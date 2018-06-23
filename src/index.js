@@ -8,24 +8,24 @@ import ApolloClient from "apollo-boost";
 const store = configureStore();
 
 const client = new ApolloClient({
-  uri: 'http://localhost:3003/graphql'  // TODO: pull this from env or config
+    uri: 'http://localhost:3003/graphql'  // TODO: pull this from env or config
 })
 
 render(
-  <AppContainer>
-    <Root store={store} history={history} client={client} />
-  </AppContainer>,
-  document.getElementById('root')
+    <AppContainer>
+        <Root store={store} history={history} client={client} />
+    </AppContainer>,
+    document.getElementById('root')
 );
 
 if (module.hot) {
-  module.hot.accept('./Root', () => {
-    const NextRoot = require('./Root'); // eslint-disable-line global-require
-    render(
-      <AppContainer>
-        <NextRoot store={store} history={history} client={client} />
-      </AppContainer>,
-      document.getElementById('root')
-    );
-  });
+    module.hot.accept('./Root', () => {
+        const NextRoot = require('./Root'); // eslint-disable-line global-require
+        render(
+            <AppContainer>
+                <NextRoot store={store} history={history} client={client} />
+            </AppContainer>,
+            document.getElementById('root')
+        );
+    });
 }
