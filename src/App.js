@@ -15,6 +15,14 @@ type Props = {
 
 export default class App extends Component<Props> {
     props: Props;
+    componentDidMount() {
+        const { app, connectedToNetwork } = this.props
+        if ( app.web3Available ) {
+            window.web3.version.getNetwork((error, networkId) => {
+                connectedToNetwork(networkId)
+            })
+        }
+    }
     render() {
         const { data } = this.props
         return (

@@ -5,6 +5,7 @@
   "dependencies": {
     "ao-core": "git+ssh://git@git.y-designs.com:ao/ao-iptv-core.git#ts",
     "apollo-boost": "^0.1.10",
+    "bignumber.js": "^7.2.1",
     "graphql": "^0.13.2",
     "graphql-tag": "^2.9.2",
     "history": "^4.7.2",
@@ -20,7 +21,7 @@
     "redux": "^4.0.0",
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.3.0",
-    "web3": "^1.0.0-beta.34"
+    "web3": "0.20.3"
   },
   "scripts": {
     "start": "react-scripts start",
