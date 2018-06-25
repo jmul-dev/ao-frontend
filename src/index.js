@@ -5,6 +5,11 @@ import Root from './Root';
 import { configureStore, history } from './store/configureStore';
 import ApolloClient from "apollo-boost";
 
+
+window.IS_ELECTRON = window.chrome && window.chrome.ipcRenderer
+
+// TODO: Setup web3
+
 const store = configureStore();
 
 const client = new ApolloClient({

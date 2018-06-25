@@ -1,7 +1,8 @@
 // @flow
 import React, { Component, Node } from 'react';
 import { Switch, Route, Redirect } from 'react-router';
-import MainLayout from './layouts/MainLayout';
+import MainLayout from './layouts/main/MainLayout';
+import RegisterLayout from './layouts/register/RegisterLayout';
 
 type Props = {
     children: Node,
@@ -26,7 +27,7 @@ export default class App extends Component<Props> {
                     )} />
                     <Route path="/" render={(routeProps) => (
                         !data.isRegistered ? (
-                            <div>{`Not registered`}</div>
+                            <RegisterLayout {...routeProps} />
                         ) : <Redirect to="/app/browse" />                        
                     )} />
                 </Switch>

@@ -4,7 +4,7 @@ import { Switch, Route, Redirect } from 'react-router';
 import { NavLink } from 'react-router-dom';
 
 const MainLayout = () => (
-    <div className="MainLayout">            
+    <div className="MainLayout">
         <main>
             <Switch>
                 <Route path="/app/browse" render={() => `browse`} />
