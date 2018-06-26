@@ -28,22 +28,34 @@ export default class Register extends PureComponent<Props> {
         var relativePath = theFiles[0].webkitRelativePath;
         console.log(theFiles, relativePath)
     }
+    _register = () => {
+        const { ethAddress } = this.props.app
+
+    }
     render() {
-        const { web3Connected, ethNetworkId, ethAddress } = this.props.app
+        const { web3Available, web3Connected, ethNetworkId, ethAddress } = this.props.app
         const { loading } = this.props.data
         if ( loading )
             return 'Loading...'
         return (
-            <div>
-                <div>web3 status: {web3Connected ? `connected` : `not connected`}</div>
-                <div>eth network: {ethNetworkId || `not connected`}</div>
-                <div>eth address: {ethAddress || `not connected`}</div>
-                <input type="file" onChange={this._onDirectorySelect} webkitdirectory="true" mozdirectory="true" msdirectory="true" odirectory="true" directory="true" multiple="true" />
-                {window.IS_ELECTRON ? (
+            <div className="Register">
+                <h1>Register</h1>
+                <p>First step, unlock account via Metamask</p>
+                {/* <input type="file" onChange={this._onDirectorySelect} webkitdirectory="true" mozdirectory="true" msdirectory="true" odirectory="true" directory="true" multiple="true" /> */}                
+                {window.IS_ELECTRON && web3Available ? (
                     <button onClick={this._openMetamask}>open metamask</button>
-                ) : (
-                    <div>Not rendered within Electron</div>
-                )}
+                ) : web3Available ? (
+                        <div>Use your browser's Metamask extension</div>
+                    ) : (
+                        <div>Metamask is required</div>
+                    )                    
+                }
+                {ethAddress ? (
+                    <div>
+                        <div>Current Ethereum account: {ethAddress}</div>
+                        <button onClick={this._register}>register</button>
+                    </div>
+                ):null}
             </div>
         );
     }
