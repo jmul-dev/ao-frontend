@@ -15,13 +15,15 @@ const mapDispatchToProps = {
 }
 
 // Graphql
-const graphqlQuery = gql(`
+export const localNodeQuery = gql(`
     query {
-        isRegistered
+        node {
+            id, ethAddress
+        }
     }
 `)
 
 export default compose(
-    graphql(graphqlQuery),
+    graphql(localNodeQuery),
     connect(mapStateToProps, mapDispatchToProps),
 )(App);

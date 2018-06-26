@@ -12,7 +12,9 @@ type Props = {
     data: {
         loading: boolean,
         error?: string,
-        isRegistered: boolean
+        node?: {
+            id: string
+        }
     }
 };
 
@@ -32,12 +34,12 @@ export default class App extends Component<Props> {
             <div className={`App ${process.env.NODE_ENV !== 'production' ? 'development-bar-spacing' : ''}`}>
                 <Switch>
                     <Route path="/app" render={(routeProps) => (
-                        data.isRegistered ? (
+                        data.node ? (
                             <MainLayout {...routeProps} />
                         ) : <Redirect to="/" />
                     )} />
                     <Route path="/" render={(routeProps) => (
-                        !data.isRegistered ? (
+                        !data.node ? (
                             <RegisterLayout {...routeProps} />
                         ) : <Redirect to="/app/browse" />                        
                     )} />                    

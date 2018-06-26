@@ -3,11 +3,11 @@ import React, { PureComponent } from 'react';
 import { AppReducerType } from '../../../store/app.reducer';
 
 type Props = {
-    data: {
-        loading: boolean,
-        error?: string
-    },
-    app: AppReducerType
+    register: Function,
+    registerLoading: boolean,
+    registerError?: Error,
+    registerResult: any,
+    app: AppReducerType,
 };
 
 export default class Register extends PureComponent<Props> {
@@ -29,14 +29,11 @@ export default class Register extends PureComponent<Props> {
         console.log(theFiles, relativePath)
     }
     _register = () => {
-        const { ethAddress } = this.props.app
-
+        this.props.register()
     }
     render() {
         const { web3Available, web3Connected, ethNetworkId, ethAddress } = this.props.app
-        const { loading } = this.props.data
-        if ( loading )
-            return 'Loading...'
+        const { register, registerLoading, registerError, registerResult } = this.props
         return (
             <div className="Register">
                 <h1>Register</h1>
@@ -53,8 +50,11 @@ export default class Register extends PureComponent<Props> {
                 {ethAddress ? (
                     <div>
                         <div>Current Ethereum account: {ethAddress}</div>
-                        <button onClick={this._register}>register</button>
+                        <button onClick={register}>register</button>
                     </div>
+                ):null}
+                {registerLoading ? (
+                    'loading...'
                 ):null}
             </div>
         );
