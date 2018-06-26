@@ -15,13 +15,12 @@ type Props = {
 export default class Console extends PureComponent<Props> {
     props: Props;
     render() {
-        const { loading, logs } = this.props.data
-        if ( loading )
-            return 'Loading...'
+        const { loading, error, logs } = this.props.data
         return (
             <div>
-                <h2>Console</h2>                
-                <ul>{logs.map((log, index) => (
+                <h2>Console</h2>
+                <div>{`Loading...`}</div>
+                <ul>{logs && logs.map((log, index) => (
                     <li key={index}>{log.message}</li>
                 ))}</ul>
             </div>

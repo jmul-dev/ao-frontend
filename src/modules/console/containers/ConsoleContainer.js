@@ -13,11 +13,16 @@ const mapStateToProps = (store) => {
 // GraphQL
 const graphqlQuery = gql(`
     query {
+        state,
         logs { createdAt, message }
     }
 `)
 
 export default compose(
-    graphql(graphqlQuery, {pollInterval: 500}),
+    graphql(graphqlQuery, {
+        options: {
+            pollInterval: 500
+        }
+    }),
     connect(mapStateToProps),
 )(Console);
