@@ -3,6 +3,9 @@ import React, { Component, Node } from 'react';
 import { Switch, Route, Redirect } from 'react-router';
 import MainLayout from './layouts/main/MainLayout';
 import RegisterLayout from './layouts/register/RegisterLayout';
+import DevelopmentBarContainer from './modules/devbar/containers/DevelopmentBarContainer';
+import './App.css';
+
 
 type Props = {
     children: Node,
@@ -26,7 +29,7 @@ export default class App extends Component<Props> {
     render() {
         const { data } = this.props
         return (
-            <div className="App">
+            <div className={`App ${process.env.NODE_ENV !== 'production' ? 'development-bar-spacing' : ''}`}>
                 <Switch>
                     <Route path="/app" render={(routeProps) => (
                         data.isRegistered ? (
@@ -37,8 +40,11 @@ export default class App extends Component<Props> {
                         !data.isRegistered ? (
                             <RegisterLayout {...routeProps} />
                         ) : <Redirect to="/app/browse" />                        
-                    )} />
+                    )} />                    
                 </Switch>
+                {process.env.NODE_ENV !== 'production' ? (
+                    <DevelopmentBarContainer />
+                ):null}
             </div>
         );
     }

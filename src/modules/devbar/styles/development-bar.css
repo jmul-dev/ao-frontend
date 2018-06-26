@@ -1,0 +1,40 @@
+.DevelopmentBar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 40px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    background: #ddd;
+    border-top: 1px solid #bbb;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.DevelopmentBar .status {
+    margin-right: 24px;
+}
+.DevelopmentBar .status.success::before {
+    content: ' \25CF';
+    font-size: 24px;
+    vertical-align: middle;
+    margin-right: 4px;
+    color: #00cc00;
+}
+.DevelopmentBar .status.warning::before {
+    content: ' \25CF';
+    font-size: 24px;
+    vertical-align: middle;
+    margin-right: 4px;
+    color: #fffc29;
+}
+.DevelopmentBar .status.error::before {
+    content: ' \25CF';
+    font-size: 24px;
+    vertical-align: middle;
+    margin-right: 4px;
+    color: #ea0808;
+}
+
