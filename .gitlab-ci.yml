@@ -1,6 +1,8 @@
 before_script:
  - eval $(ssh-agent -s)
  - nvm use 9.11
+variables:
+  CI: false
 stages:
  - build
  - release
