@@ -1,7 +1,6 @@
 before_script:
  - eval $(ssh-agent -s)
  - nvm use 9.11
- - npm install
 stages:
  - build
  - release
@@ -10,6 +9,7 @@ build_app:
    - centos7
  stage: build
  script:
+   - npm install
    - npm run build
 
 release:
