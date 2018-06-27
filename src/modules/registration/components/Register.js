@@ -45,7 +45,7 @@ export default class Register extends PureComponent<Props> {
                         <div>Use your browser's Metamask extension</div>
                     ) : (
                         <div>Metamask is required</div>
-                    )                    
+                    )
                 }
                 {ethAddress ? (
                     <div>

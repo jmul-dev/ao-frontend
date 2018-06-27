@@ -17,6 +17,7 @@ const mapDispatchToProps = {
 // Graphql
 export const localNodeQuery = gql(`
     query {
+        state,
         node {
             id, ethAddress
         }
