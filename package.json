@@ -1,9 +1,11 @@
 {
   "name": "ao-frontend",
   "version": "0.0.1",
-  "private": true,
+  "publishConfig":{
+    "registry":"https://npm.y-designs.com"
+  },
   "dependencies": {
-    "ao-core": "git+ssh://git@git.y-designs.com:ao/ao-iptv-core.git#v1.0.0",
+    "ao-core": "^1.0.4",
     "apollo-boost": "^0.1.10",
     "bignumber.js": "^7.2.1",
     "graphql": "^0.13.2",

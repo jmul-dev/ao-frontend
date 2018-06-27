@@ -21,6 +21,7 @@ release:
     - npm install
     - npm run build
     - $(npm bin)/gitlab-ci-releaser
+    - npm publish
   when: manual
   only:
   - master
