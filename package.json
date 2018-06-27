@@ -5,7 +5,7 @@
     "registry":"https://npm.y-designs.com"
   },
   "dependencies": {
-    "ao-core": "^1.0.4",
+    "ao-core": "^1.0.5",
     "apollo-boost": "^0.1.10",
     "bignumber.js": "^7.2.1",
     "graphql": "^0.13.2",
