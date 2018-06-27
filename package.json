@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "dependencies": {
+    "ao-core": "git+ssh://git@git.y-designs.com:ao/ao-iptv-core.git#v1.0.0",
     "apollo-boost": "^0.1.10",
     "bignumber.js": "^7.2.1",
     "graphql": "^0.13.2",
