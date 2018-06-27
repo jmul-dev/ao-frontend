@@ -2,9 +2,8 @@
 import React from 'react';
 import { Switch, Route, Redirect } from 'react-router';
 import { NavLink } from 'react-router-dom';
-import SettingsContainer from '../../modules/settings/containers/SettingsContainer'
-import SettingsView from '../../views/settings/SettingsView'
-import AccountContainer from '../../modules/account/containers/AccountContainer'
+import SettingsView from '../../views/settings/SettingsView';
+import AccountContainer from '../../modules/account/containers/AccountContainer';
 
 const MainLayout = () => (
     <div className="MainLayout">
