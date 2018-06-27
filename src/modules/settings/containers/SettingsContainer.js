@@ -17,7 +17,7 @@ const settingsQuery = gql(`
     }
 `)
 
-export default compose(    
+export default compose(
     connect(mapStateToProps),
     graphql(settingsQuery, {
         name: 'settings'

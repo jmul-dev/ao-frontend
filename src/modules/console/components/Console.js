@@ -17,9 +17,7 @@ export default class Console extends PureComponent<Props> {
     render() {
         const { loading, error, logs } = this.props.data
         return (
-            <div>
-                <h2>Console</h2>
-                <div>{`Loading...`}</div>
+            <div className="Console" style={{border: '1px solid #ddd', padding: 16}}>
                 <ul>{logs && logs.map((log, index) => (
                     <li key={index}>{log.message}</li>
                 ))}</ul>

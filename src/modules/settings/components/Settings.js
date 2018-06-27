@@ -1,6 +1,5 @@
 // @flow
 import React, { Component } from 'react';
-import '../styles/settings.css';
 
 type Props = {
     settings: {

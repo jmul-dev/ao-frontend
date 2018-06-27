@@ -1,0 +1,1 @@
+Views are composed of modules and describe more of the visual layout & interaction between modules.
