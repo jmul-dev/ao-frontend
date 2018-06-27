@@ -2,6 +2,7 @@
 import React from 'react';
 import { Switch, Route, Redirect } from 'react-router';
 import { NavLink } from 'react-router-dom';
+import SettingsContainer from '../../modules/settings/containers/SettingsContainer'
 
 const MainLayout = () => (
     <div className="MainLayout">
@@ -9,7 +10,7 @@ const MainLayout = () => (
             <Switch>
                 <Route path="/app/browse" render={() => `browse`} />
                 <Route path="/app/account" render={() => `account`} />
-                <Route path="/app/settings" render={() => `settings`} />
+                <Route path="/app/settings" component={SettingsContainer} />
                 <Route path="/app/upload" render={() => `upload`} />
             </Switch>
         </main>
