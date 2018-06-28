@@ -4,7 +4,8 @@ import { connect } from 'react-redux'
 // Redux
 const mapStateToProps = (store) => {
     return {
-        
+        wallet: store.wallet,
+        app: store.app,
     }
 }
 
