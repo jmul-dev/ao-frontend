@@ -3,14 +3,14 @@ import React from 'react';
 import { Switch, Route, Redirect } from 'react-router';
 import { NavLink } from 'react-router-dom';
 import SettingsView from '../../views/settings/SettingsView';
-import AccountContainer from '../../modules/account/containers/AccountContainer';
+import AccountView from '../../views/account/AccountView';
 
 const MainLayout = () => (
     <div className="MainLayout">
         <main>
             <Switch>
                 <Route path="/app/browse" render={() => `browse`} />
-                <Route path="/app/account" component={AccountContainer} />
+                <Route path="/app/account" component={AccountView} />
                 <Route path="/app/settings" component={SettingsView} />
                 <Route path="/app/upload" render={() => `upload`} />
             </Switch>

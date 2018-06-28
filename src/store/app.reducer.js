@@ -2,11 +2,11 @@
  * This reducer is for global app state
  */
 import BigNumber from 'bignumber.js'
+import { getEthBalanceForAccount } from '../modules/wallet/reducers/wallet.reducer'
 
 // Constants
 export const WEB3_CONNECTED = 'WEB3_CONNECTED'
 export const WEB3_ETH_ACCOUNT_CHANGE = 'WEB3_ETH_ACCOUNT_CHANGE'
-export const WEB3_ETH_BALANCE_CHANGE = 'WEB3_ETH_BALANCE_CHANGE'
 
 // Actions
 export const connectedToNetwork = (networkId) => {
@@ -41,20 +41,6 @@ export const connectedToNetwork = (networkId) => {
         getCurrentAccount()
     }
 }
-export const getEthBalanceForAccount = ( account ) => {
-    return (dispatch, getState) => {
-        window.web3.eth.getBalance( account, undefined, function(err, result) {
-            if ( err )
-                return console.error( 'error fetching balance', err )
-            let balance = new BigNumber( window.web3.fromWei(result, 'ether') )
-            dispatch({
-                type: WEB3_ETH_BALANCE_CHANGE,
-                payload: { balance }
-            })
-        })
-    }
-}
-
 export const getNetworkName = (networkId, shortname = false) => {
     switch (networkId) {
         case 1:
@@ -79,7 +65,6 @@ export const getNetworkName = (networkId, shortname = false) => {
             return shortname ? "" : "Unkown Network"
     }
 }
-
 
 // State
 const initialState = {
@@ -109,11 +94,6 @@ export default function appReducer(state = initialState, action) {
             return {
                 ...state,
                 ethAddress: action.payload.ethAddress
-            }
-        case WEB3_ETH_BALANCE_CHANGE:
-            return {
-                ...state,
-                ethBalance: action.payload.balance
             }
         default:
             return state
