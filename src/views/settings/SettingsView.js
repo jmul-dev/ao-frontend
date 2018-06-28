@@ -1,16 +1,12 @@
 // @flow
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import View from '../View';
 import ConsoleContainer from '../../modules/console/containers/ConsoleContainer'
 import SettingsInput from '../../modules/settings'
 import Typography from '@material-ui/core/Typography';
 
-type Props = {
 
-};
-
-export default class SettingsView extends Component<Props> {
-    props: Props;
+export default class SettingsView extends PureComponent {
     render() {
         return (
             <View className={'SettingsView'}>
