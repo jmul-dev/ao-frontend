@@ -1,6 +1,6 @@
 {
   "name": "ao-frontend",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "publishConfig": {
     "registry": "https://npm.y-designs.com"
   },
@@ -9,6 +9,7 @@
     "ao-core": "^1.0.5",
     "apollo-boost": "^0.1.10",
     "bignumber.js": "^7.2.1",
+    "gitlab-ci-releaser": "^1.5.0",
     "graphql": "^0.13.2",
     "graphql-tag": "^2.9.2",
     "history": "^4.7.2",
