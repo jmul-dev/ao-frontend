@@ -1,18 +1,20 @@
 before_script:
- - eval $(ssh-agent -s)
- - nvm use 9.11
+  - eval $(ssh-agent -s)
+  - nvm use 9.11
 variables:
   CI: "false"
 stages:
- - build
- - release
+  - build
+  - release
 build_app:
- tags:
-   - centos7
- stage: build
- script:
-   - npm install
-   - npm run build
+  tags:
+    - centos7
+  stage: build
+  script:
+    - npm install
+    - npm run build
+  only:
+    - master
 release:
   tags:
     - centos7
@@ -26,4 +28,4 @@ release:
     - npm publish
   when: manual
   only:
-  - master
+    - master
