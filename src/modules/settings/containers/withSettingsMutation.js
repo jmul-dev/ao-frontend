@@ -1,10 +1,20 @@
-import StorageInputs from '../components/StorageInputs'
 import { connect } from 'react-redux'
 import { graphql, compose } from 'react-apollo'
 import gql from "graphql-tag"
 import withStateMutation from '../../../utils/withStateMutation'
 import { updateSettingsMutation, settingsQuery } from '../graphql/settings'
+import { SettingsType } from '../graphql/settings';
 
+export type SettingsMutationProps = {
+    data: {
+        loading: boolean,
+        error?: string,
+        settings?: SettingsType
+    },
+    updateSettings: Function,
+    updateSettingsLoading: boolean,
+    updateSettingsError?: Error,
+};
 
 export default compose(
     graphql(settingsQuery),
@@ -19,4 +29,4 @@ export default compose(
         })
     }),
     withStateMutation({name: 'updateSettings'})
-)(StorageInputs);
+);

@@ -1,23 +1,13 @@
 // @flow
 import React, { Component } from 'react';
-import { SettingsType } from '../graphql/settings';
+import withSettingsMutation, { SettingsMutationProps } from '../containers/withSettingsMutation';
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 import Select from '@material-ui/core/Select';
 
-type Props = {
-    data: {
-        loading: boolean,
-        error?: string,
-        settings?: SettingsType
-    },
-    updateSettings: Function,
-    updateSettingsLoading: boolean,
-    updateSettingsError?: Error,
-};
 
-export default class StorageInputs extends Component<Props> {
-    props: Props;
+class MaxStorageInput extends Component<SettingsMutationProps> {
+    props: SettingsMutationProps;
     _handleMaxDiskSpaceChange = (event) => {
         const { updateSettings } = this.props
         let updatedValue = event.target.value
@@ -44,7 +34,7 @@ export default class StorageInputs extends Component<Props> {
             options.sort((a, b) => a - b)
         }
         return (
-            <form className="StorageInputs">
+            <form className="MaxStorageInput">
                 <FormControl>
                     <InputLabel htmlFor="max-disk-space">Max disk space</InputLabel>
                     <Select
@@ -75,3 +65,4 @@ export default class StorageInputs extends Component<Props> {
         );
     }
 }
+export default withSettingsMutation(MaxStorageInput)

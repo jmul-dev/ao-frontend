@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import View from '../View';
 import ConsoleContainer from '../../modules/console/containers/ConsoleContainer'
-import StorageInputsContainer from '../../modules/settings/containers/StorageInputsContainer'
+import SettingsInput from '../../modules/settings'
 import Typography from '@material-ui/core/Typography';
 
 type Props = {
@@ -27,7 +27,14 @@ export default class SettingsView extends Component<Props> {
                     <Typography variant="headline" gutterBottom>
                         {'Storage'}
                     </Typography>
-                    <StorageInputsContainer />
+                    <SettingsInput inputName="maxDiskSpace" />
+                </section>
+                <section>
+                    <Typography variant="headline" gutterBottom>
+                        {'Network'}
+                    </Typography>
+                    <SettingsInput inputName="maxBandwidthUp" />
+                    <SettingsInput inputName="maxBandwidthDown" />
                 </section>
             </View>
         );
