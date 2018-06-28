@@ -7,7 +7,8 @@ import Select from '@material-ui/core/Select';
 
 
 type Props = SettingsMutationProps | {
-    inputName: 'maxBandwidthUp' | 'maxBandwidthDown'
+    inputName: 'maxBandwidthUp' | 'maxBandwidthDown',
+    inputLabel: string,
 }
 
 class NetworkBandwidthInput extends Component<Props> {
@@ -26,7 +27,7 @@ class NetworkBandwidthInput extends Component<Props> {
         })
     }
     render() {
-        const { inputName } = this.props
+        const { inputName, inputLabel } = this.props
         const { loading, error, settings } = this.props.data
         if ( !settings )
             return null
@@ -41,7 +42,7 @@ class NetworkBandwidthInput extends Component<Props> {
         return (
             <form className="NetworkBandwidthInput">
                 <FormControl>
-                    <InputLabel htmlFor={inputName}>{inputName === 'maxBandwidthDown' ? 'Max download speed' : 'Max upload speed'}</InputLabel>
+                    <InputLabel htmlFor={inputName}>{inputLabel}</InputLabel>
                     <Select
                         native
                         value={inputValue}

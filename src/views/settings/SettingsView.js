@@ -21,6 +21,14 @@ export default class SettingsView extends Component<Props> {
                 </header>
                 <section>
                     <Typography variant="headline" gutterBottom>
+                        {'General'}
+                    </Typography>
+                    <SettingsInput inputName="runOnStartup" inputLabel="Run AO on startup" />
+                    <SettingsInput inputName="runInBackground" inputLabel="Run AO in background" />
+                    <SettingsInput inputName="checkForUpdates" inputLabel="Check for updates on startup" />
+                </section>
+                <section>
+                    <Typography variant="headline" gutterBottom>
                         {'Storage'}
                     </Typography>
                     <SettingsInput inputName="maxDiskSpace" />
@@ -29,8 +37,8 @@ export default class SettingsView extends Component<Props> {
                     <Typography variant="headline" gutterBottom>
                         {'Network'}
                     </Typography>
-                    <SettingsInput inputName="maxBandwidthUp" />
-                    <SettingsInput inputName="maxBandwidthDown" />
+                    <SettingsInput inputName="maxBandwidthUp" inputLabel="Max upload speed" />
+                    <SettingsInput inputName="maxBandwidthDown" inputLabel="Max download speed" />
                 </section>
                 <section>
                     <Typography variant="headline" gutterBottom>
