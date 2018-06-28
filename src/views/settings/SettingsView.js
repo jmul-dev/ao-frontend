@@ -14,15 +14,11 @@ export default class SettingsView extends Component<Props> {
     render() {
         return (
             <View className={'SettingsView'}>
-                <Typography variant="display1" gutterBottom align="center">
-                    {'Settings'}
-                </Typography>
-                <section>
-                    <Typography variant="headline" gutterBottom>
-                        {'Activity Log'}
+                <header>
+                    <Typography variant="display1" gutterBottom align="center">
+                        {'Settings'}
                     </Typography>
-                    <ConsoleContainer />
-                </section>
+                </header>
                 <section>
                     <Typography variant="headline" gutterBottom>
                         {'Storage'}
@@ -35,6 +31,18 @@ export default class SettingsView extends Component<Props> {
                     </Typography>
                     <SettingsInput inputName="maxBandwidthUp" />
                     <SettingsInput inputName="maxBandwidthDown" />
+                </section>
+                <section>
+                    <Typography variant="headline" gutterBottom>
+                        {'P2P'}
+                    </Typography>
+                    <SettingsInput inputName="maxPeerConnections" />
+                </section>
+                <section>
+                    <Typography variant="headline" gutterBottom>
+                        {'Activity Log'}
+                    </Typography>
+                    <ConsoleContainer />
                 </section>
             </View>
         );
