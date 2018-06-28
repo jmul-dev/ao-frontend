@@ -2,6 +2,7 @@ import BigNumber from 'bignumber.js'
 
 // Constants
 export const WEB3_ETH_BALANCE_CHANGE = 'WEB3_ETH_BALANCE_CHANGE'
+export const WEB3_TOKEN_BALANCE_CHANGE = 'WEB3_TOKEN_BALANCE_CHANGE'
 
 // Actions
 export const getEthBalanceForAccount = ( account ) => {
@@ -14,6 +15,15 @@ export const getEthBalanceForAccount = ( account ) => {
                 type: WEB3_ETH_BALANCE_CHANGE,
                 payload: { balance }
             })
+        })
+    }
+}
+export const getTokenBalanceForAccount = ( account ) => {
+    return (dispatch, getState) => {
+        // TODO:
+        dispatch({
+            type: WEB3_TOKEN_BALANCE_CHANGE,
+            payload: { balance: new BigNumber(0) }
         })
     }
 }
@@ -36,6 +46,11 @@ export default function walletReducer(state = initialState, action) {
             return {
                 ...state,
                 ethBalance: action.payload.balance
+            }
+        case WEB3_TOKEN_BALANCE_CHANGE:
+            return {
+                ...state,
+                tokenBalance: action.payload.balance
             }
         default:
             return state
