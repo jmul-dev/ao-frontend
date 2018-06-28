@@ -4,6 +4,7 @@ import { Switch, Route, Redirect } from 'react-router';
 import { NavLink } from 'react-router-dom';
 import SettingsView from '../../views/settings/SettingsView';
 import AccountView from '../../views/account/AccountView';
+import UploadView from '../../views/upload/UploadView';
 
 const MainLayout = () => (
     <div className="MainLayout">
@@ -12,7 +13,7 @@ const MainLayout = () => (
                 <Route path="/app/browse" render={() => `browse`} />
                 <Route path="/app/account" component={AccountView} />
                 <Route path="/app/settings" component={SettingsView} />
-                <Route path="/app/upload" render={() => `upload`} />
+                <Route path="/app/upload" component={UploadView} />
             </Switch>
         </main>
         <nav>
