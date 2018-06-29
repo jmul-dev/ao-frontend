@@ -1,7 +1,6 @@
 /**
  * This reducer is for global app state
  */
-import BigNumber from 'bignumber.js'
 import { getEthBalanceForAccount } from '../modules/wallet/reducers/wallet.reducer'
 
 // Constants

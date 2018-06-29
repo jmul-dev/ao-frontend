@@ -15,7 +15,7 @@ type Props = {
 export default class Console extends PureComponent<Props> {
     props: Props;
     render() {
-        const { loading, error, logs } = this.props.data
+        const { logs } = this.props.data
         return (
             <div className="Console" style={{border: '1px solid #ddd', padding: 16}}>
                 <ul>{logs && logs.map((log, index) => (
