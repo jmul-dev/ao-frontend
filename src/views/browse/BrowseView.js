@@ -1,5 +1,5 @@
 // @flow
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import View from '../View';
 import Button from '@material-ui/core/Button';
 import SearchIcon from '@material-ui/icons/Search';
@@ -8,7 +8,7 @@ import VideoListingContainer from '../../modules/video/containers/VideoListingCo
 import './browse-view.css';
 
 
-export default class BrowseView extends PureComponent {
+export default class BrowseView extends Component {
     render() {
         return (
             <View className={'BrowseView'} noPadding>

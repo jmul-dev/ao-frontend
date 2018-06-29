@@ -10,7 +10,7 @@ import './main-layout.css';
 
 const MainLayout = () => (
     <main className="MainLayout">
-        <BrowseView />
+        <Route component={BrowseView} />
         <Switch>
             <Route path="/app/account" component={AccountView} />
             <Route path="/app/settings" component={SettingsView} />

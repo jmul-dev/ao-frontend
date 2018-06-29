@@ -1,9 +1,14 @@
 // @flow
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import { AutoSizer, ColumnSizer, Grid } from 'react-virtualized';
 import 'react-virtualized/styles.css';
 import Typography from '@material-ui/core/Typography';
-import '../styles/video-listing.css'
+import '../styles/video-listing.css';
+import TeaserListing from './TeaserListing';
+
+// TODO: for superimposed transition check this out 
+// https://marmelab.com/blog/2017/12/04/material-design-animations-react-router.html
+// https://github.com/marmelab/react-md-motion
 
 
 type Props = {
@@ -13,12 +18,22 @@ type Props = {
     videosResult: any,
 };
 
-export default class VideoListing extends PureComponent<Props> {
+export default class VideoListing extends Component<Props> {
     props: Props;
+    constructor() {
+        super()
+        this.state = {
+            teaserListingActive: false,
+            activeVideoIndex: undefined,
+        }
+    }
     render() {
         const { videos, videosLoading } = this.props
-        const rowCount = videos.videos ? videos.videos.length / 3 : 0
-        return (
+        const { teaserListingActive } = this.state
+        const rowCount = videos.videos ? videos.videos.length / 3 : 0        
+        if ( videosLoading )
+            return null
+        return (            
             <div className="VideoListing">
                 <AutoSizer disableHeight>
                     {({width}) => (
@@ -43,8 +58,11 @@ export default class VideoListing extends PureComponent<Props> {
                         )}
                         </ColumnSizer>
                     )}
-                </AutoSizer>                
-            </div>
+                </AutoSizer>
+                {teaserListingActive ? (
+                    <TeaserListing videos={videos.videos} activeVideoIndex={this.state.activeVideoIndex} />
+                ) : null}
+            </div>            
         );
     }
     _renderCell = ({columnIndex, key, rowIndex, style}) => {
@@ -52,11 +70,23 @@ export default class VideoListing extends PureComponent<Props> {
         const video = this.props.videos.videos[videoIndex]
         return (
             <div className="Cell" key={key} style={style}>
-                <div className="cover-image" style={{backgroundImage: `url(${video.coverImageUrl})`}}></div>
+                <div 
+                    className="cover-image" 
+                    onClick={this._enterTeaserListingAtVideo.bind(this, videoIndex)}
+                    style={{backgroundImage: `url(${video.coverImageUrl})`}}
+                ></div>
                 <Typography variant="title">
                     {video.title}
                 </Typography>
             </div>
         )
+    }
+    _enterTeaserListingAtVideo = (videoIndex, event) => {
+        console.log(event.target.getBoundingClientRect())
+        this.setState({
+            teaserListingActive: true,
+            activeVideoIndex: videoIndex,
+            
+        })
     }
 }
