@@ -22,7 +22,7 @@ class MaxPeerConnectionsInput extends Component<SettingsMutationProps> {
         })
     }
     render() {
-        const { loading, error, settings } = this.props.data
+        const { settings } = this.props.data
         if ( !settings )
             return null
         let { maxPeerConnections } = settings

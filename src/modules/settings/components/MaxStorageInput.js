@@ -22,10 +22,10 @@ class MaxStorageInput extends Component<SettingsMutationProps> {
         })
     }
     render() {
-        const { loading, error, settings } = this.props.data
+        const { settings } = this.props.data
         if ( !settings )
             return null
-        let { diskSpaceAvailable, maxDiskSpace } = settings
+        let { maxDiskSpace } = settings
         if ( maxDiskSpace < 0 )
             maxDiskSpace = Infinity
         let options = [512, 1000, 5000, 10000, 50000, Infinity]
