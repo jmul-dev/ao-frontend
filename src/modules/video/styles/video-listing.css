@@ -1,0 +1,19 @@
+.VideoListing {
+    padding-left: calc(var(--gutter) / 2);
+    padding-right: calc(var(--gutter) / 2);
+}
+.VideoListing .ReactVirtualized__Grid:focus {
+    outline: none;
+}
+.VideoListing .Cell {
+    padding-left: calc(var(--gutter) / 2);
+    padding-right: calc(var(--gutter) / 2);
+}
+.VideoListing .Cell .cover-image {
+    width: 100%;
+    padding-bottom: 56.25%;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    margin-bottom: 8px;
+}
