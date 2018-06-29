@@ -1,4 +1,6 @@
 .MainLayout {
+    height: 100%;
+    position: relative;
     padding-left: var(--sidebar-width);
 }
 

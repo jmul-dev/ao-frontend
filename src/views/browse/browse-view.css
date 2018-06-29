@@ -1,0 +1,6 @@
+.BrowseView {
+
+}
+.BrowseView > header {
+    display: flex;
+}

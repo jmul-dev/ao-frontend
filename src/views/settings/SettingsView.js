@@ -1,9 +1,10 @@
 // @flow
 import React, { PureComponent } from 'react';
 import View from '../View';
-import ConsoleContainer from '../../modules/console/containers/ConsoleContainer'
-import SettingsInput from '../../modules/settings'
+import ConsoleContainer from '../../modules/console/containers/ConsoleContainer';
+import SettingsInput from '../../modules/settings';
 import Typography from '@material-ui/core/Typography';
+import './settings-view.css';
 
 
 export default class SettingsView extends PureComponent {
