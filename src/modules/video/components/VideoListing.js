@@ -2,6 +2,8 @@
 import React, { Component } from 'react';
 import { AutoSizer, ColumnSizer, Grid } from 'react-virtualized';
 import 'react-virtualized/styles.css';
+import Button from '@material-ui/core/Button';
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import Typography from '@material-ui/core/Typography';
 import '../styles/video-listing.css';
 import TeaserListing from './TeaserListing';
@@ -72,9 +74,14 @@ export default class VideoListing extends Component<Props> {
                             videos={videos.videos}
                             activeVideoIndex={this.state.activeVideoIndex}
                             activeVideoCellPosition={this.state.activeVideoCellPosition}
-                            onClose={() => setTeaserListingState({isActive: false})}
                             updateActiveVideoIndex={this._setActiveVideoIndex}
                         />
+                        <nav className="video-navigation">
+                            <Button varient="contained" onClick={() => setTeaserListingState({isActive: false})}>
+                                <ArrowBackIcon />
+                                <Typography variant="body1">{`back to browse`}</Typography>
+                            </Button>
+                        </nav>
                     </div>                        
                 </CSSTransition>
             </div>            

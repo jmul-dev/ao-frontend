@@ -21,6 +21,18 @@
     background-repeat: no-repeat;
     margin-bottom: 8px;
 }
+.VideoListing .video-navigation {
+    position: fixed;
+    top: 30px;
+    left: 30px;
+    z-index: 1000;
+    transition: opacity var(--enter-teaser-duration) var(--enter-teaser-ease);
+    opacity: 0;
+}
+.teaser-modal-enter-done .video-navigation, .teaser-modal-enter-active .video-navigation {
+    opacity: 1;
+}
+
 
 /* Teaser modal - slide title */
 .teaser-modal .title {
