@@ -1,0 +1,19 @@
+.TeaserCard .media-container {
+    transition: width 50ms linear;
+    position: relative;
+    z-index: 1;
+    pointer-events: none;
+}
+.TeaserCard .video-container {
+    width: 100%;
+    padding-bottom: 56.25%;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    margin-bottom: 8px;
+}
+.TeaserCard .content-container {
+    /* Just making room for the scroll bar */
+    padding-right: 17px;
+    box-sizing: content-box;
+}

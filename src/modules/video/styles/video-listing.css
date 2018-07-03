@@ -87,7 +87,8 @@
     position: fixed;
     width: 50vw;
     top: 10vh;
-    padding-top: 74vh;    
+    bottom: 0;
+    padding-top: 74vh;
     overflow: auto;
     transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1);
     opacity: 0;
@@ -114,6 +115,11 @@
         left: 150vw;
     }
 
+
+.teaser-modal-exit-active .media-container {
+    width: 100% !important;
+    transition: width 450ms cubic-bezier(0.23, 1, 0.32, 1) !important;
+}
 
 /* Teaser modal - backdrop */
 .teaser-modal .teaser-modal-backdrop {

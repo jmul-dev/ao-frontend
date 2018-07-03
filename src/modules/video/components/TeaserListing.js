@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Typography from '@material-ui/core/Typography';
+import TeaserCard from './TeaserCard';
 import '../styles/teaser-listing.css';
 
 
@@ -55,15 +55,7 @@ export default class TeaserListing extends Component<Props> {
                                 style={index === 2 ? this.props.activeVideoCellPosition : undefined}
                                 onClick={index !== 2 ? () => updateActiveVideoIndex(activeVideoIndex + index - 2) : undefined}
                                 >
-                                <div className="media-container" style={{backgroundImage: `url(${video.coverImageUrl})`}}></div>                                
-                                <Typography variant="title" className="title">
-                                    {video.title}
-                                </Typography>
-                                <div className="content-container">
-                                    <Typography variant="body1">
-                                        {video.description}
-                                    </Typography>
-                                </div>
+                                <TeaserCard video={video} />
                             </div>
                         )
                     })}
