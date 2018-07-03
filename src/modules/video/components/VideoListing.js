@@ -7,13 +7,12 @@ import '../styles/video-listing.css';
 import TeaserListing from './TeaserListing';
 import { CSSTransition } from 'react-transition-group';
 
-// TODO: for superimposed transition check this out 
-// https://marmelab.com/blog/2017/12/04/material-design-animations-react-router.html
-// https://github.com/marmelab/react-md-motion
 
 const propertySelection = (({ top, right, bottom, left, width, height }) => ({ top, right, bottom, left, width, height }))
 
 type Props = {
+    setTeaserListingState: Function,
+    teaserListingActive: boolean,
     videos: Function,
     videosLoading: boolean,
     videosError?: Error,
@@ -25,13 +24,11 @@ export default class VideoListing extends Component<Props> {
     constructor() {
         super()
         this.state = {
-            teaserListingActive: false,
             activeVideoIndex: undefined,
         }
     }
     render() {
-        const { videos, videosLoading } = this.props
-        const { teaserListingActive } = this.state
+        const { videos, videosLoading, teaserListingActive, setTeaserListingState } = this.props
         const rowCount = videos.videos ? videos.videos.length / 3 : 0        
         if ( videosLoading )
             return null
@@ -75,7 +72,7 @@ export default class VideoListing extends Component<Props> {
                             videos={videos.videos}
                             activeVideoIndex={this.state.activeVideoIndex}
                             activeVideoCellPosition={this.state.activeVideoCellPosition}
-                            onClose={() => this.setState({teaserListingActive: false})}
+                            onClose={() => setTeaserListingState({isActive: false})}
                             updateActiveVideoIndex={this._setActiveVideoIndex}
                         />
                     </div>                        
@@ -103,8 +100,8 @@ export default class VideoListing extends Component<Props> {
     }
     _enterTeaserListingAtVideo = (videoIndex, event) => {
         const activeVideoCellPosition = propertySelection(event.target.getBoundingClientRect())
+        this.props.setTeaserListingState({isActive: true})
         this.setState({
-            teaserListingActive: true,
             activeVideoIndex: videoIndex,
             activeVideoCellPosition,
         })

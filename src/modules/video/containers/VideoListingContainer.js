@@ -2,12 +2,17 @@ import VideoListing from '../components/VideoListing'
 import { connect } from 'react-redux'
 import { graphql, compose } from 'react-apollo'
 import gql from "graphql-tag"
+import { setTeaserListingState } from '../reducers/video.reducer'
 
 
 // Redux
+const mapDispatchToProps = {
+    setTeaserListingState
+}
+
 const mapStateToProps = (store) => {
     return {
-        // TODO: search/filters/pagination
+        teaserListingActive: store.video.teaserListingActive
     }
 }
 
@@ -21,7 +26,7 @@ const videosQuery = gql(`
 `)
 
 export default compose(    
-    connect(mapStateToProps),
+    connect(mapStateToProps, mapDispatchToProps),
     graphql(videosQuery, {
         name: 'videos',
         // Pull ethAddress input from redux props
