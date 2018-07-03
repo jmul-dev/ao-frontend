@@ -6,14 +6,15 @@ import SettingsIcon from '@material-ui/icons/Settings';
 import AddIcon from '@material-ui/icons/Add';
 import PersonIcon from '@material-ui/icons/Person';
 import PlayIcon from '@material-ui/icons/PlayArrow';
+import { connect } from 'react-redux';
 
 const BrowseLink = props => <Link to="/app" {...props} />
 const AccountLink = props => <Link to="/app/account" {...props} />
 const UploadLink = props => <Link to="/app/upload" {...props} />
 const SettingsLink = props => <Link to="/app/settings" {...props} />
 
-const MainNavigation = () => (
-    <nav className="MainNavigation">
+const MainNavigation = ({teaserListingActive}) => (
+    <nav className={`MainNavigation ${teaserListingActive ? 'offcanvas' : ''}`}>
         <div style={{display: 'flex'}}>
             <Button component={BrowseLink}>
                 <PlayIcon />
@@ -30,4 +31,9 @@ const MainNavigation = () => (
         </div>
     </nav>
 )
-export default MainNavigation
+const mapStateToProps = (store) => {
+    return {
+        teaserListingActive: store.video.teaserListingActive
+    }
+}
+export default connect(mapStateToProps)(MainNavigation)
