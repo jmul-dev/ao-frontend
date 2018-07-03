@@ -17,3 +17,78 @@
     background-repeat: no-repeat;
     margin-bottom: 8px;
 }
+
+
+/* Teaser modal - all slides */
+.teaser-modal .slider-track .slide {
+    position: fixed;
+    transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1);
+    z-index: 999;
+    top: 15vh;
+    width: 50vw;
+    height: 85vh;
+}
+.teaser-modal-enter-done .slider-track .slide, .teaser-modal-enter-active .slider-track .slide {
+    top: 15vh !important;
+    width: 50vw !important;
+    height: 85vh !important;    
+}
+/* Teaser modal - prev prev slide (initial) */
+    .teaser-modal .slider-track .slide:nth-child(1), .teaser-modal .slider-track .slide:nth-child(1) {
+        left: -100vw;
+        opacity: 0;
+    }
+    /* Teaser modal - prev prev slide (enter) */
+    .teaser-modal-enter-done .slider-track .slide:nth-child(1), .teaser-modal-enter-active .slider-track .slide:nth-child(1) {
+        left: -100vw !important;
+    }
+/* Teaser modal - prev slide (initial) */
+    .teaser-modal .slider-track .slide:nth-child(2), .teaser-modal .slider-track .slide:nth-child(2) {
+        left: -50vw;
+        opacity: 0.5;
+    }
+    /* Teaser modal - prev slide (enter) */
+    .teaser-modal-enter-done .slider-track .slide:nth-child(2), .teaser-modal-enter-active .slider-track .slide:nth-child(2) {
+        left: -40vw !important;
+    }
+/* Teaser modal - active slide */
+    .teaser-modal-enter-done .slider-track .slide:nth-child(3), .teaser-modal-enter-active .slider-track .slide:nth-child(3) {
+        left: 25vw !important;
+        opacity: 1;
+    }
+/* Teaser modal - next slide (initial) */
+    .teaser-modal .slider-track .slide:nth-child(4), .teaser-modal .slider-track .slide:nth-child(4) {
+        left: 100vw;
+        opacity: 0.5;
+    }
+    /* Teaser modal - next slide (enter) */
+    .teaser-modal-enter-done .slider-track .slide:nth-child(4), .teaser-modal-enter-active .slider-track .slide:nth-child(4) {
+        left: 90vw !important;
+    }
+/* Teaser modal - next next slide (initial) */
+    .teaser-modal .slider-track .slide:nth-child(5), .teaser-modal .slider-track .slide:nth-child(5) {
+        left: 150vw;
+        opacity: 0;
+    }
+    /* Teaser modal - next next slide (enter) */
+    .teaser-modal-enter-done .slider-track .slide:nth-child(5), .teaser-modal-enter-active .slider-track .slide:nth-child(5) {
+        left: 150vw !important;
+    }
+
+
+
+/* Teaser modal - backdrop */
+.teaser-modal .teaser-modal-backdrop {
+    position: fixed;
+    transition: opacity 450ms cubic-bezier(0.23, 1, 0.32, 1);
+    z-index: 997;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    opacity: 0;
+    background: #000000;
+}
+.teaser-modal-enter-done .teaser-modal-backdrop, .teaser-modal-enter-active .teaser-modal-backdrop {
+    opacity: 1;
+}
