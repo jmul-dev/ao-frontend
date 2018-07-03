@@ -35,7 +35,7 @@
     transition: opacity var(--enter-teaser-duration) var(--enter-teaser-ease);
     opacity: 0;
 }
-.teaser-modal-enter-active .action-pane, .teaser-modal-enter-done .action-pane {
+.teaser-modal-enter-active .slider-track .slide:nth-child(3) .action-pane, .teaser-modal-enter-done .slider-track .slide:nth-child(3) .action-pane {
     opacity: 1;
 }
 .teaser-modal-exit-active .action-pane { 
