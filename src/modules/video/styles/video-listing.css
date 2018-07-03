@@ -22,12 +22,24 @@
     margin-bottom: 8px;
 }
 
+/* Teaser modal - slide title */
 .teaser-modal .title {
     transition: font-size var(--enter-teaser-duration) var(--enter-teaser-ease);
     font-size: 1.3125rem;
 }
 .teaser-modal-enter-done .title, .teaser-modal-enter-active .title {
     font-size: 1.5rem;
+}
+/* Teaser modal - slide action pane (below title) */
+.teaser-modal .action-pane {
+    transition: opacity var(--enter-teaser-duration) var(--enter-teaser-ease);
+    opacity: 0;
+}
+.teaser-modal-enter-active .action-pane, .teaser-modal-enter-done .action-pane {
+    opacity: 1;
+}
+.teaser-modal-exit-active .action-pane { 
+    opacity: 0;
 }
 
 /* Teaser modal - all slides */
@@ -93,9 +105,9 @@
 .teaser-modal .content-container {
     position: fixed;
     width: 50vw;
-    top: 10vh;
+    top: 25vh;
     bottom: 0;
-    padding-top: 74vh;
+    padding-top: calc(50vw * 9 / 16 + 45px);
     overflow: auto;
     transition: all var(--enter-teaser-duration) var(--enter-teaser-ease);
     opacity: 0;
@@ -104,7 +116,7 @@
     transition: all var(--teaser-slide-duration) var(--teaser-slide-ease) !important;
 }
 .teaser-modal-enter-done .content-container, .teaser-modal-enter-active .content-container {
-    top: 0;    
+    top: 15vh;    
 }
 .teaser-modal-enter-done .slide:nth-child(3) .content-container, .teaser-modal-enter-active .slide:nth-child(3) .content-container {
     opacity: 1;
@@ -125,11 +137,6 @@
         left: 150vw;
     }
 
-
-.teaser-modal-exit-active .media-container {
-    width: 100% !important;
-    transition: width var(--enter-teaser-duration) var(--enter-teaser-ease) !important;
-}
 
 /* Teaser modal - backdrop */
 .teaser-modal .teaser-modal-backdrop {

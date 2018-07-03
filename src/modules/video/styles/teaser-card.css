@@ -1,19 +1,43 @@
+.TeaserCard .title {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#000000+0,000000+100&0.65+0,0+100;Neutral+Density */
+    background: -moz-linear-gradient(top, rgba(0,0,0,0.75) 75%, rgba(0,0,0,0) 100%); /* FF3.6-15 */
+    background: -webkit-linear-gradient(top, rgba(0,0,0,0.75) 75%,rgba(0,0,0,0) 100%); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(to bottom, rgba(0,0,0,0.75) 75%,rgba(0,0,0,0) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#a6000000', endColorstr='#00000000',GradientType=0 ); /* IE6-9 */
+}
 .TeaserCard .media-container {
-    transition: width 50ms linear;
     position: relative;
-    z-index: 1;
+    z-index: 2;
     pointer-events: none;
+}
+.TeaserCard .media-container .action-pane {
+    width: 50%;
+}
+.TeaserCard .media-container .play-button-container {
+    display: flex;
+    align-items: center;
+    margin-top: 16px;
+}
+.TeaserCard .media-container .action-pane button {
+    pointer-events: all;
+    background: gray; 
+    margin-right: 16px;   
 }
 .TeaserCard .video-container {
     width: 100%;
     padding-bottom: 56.25%;
     background-size: cover;
     background-position: center;
-    background-repeat: no-repeat;
-    margin-bottom: 8px;
+    background-repeat: no-repeat;    
 }
 .TeaserCard .content-container {
     /* Just making room for the scroll bar */
     padding-right: 17px;
     box-sizing: content-box;
+    z-index: 1;
 }
