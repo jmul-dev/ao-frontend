@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import TeaserCard from './TeaserCard';
+import TeaserCardContainer from '../containers/TeaserCardContainer';
 import '../styles/teaser-listing.css';
 
 
@@ -54,7 +54,7 @@ export default class TeaserListing extends Component<Props> {
                                 style={index === 2 ? this.props.activeVideoCellPosition : undefined}
                                 onClick={index !== 2 ? () => updateActiveVideoIndex(activeVideoIndex + index - 2) : undefined}
                                 >
-                                <TeaserCard video={video} />
+                                <TeaserCardContainer video={video} />
                             </div>
                         )
                     })}

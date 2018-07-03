@@ -165,3 +165,23 @@
 .teaser-modal-enter-done .teaser-modal-backdrop, .teaser-modal-enter-active .teaser-modal-backdrop {
     opacity: 1;
 }
+
+.playback-modal .playback-modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: #000000;
+    z-index: 1000;
+    opacity: 0;
+}
+.playback-modal-enter-done .playback-modal-backdrop, .playback-modal-enter-active .playback-modal-backdrop {
+    opacity: 1;
+}
+.playback-modal-enter-done .video-navigation, .playback-modal-enter-active .video-navigation {
+    opacity: 1;
+}
+.playback-modal .video-navigation {
+    z-index: 1001;
+}

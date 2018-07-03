@@ -2,17 +2,19 @@ import VideoListing from '../components/VideoListing'
 import { connect } from 'react-redux'
 import { graphql, compose } from 'react-apollo'
 import gql from "graphql-tag"
-import { setTeaserListingState } from '../reducers/video.reducer'
+import { setTeaserListingState, setVideoPlaybackState } from '../reducers/video.reducer'
 
 
 // Redux
 const mapDispatchToProps = {
-    setTeaserListingState
+    setTeaserListingState,
+    setVideoPlaybackState,
 }
 
 const mapStateToProps = (store) => {
     return {
-        teaserListingActive: store.video.teaserListingActive
+        teaserListingActive: store.video.teaserListingActive,
+        videoPlaybackActive: store.video.videoPlaybackActive,
     }
 }
 

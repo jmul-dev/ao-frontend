@@ -7,6 +7,7 @@ import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import Typography from '@material-ui/core/Typography';
 import '../styles/video-listing.css';
 import TeaserListing from './TeaserListing';
+import VideoPlayback from './VideoPlayback';
 import { CSSTransition } from 'react-transition-group';
 
 
@@ -14,7 +15,9 @@ const propertySelection = (({ top, right, bottom, left, width, height }) => ({ t
 
 type Props = {
     setTeaserListingState: Function,
+    setVideoPlaybackState: Function,
     teaserListingActive: boolean,
+    videoPlaybackActive: boolean,
     videos: Function,
     videosLoading: boolean,
     videosError?: Error,
@@ -30,7 +33,7 @@ export default class VideoListing extends Component<Props> {
         }
     }
     render() {
-        const { videos, videosLoading, teaserListingActive, setTeaserListingState } = this.props
+        const { videos, videosLoading, teaserListingActive, videoPlaybackActive, setVideoPlaybackState, setTeaserListingState } = this.props
         const rowCount = videos.videos ? videos.videos.length / 3 : 0        
         if ( videosLoading )
             return null
@@ -80,6 +83,25 @@ export default class VideoListing extends Component<Props> {
                             <Button varient="contained" onClick={() => setTeaserListingState({isActive: false})}>
                                 <ArrowBackIcon />
                                 <Typography variant="body1">{`back to browse`}</Typography>
+                            </Button>
+                        </nav>
+                    </div>                        
+                </CSSTransition>
+                <CSSTransition
+                    in={videoPlaybackActive}
+                    timeout={450}
+                    classNames="playback-modal"
+                    unmountOnExit
+                >
+                    <div className="playback-modal">
+                        <div className="playback-modal-backdrop"></div>
+                        {this.state.activeVideoIndex !== undefined ? (
+                            <VideoPlayback video={videos.videos[this.state.activeVideoIndex]} />
+                        ) : null}                        
+                        <nav className="video-navigation">
+                            <Button varient="contained" onClick={() => setVideoPlaybackState({isActive: false})}>
+                                <ArrowBackIcon />
+                                <Typography variant="body1">{`back to info`}</Typography>
                             </Button>
                         </nav>
                     </div>                        

@@ -8,11 +8,16 @@ import '../styles/teaser-card.css';
 
 type Props = {
     video: any,
+    setVideoPlaybackState: Function,
 }
 
 export default class TeaserCard extends Component<Props> {
+    _playVideo = () => {
+        const { setVideoPlaybackState } = this.props
+        setVideoPlaybackState({isActive: true})
+    }
     render() {
-        const { video } = this.props
+        const { video, setVideoPlaybackState } = this.props
         return (
             <div className="TeaserCard">
                 <div className="media-container">
@@ -23,7 +28,7 @@ export default class TeaserCard extends Component<Props> {
                     <div className="action-pane">
                         <Typography variant="body1">{`LIVE | 15 AO | watch for free`}</Typography>
                         <div className="play-button-container">
-                            <IconButton>
+                            <IconButton onClick={this._playVideo}>
                                 <PlayIcon />
                             </IconButton>
                             <Typography variant="subheading">{`Watch`}</Typography>
