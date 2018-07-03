@@ -31,7 +31,7 @@ export default class VideoListing extends Component<Props> {
     }
     render() {
         const { videos, videosLoading } = this.props
-        const { teaserListingActive, gridScrollToRow } = this.state
+        const { teaserListingActive } = this.state
         const rowCount = videos.videos ? videos.videos.length / 3 : 0        
         if ( videosLoading )
             return null
@@ -57,7 +57,6 @@ export default class VideoListing extends Component<Props> {
                                 rowHeight={adjustedWidth / 3}                    
                                 height={adjustedWidth / 3 * rowCount + 200}
                                 style={{marginTop: 200, marginBottom: 200}}
-                                scrollToRow={gridScrollToRow}
                             />
                         )}
                         </ColumnSizer>
@@ -118,8 +117,7 @@ export default class VideoListing extends Component<Props> {
         const activeVideoCellPosition = propertySelection(targetCellClickable.getBoundingClientRect())
         this.setState({
             activeVideoIndex: videoIndex,
-            activeVideoCellPosition,
-            gridScrollToRow: videoIndex / 3
+            activeVideoCellPosition
         })
     }
     _unsetActiveVideoState = () => {

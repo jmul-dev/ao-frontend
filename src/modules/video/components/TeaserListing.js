@@ -55,10 +55,13 @@ export default class TeaserListing extends Component<Props> {
                                 style={index === 2 ? this.props.activeVideoCellPosition : undefined}
                                 onClick={index !== 2 ? () => updateActiveVideoIndex(activeVideoIndex + index - 2) : undefined}
                                 >
-                                <div className="media-container" style={{backgroundImage: `url(${video.coverImageUrl})`}}></div>
+                                <div className="media-container" style={{backgroundImage: `url(${video.coverImageUrl})`}}></div>                                
+                                <Typography variant="title" className="title">
+                                    {video.title}
+                                </Typography>
                                 <div className="content-container">
-                                    <Typography variant="title">
-                                        {video.title}
+                                    <Typography variant="body1">
+                                        {video.description}
                                     </Typography>
                                 </div>
                             </div>
