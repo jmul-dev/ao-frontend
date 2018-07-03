@@ -44,7 +44,7 @@ export default class TeaserListing extends Component<Props> {
         const { updateActiveVideoIndex, activeVideoIndex } = this.props
         return (
             <div className="TeaserListing">
-                <button onClick={this.props.onClose} style={{position: 'fixed', top: 0, left: 0, zIndex: 999}}>X</button>
+                <button onClick={this.props.onClose} style={{position: 'fixed', top: 24, left: 24, zIndex: 9999}}>X</button>
                 <div className="slider-track">
                     {videosSlice.map((video, index) => {
                         if ( !video )

@@ -108,6 +108,8 @@ export default class VideoListing extends Component<Props> {
             activeVideoIndex: videoIndex,
             activeVideoCellPosition,
         })
+        // Disable scrolling 
+        document.querySelector('.BrowseView').style.overflow = 'hidden'
     }
     _setActiveVideoIndex = (videoIndex) => {
         const targetCell = document.querySelectorAll('.VideoListing .Cell')[videoIndex]
@@ -125,5 +127,7 @@ export default class VideoListing extends Component<Props> {
             activeVideoIndex: undefined,
             activeVideoCellPosition: undefined,
         })
+        // Enable scrolling 
+        document.querySelector('.BrowseView').style.overflow = 'auto'
     }
 }
