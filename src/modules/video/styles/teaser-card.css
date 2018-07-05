@@ -1,3 +1,7 @@
+.TeaserCard {
+    --fullscreen-transition-duration: 300ms;
+    --fullscreen-transition-ease: var(--enter-teaser-ease);
+}
 .TeaserCard .title {
     white-space: nowrap;
     text-overflow: ellipsis;
@@ -29,15 +33,46 @@
     margin-right: 16px;   
 }
 .TeaserCard .video-container {
+    position: relative;
     width: 100%;
-    padding-bottom: 56.25%;
+    padding-bottom: 56.2%;
     background-size: cover;
     background-position: center;
-    background-repeat: no-repeat;    
+    background-repeat: no-repeat;
+    overflow: hidden;
+    pointer-events: all;
+
+    transition: transform var(--fullscreen-transition-duration) var(--fullscreen-transition-ease);
+    transform-origin: top center;
+    transform: scale(1);
 }
 .TeaserCard .content-container {
     /* Just making room for the scroll bar */
     padding-right: 17px;
     box-sizing: content-box;
     z-index: 1;
+}
+.TeaserCard .loading-overlay {
+    position: absolute;
+    top: -1px;
+    left: -1px;
+    bottom: -1px;
+    right: -1px;
+    transition: all var(--fullscreen-transition-duration) var(--fullscreen-transition-ease);
+    opacity: 0;
+    visibility: hidden;
+    background: #333333;
+}
+
+
+.TeaserCard-fullscreen-enter-active .video-container, .TeaserCard-fullscreen-enter-done .video-container {
+    transform: scale(1.75); /* 50vw * 1.75 = 87.5vw */
+}
+.TeaserCard-fullscreen-enter-active .hide-fullscreen, .TeaserCard-fullscreen-enter-done .hide-fullscreen {
+    visibility: hidden;
+    transition: none !important;
+}
+.TeaserCard-fullscreen-enter-active .loading-overlay, .TeaserCard-fullscreen-enter-done .loading-overlay {
+    opacity: 1;
+    visibility: visible;
 }

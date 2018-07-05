@@ -1,21 +1,21 @@
 // Constants
 export const SET_TEASER_LISTING_STATE = 'SET_TEASER_LISTING_STATE'
-export const SET_VIDEO_PLAYBACK_STATE = 'SET_VIDEO_PLAYBACK_STATE'
+export const SET_ACTIVE_VIDEO = 'SET_ACTIVE_VIDEO'
 
 // Actions
 export const setTeaserListingState = ({isActive}) => ({
     type: SET_TEASER_LISTING_STATE,
     payload: { isActive }
 })
-export const setVideoPlaybackState = ({isActive}) => ({
-    type: SET_VIDEO_PLAYBACK_STATE,
-    payload: { isActive }
+export const setActiveVideo = (video) => ({
+    type: SET_ACTIVE_VIDEO,
+    payload: { video }
 })
 
 // State
 const initialState = {
     teaserListingActive: false,
-    videoPlaybackActive: false,
+    activeVideo: undefined,
 }
 
 // Reducer
@@ -26,10 +26,10 @@ export default function videoReducer(state = initialState, action) {
                 ...state,
                 teaserListingActive: action.payload.isActive
             }
-        case SET_VIDEO_PLAYBACK_STATE:
+        case SET_ACTIVE_VIDEO:
             return {
                 ...state,
-                videoPlaybackActive: action.payload.isActive
+                activeVideo: action.payload.video,
             }
         default:
             return state

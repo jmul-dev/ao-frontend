@@ -15,9 +15,9 @@ const propertySelection = (({ top, right, bottom, left, width, height }) => ({ t
 
 type Props = {
     setTeaserListingState: Function,
-    setVideoPlaybackState: Function,
+    setActiveVideo: Function,
     teaserListingActive: boolean,
-    videoPlaybackActive: boolean,
+    activeVideo?: Object,
     videos: Function,
     videosLoading: boolean,
     videosError?: Error,
@@ -29,11 +29,12 @@ export default class VideoListing extends Component<Props> {
     constructor() {
         super()
         this.state = {
-            activeVideoIndex: undefined,
+            activeTeaserVideoIndex: undefined,
+            enteredTeaser: false,
         }
     }
     render() {
-        const { videos, videosLoading, teaserListingActive, videoPlaybackActive, setVideoPlaybackState, setTeaserListingState } = this.props
+        const { videos, videosLoading, teaserListingActive, activeVideo, setActiveVideo, setTeaserListingState } = this.props
         const rowCount = videos.videos ? videos.videos.length / 3 : 0        
         if ( videosLoading )
             return null
@@ -69,15 +70,18 @@ export default class VideoListing extends Component<Props> {
                     timeout={450}
                     classNames="teaser-modal"
                     unmountOnExit
-                    onExited={this._unsetActiveVideoState}
+                    onExited={this._unsetActiveTeaserVideo}
+                    onEntered={this._onEnteredTeaserListing}
                 >
                     <div className="teaser-modal">
                         <div className="teaser-modal-backdrop"></div>
                         <TeaserListing
                             videos={videos.videos}
-                            activeVideoIndex={this.state.activeVideoIndex}
-                            activeVideoCellPosition={this.state.activeVideoCellPosition}
-                            updateActiveVideoIndex={this._setActiveVideoIndex}
+                            activeTeaserVideoIndex={this.state.activeTeaserVideoIndex}
+                            activeTeaserVideoCellPosition={this.state.activeTeaserVideoCellPosition}
+                            activeFullscreenVideo={this.props.activeVideo}
+                            updateActiveVideoIndex={this._setActiveTeaserVideoIndex}
+                            enteredTeaser={this.state.enteredTeaser}
                         />
                         <nav className="video-navigation">
                             <Button varient="contained" onClick={() => setTeaserListingState({isActive: false})}>
@@ -88,18 +92,20 @@ export default class VideoListing extends Component<Props> {
                     </div>                        
                 </CSSTransition>
                 <CSSTransition
-                    in={videoPlaybackActive}
+                    in={activeVideo !== undefined}
                     timeout={450}
                     classNames="playback-modal"
                     unmountOnExit
                 >
                     <div className="playback-modal">
                         <div className="playback-modal-backdrop"></div>
-                        {this.state.activeVideoIndex !== undefined ? (
-                            <VideoPlayback video={videos.videos[this.state.activeVideoIndex]} />
-                        ) : null}                        
+                        {this.state.activeTeaserVideoIndex !== undefined ? (
+                            <VideoPlayback 
+                                video={videos.videos[this.state.activeTeaserVideoIndex]}
+                            />
+                        ) : null}
                         <nav className="video-navigation">
-                            <Button varient="contained" onClick={() => setVideoPlaybackState({isActive: false})}>
+                            <Button varient="contained" onClick={() => setActiveVideo(undefined)}>
                                 <ArrowBackIcon />
                                 <Typography variant="body1">{`back to info`}</Typography>
                             </Button>
@@ -112,7 +118,7 @@ export default class VideoListing extends Component<Props> {
     _renderCell = ({columnIndex, key, rowIndex, style}) => {
         const videoIndex = rowIndex * 3 + columnIndex
         const video = this.props.videos.videos[videoIndex]
-        const isActive = this.state.activeVideoIndex === videoIndex
+        const isActive = this.state.activeTeaserVideoIndex === videoIndex
         return (
             <div className="Cell" key={key} style={{...style, opacity: isActive ? 0 : 1}}>
                 <div className="clickable" onClick={this._enterTeaserListingAtVideo.bind(this, videoIndex)}>
@@ -128,32 +134,36 @@ export default class VideoListing extends Component<Props> {
         )
     }
     _enterTeaserListingAtVideo = (videoIndex, event) => {
-        const activeVideoCellPosition = propertySelection(event.target.getBoundingClientRect())
+        const activeTeaserVideoCellPosition = propertySelection(event.target.getBoundingClientRect())
         this.props.setTeaserListingState({isActive: true})
         this.setState({
-            activeVideoIndex: videoIndex,
-            activeVideoCellPosition,
+            activeTeaserVideoIndex: videoIndex,
+            activeTeaserVideoCellPosition,
         })
         // Disable scrolling 
         document.querySelector('.BrowseView').style.overflow = 'hidden'
     }
-    _setActiveVideoIndex = (videoIndex) => {
+    _setActiveTeaserVideoIndex = (videoIndex) => {
         const targetCell = document.querySelectorAll('.VideoListing .Cell')[videoIndex]
         if ( !targetCell )
             return console.warn(`Could not find .Cell in VideoListing at index ${videoIndex}`)
         const targetCellClickable = targetCell.querySelector('.clickable')
-        const activeVideoCellPosition = propertySelection(targetCellClickable.getBoundingClientRect())
+        const activeTeaserVideoCellPosition = propertySelection(targetCellClickable.getBoundingClientRect())
         this.setState({
-            activeVideoIndex: videoIndex,
-            activeVideoCellPosition
+            activeTeaserVideoIndex: videoIndex,
+            activeTeaserVideoCellPosition
         })
     }
-    _unsetActiveVideoState = () => {
+    _unsetActiveTeaserVideo = () => {
         this.setState({
-            activeVideoIndex: undefined,
-            activeVideoCellPosition: undefined,
+            activeTeaserVideoIndex: undefined,
+            activeTeaserVideoCellPosition: undefined,
+            enteredTeaser: false
         })
         // Enable scrolling 
         document.querySelector('.BrowseView').style.overflow = 'auto'
+    }
+    _onEnteredTeaserListing = () => {
+        this.setState({enteredTeaser: true})
     }
 }

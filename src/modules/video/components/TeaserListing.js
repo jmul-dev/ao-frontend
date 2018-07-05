@@ -5,9 +5,11 @@ import '../styles/teaser-listing.css';
 
 type Props = {
     videos: [any],
-    activeVideoIndex: number,
-    activeVideoCellPosition: Object,
+    activeTeaserVideoIndex: number,
+    activeTeaserVideoCellPosition: Object,
+    activeFullscreenVideo: Object,
     updateActiveVideoIndex: Function,
+    enteredTeaser: boolean,
 }
 
 export default class TeaserListing extends Component<Props> {
@@ -18,11 +20,11 @@ export default class TeaserListing extends Component<Props> {
         }
     }
     componentDidMount() {
-        this._getVideosRangeBasedOnActiveIndex(this.props.activeVideoIndex)
+        this._getVideosRangeBasedOnActiveIndex(this.props.activeTeaserVideoIndex)
     }
     componentWillReceiveProps(nextProps) {
-        if ( nextProps.activeVideoIndex !== this.props.activeVideoIndex ) {
-            this._getVideosRangeBasedOnActiveIndex(nextProps.activeVideoIndex)
+        if ( nextProps.activeTeaserVideoIndex !== this.props.activeTeaserVideoIndex ) {
+            this._getVideosRangeBasedOnActiveIndex(nextProps.activeTeaserVideoIndex)
         }
     }
     _getVideosRangeBasedOnActiveIndex = (activeIndex) => {
@@ -41,20 +43,27 @@ export default class TeaserListing extends Component<Props> {
     }
     render() {
         const { videosSlice } = this.state
-        const { updateActiveVideoIndex, activeVideoIndex } = this.props
+        const { updateActiveVideoIndex, activeTeaserVideoIndex, activeFullscreenVideo, enteredTeaser } = this.props
         return (
             <div className="TeaserListing">                
                 <div className="slider-track">
                     {videosSlice.map((video, index) => {
                         if ( !video )
                             return (<div key={`slide placeholder-${index}`}></div>)
+                        const slideIsFullscreen = activeFullscreenVideo && activeFullscreenVideo.id === video.id
+                        const slideIsActive = index === 2
                         return (
                             <div 
-                                className={`slide ${index !== 2 ? 'clickable' : 'active'}`} key={video.id} 
-                                style={index === 2 ? this.props.activeVideoCellPosition : undefined}
-                                onClick={index !== 2 ? () => updateActiveVideoIndex(activeVideoIndex + index - 2) : undefined}
+                                className={`slide ${index !== 2 ? 'clickable' : 'active'} ${slideIsFullscreen ? 'fullscreen' : ''}`} key={video.id} 
+                                style={index === 2 ? this.props.activeTeaserVideoCellPosition : undefined}
+                                onClick={index !== 2 ? () => updateActiveVideoIndex(activeTeaserVideoIndex + index - 2) : undefined}
                                 >
-                                <TeaserCardContainer video={video} />
+                                <TeaserCardContainer 
+                                    video={video}                                    
+                                    isActive={slideIsActive}
+                                    isFullscreen={slideIsFullscreen}
+                                    isTeaserEntered={enteredTeaser}
+                                />
                             </div>
                         )
                     })}

@@ -89,7 +89,7 @@
     .teaser-modal-enter-done .slider-track .slide:nth-child(2), .teaser-modal-enter-active .slider-track .slide:nth-child(2) {
         left: -40vw !important;
     }
-/* Teaser modal - active slide */
+/* Teaser modal - ACTIVE slide */
     .teaser-modal-enter-done .slider-track .slide:nth-child(3), .teaser-modal-enter-active .slider-track .slide:nth-child(3) {
         left: 25vw !important;
         opacity: 1;

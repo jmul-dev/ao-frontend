@@ -1,3 +1,13 @@
 .TeaserListing {
     width: 100%;  /* assumes width of container */
 }
+
+.TeaserListing .slide {
+
+}
+.TeaserListing .slide.active {
+    z-index: 1001;
+}
+.TeaserListing .slide.fullscreen {
+    z-index: 1002;
+}
