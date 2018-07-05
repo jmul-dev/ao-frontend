@@ -6,6 +6,7 @@ import PlayIcon from '@material-ui/icons/PlayArrow';
 import { CSSTransition } from 'react-transition-group';
 import ReactPlayer from 'react-player'
 import '../styles/teaser-card.css';
+import { LogoIcon } from '../../../assets/Icons';
 
 
 type Props = {
@@ -43,7 +44,7 @@ export default class TeaserCard extends Component<Props> {
     _onExitingFullscreen = () => {}
     render() {
         const { video, isActive, isFullscreen, isTeaserEntered } = this.props
-        const { teaserPlaying, videoSrc, usingTeaserSrc, videoSrcReady } = this.state
+        const { videoSrc, usingTeaserSrc, videoSrcReady } = this.state
         return (
             <CSSTransition
                 in={isFullscreen}
@@ -60,7 +61,7 @@ export default class TeaserCard extends Component<Props> {
                             onClick={isActive ? this._playVideo : undefined}
                             >
                             <ReactPlayer 
-                                key={videoSrc /* Unmounts on src change. TODO: factor fullscreen video into VideoPlayback component */}
+                                key={usingTeaserSrc ? 'teaser' : 'video' /* Unmounts on src change. TODO: factor fullscreen video into VideoPlayback component */}
                                 url={videoSrc}
                                 config={{
                                     file: {
@@ -74,10 +75,13 @@ export default class TeaserCard extends Component<Props> {
                                 height="100%"
                                 style={{position: 'absolute', top: 0, left: 0}}
                                 onReady={usingTeaserSrc ? undefined : this._onVideoSrcReady}
+                                onPlay={usingTeaserSrc ? undefined : this._onVideoSrcReady}
                             />
                             {!videoSrcReady ? (
-                                <div className="loading-overlay"></div>
-                            ):null}                            
+                                <div className="loading-overlay">
+                                    <LogoIcon />
+                                </div>
+                            ):null}
                         </div>
                         <Typography variant="title" className="title">
                             {video.title}

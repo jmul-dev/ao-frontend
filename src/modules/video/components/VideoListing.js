@@ -7,7 +7,6 @@ import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import Typography from '@material-ui/core/Typography';
 import '../styles/video-listing.css';
 import TeaserListing from './TeaserListing';
-import VideoPlayback from './VideoPlayback';
 import { CSSTransition } from 'react-transition-group';
 
 
@@ -99,11 +98,6 @@ export default class VideoListing extends Component<Props> {
                 >
                     <div className="playback-modal">
                         <div className="playback-modal-backdrop"></div>
-                        {this.state.activeTeaserVideoIndex !== undefined ? (
-                            <VideoPlayback 
-                                video={videos.videos[this.state.activeTeaserVideoIndex]}
-                            />
-                        ) : null}
                         <nav className="video-navigation">
                             <Button varient="contained" onClick={() => setActiveVideo(undefined)}>
                                 <ArrowBackIcon />

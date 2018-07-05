@@ -36,7 +36,6 @@ export default class TeaserListing extends Component<Props> {
             videosSlice.unshift(null)
         if ( activeIndex - 2 < -1 )
             videosSlice.unshift(null)
-        console.log(videosSlice)
         this.setState({
             videosSlice
         })
