@@ -3,14 +3,16 @@
     bottom: 0;
     left: 0;
     right: 0;
-    height: 40px;
+    height: 30px;
     display: flex;
     flex-direction: row;
     align-items: center;
-    background: #ddd;
-    border-top: 1px solid #bbb;
+    background: #000000;
+    border-top: 1px solid #505050;
     padding-left: 15px;
     padding-right: 15px;
+    color: #dddddd;
+    font-size: 12px;
 }
 
 .DevelopmentBar .status {

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="90px" height="90px" viewBox="0 0 90 90" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50 (54983) - http://www.bohemiancoding.com/sketch -->
+    <title>icon-account</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="icon-account" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <circle id="Oval-5" stroke="#FFFFFF" cx="45" cy="31.4827586" r="14.4827586"></circle>
+        <path d="M17,73 L17,69.137931 C17,60.6060839 23.9164287,53.6896552 32.4482759,53.6896552 L57.5517241,53.6896552 C66.0835713,53.6896552 73,60.6060839 73,69.137931 L73,73" id="Rectangle-8" stroke="#FFFFFF"></path>
+    </g>
+</svg>

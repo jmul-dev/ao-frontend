@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="45px" height="45px" viewBox="0 0 45 45" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50 (54983) - http://www.bohemiancoding.com/sketch -->
+    <title>icon-upload</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="icon-upload" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <path d="M29.4545455,23 L15.2727273,23" id="Line-4" stroke="#FFFFFF"></path>
+        <path d="M22.3636364,15.9090909 L22.3636364,30.0909091" id="Line-4" stroke="#FFFFFF"></path>
+        <rect id="Rectangle-11" stroke="#FFFFFF" x="7.5" y="10.5" width="29.7272727" height="25" rx="5"></rect>
+    </g>
+</svg>

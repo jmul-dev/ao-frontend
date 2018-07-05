@@ -1,4 +1,6 @@
 .MainLayout {
+    height: 100%;
+    position: relative;
     padding-left: var(--sidebar-width);
 }
 
@@ -8,6 +10,12 @@
     left: 0;
     bottom: 0;
     width: 80px;
+    transition: all 250ms ease-out;
+    opacity: 1;
+}
+.MainNavigation.offcanvas {
+    opacity: 0;
+    transform: translateX(calc(-1 * var(--sidebar-width)));
 }
 .MainNavigation > div {
     height: 100%;

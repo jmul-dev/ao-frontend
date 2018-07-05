@@ -36,10 +36,12 @@
 }
 
 
-html, body {
+html, body, #root {
     height: 100%;
     width: 100%;
 }
+
+
 
 body {
     font-family: 'Arimo';
@@ -47,9 +49,10 @@ body {
 }
 
 .App {
-
+    height: 100%;
+    position: relative;
 }
 
 .App.development-bar-spacing {
-    padding-bottom: 40px;
+    padding-bottom: 30px;
 }
