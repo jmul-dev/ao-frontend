@@ -36,26 +36,18 @@
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00ffffff', endColorstr='#0dffffff',GradientType=0 ); /* IE6-9 */
 }
 
-.OverlayView {
-    --overlay-transition-duration: 300ms;
-    --overlay-transition-ease: ease-out;
-    position: relative;
-    z-index: 1;
-}
 
-.OverlayView .backdrop {
+.overlay-views-wrapper {
+    position: relative;
+}
+.overlay-views-wrapper > div {
+    position: absolute;
+}
+.overlay-views-backdrop {
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    opacity: 0;
-    visibility: hidden;
-    transition: all var(--overlay-transition-duration) var(--overlay-transition-ease);
     background-color: rgba(0,0,0,0.75);
-}
-.OverlayView-enter-active .backdrop, .OverlayView-enter-done .backdrop {
-    opacity: 1;
-    visibility: visible;
-    cursor: pointer;
 }
