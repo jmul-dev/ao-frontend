@@ -1,0 +1,74 @@
+.MainLayout {
+    height: 100%;
+    position: relative;
+    padding-left: var(--sidebar-width);
+}
+
+.MainNavigation {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 80px;
+    transition: all 250ms ease-out;
+    opacity: 1;
+}
+.MainNavigation > div {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+.MainNavigation a {
+    width: var(--sidebar-width);
+    min-width: var(--sidebar-width);
+    border-radius: 0;
+    height: 140px;    
+}
+.MainNavigation.offcanvas {
+    opacity: 0;
+    transform: translateX(calc(-1 * var(--sidebar-width)));
+}
+.MainNavigation.light {
+    background: rgba(255,255,255,1);
+    color: black;
+}
+.MainNavigation.light a {
+    background-image: linear-gradient(45deg, #FFFFFF 0%, #F4F4F4 100%);
+}
+.MainNavigation.dark {
+    background: rgba(0,0,0,1);
+    color: white;
+}
+.MainNavigation.dark a {
+    /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#ffffff+0,ffffff+100&0+0,0.05+100 */
+    background: -moz-linear-gradient(top, rgba(255,255,255,0) 0%, rgba(255,255,255,0.05) 100%); /* FF3.6-15 */
+    background: -webkit-linear-gradient(top, rgba(255,255,255,0) 0%,rgba(255,255,255,0.05) 100%); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(to bottom, rgba(255,255,255,0) 0%,rgba(255,255,255,0.05) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00ffffff', endColorstr='#0dffffff',GradientType=0 ); /* IE6-9 */
+}
+
+.overlay-views-container {
+    position: relative;
+    width: calc(90vw - var(--sidebar-width));    
+}
+.overlay-view-container {
+    position: relative;
+    height: 100vh;    
+    width: 100%;
+    background:#F8F8F8;
+    background-image: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz48c3ZnIHZpZXdCb3g9IjAgMCAxMzAwIDEwMjYiIHZlcnNpb249IjEuMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayI+ICAgIDx0aXRsZT5iZzwvdGl0bGU+ICAgIDxkZWZzPiAgICAgICAgPGxpbmVhckdyYWRpZW50IHgxPSI1MCUiIHkxPSIwJSIgeDI9IjUwJSIgeTI9IjEwMCUiIGlkPSJwYWdlLWJnLWdyYWRpZW50Ij4gICAgICAgICAgICA8c3RvcCBzdG9wLWNvbG9yPSIjRkFGQUZBIiBvZmZzZXQ9IjAlIj48L3N0b3A+ICAgICAgICAgICAgPHN0b3Agc3RvcC1jb2xvcj0iI0VFRUVFRSIgb2Zmc2V0PSIxMDAlIj48L3N0b3A+ICAgICAgICA8L2xpbmVhckdyYWRpZW50PiAgICA8L2RlZnM+ICAgIDxnIHN0cm9rZT0ibm9uZSIgc3Ryb2tlLXdpZHRoPSIxIiBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPiAgICAgICAgPGNpcmNsZSBmaWxsPSJ1cmwoI3BhZ2UtYmctZ3JhZGllbnQpIiBjeD0iMTQwNiIgY3k9IjIzNyIgcj0iMTA1OCI+PC9jaXJjbGU+ICAgIDwvZz48L3N2Zz4=);
+}
+.overlay-view-container > div {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+}
+.overlay-views-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0,0,0,0.75);
+}

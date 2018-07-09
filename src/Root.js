@@ -6,9 +6,8 @@ import AppContainer from './AppContainer';
 import { ApolloProvider } from "react-apollo";
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import aoTheme from './theme';
-import './index.css'
 
-const theme = createMuiTheme(aoTheme)
+const theme = createMuiTheme(aoTheme);
 
 type Props = {
     store: {},

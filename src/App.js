@@ -5,7 +5,9 @@ import MainLayout from './layouts/main/MainLayout';
 import RegisterLayout from './layouts/register/RegisterLayout';
 import BootLayout from './layouts/boot/BootLayout';
 import DevelopmentBarContainer from './modules/devbar/containers/DevelopmentBarContainer';
-import './App.css';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import './app-variables.css';
+import './app.css';
 
 
 type Props = {
@@ -37,6 +39,7 @@ export default class App extends Component<Props> {
         }
         return (
             <div className={`App ${process.env.NODE_ENV !== 'production' ? 'development-bar-spacing' : ''}`}>
+                <CssBaseline />
                 <Switch>
                     <Route path="/app" render={(routeProps) => (
                         data.node ? (

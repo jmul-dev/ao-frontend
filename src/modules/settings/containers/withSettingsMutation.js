@@ -1,6 +1,4 @@
-import { connect } from 'react-redux'
 import { graphql, compose } from 'react-apollo'
-import gql from "graphql-tag"
 import withStateMutation from '../../../utils/withStateMutation'
 import { updateSettingsMutation, settingsQuery } from '../graphql/settings'
 import { SettingsType } from '../graphql/settings';

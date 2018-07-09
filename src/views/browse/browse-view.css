@@ -1,0 +1,17 @@
+.BrowseView {
+    position: fixed;
+    top: 0;
+    left: var(--sidebar-width);
+    right: 0;
+    bottom: 0;
+    overflow: auto;
+}
+.BrowseView > header {
+    position: fixed;
+    top: 0;
+    left: var(--sidebar-width);
+    right: 0;
+    display: flex;
+    padding: var(--gutter);
+    z-index: 1;
+}

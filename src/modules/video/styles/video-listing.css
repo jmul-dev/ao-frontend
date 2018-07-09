@@ -1,0 +1,187 @@
+.VideoListing {
+    padding-left: calc(var(--gutter) / 2);
+    padding-right: calc(var(--gutter) / 2);
+    --enter-teaser-duration: 450ms;
+    --enter-teaser-ease: cubic-bezier(0.23, 1, 0.32, 1);
+    --teaser-slide-duration: 450ms;
+    --teaser-slide-ease: ease-out;
+}
+.VideoListing .ReactVirtualized__Grid:focus {
+    outline: none;
+}
+.VideoListing .Cell {
+    padding-left: calc(var(--gutter) / 2);
+    padding-right: calc(var(--gutter) / 2);
+}
+.VideoListing .Cell .cover-image {
+    width: 100%;
+    padding-bottom: 56.25%;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    margin-bottom: 8px;
+}
+.VideoListing .video-navigation {
+    position: fixed;
+    top: 30px;
+    left: 30px;
+    z-index: 1000;
+    transition: opacity var(--enter-teaser-duration) var(--enter-teaser-ease);
+    opacity: 0;
+}
+.teaser-modal-enter-done .video-navigation, .teaser-modal-enter-active .video-navigation {
+    opacity: 1;
+}
+
+
+/* Teaser modal - slide title */
+.teaser-modal .title {
+    transition: font-size var(--enter-teaser-duration) var(--enter-teaser-ease);
+    font-size: 1.3125rem;
+}
+.teaser-modal-enter-done .title, .teaser-modal-enter-active .title {
+    font-size: 1.5rem;
+}
+/* Teaser modal - slide action pane (below title) */
+.teaser-modal .action-pane {
+    transition: opacity var(--enter-teaser-duration) var(--enter-teaser-ease);
+    opacity: 0;
+}
+.teaser-modal-enter-active .slider-track .slide:nth-child(3) .action-pane, .teaser-modal-enter-done .slider-track .slide:nth-child(3) .action-pane {
+    opacity: 1;
+}
+.teaser-modal-exit-active .action-pane { 
+    opacity: 0;
+}
+
+/* Teaser modal - all slides */
+.teaser-modal .slider-track .slide {
+    position: fixed;
+    transition: all var(--enter-teaser-duration) var(--enter-teaser-ease);
+    z-index: 999;
+    top: 15vh;
+    width: 50vw;
+    height: 85vh;
+}
+.teaser-modal-enter-done .slider-track .slide, .teaser-modal-enter-active .slider-track .slide {
+    top: 15vh !important;
+    width: 50vw !important;
+    height: 85vh !important;
+}
+.teaser-modal-enter-done .slider-track .slide {
+    transition: all var(--teaser-slide-duration) var(--teaser-slide-ease);
+}
+/* Teaser modal - prev prev slide (initial) */
+    .teaser-modal .slider-track .slide:nth-child(1), .teaser-modal .slider-track .slide:nth-child(1) {
+        left: -100vw;
+        opacity: 0;
+    }
+    /* Teaser modal - prev prev slide (enter) */
+    .teaser-modal-enter-done .slider-track .slide:nth-child(1), .teaser-modal-enter-active .slider-track .slide:nth-child(1) {
+        left: -100vw !important;
+    }
+/* Teaser modal - prev slide (initial) */
+    .teaser-modal .slider-track .slide:nth-child(2), .teaser-modal .slider-track .slide:nth-child(2) {
+        left: -50vw;
+        opacity: 0.5;
+    }
+    /* Teaser modal - prev slide (enter) */
+    .teaser-modal-enter-done .slider-track .slide:nth-child(2), .teaser-modal-enter-active .slider-track .slide:nth-child(2) {
+        left: -40vw !important;
+    }
+/* Teaser modal - ACTIVE slide */
+    .teaser-modal-enter-done .slider-track .slide:nth-child(3), .teaser-modal-enter-active .slider-track .slide:nth-child(3) {
+        left: 25vw !important;
+        opacity: 1;
+    }
+/* Teaser modal - next slide (initial) */
+    .teaser-modal .slider-track .slide:nth-child(4), .teaser-modal .slider-track .slide:nth-child(4) {
+        left: 100vw;
+        opacity: 0.5;
+    }
+    /* Teaser modal - next slide (enter) */
+    .teaser-modal-enter-done .slider-track .slide:nth-child(4), .teaser-modal-enter-active .slider-track .slide:nth-child(4) {
+        left: 90vw !important;
+    }
+/* Teaser modal - next next slide (initial) */
+    .teaser-modal .slider-track .slide:nth-child(5), .teaser-modal .slider-track .slide:nth-child(5) {
+        left: 150vw;
+        opacity: 0;
+    }
+    /* Teaser modal - next next slide (enter) */
+    .teaser-modal-enter-done .slider-track .slide:nth-child(5), .teaser-modal-enter-active .slider-track .slide:nth-child(5) {
+        left: 150vw !important;
+    }
+
+/* Teaser modal - content containers */
+.teaser-modal .content-container {
+    position: fixed;
+    width: 50vw;
+    top: 25vh;
+    bottom: 0;
+    padding-top: calc(50vw * 9 / 16 + 45px);
+    overflow: auto;
+    transition: all var(--enter-teaser-duration) var(--enter-teaser-ease);
+    opacity: 0;
+}
+.teaser-modal-enter-done .content-container {
+    transition: all var(--teaser-slide-duration) var(--teaser-slide-ease) !important;
+}
+.teaser-modal-enter-done .content-container, .teaser-modal-enter-active .content-container {
+    top: 15vh;    
+}
+.teaser-modal-enter-done .slide:nth-child(3) .content-container, .teaser-modal-enter-active .slide:nth-child(3) .content-container {
+    opacity: 1;
+}
+    .teaser-modal .slide:nth-child(1) .content-container {
+        left: -100vw;
+    }
+    .teaser-modal .slide:nth-child(2) .content-container {
+        left: -40vw;
+    }
+    .teaser-modal .slide:nth-child(3) .content-container {
+        left: 25vw;        
+    }
+    .teaser-modal .slide:nth-child(4) .content-container {
+        left: 90vw;
+    }
+    .teaser-modal .slide:nth-child(5) .content-container {
+        left: 150vw;
+    }
+
+
+/* Teaser modal - backdrop */
+.teaser-modal .teaser-modal-backdrop {
+    position: fixed;
+    transition: opacity var(--enter-teaser-duration) var(--enter-teaser-ease);
+    z-index: 997;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    opacity: 0;
+    background: #000000;
+}
+.teaser-modal-enter-done .teaser-modal-backdrop, .teaser-modal-enter-active .teaser-modal-backdrop {
+    opacity: 1;
+}
+
+.playback-modal .playback-modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: #000000;
+    z-index: 1000;
+    opacity: 0;
+}
+.playback-modal-enter-done .playback-modal-backdrop, .playback-modal-enter-active .playback-modal-backdrop {
+    opacity: 1;
+}
+.playback-modal-enter-done .video-navigation, .playback-modal-enter-active .video-navigation {
+    opacity: 1;
+}
+.playback-modal .video-navigation {
+    z-index: 1001;
+}
