@@ -18,13 +18,13 @@ const MainNavigation = ({teaserListingActive, light, dark}) => (
                 <LogoIcon />
             </Button>
             <Button component={AccountLink}>
-                <AccountIcon />
+                <AccountIcon color={light ? '#000000' : '#FFFFFF'} />
             </Button>
             <Button component={UploadLink}>
-                <UploadIcon />
+                <UploadIcon color={light ? '#000000' : '#FFFFFF'} />
             </Button>
             <Button component={SettingsLink}>
-                <SettingsIcon />
+                <SettingsIcon color={light ? '#000000' : '#FFFFFF'} />
             </Button>
         </div>
     </nav>

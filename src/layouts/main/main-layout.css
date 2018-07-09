@@ -17,6 +17,14 @@
     opacity: 0;
     transform: translateX(calc(-1 * var(--sidebar-width)));
 }
+.MainNavigation.light {
+    background: rgba(255,255,255,1);
+    color: black;
+}
+.MainNavigation.dark {
+    background: rgba(0,0,0,1);
+    color: white;
+}
 .MainNavigation > div {
     height: 100%;
     width: 100%;
@@ -36,12 +44,18 @@
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00ffffff', endColorstr='#0dffffff',GradientType=0 ); /* IE6-9 */
 }
 
-
-.overlay-views-wrapper {
+.overlay-views-container {
     position: relative;
+    width: 80vw;
 }
-.overlay-views-wrapper > div {
-    position: absolute;
+.overlay-view-container {
+    position: relative;
+    height: 100vh;    
+    width: 100%;
+    background: white;    
+}
+.overlay-view-container > div {
+    position: absolute;    
 }
 .overlay-views-backdrop {
     position: fixed;
