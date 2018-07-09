@@ -12,3 +12,12 @@ export default {
         },
     }
 }
+
+export const lightTheme = {
+    palette: {
+        type: 'light',
+        background: {
+            default: '#FFFFFF'
+        },
+    }
+}

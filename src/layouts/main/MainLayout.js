@@ -7,26 +7,30 @@ import AccountView from '../../views/account/AccountView';
 import BrowseView from '../../views/browse/BrowseView';
 import MainNavigation from './MainNavigation';
 import { AnimatedRoute, AnimatedSwitch, spring } from 'react-router-transition';
+import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import { lightTheme } from '../../theme';
 import './main-layout.css';
 
-const overlayTransitionParams = { stiffness: 200, damping: 15 }
-
+const overlayTransitionParams = { stiffness: 350, damping: 16 }
+const muiThemeLight = createMuiTheme(lightTheme)
 
 const ViewRoutes = () => (
-    <AnimatedSwitch 
-        atEnter={{offset: spring(-25, overlayTransitionParams), opacity: 0}}
-        atLeave={{offset: spring(-25, overlayTransitionParams), opacity: 0}}
-        atActive={{offset: spring(0, overlayTransitionParams), opacity: 1}}
-        mapStyles={(styles) => ({
-            transform: `translateX(${styles.offset}%)`,
-            opacity: styles.opacity
-        })}
-        className="overlay-view-container"
-        >
-        <Route path="/app/view/account" component={AccountView} />
-        <Route path="/app/view/settings" component={SettingsView} />
-        <Route path="/app/view/upload" render={() => `upload`} />
-    </AnimatedSwitch>
+    <MuiThemeProvider theme={muiThemeLight}>
+        <AnimatedSwitch 
+            atEnter={{offset: spring(-25, overlayTransitionParams), opacity: 0}}
+            atLeave={{offset: spring(-25, overlayTransitionParams), opacity: 0}}
+            atActive={{offset: spring(0, overlayTransitionParams), opacity: 1}}
+            mapStyles={(styles) => ({
+                transform: `translateX(${styles.offset}%)`,
+                opacity: styles.opacity
+            })}
+            className="overlay-view-container"
+            >
+            <Route path="/app/view/account" component={AccountView} />
+            <Route path="/app/view/settings" component={SettingsView} />
+            <Route path="/app/view/upload" render={() => `upload`} />
+        </AnimatedSwitch>
+    </MuiThemeProvider>
 )
 
 const ViewRoutesBackdrop = () => (
