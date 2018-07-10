@@ -29,7 +29,7 @@ const ViewRoutes = () => (
             >
             <Route path="/app/view/account" component={AccountView} />
             <Route path="/app/view/settings" component={SettingsView} />
-            <Route path="/app/view/upload" render={UploadView} />
+            <Route path="/app/view/upload" component={UploadView} />
         </AnimatedSwitch>
     </MuiThemeProvider>
 )

@@ -5,9 +5,9 @@ import { ConnectedRouter } from 'react-router-redux';
 import AppContainer from './AppContainer';
 import { ApolloProvider } from "react-apollo";
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
-import aoTheme from './theme';
+import { darkTheme } from './theme';
 
-const theme = createMuiTheme(aoTheme);
+const theme = createMuiTheme(darkTheme);
 
 type Props = {
     store: {},

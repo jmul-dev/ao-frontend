@@ -1,11 +1,12 @@
 // @flow
 import React, { Component } from 'react';
 import { UploadReducerType } from '../reducers/upload.reducer';
-import Stepper from '@material-ui/core/Stepper';
-import Step from '@material-ui/core/Step';
-import StepButton from '@material-ui/core/StepButton';
 import FileUpload from '../components/FileUpload';
 import TextInput from '../components/TextInput';
+import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
+import Grid from '@material-ui/core/Grid';
+import '../styles/upload-form.css';
 
 
 type Props = {
@@ -13,48 +14,63 @@ type Props = {
     updateCurrentStep: (number) => void,
 };
 
-const STEPS = ['Video', 'Teaser', 'Featured Image', 'Title & Description']
 
 export default class UploadForm extends Component<Props> {
     props: Props;
-    _handleStepNav = (index) => {
+    _navToStep = (index) => {
         const { updateCurrentStep } = this.props
-        // TODO: verifiy if user can nav to this step
         updateCurrentStep(index)
     }
     render() {
         const { currentStepIndex } = this.props.upload
         return (
             <div className="UploadForm">
-                <div>{this._renderStep(currentStepIndex)}</div>
-                <Stepper nonLinear activeStep={currentStepIndex}>
-                    {STEPS.map((step, index) => (
-                        <Step key={index}>
-                            <StepButton
-                                onClick={this._handleStepNav.bind(this, index)}
-                                completed={currentStepIndex > index}
-                            >
-                                {step}
-                            </StepButton>
-                        </Step>
-                    ))}
-                </Stepper>
+                {this._renderStep(currentStepIndex)}
             </div>
         );
     }
     _renderStep(index) {
+        const { form } = this.props.upload
         switch (index) {
             case 0:
                 return (
-                    <FileUpload inputName="video" />
+                    <FileUpload inputName="video" onInputChange={this._navToStep.bind(this, 1)}>
+                        <div className="video-input">
+                            <Typography variant="display2" gutterBottom align="center">
+                                {'drag and drop to upload'}
+                            </Typography>
+                            <Typography variant="caption" gutterBottom align="center">
+                                {'mp4 or mov files'}
+                            </Typography>
+                            <Button variant="contained" style={{backgroundColor: 'white', marginTop: 24}}>
+                                {'or choose a file'}
+                            </Button>
+                        </div>
+                    </FileUpload>
                 )
             case 1:
                 return (
-                    <FileUpload inputName="videoTeaser" />
+                    <Grid container spacing={16}>
+                        <Grid item xs={4}>
+                            <Typography variant="body1">
+                                {~~(form.video.size / 1000 / 1000)} MB
+                            </Typography>
+                        </Grid>
+                        <Grid item xs={8}>
+                            <Typography variant="body1">
+                                {'We’ve put together a few options based on your needs:'}
+                            </Typography>
+                        </Grid>
+                    </Grid>                    
                 )
             case 2:
                 return (
-                    <FileUpload inputName="featuredImage" />
+                    <Grid container spacing={16}>
+                        <Grid item xs={4}>
+                            <FileUpload inputName="videoTeaser" />
+                            <FileUpload inputName="featuredImage" />
+                        </Grid>                        
+                    </Grid>                    
                 )
             case 3:
                 return (
@@ -65,9 +81,12 @@ export default class UploadForm extends Component<Props> {
                 )
             default:
                 return (
-                    <div>{`Current step: ${index} - ${STEPS[index]}`}</div>
+                    <div>{`Current step: ${index}`}</div>
                 )
                 break;
         }
+    }
+    _navToSecondInputs = () => {
+
     }
 }
