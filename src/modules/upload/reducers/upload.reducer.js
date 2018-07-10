@@ -24,6 +24,7 @@ const initialState = {
         featuredImage: undefined,
         title: undefined,
         description: undefined,
+        pricingOption: 1,  // 0 = custom, 1-3 predefined inputs
     },
 }
 export type UploadReducerType = {

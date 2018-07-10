@@ -4,3 +4,47 @@
     padding-bottom: 140px;
     text-align: center;
 }
+
+.UploadForm .video-preview {
+    width: 100%;
+    padding-bottom: 56.25%;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    margin-bottom: 8px;
+}
+
+.UploadForm .pricing-card {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    padding: 16px;
+    padding-bottom: 64px;
+    border-radius: 4px;
+    background: white;
+    height: 300px;
+    width: 100%;
+    overflow: hidden;
+}
+.UploadForm .pricing-card .headline {
+    margin-bottom: auto;
+}
+.UploadForm .pricing-card .label {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    text-align: center;
+    padding: 8px;
+    background: gray;
+}
+.UploadForm .pricing-card .pricing-table {
+    width: 100%;
+}
+.UploadForm .pricing-card .pricing-table > div {
+    display: flex;
+    align-items: center;
+}
+.UploadForm .pricing-card .pricing-table > div > * {
+    width: 50%;
+}

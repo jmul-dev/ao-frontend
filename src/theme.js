@@ -10,6 +10,10 @@ export const darkTheme = {
         display2: {
             fontSize: '1.714rem',
             color: '#FFFFFF'
+        },
+        display3: {
+            fontSize: '1.5rem',
+            color: '#FFFFFF'
         }
     },
     palette: {
@@ -24,6 +28,10 @@ export const lightTheme = {
         fontFamily: 'Arimo',
         display2: {
             fontSize: '1.714rem',
+            color: '#333333'
+        },
+        display3: {
+            fontSize: '1.5rem',
             color: '#333333'
         }
     },
