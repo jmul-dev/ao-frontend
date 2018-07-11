@@ -7,6 +7,9 @@ import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import Input from '@material-ui/core/Input';
+import Paper from '@material-ui/core/Paper';
+import ProfitSlider from './ProfitSlider';
 import withUploadFormData from '../containers/withUploadFormData';
 import { Redirect } from 'react-router-dom';
 import { BackButton, PrimaryButton } from './UploadFormNavButtons';
@@ -35,13 +38,41 @@ const PricingInputCard = ({headline, label, stake, profit, selected, onClick}) =
     </ButtonBase>
 )
 
-const CustomPricingCard = ({expanded, ...props}) => (
-    <ExpansionPanel className={expanded ? 'selected' : ''} expanded={expanded} {...props}>
+const CustomPricingCard = ({expanded, stake, profit, onSelected, onChange, ...props}) => (
+    <ExpansionPanel className={expanded ? 'selected' : ''} expanded={expanded} onChange={onSelected} {...props}>
         <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-            {'custom settings'}
+            <Typography variant="display3" className="headline">{'custom settings'}</Typography>
         </ExpansionPanelSummary>
         <ExpansionPanelDetails>
-            Details
+            <div>
+                <div className="gutter-bottom">
+                    <Typography>{'1. How much would you like to charge?'}</Typography>
+                    <div className="stake-input-container indent">
+                        <Input 
+                            type="number"
+                            disableUnderline={true}
+                            value={stake}
+                            onChange={(event) => onChange(parseInt(event.target.value))}
+                        />
+                        <Typography>{'ao/view'}</Typography>
+                    </div>
+                </div>
+                <div className="gutter-bottom">
+                    <Typography>{'2. What percentage of the earnings would you like to make?'}</Typography>
+                    <Typography variant="caption" className="indent">{'Please note the higher percentage you take, the less profits you may actually make as nodes are less likely to host your content and give you exposure.'}</Typography>
+                    <div className="profit-input-container indent">
+                        <Typography variant="display3">{`${profit}%`}</Typography>
+                        <ProfitSlider
+                            min={0}
+                            max={100}
+                            step={1}
+                            value={profit}
+                            onChange={(event, value) => onChange(undefined, parseInt(value))}
+                        />
+                        <Typography style={{color: '#17BB59'}}>{profit < 25 ? 'great exposure' : (profit < 50 ? 'good exposure' : (profit < 75 ? 'average exposure' : 'less exposure'))}</Typography>
+                    </div>
+                </div>
+            </div>
         </ExpansionPanelDetails>
     </ExpansionPanel>
 )
@@ -50,8 +81,8 @@ class UploadFormPricing extends Component {
     static contextTypes = {
         router: PropTypes.object.isRequired
     }
-    _selectPricingOption = (pricingOptionIndex) => {
-        this.props.updateUploadFormField("pricingOption", pricingOptionIndex)
+    _selectPricingOption = (pricingOptionIndex, stake, profit) => {
+        this.props.updatePricingOption(pricingOptionIndex, stake, profit)
     }
     _navBack = () => {
         this.context.router.history.goBack()
@@ -70,7 +101,9 @@ class UploadFormPricing extends Component {
         return (
             <Grid container spacing={16}>
                 <Grid item xs={3}>
-                    <div className="video-preview" style={{backgroundImage: `url(${form.video.preview})`}}></div>
+                    <Paper style={{overflow: 'hidden', marginBottom: 8}}>
+                        <div className="video-preview" style={{backgroundImage: `url(${form.video.preview})`}}></div>
+                    </Paper>
                     <Typography variant="body1">
                         {`file size: ${fileSizeInMb} MB`}
                     </Typography>
@@ -116,7 +149,10 @@ class UploadFormPricing extends Component {
                     <div className="custom-pricing gutter-bottom">
                         <CustomPricingCard
                             expanded={form.pricingOption === 0}
-                            onChange={(_, expanded) => expanded ? this._selectPricingOption(0) : this._selectPricingOption(1)}
+                            stake={form.stake}
+                            profit={form.profit}
+                            onSelected={(_, expanded) => expanded ? this._selectPricingOption(0) : this._selectPricingOption(1)}
+                            onChange={this._selectPricingOption.bind(this, 0)}
                         />
                     </div>
                     <nav className="upload-form-nav gutter-bottom">

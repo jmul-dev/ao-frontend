@@ -11,6 +11,9 @@
 .UploadView .gutter-bottom {
     margin-bottom: 30px;
 }
+.UploadView .indent {
+    padding-left: 16px;
+}
 .UploadView .upload-form-nav {
     text-align: right;
 }
@@ -28,7 +31,6 @@
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    margin-bottom: 8px;
 }
 .UploadView .pricing-card {
     display: flex;
@@ -47,6 +49,9 @@
 }
 .UploadView .custom-pricing .selected {
     box-shadow: 0px 0px 1px 1px var(--brand-primary);
+}
+.UploadView .custom-pricing .selected .headline {
+    color: var(--brand-primary);
 }
 .UploadView .pricing-card.selected .headline {
     color: var(--brand-primary);
@@ -75,4 +80,38 @@
 }
 .UploadView .pricing-card .pricing-table > div > * {
     width: 50%;
+}
+.UploadView .custom-pricing .profit-input-container {
+    display: flex;
+    align-items: center;
+    position: relative;
+    margin-top: 16px;
+}
+.UploadView .custom-pricing .profit-input-container > :first-child {
+    margin-right: 16px;
+    width: 50px;
+    flex-shrink: 0;
+    flex-grow: 0;
+    color: var(--brand-primary);
+}
+.UploadView .custom-pricing .profit-input-container > :last-child {
+    position: absolute;
+    top: 100%;
+    right: 0;
+}
+.UploadView .custom-pricing .stake-input-container {
+    display: flex;
+    align-items: center;
+    margin-top: 16px;
+}
+.UploadView .custom-pricing .stake-input-container > :first-child {
+    margin-right: 8px;
+}
+.UploadView .custom-pricing .stake-input-container input {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    text-align: right;
+    width: 140px;
+    font-size: 1.5rem;
+    color: var(--brand-primary);
 }

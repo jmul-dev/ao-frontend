@@ -19,8 +19,9 @@ class UploadForm extends Component {
     _onFileInputChange = (value) => {
         if ( value ) {
             // Nav to next view
-            this.props.routerPush('/app/view/upload/pricing')
+            this.props.updatePricingOption(1)
             this.props.updateLastReachedStep('pricing')
+            this.props.routerPush('/app/view/upload/pricing')
         }
     }
     render() {

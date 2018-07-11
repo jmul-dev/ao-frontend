@@ -1,10 +1,11 @@
 import { connect } from 'react-redux'
-import { updateUploadFormField, updateLastReachedStep } from '../reducers/upload.reducer'
+import { updateUploadFormField, updatePricingOption, updateLastReachedStep } from '../reducers/upload.reducer'
 import { push } from 'react-router-redux';
 
 // Redux
 const mapDispatchToProps = {
     updateUploadFormField,
+    updatePricingOption,
     updateLastReachedStep,
     routerPush: push,
 }
