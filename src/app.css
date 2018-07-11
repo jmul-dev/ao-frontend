@@ -56,3 +56,6 @@ body {
 .App.development-bar-spacing {
     padding-bottom: 30px;
 }
+.App.development-bar-spacing .overlay-view-container {
+    height: calc(100vh - 30px);
+}

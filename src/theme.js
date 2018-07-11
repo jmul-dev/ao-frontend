@@ -40,5 +40,17 @@ export const lightTheme = {
         background: {
             default: '#FFFFFF'
         },
-    }
+    },
+    overrides: {
+        MuiButton: {
+            root: {
+                textTransform: 'none'
+            },
+            flatPrimary: {
+                background: 'linear-gradient(-90deg, #6425FB 0%, #546EFF 100%)',
+                padding: '0 45px',
+                color: 'white',
+            },
+        },
+    },
 }

@@ -2,6 +2,7 @@
     height: 100%;
     position: relative;
     padding-left: var(--sidebar-width);
+    overflow: hidden;
 }
 
 .MainNavigation {
@@ -54,10 +55,11 @@
 }
 .overlay-view-container {
     position: relative;
-    height: 100vh;    
+    height: 100vh;
     width: 100%;
     background:#F8F8F8;
     background-image: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz48c3ZnIHZpZXdCb3g9IjAgMCAxMzAwIDEwMjYiIHZlcnNpb249IjEuMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayI+ICAgIDx0aXRsZT5iZzwvdGl0bGU+ICAgIDxkZWZzPiAgICAgICAgPGxpbmVhckdyYWRpZW50IHgxPSI1MCUiIHkxPSIwJSIgeDI9IjUwJSIgeTI9IjEwMCUiIGlkPSJwYWdlLWJnLWdyYWRpZW50Ij4gICAgICAgICAgICA8c3RvcCBzdG9wLWNvbG9yPSIjRkFGQUZBIiBvZmZzZXQ9IjAlIj48L3N0b3A+ICAgICAgICAgICAgPHN0b3Agc3RvcC1jb2xvcj0iI0VFRUVFRSIgb2Zmc2V0PSIxMDAlIj48L3N0b3A+ICAgICAgICA8L2xpbmVhckdyYWRpZW50PiAgICA8L2RlZnM+ICAgIDxnIHN0cm9rZT0ibm9uZSIgc3Ryb2tlLXdpZHRoPSIxIiBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPiAgICAgICAgPGNpcmNsZSBmaWxsPSJ1cmwoI3BhZ2UtYmctZ3JhZGllbnQpIiBjeD0iMTQwNiIgY3k9IjIzNyIgcj0iMTA1OCI+PC9jaXJjbGU+ICAgIDwvZz48L3N2Zz4=);
+    overflow: auto;
 }
 .overlay-view-container > div {
     position: absolute;

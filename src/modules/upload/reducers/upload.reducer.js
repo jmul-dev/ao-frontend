@@ -3,9 +3,9 @@ export const UPDATE_CURRENT_UPLOAD_STEP = 'UPDATE_CURRENT_UPLOAD_STEP'
 export const UPDATE_UPLOAD_FORM_FIELD = 'UPDATE_UPLOAD_FORM_FIELD'
 
 // Actions
-export const updateCurrentStep = (index) => ({
+export const updateLastReachedStep = (step) => ({
     type: UPDATE_CURRENT_UPLOAD_STEP,
-    payload: index
+    payload: step
 })
 export const updateUploadFormField = (inputName, inputValue) => ({
     type: UPDATE_UPLOAD_FORM_FIELD,
@@ -17,7 +17,7 @@ export const updateUploadFormField = (inputName, inputValue) => ({
 
 // State
 const initialState = {
-    currentStepIndex: 0,
+    lastReachedUploadStep: 'start',
     form: {
         video: undefined,
         videoTeaser: undefined,
@@ -25,10 +25,10 @@ const initialState = {
         title: undefined,
         description: undefined,
         pricingOption: 1,  // 0 = custom, 1-3 predefined inputs
-    },
+    },    
 }
 export type UploadReducerType = {
-    currentStepIndex: number,
+    lastReachedUploadStep: 'start' | 'pricing' | 'reload' | 'content',
 }
 
 // Reducer
@@ -37,7 +37,7 @@ export default function uploadReducer(state = initialState, action) {
         case UPDATE_CURRENT_UPLOAD_STEP:
             return {
                 ...state,
-                currentStepIndex: action.payload
+                lastReachedUploadStep: action.payload
             }
         case UPDATE_UPLOAD_FORM_FIELD:
             return {
