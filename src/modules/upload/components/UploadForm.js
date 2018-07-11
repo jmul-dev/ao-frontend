@@ -1,12 +1,8 @@
 import React, { Component } from 'react';
-import { UploadReducerType } from '../reducers/upload.reducer';
 import FileUpload from '../components/FileUpload';
-import TextInput from '../components/TextInput';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
-import Grid from '@material-ui/core/Grid';
 import withUploadFormData from '../containers/withUploadFormData';
-
 
 
 class UploadForm extends Component {
@@ -15,6 +11,9 @@ class UploadForm extends Component {
         this.state = {
             initialRedirect: false
         }
+    }
+    componentDidMount() {
+        this.props.resetUploadForm()
     }
     _onFileInputChange = (value) => {
         if ( value ) {
@@ -25,7 +24,6 @@ class UploadForm extends Component {
         }
     }
     render() {
-        const { form } = this.props
         return (
             <div className="UploadForm">
                 <FileUpload inputName="video" onInputChange={this._onFileInputChange}>

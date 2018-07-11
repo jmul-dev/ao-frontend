@@ -1,6 +1,5 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { updateUploadFormField } from '../reducers/upload.reducer'
 import { Redirect } from 'react-router-dom'
 
 const UploadFormContinue = ({lastReachedUploadStep}) => (

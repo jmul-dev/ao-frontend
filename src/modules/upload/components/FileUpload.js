@@ -10,7 +10,8 @@ type Props = {
     onInputChange: (any) => void,
 };
 
-class FileUpload extends Component {
+class FileUpload extends Component<Props> {
+    props: Props;
     _onDrop = (acceptedFiles, rejectedFiles) => {
         const { updateUploadFormField, inputName, onInputChange } = this.props
         updateUploadFormField(inputName, acceptedFiles[0])
@@ -19,7 +20,7 @@ class FileUpload extends Component {
     render() {
         const { inputValue } = this.props
         return inputValue ? (
-            <img src={inputValue.preview} width={300} height={'auto'} />
+            <img alt="preview" src={inputValue.preview} width={300} height={'auto'} />
         ) : (
             <Dropzone onDrop={this._onDrop} style={{width: '100%', border: '1px dashed #CCCCCC'}}>
                 {this.props.children}

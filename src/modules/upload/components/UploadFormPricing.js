@@ -8,11 +8,11 @@ import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Input from '@material-ui/core/Input';
-import Paper from '@material-ui/core/Paper';
 import ProfitSlider from './ProfitSlider';
 import withUploadFormData from '../containers/withUploadFormData';
 import { Redirect } from 'react-router-dom';
 import { BackButton, PrimaryButton } from './UploadFormNavButtons';
+import OverviewAside from './OverviewAside';
 
 
 const PricingInputCard = ({headline, label, stake, profit, selected, onClick}) => (
@@ -52,7 +52,7 @@ const CustomPricingCard = ({expanded, stake, profit, onSelected, onChange, ...pr
                             type="number"
                             disableUnderline={true}
                             value={stake}
-                            onChange={(event) => onChange(parseInt(event.target.value))}
+                            onChange={(event) => onChange(parseInt(event.target.value, 10))}
                         />
                         <Typography>{'ao/view'}</Typography>
                     </div>
@@ -67,7 +67,7 @@ const CustomPricingCard = ({expanded, stake, profit, onSelected, onChange, ...pr
                             max={100}
                             step={1}
                             value={profit}
-                            onChange={(event, value) => onChange(undefined, parseInt(value))}
+                            onChange={(event, value) => onChange(undefined, parseInt(value, 10))}
                         />
                         <Typography style={{color: '#17BB59'}}>{profit < 25 ? 'great exposure' : (profit < 50 ? 'good exposure' : (profit < 75 ? 'average exposure' : 'less exposure'))}</Typography>
                     </div>
@@ -93,7 +93,7 @@ class UploadFormPricing extends Component {
         this.context.router.history.push(nextRoute)
     }
     render() {
-        const { form, router } = this.props
+        const { form } = this.props
         if ( !form.video ) {
             return <Redirect to={'/app/view/upload/start'} />
         }
@@ -101,14 +101,9 @@ class UploadFormPricing extends Component {
         return (
             <Grid container spacing={16}>
                 <Grid item xs={3}>
-                    <Paper style={{overflow: 'hidden', marginBottom: 8}}>
-                        <div className="video-preview" style={{backgroundImage: `url(${form.video.preview})`}}></div>
-                    </Paper>
-                    <Typography variant="body1">
-                        {`file size: ${fileSizeInMb} MB`}
-                    </Typography>
+                    <OverviewAside form={form} includePricing={false} />
                 </Grid>
-                <Grid item xs={9}>                    
+                <Grid item xs={8} style={{marginLeft: 'auto'}}>                    
                     <Typography variant="display3" className="gutter-bottom">
                         {'We’ve put together a few options based on your needs:'}
                     </Typography>

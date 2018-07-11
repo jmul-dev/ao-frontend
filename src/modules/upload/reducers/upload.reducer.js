@@ -2,6 +2,7 @@
 export const UPDATE_CURRENT_UPLOAD_STEP = 'UPDATE_CURRENT_UPLOAD_STEP'
 export const UPDATE_UPLOAD_FORM_FIELD = 'UPDATE_UPLOAD_FORM_FIELD'
 export const UPDATE_PRICING = 'UPDATE_PRICING'
+export const RESET_UPLOAD_FORM = 'RESET_UPLOAD_FORM'
 
 export const PRICING_DEFAULTS = [{
     stakeRatio: 1,
@@ -32,6 +33,18 @@ export const updateUploadFormField = (inputName, inputValue) => ({
         inputValue,
     }
 })
+export const resetUploadForm = () => {
+    return (dispatch, getState) => {
+        const state = getState()
+        const video = state.upload.form.video
+        if ( video ) {
+            window.URL.revokeObjectURL(video.preview);
+        }
+        dispatch({
+            type: RESET_UPLOAD_FORM,
+        })
+    }
+}
 // Only provide stake/profit if custom pricingOption = 0
 export const updatePricingOption = (pricingOption, stake = undefined, profit = undefined) => {
     return (dispatch, getState) => {
@@ -101,6 +114,12 @@ export default function uploadReducer(state = initialState, action) {
                     ...state.form,
                     ...action.payload
                 }
+            }
+        case RESET_UPLOAD_FORM:
+            return {
+                ...state,
+                lastReachedUploadStep: 'start',
+                form: {}
             }
         default:
             return state
