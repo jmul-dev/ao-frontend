@@ -10,6 +10,7 @@
     "@material-ui/lab": "^1.0.0-alpha.5",
     "ao-core": "^1.0.5",
     "apollo-cache-inmemory": "^1.2.5",
+    "apollo-client": "^2.3.5",
     "apollo-upload-client": "^8.1.0",
     "bignumber.js": "^7.2.1",
     "classnames": "^2.2.6",
