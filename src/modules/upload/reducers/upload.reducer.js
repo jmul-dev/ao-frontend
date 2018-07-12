@@ -3,6 +3,9 @@ export const UPDATE_CURRENT_UPLOAD_STEP = 'UPDATE_CURRENT_UPLOAD_STEP'
 export const UPDATE_UPLOAD_FORM_FIELD = 'UPDATE_UPLOAD_FORM_FIELD'
 export const UPDATE_PRICING = 'UPDATE_PRICING'
 export const RESET_UPLOAD_FORM = 'RESET_UPLOAD_FORM'
+export const STAKE_TRANSACTION_SUCCESS = 'STAKE_TRANSACTION_SUCCESS'
+export const STAKE_TRANSACTION_ERROR = 'STAKE_TRANSACTION_ERROR'
+
 
 export const PRICING_DEFAULTS = [{
     stakeRatio: 1,
@@ -72,6 +75,30 @@ export const updatePricingOption = (pricingOption, stake = undefined, profit = u
         })
     }
 }
+export const triggerStakeTransaction = () => {
+    return (dispatch, getState) => {
+        const state = getState()
+        const stakeParams = {
+            stake: state.upload.form.stake,
+            split: state.upload.form.profit,
+        }
+        const messageToSign = JSON.stringify(stakeParams)
+        const hashedMessage = window.web3.sha3(messageToSign)
+        window.web3.eth.sign(state.app.ethAddress, hashedMessage, function(error, result) {
+            if ( error ) {
+                dispatch({
+                    type: STAKE_TRANSACTION_ERROR,
+                    payload: error
+                })
+            } else {
+                dispatch({
+                    type: STAKE_TRANSACTION_SUCCESS,
+                    payload: result
+                })
+            }
+        })
+    }
+}
 
 // State
 const initialState = {
@@ -85,7 +112,11 @@ const initialState = {
         pricingOption: 1,  // 0 = custom, 1-3 predefined inputs
         stake: undefined,
         profit: undefined,
-    },    
+    },
+    stakeTransaction: {
+        result: undefined,
+        error: undefined,
+    }
 }
 export type UploadReducerType = {
     lastReachedUploadStep: 'start' | 'pricing' | 'reload' | 'content',
@@ -120,6 +151,20 @@ export default function uploadReducer(state = initialState, action) {
                 ...state,
                 lastReachedUploadStep: 'start',
                 form: {}
+            }
+        case STAKE_TRANSACTION_SUCCESS:
+            return {
+                ...state,
+                stakeTransaction: {
+                    result: action.payload
+                }
+            }
+        case STAKE_TRANSACTION_ERROR:
+            return {
+                ...state,
+                stakeTransaction: {
+                    error: action.payload
+                }
             }
         default:
             return state

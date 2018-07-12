@@ -6,24 +6,24 @@ import { LogoIcon, AccountIcon, UploadIcon, SettingsIcon } from '../../assets/Ic
 import { connect } from 'react-redux';
 import classnames from 'classnames'
 
-const BrowseLink = props => <Link to="/app" {...props} />
-const AccountLink = props => <Link to="/app/view/account" {...props} />
-const UploadLink = props => <Link to="/app/view/upload" {...props} />
-const SettingsLink = props => <Link to="/app/view/settings" {...props} />
+const BrowseLink = ({overlayViewsActive, ...props}) => <Link to="/app" {...props} />
+const AccountLink = ({overlayViewsActive, ...props}) => <Link to="/app/view/account" replace={overlayViewsActive} {...props} />
+const UploadLink = ({overlayViewsActive, ...props}) => <Link to="/app/view/upload" replace={overlayViewsActive} {...props} />
+const SettingsLink = ({overlayViewsActive, ...props}) => <Link to="/app/view/settings" replace={overlayViewsActive} {...props} />
 
-const MainNavigation = ({teaserListingActive, light, dark}) => (
+const MainNavigation = ({teaserListingActive, overlayViewsActive, light, dark}) => (
     <nav className={classnames('MainNavigation', {light, dark, offcanvas: teaserListingActive})}>
         <div style={{display: 'flex'}}>
-            <Button component={BrowseLink}>
+            <Button component={BrowseLink} overlayViewsActive={overlayViewsActive}>
                 <LogoIcon />
             </Button>
-            <Button component={AccountLink}>
+            <Button component={AccountLink} overlayViewsActive={overlayViewsActive}>
                 <AccountIcon color={light ? '#000000' : '#FFFFFF'} />
             </Button>
-            <Button component={UploadLink}>
+            <Button component={UploadLink} overlayViewsActive={overlayViewsActive}>
                 <UploadIcon color={light ? '#000000' : '#FFFFFF'} />
             </Button>
-            <Button component={SettingsLink}>
+            <Button component={SettingsLink} overlayViewsActive={overlayViewsActive}>
                 <SettingsIcon color={light ? '#000000' : '#FFFFFF'} />
             </Button>
         </div>
@@ -31,7 +31,8 @@ const MainNavigation = ({teaserListingActive, light, dark}) => (
 )
 const mapStateToProps = (store) => {
     return {
-        teaserListingActive: store.video.teaserListingActive
+        teaserListingActive: store.video.teaserListingActive,
+        overlayViewsActive: store.router.location.pathname.indexOf('/app/view') > -1
     }
 }
 export default connect(mapStateToProps)(MainNavigation)

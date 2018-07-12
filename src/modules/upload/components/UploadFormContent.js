@@ -14,7 +14,7 @@ import FileUpload from './FileUpload';
 class UploadFormContent extends Component {
     static contextTypes = {
         router: PropTypes.object.isRequired
-    }    
+    }
     componentDidMount() {
         this.props.updateLastReachedStep('content')
     }

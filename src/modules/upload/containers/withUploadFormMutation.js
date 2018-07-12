@@ -1,7 +1,8 @@
 import { graphql, compose } from 'react-apollo';
 import withStateMutation from '../../../utils/withStateMutation';
 import gql from 'graphql-tag';
-import { connect } from 'react-redux'
+import { connect } from 'react-redux';
+import { triggerStakeTransaction } from '../reducers/upload.reducer';
 
 
 export type UploadFormMutationProps = {
@@ -10,12 +11,18 @@ export type UploadFormMutationProps = {
     submitContentError?: Error,
 };
 
+// Redux
+const mapDispatchToProps = {
+    triggerStakeTransaction
+}
 const mapStateToProps = (store) => {
     return {
-        form: store.upload.form
+        form: store.upload.form,
+        stakeTransaction: store.upload.stakeTransaction
     }
 }
 
+// Graphql
 const submitContentMutation = gql(`
     mutation submitVideoContent($inputs: VideoContentSubmissionInputs) {
         submitVideoContent(inputs: $inputs) {
@@ -25,7 +32,7 @@ const submitContentMutation = gql(`
 `)
 
 export default compose(
-    connect(mapStateToProps),
+    connect(mapStateToProps, mapDispatchToProps),
     graphql(submitContentMutation, {
         name: 'submitContent',
         // Pull inputs straight from redux props
