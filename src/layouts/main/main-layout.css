@@ -26,6 +26,9 @@
     border-radius: 0;
     height: 140px;
 }
+.MainNavigation a.active svg * {
+    stroke: var(--brand-primary);
+}
 .MainNavigation.offcanvas {
     opacity: 0;
     transform: translateX(calc(-1 * var(--sidebar-width)));

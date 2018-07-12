@@ -1,15 +1,17 @@
 // @flow
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 import { LogoIcon, AccountIcon, UploadIcon, SettingsIcon } from '../../assets/Icons';
 import { connect } from 'react-redux';
-import classnames from 'classnames'
+import classnames from 'classnames';
+import { withRouter } from 'react-router';
+
 
 const BrowseLink = ({overlayViewsActive, ...props}) => <Link to="/app" {...props} />
-const AccountLink = ({overlayViewsActive, ...props}) => <Link to="/app/view/account" replace={overlayViewsActive} {...props} />
-const UploadLink = ({overlayViewsActive, ...props}) => <Link to="/app/view/upload" replace={overlayViewsActive} {...props} />
-const SettingsLink = ({overlayViewsActive, ...props}) => <Link to="/app/view/settings" replace={overlayViewsActive} {...props} />
+const AccountLink = ({overlayViewsActive, ...props}) => <NavLink to="/app/view/account" replace={overlayViewsActive} {...props} />
+const UploadLink = ({overlayViewsActive, ...props}) => <NavLink to="/app/view/upload" replace={overlayViewsActive} {...props} />
+const SettingsLink = ({overlayViewsActive, ...props}) => <NavLink to="/app/view/settings" replace={overlayViewsActive} {...props} />
 
 const MainNavigation = ({teaserListingActive, overlayViewsActive, light, dark}) => (
     <nav className={classnames('MainNavigation', {light, dark, offcanvas: teaserListingActive})}>
@@ -35,4 +37,4 @@ const mapStateToProps = (store) => {
         overlayViewsActive: store.router.location.pathname.indexOf('/app/view') > -1
     }
 }
-export default connect(mapStateToProps)(MainNavigation)
+export default withRouter(connect(mapStateToProps)(MainNavigation))
