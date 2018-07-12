@@ -41,7 +41,7 @@ class NetworkBandwidthInput extends Component<Props> {
         }
         return (
             <form className="NetworkBandwidthInput">
-                <FormControl>
+                <FormControl fullWidth>
                     <InputLabel htmlFor={inputName}>{inputLabel}</InputLabel>
                     <Select
                         native
@@ -51,6 +51,7 @@ class NetworkBandwidthInput extends Component<Props> {
                             name: inputName,
                             id: inputName,
                         }}
+                        disableUnderline
                     >
                         {options.map(option => {
                             let label = ``

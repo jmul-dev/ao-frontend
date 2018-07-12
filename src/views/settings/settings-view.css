@@ -1,0 +1,31 @@
+.SettingsView header {
+    margin-bottom: 24px;
+}
+.SettingsView section {
+    margin-bottom: 24px;
+}
+.SettingsView select {
+    padding-left: 8px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    padding-right: 24px;
+}
+.SettingsView .spacer {
+    margin-top: 12px;
+}
+.SettingsView form label + div {
+    background: white;
+}
+.SettingsView .section-console {
+    height: 100%;
+    max-height: calc(100vh - 240px);
+    background: white;
+    padding: 16px;
+}
+.SettingsView .Console {
+    height: 100%;
+}
+.SettingsView .console-heading {
+    margin-top: 8px;
+    margin-bottom: 18px;
+}

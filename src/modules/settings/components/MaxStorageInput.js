@@ -35,7 +35,7 @@ class MaxStorageInput extends Component<SettingsMutationProps> {
         }
         return (
             <form className="MaxStorageInput">
-                <FormControl>
+                <FormControl fullWidth>
                     <InputLabel htmlFor="max-disk-space">Max disk space</InputLabel>
                     <Select
                         native
@@ -45,6 +45,7 @@ class MaxStorageInput extends Component<SettingsMutationProps> {
                             name: 'max-disk-space',
                             id: 'max-disk-space',
                         }}
+                        disableUnderline
                     >
                         {options.map(option => {
                             let label = ``

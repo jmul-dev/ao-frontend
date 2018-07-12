@@ -6,7 +6,7 @@
  */
 export const darkTheme = {
     typography: {
-        fontFamily: 'Arimo',
+        fontFamily: 'Arimo',        
         display2: {
             fontSize: '1.714rem',
             color: '#FFFFFF'
@@ -18,6 +18,11 @@ export const darkTheme = {
     },
     palette: {
         type: 'dark',
+        primary: {
+            light: 'rgba(84, 110, 255, 0.5)',
+            main: 'rgba(84, 110, 255, 1)',
+            dark: '#2445FC',
+        },
         background: {
             default: '#000000'
         },
@@ -26,6 +31,10 @@ export const darkTheme = {
 export const lightTheme = {
     typography: {
         fontFamily: 'Arimo',
+        subheading: {
+            fontSize: '1rem',
+            color: '#777777'
+        },
         display2: {
             fontSize: '1.714rem',
             color: '#333333'
@@ -37,6 +46,11 @@ export const lightTheme = {
     },
     palette: {
         type: 'light',
+        primary: {
+            light: 'rgba(84, 110, 255, 0.5)',
+            main: 'rgba(84, 110, 255, 1)',
+            dark: '#2445FC',
+        },
         background: {
             default: '#FFFFFF'
         },

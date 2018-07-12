@@ -11,7 +11,7 @@ import './browse-view.css';
 export default class BrowseView extends Component {
     render() {
         return (
-            <View className={'BrowseView'} noPadding>
+            <View className={'BrowseView'} padding="none">
                 <header>
                     <Clock />
                     <div>[stats]</div>

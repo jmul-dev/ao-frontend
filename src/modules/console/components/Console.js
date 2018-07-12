@@ -1,5 +1,6 @@
 // @flow
 import React, { PureComponent } from 'react';
+import Typography from '@material-ui/core/Typography';
 
 type Props = {
     data: {
@@ -17,10 +18,12 @@ export default class Console extends PureComponent<Props> {
     render() {
         const { logs } = this.props.data
         return (
-            <div className="Console" style={{border: '1px solid #ddd', padding: 16}}>
-                <ul>{logs && logs.map((log, index) => (
-                    <li key={index}>{log.message}</li>
-                ))}</ul>
+            <div className="Console">
+                <Typography variant="body1">
+                    <ul style={{listStyle: 'none', padding: 0, margin: 0}}>{logs && logs.map((log, index) => (
+                        <li key={index}>{log.message}</li>
+                    ))}</ul>
+                </Typography>
             </div>
         );
     }

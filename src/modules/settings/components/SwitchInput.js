@@ -36,6 +36,7 @@ class SwitchInput extends Component<Props> {
                         label={inputLabel}
                         control={
                             <Switch
+                                color="primary"
                                 checked={inputValue}
                                 onChange={this._handleInputChange}
                             />

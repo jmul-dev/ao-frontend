@@ -35,7 +35,7 @@ class MaxPeerConnectionsInput extends Component<SettingsMutationProps> {
         }
         return (
             <form className="MaxPeerConnectionsInput">
-                <FormControl>
+                <FormControl fullWidth>
                     <InputLabel htmlFor="max-peer-connections">Max peer connections</InputLabel>
                     <Select
                         native
@@ -45,6 +45,8 @@ class MaxPeerConnectionsInput extends Component<SettingsMutationProps> {
                             name: 'max-peer-connections',
                             id: 'max-peer-connections',
                         }}
+                        disableUnderline
+                        className="TEST"
                     >
                         {options.map(option => {
                             let label = ``
