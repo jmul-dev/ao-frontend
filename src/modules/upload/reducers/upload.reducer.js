@@ -84,7 +84,7 @@ const initialState = {
         description: undefined,
         pricingOption: 1,  // 0 = custom, 1-3 predefined inputs
         stake: undefined,
-        profit: undefined,        
+        profit: undefined,
     },    
 }
 export type UploadReducerType = {

@@ -6,6 +6,7 @@ import UploadForm from '../../modules/upload/components/UploadForm';
 import UploadFormPricing from '../../modules/upload/components/UploadFormPricing';
 import UploadFormReload from '../../modules/upload/components/UploadFormReload';
 import UploadFormContent from '../../modules/upload/components/UploadFormContent';
+import UploadFormSubmit from '../../modules/upload/components/UploadFormSubmit';
 import UploadFormContinue from '../../modules/upload/containers/UploadFormContinue';
 import './upload-view.css';
 
@@ -19,6 +20,7 @@ export default class UploadView extends PureComponent {
                     <Route exact path="/app/view/upload/pricing" component={UploadFormPricing} />
                     <Route exact path="/app/view/upload/reload" component={UploadFormPricing} />
                     <Route exact path="/app/view/upload/content" component={UploadFormContent} />
+                    <Route exact path="/app/view/upload/submit" component={UploadFormSubmit} />
                     {/* UploadFormContinue redirects to one of the routes above */}
                     <Route component={UploadFormContinue} />
                 </Switch>

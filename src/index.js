@@ -3,8 +3,11 @@ import { render } from 'react-dom';
 import { AppContainer } from 'react-hot-loader';
 import Root from './Root';
 import { configureStore, history } from './store/configureStore';
-import ApolloClient from "apollo-boost";
+import { ApolloClient } from 'apollo-client';
+import { InMemoryCache } from 'apollo-cache-inmemory';
+import { createUploadLink } from 'apollo-upload-client';
 import Web3 from 'web3';
+
 
 window.IS_ELECTRON = window.chrome && window.chrome.ipcRenderer
 
@@ -20,7 +23,10 @@ const store = configureStore({
 });
 
 const client = new ApolloClient({
-    uri: 'http://localhost:3003/graphql'  // TODO: pull this from env or config
+    link: createUploadLink({
+        uri: 'http://localhost:3003/graphql' // TODO: pull this from env or config
+    }),
+    cache: new InMemoryCache(),
 })
 
 render(
