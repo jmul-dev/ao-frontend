@@ -8,7 +8,7 @@ import Typography from '@material-ui/core/Typography';
 export default class AccountView extends PureComponent {
     render() {
         return (
-            <View className={'AccountView'}>
+            <View className={'AccountView'} padding="full">
                 <header>
                     <Typography variant="display1" gutterBottom align="center">
                         {'Account'}

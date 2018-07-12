@@ -14,7 +14,7 @@ import './upload-view.css';
 export default class UploadView extends PureComponent {
     render() {
         return (
-            <View className={'UploadView'}>
+            <View className={'UploadView'} padding="full">
                 <Switch>
                     <Route exact path="/app/view/upload/start" component={UploadForm} />
                     <Route exact path="/app/view/upload/pricing" component={UploadFormPricing} />

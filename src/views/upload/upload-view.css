@@ -1,6 +1,3 @@
-.UploadView {
-    padding: 128px 64px !important;
-}
 .UploadView .upload-page-container {
     position: relative;
 }
@@ -128,10 +125,6 @@
 }
 
 /* UploadForm - Start */
-.UploadForm {
-    max-width: 80%;
-    margin: auto;
-}
 /* UploadForm - Content */
 .UploadView .text-inputs {
     margin-top: -8px;
