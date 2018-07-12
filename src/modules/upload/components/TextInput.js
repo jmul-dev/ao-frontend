@@ -1,30 +1,32 @@
-// @flow
 import React, { Component } from 'react';
 import TextField from '@material-ui/core/TextField';
-import withUploadFormValue from '../containers/withUploadFormValue';
+import { withStyles } from '@material-ui/core/styles';
 
-type Props = {
-    inputName: string,
-    inputValue?: string,
-    inputLabel?: string,
-    updateUploadFormField: (string, any) => void,
-};
 
-class TextInput extends Component {
-    _onChange = (event) => {
-        const { updateUploadFormField, inputName } = this.props
-        // TODO: validate input?
-        updateUploadFormField( inputName, event.target.value )
-    }
-    render() {
-        const { inputName, inputValue, inputLabel } = this.props
-        return (
-            <TextField 
-                value={inputValue}
-                onChange={this._onChange}
-                label={inputLabel}
-            />
-        )
+const styles = {
+    root: {
+        background: 'white',
+        paddingTop: 8,
+        paddingLeft: 12,
+        paddingRight: 12,
+        paddingBottom: 16,
+        borderRadius: 4,
+    },
+    inputFormLabel: {
+        top: 8,
+        left: 12,
     }
 }
-export default withUploadFormValue( TextInput )
+
+const TextInput = ({classes, ...props}) => (
+    <TextField 
+        fullWidth 
+        margin="dense"
+        className={classes.root}
+        InputProps={{disableUnderline: true}} 
+        InputLabelProps={{className: classes.inputFormLabel}}
+        {...props} 
+    />
+)
+
+export default withStyles(styles)( TextInput )

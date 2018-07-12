@@ -115,3 +115,24 @@
     font-size: 1.5rem;
     color: var(--brand-primary);
 }
+/* OverviewAside */
+.UploadView .OverviewAside .pricing-overview p {
+    display: flex;
+    align-items: center;
+    color: #777777;
+}
+.UploadView .OverviewAside .pricing-overview p > span {
+    width: 50%;
+    margin-left: auto;
+    color: rgba(0, 0, 0, 0.87);
+}
+
+/* UploadForm - Start */
+.UploadForm {
+    max-width: 80%;
+    margin: auto;
+}
+/* UploadForm - Content */
+.UploadView .text-inputs {
+    margin-top: -8px;
+}

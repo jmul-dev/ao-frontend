@@ -13,30 +13,24 @@ const OverviewAside = ({form, includePricing = false}) => (
         </Typography>
         {includePricing ? (
             <div className="pricing-overview">
-                {form.stake ? (
-                    <Typography variant="body1">
-                        {'your stake'}
-                        <Typography variant="body1" component="span">
-                            {`${form.stake}ao`}
-                        </Typography>
+                <Typography variant="body1" gutterBottom>
+                    {'your stake'}
+                    <Typography variant="body1" component="span">
+                        {`${form.stake}ao`}
                     </Typography>
-                ) : null}
-                {form.stake ? (
-                    <Typography variant="body1">
-                        {'you charge'}
-                        <Typography variant="body1" component="span">
-                            {`${form.stake}ao /view`}
-                        </Typography>
+                </Typography>
+                <Typography variant="body1" gutterBottom>
+                    {'you charge'}
+                    <Typography variant="body1" component="span">
+                        {`${form.stake}ao /view`}
                     </Typography>
-                ) : null}
-                {form.profit ? (
-                    <Typography variant="body1">
-                        {'you make'}
-                        <Typography variant="body1" component="span">
-                            {`${form.profit}% profits`}
-                        </Typography>
+                </Typography>
+                <Typography variant="body1" gutterBottom>
+                    {'you make'}
+                    <Typography variant="body1" component="span">
+                        {`${form.profit}% profits`}
                     </Typography>
-                ) : null}
+                </Typography>
             </div>
         ) : null}        
     </aside>

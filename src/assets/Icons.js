@@ -1,5 +1,15 @@
 import React from 'react';
 
+export const AddIcon = () => (
+    <svg width="35px" height="35px" viewBox="0 0 35 35" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink">
+        <title>add</title>
+        <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd" strokeLinecap="square">
+            <path d="M17,0 L17,35" stroke="#979797"></path>
+            <path d="M35,17 L0,17" stroke="#979797"></path>
+        </g>
+    </svg>
+)
+
 export const AccountIcon = ({color = '#FFFFFF'}) => (
     <svg width="45px" height="45px" viewBox="0 0 45 45" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink">
         <title>icon-account</title>
