@@ -19,7 +19,7 @@ export default class Console extends PureComponent<Props> {
         const { logs } = this.props.data
         return (
             <div className="Console">
-                <Typography variant="body1">
+                <Typography variant="body1" component="div">
                     <ul style={{listStyle: 'none', padding: 0, margin: 0}}>{logs && logs.map((log, index) => (
                         <li key={index}>{log.message}</li>
                     ))}</ul>
