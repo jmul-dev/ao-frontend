@@ -7,30 +7,22 @@ import AccountView from '../../views/account/AccountView';
 import BrowseView from '../../views/browse/BrowseView';
 import UploadView from '../../views/upload/UploadView';
 import MainNavigation from './MainNavigation';
-import { AnimatedRoute, AnimatedSwitch, spring } from 'react-router-transition';
+import { AnimatedRoute, spring } from 'react-router-transition';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import { lightTheme } from '../../theme';
 import './main-layout.css';
 
-const overlayTransitionParams = { stiffness: 350, damping: 16 }
 const muiThemeLight = createMuiTheme(lightTheme)
 
 const ViewRoutes = () => (
     <MuiThemeProvider theme={muiThemeLight}>
-        <AnimatedSwitch 
-            atEnter={{offset: spring(-25, overlayTransitionParams), opacity: 0}}
-            atLeave={{offset: spring(-25, overlayTransitionParams), opacity: 0}}
-            atActive={{offset: spring(0, overlayTransitionParams), opacity: 1}}
-            mapStyles={(styles) => ({
-                transform: `translateX(${styles.offset}%)`,
-                opacity: styles.opacity
-            })}
-            className="overlay-view-container"
-            >
-            <Route path="/app/view/account" component={AccountView} />
-            <Route path="/app/view/settings" component={SettingsView} />
-            <Route path="/app/view/upload" component={UploadView} />
-        </AnimatedSwitch>
+        <div className="overlay-view-container">
+            <Switch>
+                <Route path="/app/view/account" component={AccountView} />
+                <Route path="/app/view/settings" component={SettingsView} />
+                <Route path="/app/view/upload" component={UploadView} />
+            </Switch>
+        </div>
     </MuiThemeProvider>
 )
 
