@@ -35,7 +35,7 @@ export default compose(
                     ...props.form,
                     pricingOption: undefined // remove from form inputs
                 }
-            }            
+            }
         })
     }),
     withStateMutation({name: 'submitContent'})

@@ -22,7 +22,8 @@ class UploadFormContent extends Component {
         this.context.router.history.goBack()
     }
     _submit = () => {
-        // TODO:
+        // TODO: validation
+        this.context.router.history.push('/app/view/upload/submit')
     }
     _onTeaserInputChange = (inputFile) => {
         // TODO: check file size
@@ -78,7 +79,7 @@ class UploadFormContent extends Component {
                         <PrimaryButton onClick={this._submit}>{'finish & upload'}</PrimaryButton>
                     </nav>
                 </Grid>
-            </Grid>   
+            </Grid>
         )
     }
 }
