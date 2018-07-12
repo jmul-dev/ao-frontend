@@ -15,11 +15,14 @@ class UploadFormContent extends Component {
     static contextTypes = {
         router: PropTypes.object.isRequired
     }    
+    componentDidMount() {
+        this.props.updateLastReachedStep('content')
+    }
     _navBack = () => {
         this.context.router.history.goBack()
     }
     _submit = () => {
-        
+        // TODO:
     }
     _onTeaserInputChange = (inputFile) => {
         // TODO: check file size

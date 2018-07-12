@@ -1,7 +1,7 @@
 import { createStore, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
 import { createHashHistory } from 'history';
-import { routerMiddleware, routerActions } from 'react-router-redux';
+import { connectRouter, routerMiddleware } from 'connected-react-router';
 import { createLogger } from 'redux-logger';
 import rootReducer from './reducers';
 
@@ -30,17 +30,10 @@ export const configureStore = (initialState?) => {
   const router = routerMiddleware(history);
   middleware.push(router);
 
-  // Redux DevTools Configuration
-  const actionCreators = {
-    ...routerActions,
-  };
   // If Redux DevTools Extension is installed use it, otherwise use Redux compose
   /* eslint-disable no-underscore-dangle */
   const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
-    ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({
-      // Options: http://zalmoxisus.github.io/redux-devtools-extension/API/Arguments.html
-      actionCreators,
-    })
+    ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__()
     : compose;
   /* eslint-enable no-underscore-dangle */
 
@@ -48,8 +41,11 @@ export const configureStore = (initialState?) => {
   enhancers.push(applyMiddleware(...middleware));
   const enhancer = composeEnhancers(...enhancers);
 
+  // Connect router
+  const root = connectRouter(history)(rootReducer)
+
   // Create Store
-  const store = createStore(rootReducer, initialState, enhancer);
+  const store = createStore(root, initialState, enhancer);
 
   if (module.hot) {
     module.hot.accept('./reducers', () =>

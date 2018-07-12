@@ -1,7 +1,7 @@
 // @flow
 import React, { Component } from 'react';
 import { Provider } from 'react-redux';
-import { ConnectedRouter } from 'react-router-redux';
+import { ConnectedRouter } from 'connected-react-router';
 import AppContainer from './AppContainer';
 import { ApolloProvider } from "react-apollo";
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
