@@ -22,7 +22,8 @@ class MaxPeerConnectionsInput extends Component<SettingsMutationProps> {
         })
     }
     render() {
-        const { settings } = this.props.data
+        const { data, ...props } = this.props
+        const { settings } = data
         if ( !settings )
             return null
         let { maxPeerConnections } = settings
@@ -46,7 +47,7 @@ class MaxPeerConnectionsInput extends Component<SettingsMutationProps> {
                             id: 'max-peer-connections',
                         }}
                         disableUnderline
-                        className="TEST"
+                        {...props}
                     >
                         {options.map(option => {
                             let label = ``

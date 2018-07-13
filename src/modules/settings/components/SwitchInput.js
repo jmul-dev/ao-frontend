@@ -24,8 +24,8 @@ class SwitchInput extends Component<Props> {
         })
     }
     render() {
-        const { inputName, inputLabel } = this.props
-        const { settings } = this.props.data
+        const { inputName, inputLabel, data, ...props } = this.props
+        const { settings } = data
         if ( !settings )
             return null
         let inputValue = settings[inputName]
@@ -39,6 +39,7 @@ class SwitchInput extends Component<Props> {
                                 color="primary"
                                 checked={inputValue}
                                 onChange={this._handleInputChange}
+                                {...props}
                             />
                         }
                     />

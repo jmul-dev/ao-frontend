@@ -22,7 +22,8 @@ class MaxStorageInput extends Component<SettingsMutationProps> {
         })
     }
     render() {
-        const { settings } = this.props.data
+        const { data, ...props } = this.props
+        const { settings } = data
         if ( !settings )
             return null
         let { maxDiskSpace } = settings
@@ -46,6 +47,7 @@ class MaxStorageInput extends Component<SettingsMutationProps> {
                             id: 'max-disk-space',
                         }}
                         disableUnderline
+                        {...props}
                     >
                         {options.map(option => {
                             let label = ``
