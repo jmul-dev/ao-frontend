@@ -35,7 +35,7 @@ export default class AccountView extends PureComponent {
                         </section>
                     </Grid>
                     <Grid item xs={12}>
-                        <section>
+                        <section style={{marginTop: 48}}>
                             <Typography variant="display3" gutterBottom>
                                 {'My videos'}
                             </Typography>

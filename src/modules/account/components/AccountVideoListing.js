@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
+import ButtonBase from '@material-ui/core/ButtonBase';
+import PlayIcon from '@material-ui/icons/PlayArrow';
 import withAccountVideos from '../containers/withAccountVideos';
+import moment from 'moment';
 import '../styles/account-video-listing.css';
 
 
@@ -10,23 +13,30 @@ class AccountVideoListItem extends Component {
         const { video } = this.props
         return (
             <div className="AccountVideoListItem">
-                <Grid container spacing={16}>
+                <Grid container spacing={16} alignItems="center">
                     <Grid item sm={4}>
-                        <div className="featured-image" style={{backgroundImage: `url(${video.coverImageUrl})`}}></div>
+                        <ButtonBase style={{width: '100%'}}>
+                            <div className="featured-image" style={{backgroundImage: `url(${video.coverImageUrl})`}}>
+                                <PlayIcon className="play-icon" />
+                            </div>
+                        </ButtonBase>
                     </Grid>
                     <Grid item sm={8}>
-                        <Typography variant="subheading" gutterBottom>
+                        <Typography variant="heading3" gutterBottom>
                             {video.title}
                         </Typography>
-                        <Typography variant="body1" gutterBottom>
-                            {`uploaded: ${video.createdAt}`}
+                        <Typography variant="body1" gutterBottom color="textSecondary">
+                            {`uploaded: ${moment(video.createdAt).format('M/D/YYYY')}`}
                         </Typography>
-                        <Typography variant="body1" gutterBottom>
+                        <Typography variant="body1" gutterBottom color="textSecondary">
                             {`XXX ao earned | ${video.stake}ao staked`}
                         </Typography>
-                        <Typography variant="body1" gutterBottom>
+                        <Typography className="description" variant="body1" gutterBottom color="textSecondary">
                             {video.description}
                         </Typography>
+                        <ButtonBase className="more-info">
+                            {'+ more info'}
+                        </ButtonBase>
                     </Grid>
                 </Grid>
             </div>

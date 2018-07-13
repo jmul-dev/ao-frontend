@@ -1,5 +1,5 @@
 .AccountVideoListing {
-
+    
 }
 
 .AccountVideoListing ul li {
@@ -8,6 +8,9 @@
     border-bottom: 1px solid #E5E5E5;
 }
 
+.AccountVideoListItem {
+    position: relative;
+}
 .AccountVideoListItem .featured-image {
     position: relative;
     width: 100%;
@@ -17,4 +20,31 @@
     background-position: center;
     background-repeat: no-repeat;
     overflow: hidden;
+}
+.AccountVideoListItem .play-icon {
+    position: absolute;
+    bottom: 8px;
+    right: 8px;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    color: white;
+    padding: 2px;
+    background: rgba(204,204,204,0.50);
+    box-shadow: 0 2px 4px 0 rgba(0,0,0,0.50);
+}
+.AccountVideoListItem .description {
+    margin-top: 12px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.AccountVideoListItem .more-info {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    color: var(--brand-primary);
+    font-size: 0.75rem;
+    padding: 8px;
+    border-radius: 3px;
 }
