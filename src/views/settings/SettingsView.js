@@ -23,29 +23,29 @@ export default class SettingsView extends PureComponent {
                             <Typography variant="subheading" gutterBottom>
                                 {'General'}
                             </Typography>
-                            <SettingsInput inputName="runOnStartup" inputLabel="Run AO on startup" />
-                            <SettingsInput inputName="runInBackground" inputLabel="Run AO in background" />
-                            <SettingsInput inputName="checkForUpdates" inputLabel="Check for updates on startup" />
+                            <SettingsInput disabled inputName="runOnStartup" inputLabel="Run AO on startup" />
+                            <SettingsInput disabled inputName="runInBackground" inputLabel="Run AO in background" />
+                            <SettingsInput disabled inputName="checkForUpdates" inputLabel="Check for updates on startup" />
                         </section>
                         <section>
                             <Typography variant="subheading" gutterBottom>
                                 {'Storage'}
                             </Typography>
-                            <SettingsInput inputName="maxDiskSpace" />
+                            <SettingsInput disabled inputName="maxDiskSpace" />
                         </section>
                         <section>
                             <Typography variant="subheading" gutterBottom>
                                 {'Network'}
                             </Typography>
-                            <SettingsInput inputName="maxBandwidthUp" inputLabel="Max upload speed" />
+                            <SettingsInput disabled inputName="maxBandwidthUp" inputLabel="Max upload speed" />
                             <div className="spacer"></div>
-                            <SettingsInput inputName="maxBandwidthDown" inputLabel="Max download speed" />
+                            <SettingsInput disabled inputName="maxBandwidthDown" inputLabel="Max download speed" />
                         </section>
                         <section>
                             <Typography variant="subheading" gutterBottom>
                                 {'P2P'}
                             </Typography>
-                            <SettingsInput inputName="maxPeerConnections" />
+                            <SettingsInput disabled inputName="maxPeerConnections" />
                         </section>
                     </Grid>
                     <Grid item xs={6} style={{marginLeft: 'auto'}}>     
