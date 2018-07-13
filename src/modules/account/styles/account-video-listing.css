@@ -33,7 +33,7 @@
     background: rgba(204,204,204,0.50);
     box-shadow: 0 2px 4px 0 rgba(0,0,0,0.50);
 }
-.AccountVideoListItem .description {
+.AccountVideoListItem .card-container .description {
     margin-top: 12px;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -41,10 +41,15 @@
 }
 .AccountVideoListItem .more-info {
     position: absolute;
-    bottom: 0;
+    bottom: -12px;
     right: 0;
     color: var(--brand-primary);
     font-size: 0.75rem;
     padding: 8px;
     border-radius: 3px;
+}
+
+.AccountVideoListItem .expansion-container {
+    padding-top: 24px;
+    padding-bottom: 16px;
 }

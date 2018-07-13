@@ -5,10 +5,20 @@ import ButtonBase from '@material-ui/core/ButtonBase';
 import PlayIcon from '@material-ui/icons/PlayArrow';
 import withAccountVideos from '../containers/withAccountVideos';
 import moment from 'moment';
+import Collapse from '@material-ui/core/Collapse';
 import '../styles/account-video-listing.css';
 
 
 class AccountVideoListItem extends Component {
+    constructor() {
+        super()
+        this.state = {
+            expanded: false,
+        }
+    }
+    _toggleExapansion = () => {
+        this.setState({expanded: !this.state.expanded})
+    }
     render() {
         const { video } = this.props
         return (
@@ -21,8 +31,8 @@ class AccountVideoListItem extends Component {
                             </div>
                         </ButtonBase>
                     </Grid>
-                    <Grid item sm={8}>
-                        <Typography variant="heading3" gutterBottom>
+                    <Grid item sm={8} className="card-container">
+                        <Typography variant="title" gutterBottom>
                             {video.title}
                         </Typography>
                         <Typography variant="body1" gutterBottom color="textSecondary">
@@ -34,11 +44,20 @@ class AccountVideoListItem extends Component {
                         <Typography className="description" variant="body1" gutterBottom color="textSecondary">
                             {video.description}
                         </Typography>
-                        <ButtonBase className="more-info">
-                            {'+ more info'}
-                        </ButtonBase>
                     </Grid>
                 </Grid>
+                <div>
+                    <Collapse in={this.state.expanded}>
+                        <div className="expansion-container">                            
+                            <Typography className="description" variant="body1" gutterBottom color="textSecondary">
+                                {video.description}
+                            </Typography>
+                        </div>
+                    </Collapse>
+                    <ButtonBase className="more-info" onClick={this._toggleExapansion}>
+                        {this.state.expanded ? '- hide info' : '+ more info'}
+                    </ButtonBase>
+                </div>                
             </div>
         )
     }
