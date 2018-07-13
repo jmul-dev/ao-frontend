@@ -4,6 +4,7 @@
   "publishConfig": {
     "registry": "https://npm.y-designs.com"
   },
+  "files": ["build"],
   "dependencies": {
     "@material-ui/core": "^1.3.0",
     "@material-ui/icons": "^1.1.0",
