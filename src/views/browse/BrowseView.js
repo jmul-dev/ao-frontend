@@ -5,6 +5,7 @@ import Button from '@material-ui/core/Button';
 import SearchIcon from '@material-ui/icons/Search';
 import Clock from '../../modules/clock/components/Clock';
 import VideoListingContainer from '../../modules/video/containers/VideoListingContainer';
+import Stats from '../../modules/stats/components/Stats';
 import './browse-view.css';
 
 
@@ -14,7 +15,7 @@ export default class BrowseView extends Component {
             <View className={'BrowseView'} padding="none">
                 <header>
                     <Clock />
-                    <div>[stats]</div>
+                    <Stats />
                     <div style={{marginLeft: 'auto'}}>
                         <Button>
                             <SearchIcon />

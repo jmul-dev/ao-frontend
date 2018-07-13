@@ -24,7 +24,7 @@
     width: var(--sidebar-width);
     min-width: var(--sidebar-width);
     border-radius: 0;
-    height: 140px;
+    height: 120px;
 }
 .MainNavigation a.active svg * {
     stroke: var(--brand-primary);
@@ -63,12 +63,12 @@
     background-position: right center;
     background-size: cover;
     background-repeat: no-repeat;
-    overflow: auto;
 }
 .overlay-view-container > div {
     position: absolute;
     height: 100%;
     width: calc(100% - var(--sidebar-width));
+    overflow: auto;
 }
 .overlay-views-backdrop {
     position: fixed;

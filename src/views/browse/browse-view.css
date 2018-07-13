@@ -12,6 +12,10 @@
     left: var(--sidebar-width);
     right: 0;
     display: flex;
-    padding: var(--gutter);
+    align-items: center;
+    padding: 40px var(--gutter);
     z-index: 1;
+}
+.BrowseView .Stats {
+    margin-left: var(--gutter);
 }
