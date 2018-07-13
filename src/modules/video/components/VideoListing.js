@@ -128,7 +128,7 @@ export default class VideoListing extends Component<Props> {
         )
     }
     _enterTeaserListingAtVideo = (videoIndex, event) => {
-        const activeTeaserVideoCellPosition = propertySelection(event.target.getBoundingClientRect())
+        const activeTeaserVideoCellPosition = propertySelection(event.currentTarget.getBoundingClientRect())
         this.props.setTeaserListingState({isActive: true})
         this.setState({
             activeTeaserVideoIndex: videoIndex,
