@@ -15,6 +15,10 @@
     align-items: center;
     padding: 40px var(--gutter);
     z-index: 1;
+    pointer-events: none;
+}
+.BrowseView button {
+    pointer-events: all;
 }
 .BrowseView .Stats {
     margin-left: var(--gutter);

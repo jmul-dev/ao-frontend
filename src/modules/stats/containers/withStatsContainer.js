@@ -13,4 +13,7 @@ const statsQuery = gql(`
 
 export default graphql(statsQuery, {
     name: 'query',
+    options: {
+        pollInterval: 5000
+    }
 });

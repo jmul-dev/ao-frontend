@@ -1,7 +1,7 @@
 // @flow
 import React, { Component } from 'react';
 import View from '../View';
-import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
 import SearchIcon from '@material-ui/icons/Search';
 import Clock from '../../modules/clock/components/Clock';
 import VideoListingContainer from '../../modules/video/containers/VideoListingContainer';
@@ -17,9 +17,9 @@ export default class BrowseView extends Component {
                     <Clock />
                     <Stats />
                     <div style={{marginLeft: 'auto'}}>
-                        <Button>
+                        <IconButton style={{marginRight: '-14px'}}>
                             <SearchIcon />
-                        </Button>
+                        </IconButton>
                     </div>
                 </header>
                 <VideoListingContainer />
