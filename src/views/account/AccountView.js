@@ -1,25 +1,46 @@
 // @flow
 import React, { PureComponent } from 'react';
 import View from '../View';
-import WalletContainer from '../../modules/wallet/containers/WalletContainer'
+import WalletContainer from '../../modules/wallet/containers/WalletContainer';
 import Typography from '@material-ui/core/Typography';
+import Account from '../../modules/account/components/Account';
+import Grid from '@material-ui/core/Grid';
 
 
 export default class AccountView extends PureComponent {
     render() {
         return (
             <View className={'AccountView'} padding="full">
-                <header>
-                    <Typography variant="display1" gutterBottom align="center">
-                        {'Account'}
-                    </Typography>
-                </header>
-                <section>
-                    <Typography variant="headline" gutterBottom>
-                        {'Wallet'}
-                    </Typography>
-                    <WalletContainer />
-                </section>
+                <Grid container spacing={16}>                
+                    <Grid item xs={6}>
+                        <header style={{display: 'flex'}}>
+                            <Account display="ethIcon" />
+                            <div style={{marginLeft: 16}}>
+                                <Typography variant="display3" gutterBottom>
+                                    {'Account'}
+                                </Typography>
+                                <Typography variant="body1" gutterBottom>
+                                    <Account display="ethAddress" />
+                                </Typography>
+                            </div>
+                        </header>
+                    </Grid>
+                    <Grid item xs={6}>
+                        <section>
+                            <Typography variant="display3" gutterBottom>
+                                {'Wallet'}
+                            </Typography>
+                            <WalletContainer />
+                        </section>
+                    </Grid>
+                    <Grid item xs={12}>
+                        <section>
+                            <Typography variant="display3" gutterBottom>
+                                {'My videos'}
+                            </Typography>
+                        </section>
+                    </Grid>
+                </Grid>
             </View>
         );
     }
