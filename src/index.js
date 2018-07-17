@@ -1,12 +1,12 @@
 import React from 'react';
-import { render } from '../../../Library/Caches/typescript/2.9/node_modules/@types/react-dom';
+import { render } from 'react-dom';
 import { AppContainer as HotLoaderContainer } from 'react-hot-loader';
 import Root from './Root';
 import { configureStore, history } from './store/configureStore';
 import { ApolloClient } from 'apollo-client';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { createUploadLink } from 'apollo-upload-client/lib/main';
-import Web3 from '../../../Library/Caches/typescript/2.9/node_modules/@types/web3';
+import Web3 from 'web3';
 
 
 if ( typeof window.web3 !== 'undefined' ) {

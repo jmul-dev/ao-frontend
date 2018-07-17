@@ -1,6 +1,6 @@
 // @flow
 import React, { Component } from 'react';
-import { findDOMNode } from '../../../../../../Library/Caches/typescript/2.9/node_modules/@types/react-dom';
+import { findDOMNode } from 'react-dom';
 import Jazzicon from 'jazzicon';
 import PropTypes from 'prop-types';
 
