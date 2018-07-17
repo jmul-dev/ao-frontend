@@ -1,17 +1,14 @@
 import React from 'react';
-import { render } from 'react-dom';
-import { AppContainer } from 'react-hot-loader';
+import { render } from '../../../Library/Caches/typescript/2.9/node_modules/@types/react-dom';
+import { AppContainer as HotLoaderContainer } from 'react-hot-loader';
 import Root from './Root';
 import { configureStore, history } from './store/configureStore';
 import { ApolloClient } from 'apollo-client';
 import { InMemoryCache } from 'apollo-cache-inmemory';
-import { createUploadLink } from 'apollo-upload-client';
-import Web3 from 'web3';
+import { createUploadLink } from 'apollo-upload-client/lib/main';
+import Web3 from '../../../Library/Caches/typescript/2.9/node_modules/@types/web3';
 
 
-window.IS_ELECTRON = window.chrome && window.chrome.ipcRenderer
-
-// TODO: Setup web3
 if ( typeof window.web3 !== 'undefined' ) {
     window.web3 = new Web3(window.web3.currentProvider)
 }
@@ -30,9 +27,9 @@ const client = new ApolloClient({
 })
 
 render(
-    <AppContainer>
+    <HotLoaderContainer>
         <Root store={store} history={history} client={client} />
-    </AppContainer>,
+    </HotLoaderContainer>,
     document.getElementById('root')
 );
 
@@ -40,9 +37,9 @@ if (module.hot) {
     module.hot.accept('./Root', () => {
         const NextRoot = require('./Root'); // eslint-disable-line global-require
         render(
-            <AppContainer>
+            <HotLoaderContainer>
                 <NextRoot store={store} history={history} client={client} />
-            </AppContainer>,
+            </HotLoaderContainer>,
             document.getElementById('root')
         );
     });

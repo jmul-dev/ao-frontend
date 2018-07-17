@@ -6,6 +6,16 @@ import { getEthBalanceForAccount } from '../modules/wallet/reducers/wallet.reduc
 // Constants
 export const WEB3_CONNECTED = 'WEB3_CONNECTED'
 export const WEB3_ETH_ACCOUNT_CHANGE = 'WEB3_ETH_ACCOUNT_CHANGE'
+export const APP_STATES = {
+    APP_INITIALIZING: 'APP_INITIALIZING',
+    CORE_CONNECTED: 'CORE_CONNECTED',
+    CORE_READY: 'CORE_READY',
+    WEB3_CONNECTED: 'WEB3_CONNECTED',
+    WEB3_READY: 'WEB3_READY',
+    APP_READY: 'APP_READY',
+}
+export const APP_STATES_ORDERING = Object.values(APP_STATES)
+
 
 // Actions
 export const connectedToNetwork = (networkId) => {
@@ -67,6 +77,7 @@ export const getNetworkName = (networkId, shortname = false) => {
 
 // State
 const initialState = {
+    state: APP_STATES.APP_INITIALIZING,
     web3Available: false,
     web3Connected: false,    
     ethNetworkId: undefined,
@@ -74,6 +85,7 @@ const initialState = {
     ethAddress: undefined,
 }
 export type AppReducerType = {
+    state: string,
     web3Available: boolean,
     web3Connected: boolean,    
     ethNetworkId?: string | number,

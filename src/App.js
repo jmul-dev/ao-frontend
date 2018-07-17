@@ -5,7 +5,6 @@ import MainLayout from './layouts/main/MainLayout';
 import RegisterLayout from './layouts/register/RegisterLayout';
 import BootLayout from './layouts/boot/BootLayout';
 import DevelopmentBarContainer from './modules/devbar/containers/DevelopmentBarContainer';
-import CssBaseline from '@material-ui/core/CssBaseline';
 import './app-variables.css';
 import './app.css';
 
@@ -38,8 +37,7 @@ export default class App extends Component<Props> {
             return <BootLayout />
         }
         return (
-            <div className={`App ${process.env.NODE_ENV !== 'production' ? 'development-bar-spacing' : ''}`}>
-                <CssBaseline />
+            <div className={`App ${process.env.NODE_ENV !== 'production' ? 'development-bar-spacing' : ''}`}>                
                 <Switch>
                     <Route path="/app" render={(routeProps) => (
                         data.node ? (
@@ -55,6 +53,7 @@ export default class App extends Component<Props> {
                 {process.env.NODE_ENV !== 'production' ? (
                     <DevelopmentBarContainer />
                 ):null}
+                <div style={{color: 'white'}}>{this.props.app.state}</div>
             </div>
         );
     }

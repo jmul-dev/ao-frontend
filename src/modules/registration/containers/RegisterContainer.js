@@ -1,5 +1,5 @@
 import Register from '../components/Register'
-import { connect } from 'react-redux'
+import { connect } from '../../../../../../Library/Caches/typescript/2.9/node_modules/@types/react-redux'
 import { graphql, compose } from 'react-apollo'
 import gql from "graphql-tag"
 import { localNodeQuery } from '../../../AppContainer'
@@ -8,7 +8,8 @@ import withStateMutation from '../../../utils/withStateMutation'
 // Redux
 const mapStateToProps = (store) => {
     return {
-        app: store.app
+        app: store.app,
+        isElectron: store.electron.isElectron
     }
 }
 

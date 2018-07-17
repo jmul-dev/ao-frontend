@@ -10,7 +10,8 @@ type Props = {
         loading: boolean,
         error?: string
     },
-    app: AppReducerType
+    app: AppReducerType,
+    isElectron: boolean,
 };
 
 export default class DevelopmentBar extends PureComponent<Props> {
@@ -24,7 +25,7 @@ export default class DevelopmentBar extends PureComponent<Props> {
             <div className="DevelopmentBar">
                 <div className={`status`}>frontend v{packageJson.version}</div>
                 <div className={`status`}>core v{version}</div>
-                <div className={`status ${window.IS_ELECTRON ? 'success' : 'error'}`}>electron</div>
+                <div className={`status ${this.props.isElectron ? 'success' : 'error'}`}>electron</div>
                 <div className={`status ${web3Connected ? 'success' : 'error'}`}>web3</div>
                 <div className={`status ${!error ? 'success' : 'error'}`}>graphql</div>
                 {ethNetworkId ? (
