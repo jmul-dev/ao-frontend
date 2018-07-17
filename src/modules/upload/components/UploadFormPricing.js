@@ -10,7 +10,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Input from '@material-ui/core/Input';
 import ProfitSlider from './ProfitSlider';
 import withUploadFormData from '../containers/withUploadFormData';
-import { Redirect } from 'react-router-dom';
+import { Redirect } from '../../../../../../Library/Caches/typescript/2.9/node_modules/@types/react-router-dom';
 import { BackButton, PrimaryButton } from './UploadFormNavButtons';
 import OverviewAside from './OverviewAside';
 

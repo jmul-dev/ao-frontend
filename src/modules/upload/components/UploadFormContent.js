@@ -5,7 +5,7 @@ import Grid from '@material-ui/core/Grid';
 import TextInput from './TextInput';
 import { AddIcon } from '../../../assets/Icons';
 import withUploadFormData from '../containers/withUploadFormData';
-import { Redirect } from 'react-router-dom';
+import { Redirect } from '../../../../../../Library/Caches/typescript/2.9/node_modules/@types/react-router-dom';
 import { BackButton, PrimaryButton } from './UploadFormNavButtons';
 import OverviewAside from './OverviewAside';
 import FileUpload from './FileUpload';
