@@ -20,7 +20,7 @@ export const listenOnIpcChannel = () => {
 // State
 const initialState = {
     eventLogs: [],
-    isElectron: window.chrome && window.chrome.ipcRenderer
+    isElectron: !!(window.chrome && window.chrome.ipcRenderer)
 }
 
 // Reducer

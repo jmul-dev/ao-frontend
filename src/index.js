@@ -13,11 +13,7 @@ if ( typeof window.web3 !== 'undefined' ) {
     window.web3 = new Web3(window.web3.currentProvider)
 }
 
-const store = configureStore({
-    app: {
-        web3Available: typeof window.web3 !== 'undefined'
-    }
-});
+const store = configureStore();
 
 const client = new ApolloClient({
     link: createUploadLink({

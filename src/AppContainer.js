@@ -2,7 +2,7 @@ import App from './App'
 import { connect } from 'react-redux'
 import { graphql, compose } from 'react-apollo'
 import gql from "graphql-tag"
-import { connectedToNetwork } from './store/app.reducer'
+import { connectToWeb3, updateAppState } from './store/app.reducer'
 
 // Redux
 const mapStateToProps = (store) => {
@@ -11,7 +11,8 @@ const mapStateToProps = (store) => {
     }
 }
 const mapDispatchToProps = {
-    connectedToNetwork
+    connectToWeb3,
+    updateAppState,
 }
 
 // Graphql
@@ -25,6 +26,13 @@ export const localNodeQuery = gql(`
 `)
 
 export default compose(
-    graphql(localNodeQuery),
+    graphql(localNodeQuery, {
+        name: 'query',
+        options: {
+            notifyOnNetworkStatusChange: true,
+            pollInterval: 2500,  // periodically ping for node state change
+            errorPolicy: 'all',
+        }
+    }),
     connect(mapStateToProps, mapDispatchToProps),
 )(App);

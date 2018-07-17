@@ -1,6 +1,6 @@
 // @flow
 import React, { PureComponent } from 'react';
-import { AppReducerType } from '../../../store/app.reducer';
+import { AppReducerType, APP_STATES } from '../../../store/app.reducer';
 
 type Props = {
     register: Function,
@@ -32,8 +32,9 @@ export default class Register extends PureComponent<Props> {
         this.props.register()
     }
     render() {
-        const { web3Available, ethAddress } = this.props.app
+        const { states, ethAddress } = this.props.app
         const { register, registerLoading, isElectron } = this.props
+        const web3Available = states[APP_STATES.WEB3_AVAILABLE]
         return (
             <div className="Register">
                 <h1>Register</h1>
