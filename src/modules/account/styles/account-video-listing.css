@@ -10,6 +10,7 @@
 
 .AccountVideoListItem {
     position: relative;
+    margin-bottom: 24px;
 }
 .AccountVideoListItem .featured-image {
     position: relative;

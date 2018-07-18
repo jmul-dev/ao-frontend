@@ -32,11 +32,10 @@ class UploadFormContent extends Component {
         this.props.updateUploadFormField(inputName, event.target.value)
     }
     render() {
-        const { form, router } = this.props
+        const { form } = this.props
         if ( !form.video ) {
             return <Redirect to={'/app/view/upload/start'} />
         }
-        const fileSizeInMb = ~~(form.video.size / 1000 / 1000)
         return (
             <Grid container spacing={16}>
                 <Grid item xs={3}>

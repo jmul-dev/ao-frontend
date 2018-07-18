@@ -6,6 +6,8 @@ import withUploadFormValue from '../containers/withUploadFormValue';
 type Props = {
     inputName: string,
     inputValue?: any,
+    disabled?: boolean,
+    accept?: string,
     updateUploadFormField: (string, any) => void,
     onInputChange: (any) => void,
 };
@@ -44,12 +46,12 @@ class FileUpload extends Component<Props> {
         if ( onInputChange ) onInputChange(acceptedFiles[0])
     }
     render() {
-        const { inputValue } = this.props
+        const { inputValue, disabled, accept } = this.props
         let innerStyles = styles.inner
         if ( inputValue )
             innerStyles = Object.assign({}, innerStyles, styles.innerActive, {backgroundImage: inputValue ? `url(${inputValue.preview})` : ''})
         return (
-            <Dropzone onDrop={this._onDrop} style={styles.container} accept={this.props.accept}>
+            <Dropzone disabled={disabled} onDrop={this._onDrop} style={styles.container} accept={accept}>
                 <div style={innerStyles}>
                     {!inputValue ? this.props.children : null}
                 </div>

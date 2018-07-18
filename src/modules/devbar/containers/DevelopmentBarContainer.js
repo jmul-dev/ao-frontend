@@ -6,7 +6,8 @@ import gql from "graphql-tag"
 // Redux
 const mapStateToProps = (store) => {
     return {
-        app: store.app
+        app: store.app,
+        isElectron: store.electron.isElectron,
     }
 }
 

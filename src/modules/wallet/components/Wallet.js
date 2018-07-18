@@ -7,6 +7,7 @@ import '../styles/wallet.css';
 type Props = {
     wallet: WalletReducerType,
     app: AppReducerType,
+    isElectron: boolean,
     getEthBalanceForAccount: (string) => void,
     getTokenBalanceForAccount: (string) => void,
 };
@@ -16,6 +17,8 @@ export default class Wallet extends PureComponent<Props> {
     componentDidMount() {
         if ( this.props.app.ethAddress ) {
             this._getUpdatedBalances( this.props.app.ethAddress )
+        } else if ( this.props.isElectron ) {
+            window.chrome.ipcRenderer.send('open-metamask-popup')
         }
     }
     componentWillReceiveProps(nextProps: Props) {

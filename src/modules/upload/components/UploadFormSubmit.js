@@ -1,7 +1,5 @@
 // @flow
 import React, { Component } from 'react';
-import Typography from '@material-ui/core/Typography';
-import Grid from '@material-ui/core/Grid';
 import withUploadFormMutation, { UploadFormMutationProps } from '../containers/withUploadFormMutation';
 import { Redirect } from 'react-router-dom';
 
@@ -25,7 +23,7 @@ class UploadFormSubmit extends Component<Props> {
         }
     }
     render() {
-        const { submitContentLoading, submitContentError, form, stakeTransaction } = this.props
+        const { submitContentLoading, submitContentError, form } = this.props
         if ( !form.video ) {
             return <Redirect to={'/app/view/upload/start'} />
         }
