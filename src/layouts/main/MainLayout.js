@@ -7,7 +7,7 @@ import AccountView from '../../views/account/AccountView';
 import BrowseView from '../../views/browse/BrowseView';
 import UploadView from '../../views/upload/UploadView';
 import MainNavigation from './MainNavigation';
-import { AnimatedRoute, spring } from 'react-router-transition';
+import { AnimatedRoute } from 'react-router-transition';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import { lightTheme } from '../../theme';
 import './main-layout.css';

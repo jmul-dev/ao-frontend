@@ -8,7 +8,8 @@ import withStateMutation from '../../../utils/withStateMutation'
 // Redux
 const mapStateToProps = (store) => {
     return {
-        app: store.app
+        app: store.app,
+        isElectron: store.electron.isElectron
     }
 }
 

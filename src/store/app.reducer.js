@@ -6,9 +6,24 @@ import { getEthBalanceForAccount } from '../modules/wallet/reducers/wallet.reduc
 // Constants
 export const WEB3_CONNECTED = 'WEB3_CONNECTED'
 export const WEB3_ETH_ACCOUNT_CHANGE = 'WEB3_ETH_ACCOUNT_CHANGE'
+export const UPDATE_APP_STATE = 'UPDATE_APP_STATE'
+export const APP_STATES = {
+    APP_INITIALIZING: 'APP_INITIALIZING',
+    CORE_CONNECTED: 'CORE_CONNECTED',
+    CORE_READY: 'CORE_READY',
+    WEB3_AVAILABLE: 'WEB3_AVAILABLE',
+    WEB3_CONNECTED: 'WEB3_CONNECTED',
+    WEB3_READY: 'WEB3_READY',
+    APP_READY: 'APP_READY',
+}
+
 
 // Actions
-export const connectedToNetwork = (networkId) => {
+export const updateAppState = (key, value) => ({
+    type: UPDATE_APP_STATE,
+    payload: { key, value }
+})
+export const connectToWeb3 = (networkId) => {
     return (dispatch, getState) => {
         let networkName = getNetworkName( networkId, true )
         const networkLink = networkName ? `https://${networkName}.etherscan.io` : `https://etherscan.io`
@@ -17,7 +32,6 @@ export const connectedToNetwork = (networkId) => {
             payload: {
                 ethNetworkId: networkId,
                 ethNetworkLink: networkLink,
-                web3Connected: true,
             }
         })
         // web3 interface is connected, lets listen for changes to the active/selected account
@@ -67,15 +81,23 @@ export const getNetworkName = (networkId, shortname = false) => {
 
 // State
 const initialState = {
-    web3Available: false,
-    web3Connected: false,    
+    states: {
+        [APP_STATES.APP_INITIALIZING]: true,
+        [APP_STATES.CORE_CONNECTED]: false,
+        [APP_STATES.CORE_READY]: false,
+        [APP_STATES.WEB3_AVAILABLE]: typeof window.web3 !== 'undefined',
+        [APP_STATES.WEB3_CONNECTED]: false,
+        [APP_STATES.WEB3_READY]: false,
+        [APP_STATES.APP_READY]: false,
+    },
     ethNetworkId: undefined,
     ethNetworkLink: 'https://etherscan.io',
     ethAddress: undefined,
 }
 export type AppReducerType = {
-    web3Available: boolean,
-    web3Connected: boolean,    
+    state: {
+        [key: string]: boolean
+    },
     ethNetworkId?: string | number,
     ethNetworkLink?: string,
     ethAddress?: string,
@@ -87,12 +109,25 @@ export default function appReducer(state = initialState, action) {
         case WEB3_CONNECTED:
             return {
                 ...state,
-                ...action.payload,
+                ethNetworkId: action.payload.ethNetworkId,
+                ethNetworkLink: action.payload.ethNetworkLink,
+                states: {
+                    ...state.states,
+                    [APP_STATES.WEB3_CONNECTED]: true
+                }
             }
         case WEB3_ETH_ACCOUNT_CHANGE:
             return {
                 ...state,
                 ethAddress: action.payload.ethAddress
+            }
+        case UPDATE_APP_STATE:
+            return {
+                ...state,
+                states: {
+                    ...state.states,
+                    [action.payload.key]: action.payload.value
+                }
             }
         default:
             return state

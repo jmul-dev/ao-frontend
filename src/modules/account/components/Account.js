@@ -1,22 +1,25 @@
 // @flow
-import React, { Component } from 'react';
-import EthereumIcon from './EthereumIcon';
+import React from 'react';
+import EthereumIcon, { EthereumIconPlaceholder } from './EthereumIcon';
 import withEthAddress from '../containers/withEthAddress';
-import PropTypes from 'prop-types';
 
-const propTypes = {
-    display: PropTypes.oneOf(["ethAddress", "ethIcon"]),
+type Props = {
+    display: 'ethAddress' | 'ethIcon',
+    ethAddress?: string,
 }
 
-const Account = ({display, ethAddress}) => {
+const Account = ({display, ethAddress}: Props) => {
     switch (display) {
         case "ethAddress":
-            return <React.Fragment>{ethAddress}</React.Fragment>;
+            if ( ethAddress )
+                return <React.Fragment>{ethAddress}</React.Fragment>;
+            else
+                return <span className="placeholder-text">{'0x0000000000000000000000000000000000000000'}</span>
         case "ethIcon":
             if ( ethAddress )
                 return <EthereumIcon ethAddress={ethAddress} />;
             else
-                return null;
+                return <EthereumIconPlaceholder />;
         default:
             return null;
     }

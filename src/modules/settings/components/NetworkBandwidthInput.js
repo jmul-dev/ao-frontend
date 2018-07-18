@@ -27,7 +27,7 @@ class NetworkBandwidthInput extends Component<Props> {
         })
     }
     render() {
-        const { inputName, inputLabel, data, ...props } = this.props
+        const { inputName, inputLabel, data, updateSettings, updateSettingsError, updateSettingsLoading, updateSettingsResult, ...props } = this.props
         const { settings } = data
         if ( !settings )
             return null

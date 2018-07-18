@@ -1,6 +1,6 @@
 // @flow
 import React, { PureComponent } from 'react';
-import { AppReducerType } from '../../../store/app.reducer';
+import { AppReducerType, APP_STATES } from '../../../store/app.reducer';
 
 type Props = {
     register: Function,
@@ -8,6 +8,7 @@ type Props = {
     registerError?: Error,
     registerResult: any,
     app: AppReducerType,
+    isElectron: boolean,
 };
 
 export default class Register extends PureComponent<Props> {
@@ -18,9 +19,8 @@ export default class Register extends PureComponent<Props> {
      * to Metamask extension)
      */
     _openMetamask = () => {
-        if ( !window.IS_ELECTRON )
-            return null
-        window.chrome.ipcRenderer.send('open-metamask-popup')
+        if ( this.props.isElectron )
+            window.chrome.ipcRenderer.send('open-metamask-popup')
     }
     _onDirectorySelect = (event) => {
         console.log(event)
@@ -32,14 +32,15 @@ export default class Register extends PureComponent<Props> {
         this.props.register()
     }
     render() {
-        const { web3Available, ethAddress } = this.props.app
-        const { register, registerLoading } = this.props
+        const { states, ethAddress } = this.props.app
+        const { register, registerLoading, isElectron } = this.props
+        const web3Available = states[APP_STATES.WEB3_AVAILABLE]
         return (
             <div className="Register">
                 <h1>Register</h1>
                 <p>First step, unlock account via Metamask</p>
                 {/* <input type="file" onChange={this._onDirectorySelect} webkitdirectory="true" mozdirectory="true" msdirectory="true" odirectory="true" directory="true" multiple="true" /> */}                
-                {window.IS_ELECTRON && web3Available ? (
+                {isElectron && web3Available ? (
                     <button onClick={this._openMetamask}>open metamask</button>
                 ) : web3Available ? (
                         <div>Use your browser's Metamask extension</div>

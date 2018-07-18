@@ -4,9 +4,11 @@ import Grid from '@material-ui/core/Grid';
 import ButtonBase from '@material-ui/core/ButtonBase';
 import PlayIcon from '@material-ui/icons/PlayArrow';
 import withAccountVideos from '../containers/withAccountVideos';
+import withEthAddress from '../containers/withEthAddress';
 import moment from 'moment';
 import Collapse from '@material-ui/core/Collapse';
 import '../styles/account-video-listing.css';
+import { compose } from 'react-apollo';
 
 
 class AccountVideoListItem extends Component {
@@ -62,9 +64,35 @@ class AccountVideoListItem extends Component {
         )
     }
 }
+const AccountVideoListItemPlaceholder = () => (
+    <div className="AccountVideoListItem placeholder">
+        <Grid container spacing={16} alignItems="center">
+            <Grid item sm={4}>
+                <div className="featured-image placeholder-bg"></div>
+            </Grid>
+            <Grid item sm={8} className="card-container">
+                <Typography className="placeholder-text" variant="title" gutterBottom>
+                    {'Lorem ipsum dolor'}
+                </Typography>
+                <Typography className="placeholder-text" variant="body1" gutterBottom color="textSecondary">
+                    {`uploaded: 1/1/1970`}
+                </Typography>
+                <Typography className="placeholder-text" variant="body1" gutterBottom color="textSecondary">
+                    {`X ao earned | X ao staked`}
+                </Typography>
+                <Typography className="placeholder-text description" variant="body1" gutterBottom color="textSecondary">
+                    {'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'}
+                </Typography>
+            </Grid>
+        </Grid>              
+    </div>
+)
 
 class AccountVideoListing extends Component {
     render() {
+        const { ethAddress } = this.props
+        if ( !ethAddress )
+            return this._renderPlaceholderAccountListing()
         const { loading, error, node } = this.props.query
         if ( loading || error )
             return null  // TODO: loading or error state
@@ -83,6 +111,20 @@ class AccountVideoListing extends Component {
             </div>
         );
     }
+    _renderPlaceholderAccountListing() {
+        return (
+            <div className="AccountVideoListing placeholder">
+                <ul style={{listStyle: 'none', padding: 0, margin: 0}}>
+                    <AccountVideoListItemPlaceholder/>
+                    <AccountVideoListItemPlaceholder/>
+                    <AccountVideoListItemPlaceholder/>
+                </ul>
+            </div>
+        )
+    }
 }
 
-export default withAccountVideos(AccountVideoListing)
+export default compose(
+    withAccountVideos,
+    withEthAddress,
+)(AccountVideoListing)
