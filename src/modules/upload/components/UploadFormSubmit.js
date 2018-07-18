@@ -1,4 +1,4 @@
-// @flow
+    // @flow
 import React, { Component } from 'react';
 import withUploadFormMutation, { UploadFormMutationProps } from '../containers/withUploadFormMutation';
 import { Redirect } from 'react-router-dom';
@@ -21,11 +21,22 @@ type Props = {
 
 class UploadFormSubmit extends Component<Props> {
     props: Props;
+    _triggerStakeTimeout: number;
     componentDidMount() {
         // TODO: check if form is valid
         if ( this.props.form.video ) {
-            this.props.triggerStakeTransaction()
+            this._triggerStakeTimeout = setTimeout(this._triggerStakeTransaction, 1500)            
         }
+    }
+    componentWillUnmount() {
+        clearTimeout(this._triggerStakeTimeout)
+    }
+    _triggerStakeTransaction = () => {
+        this.props.triggerStakeTransaction().then(result => {
+
+        }).catch(error => {
+            // TODO: nav back OR update state to show failed transaction (and allow electron users to open metamask again!)
+        })
     }
     _cancel = () => {
 
@@ -47,10 +58,14 @@ class UploadFormSubmit extends Component<Props> {
                     <Grid item xs={3}>
                         <OverviewAside form={form} includePricing={true} />
                     </Grid>
-                    <Grid item xs={8} style={{marginLeft: 'auto'}}>                    
-                        <div>{submitContentLoading ? 'loading' : ''}</div>
-                        <div>{submitContentError ? submitContentError.toString() : ''}</div>
-                        <button onClick={this.props.submitContent}>submit</button>
+                    <Grid item xs={8} style={{marginLeft: 'auto'}}>
+                        <div className="upload-status-container gutter-bottom">
+                            <div>
+                                <div>{submitContentLoading ? 'loading' : ''}</div>
+                                <div>{submitContentError ? submitContentError.toString() : ''}</div>
+                                <button onClick={this.props.submitContent}>submit</button>
+                            </div>
+                        </div>                        
                         <nav className="upload-form-nav gutter-bottom">
                             <BackButton onClick={this._cancel}>{'cancel upload'}</BackButton>
                             <PrimaryButton onClick={this._continue}>{'continue'}</PrimaryButton>

@@ -77,26 +77,31 @@ export const updatePricingOption = (pricingOption, stake = undefined, profit = u
 }
 export const triggerStakeTransaction = () => {
     return (dispatch, getState) => {
-        const state = getState()
-        const stakeParams = {
-            stake: state.upload.form.stake,
-            split: state.upload.form.profit,
-        }
-        const messageToSign = JSON.stringify(stakeParams)
-        const hashedMessage = window.web3.sha3(messageToSign)
-        window.web3.eth.sign(state.app.ethAddress, hashedMessage, function(error, result) {
-            if ( error ) {
-                dispatch({
-                    type: STAKE_TRANSACTION_ERROR,
-                    payload: error
-                })
-            } else {
-                dispatch({
-                    type: STAKE_TRANSACTION_SUCCESS,
-                    payload: result
-                })
+        return new Promise((resolve, reject) => {
+            // TODO: check state.electron.isElectron and open metamask if so
+            const state = getState()
+            const stakeParams = {
+                stake: state.upload.form.stake,
+                split: state.upload.form.profit,
             }
-        })
+            const messageToSign = JSON.stringify(stakeParams)
+            const hashedMessage = window.web3.sha3(messageToSign)
+            window.web3.eth.sign(state.app.ethAddress, hashedMessage, function(error, result) {
+                if ( error ) {
+                    dispatch({
+                        type: STAKE_TRANSACTION_ERROR,
+                        payload: error
+                    })
+                    reject(error)
+                } else {
+                    dispatch({
+                        type: STAKE_TRANSACTION_SUCCESS,
+                        payload: result
+                    })
+                    resolve(result)
+                }
+            })
+        })        
     }
 }
 
