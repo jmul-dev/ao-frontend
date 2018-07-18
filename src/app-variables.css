@@ -1,5 +1,5 @@
 :root {
-    --brand-primary: #546EFF;
+    --brand-primary: rgba(0,204,71,1);
     --background-color: #000000;
     --sidebar-width: 80px;
     --gutter: 30px;

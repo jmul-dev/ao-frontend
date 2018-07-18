@@ -96,8 +96,8 @@ class AccountVideoListing extends Component {
         const { loading, error, node } = this.props.query
         if ( loading || error )
             return null  // TODO: loading or error state
-        if ( !node.creator || !node.creator.content )
-            return null // TODO: no user content
+        if ( !node || !node.creator || !node.creator.content )
+            return this._renderNoAccountVideos()
         const videos = node.creator.content
         return (
             <div className="AccountVideoListing">
@@ -110,6 +110,15 @@ class AccountVideoListing extends Component {
                 </ul>
             </div>
         );
+    }
+    _renderNoAccountVideos() {
+        return (
+            <div className="AccountVideoListing placeholder">
+                <Typography variant="body1" style={{marginTop: 16, marginBottom: 24, color: '#AAAAAA'}}>
+                    {'You have not uploaded any videos with this account to the AO network'}
+                </Typography>
+            </div>
+        )
     }
     _renderPlaceholderAccountListing() {
         return (

@@ -6,21 +6,27 @@
  */
 export const darkTheme = {
     typography: {
-        fontFamily: 'Arimo',        
-        display2: {
-            fontSize: '1.714rem',
+        fontFamily: 'Arimo',
+        title: {
+            fontSize: '1.5rem',
+            fontWeight: 'bold',
+            color: '#FFFFFF'
+        },
+        subheading: {
+            fontSize: '1.125rem',
+            fontWeight: 'bold',
             color: '#FFFFFF'
         },
         display3: {
-            fontSize: '1.5rem',
+            fontSize: '1.313rem',
             color: '#FFFFFF'
         }
     },
     palette: {
         type: 'dark',
         primary: {
-            light: 'rgba(84, 110, 255, 0.5)',
-            main: 'rgba(84, 110, 255, 1)',
+            light: 'rgba(0, 204, 71, 0.5)',
+            main: 'rgba(0, 204, 71, 1)',
             dark: '#2445FC',
         },
         background: {
@@ -31,24 +37,26 @@ export const darkTheme = {
 export const lightTheme = {
     typography: {
         fontFamily: 'Arimo',
-        subheading: {
-            fontSize: '1rem',
-            color: '#777777'
+        title: {
+            fontSize: '1.5rem',
+            fontWeight: 'bold',
+            color: '#222222'
         },
-        display2: {
-            fontSize: '1.714rem',
-            color: '#333333'
+        subheading: {
+            fontSize: '1.125rem',
+            fontWeight: 'bold',
+            color: '#222222'
         },
         display3: {
-            fontSize: '1.5rem',
+            fontSize: '1.313rem',
             color: '#333333'
         }
     },
     palette: {
         type: 'light',
         primary: {
-            light: 'rgba(84, 110, 255, 0.5)',
-            main: 'rgba(84, 110, 255, 1)',
+            light: 'rgba(0, 204, 71, 0.5)',
+            main: 'rgba(0, 204, 71, 1)',
             dark: '#2445FC',
         },
         background: {
@@ -61,8 +69,7 @@ export const lightTheme = {
                 textTransform: 'none'
             },
             flatPrimary: {
-                background: 'linear-gradient(-90deg, #6425FB 0%, #546EFF 100%)',
-                padding: '0 45px',
+                background: 'rgba(0, 204, 71, 1)',
                 color: 'white',
             },
         },

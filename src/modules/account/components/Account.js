@@ -8,7 +8,7 @@ type Props = {
     ethAddress?: string,
 }
 
-const Account = ({display, ethAddress}: Props) => {
+const Account = ({display, ethAddress, ...props}: Props) => {
     switch (display) {
         case "ethAddress":
             if ( ethAddress )
@@ -17,9 +17,9 @@ const Account = ({display, ethAddress}: Props) => {
                 return <span className="placeholder-text">{'0x0000000000000000000000000000000000000000'}</span>
         case "ethIcon":
             if ( ethAddress )
-                return <EthereumIcon ethAddress={ethAddress} />;
+                return <EthereumIcon ethAddress={ethAddress} {...props} />;
             else
-                return <EthereumIconPlaceholder />;
+                return <EthereumIconPlaceholder {...props} />;
         default:
             return null;
     }
