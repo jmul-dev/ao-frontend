@@ -1,0 +1,18 @@
+/* OverviewAside */
+.OverviewAside ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+.OverviewAside ul li {
+    display: flex;
+    align-items: center;
+    color: #777777;
+    margin-bottom: 4px;
+}
+.OverviewAside ul li .divider {
+    flex: 1;
+    border-bottom: 1px dashed #979797;
+    margin-left: 12px;
+    margin-right: 12px;
+}

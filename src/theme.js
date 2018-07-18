@@ -29,6 +29,10 @@ export const darkTheme = {
             main: 'rgba(0, 204, 71, 1)',
             dark: '#2445FC',
         },
+        secondary: {
+            main: '#4A546D',
+            contrastText: "#FFFFFF",
+        },
         background: {
             default: '#000000'
         },
@@ -58,6 +62,11 @@ export const lightTheme = {
             light: 'rgba(0, 204, 71, 0.5)',
             main: 'rgba(0, 204, 71, 1)',
             dark: '#2445FC',
+            contrastText: "#FFFFFF",
+        },
+        secondary: {
+            main: '#4A546D',
+            contrastText: "#FFFFFF",
         },
         background: {
             default: '#FFFFFF'
@@ -74,4 +83,8 @@ export const lightTheme = {
             },
         },
     },
+    slider: {
+        selectionColor: '#F76B1C',
+        handleFillColor: '#F76B1C'
+    }
 }

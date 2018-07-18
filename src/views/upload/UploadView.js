@@ -10,8 +10,6 @@ import UploadFormSubmit from '../../modules/upload/components/UploadFormSubmit';
 import UploadFormContinue from '../../modules/upload/containers/UploadFormContinue';
 import './upload-view.css';
 import withEthAddress from '../../modules/account/containers/withEthAddress';
-import Typography from '@material-ui/core/Typography';
-import UnlockIcon from '@material-ui/icons/LockOpen';
 
 
 class UploadView extends PureComponent {
@@ -30,12 +28,7 @@ class UploadView extends PureComponent {
                         <Route component={UploadFormContinue} />
                     </Switch>
                 ) : (
-                    <div>
-                        <Typography variant="display3" gutterBottom style={{display: 'flex', alignItems: 'center'}}>
-                            <UnlockIcon style={{marginRight: 8}} />{'Unlock your account to proceed'}
-                        </Typography>
-                        <UploadForm asPlaceholder />
-                    </div>
+                    <UploadForm asPlaceholder />
                 )}
             </View>
         );
