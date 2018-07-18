@@ -27,17 +27,17 @@ const OverviewAside = ({form, includePricing = false}) => (
                     <li>
                         <span>{'your stake'}</span>
                         <span className="divider"></span>
-                        <b>{`${form.stake} AO`}</b>
+                        <b className="em-submit">{`${form.stake} AO`}</b>
                     </li>
                     <li>
                         <span>{'you charge'}</span>
                         <span className="divider"></span>
-                        <b>{`${form.stake} AO / view`}</b>
+                        <b className="em-submit">{`${form.stake} AO / view`}</b>
                     </li>
                     <li>
                         <span>{'you make'}</span>
                         <span className="divider"></span>
-                        <b>{`${form.profit}% profits`}</b>
+                        <b className="em-submit">{`${form.profit}% profits`}</b>
                     </li>
                 </React.Fragment>
             ) : null}

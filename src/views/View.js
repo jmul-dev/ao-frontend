@@ -8,11 +8,14 @@ type Props = {
 
 export default class View extends Component<Props> {
     render() {
-        let style = {padding: 24}
+        let padding = {padding: 24}
         if ( this.props.padding === 'none' )
-            style = {padding: 0}
+            padding = {padding: 0}
         else if ( this.props.padding === 'full' )
-            style = {padding: 100}
+            padding = {padding: 100}
+        const style = Object.assign({}, this.props.style, padding, {
+            transition: 'all 300ms ease-out'
+        })
         return (
             <div className={["View", this.props.className].join(' ')} style={style}>
                 {this.props.children}
