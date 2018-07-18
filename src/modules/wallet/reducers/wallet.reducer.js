@@ -33,10 +33,14 @@ export const getTokenBalanceForAccount = ( account ) => {
 const initialState = {
     ethBalance: new BigNumber(0),
     tokenBalance: new BigNumber(0),
+    tokenStaked: new BigNumber(0),
+    tokenEarned: new BigNumber(0),
 }
 export type WalletReducerType = {
     ethBalance: BigNumber,
     tokenBalance: BigNumber,
+    tokenStaked: BigNumber,
+    tokenEarned: BigNumber,
 }
 
 // Reducer

@@ -1,4 +1,3 @@
-import Wallet from '../components/Wallet'
 import { connect } from 'react-redux'
 import { getEthBalanceForAccount, getTokenBalanceForAccount } from '../reducers/wallet.reducer'
 
@@ -9,10 +8,10 @@ const mapDispatchToProps = {
 }
 const mapStateToProps = (store) => {
     return {
+        ethAddress: store.app.ethAddress,
         wallet: store.wallet,
-        app: store.app,
         isElectron: store.electron.isElectron,
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Wallet);
+export default connect(mapStateToProps, mapDispatchToProps);
