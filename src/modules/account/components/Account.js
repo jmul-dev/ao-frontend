@@ -1,14 +1,14 @@
 // @flow
-import React, { Component } from 'react';
+import React from 'react';
 import EthereumIcon from './EthereumIcon';
 import withEthAddress from '../containers/withEthAddress';
-import PropTypes from 'prop-types';
 
-const propTypes = {
-    display: PropTypes.oneOf(["ethAddress", "ethIcon"]),
+type Props = {
+    display: 'ethAddress' | 'ethIcon',
+    ethAddress?: string,
 }
 
-const Account = ({display, ethAddress}) => {
+const Account = ({display, ethAddress}: Props) => {
     switch (display) {
         case "ethAddress":
             return <React.Fragment>{ethAddress}</React.Fragment>;

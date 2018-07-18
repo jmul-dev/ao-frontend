@@ -1,8 +1,6 @@
 // @flow
 import React, { Component, Node } from 'react';
-import { Switch, Route, Redirect } from 'react-router';
 import MainLayout from './layouts/main/MainLayout';
-import RegisterLayout from './layouts/register/RegisterLayout';
 import BootLayout from './layouts/boot/BootLayout';
 import DevelopmentBarContainer from './modules/devbar/containers/DevelopmentBarContainer';
 import { APP_STATES } from './store/app.reducer';
@@ -37,7 +35,7 @@ export default class App extends Component<Props> {
         }
     }
     componentWillReceiveProps( nextProps: Props ) {
-        const { query, app, updateAppState } = this.props
+        const { query, updateAppState } = this.props
         if ( !query.state && nextProps.query.state !== undefined ) {
             // no core state -> core state, means our core connection has been established
             updateAppState(APP_STATES.CORE_CONNECTED, true)
@@ -59,23 +57,11 @@ export default class App extends Component<Props> {
             return <BootLayout networkError={query.error} />
         }
         return (
-            <div className={`App ${process.env.NODE_ENV !== 'production' ? 'development-bar-spacing' : ''}`}>                
-                <Switch>
-                    <Route path="/app" render={(routeProps) => (
-                        query.node ? (
-                            <MainLayout {...routeProps} />
-                        ) : <Redirect to="/" />
-                    )} />
-                    <Route path="/" render={(routeProps) => (
-                        !query.node ? (
-                            <RegisterLayout {...routeProps} />
-                        ) : <Redirect to="/app/browse" />
-                    )} />
-                </Switch>
+            <div className={`App ${process.env.NODE_ENV !== 'production' ? 'development-bar-spacing' : ''}`}>
+                <MainLayout />
                 {process.env.NODE_ENV !== 'production' ? (
                     <DevelopmentBarContainer />
                 ):null}
-                <div style={{color: 'white'}}>{this.props.app.state}</div>
             </div>
         );
     }
