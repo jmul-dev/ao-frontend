@@ -1,6 +1,6 @@
 // @flow
 import React from 'react';
-import EthereumIcon from './EthereumIcon';
+import EthereumIcon, { EthereumIconPlaceholder } from './EthereumIcon';
 import withEthAddress from '../containers/withEthAddress';
 
 type Props = {
@@ -11,12 +11,15 @@ type Props = {
 const Account = ({display, ethAddress}: Props) => {
     switch (display) {
         case "ethAddress":
-            return <React.Fragment>{ethAddress}</React.Fragment>;
+            if ( ethAddress )
+                return <React.Fragment>{ethAddress}</React.Fragment>;
+            else
+                return <span className="placeholder-text">{'0x0000000000000000000000000000000000000000'}</span>
         case "ethIcon":
             if ( ethAddress )
                 return <EthereumIcon ethAddress={ethAddress} />;
             else
-                return null;
+                return <EthereumIconPlaceholder />;
         default:
             return null;
     }

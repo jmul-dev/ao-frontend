@@ -6,12 +6,14 @@ import Typography from '@material-ui/core/Typography';
 import Account from '../../modules/account/components/Account';
 import AccountVideoListing from '../../modules/account/components/AccountVideoListing';
 import Grid from '@material-ui/core/Grid';
+import withEthAddress from '../../modules/account/containers/withEthAddress';
 
 
-export default class AccountView extends PureComponent {
+class AccountView extends PureComponent {
     render() {
+        const { ethAddress } = this.props
         return (
-            <View className={'AccountView'} padding="full">
+            <View className={`AccountView ${ethAddress ? 'connected' : 'not-connected'}`} padding="full">
                 <Grid container spacing={16}>                
                     <Grid item xs={6}>
                         <header style={{display: 'flex', alignItems: 'center'}}>
@@ -36,7 +38,7 @@ export default class AccountView extends PureComponent {
                     </Grid>
                     <Grid item xs={12}>
                         <section style={{marginTop: 48}}>
-                            <Typography variant="display3" gutterBottom>
+                            <Typography variant="display3" gutterBottom className={ethAddress ? '' : 'placeholder-text'}>
                                 {'My videos'}
                             </Typography>
                             <AccountVideoListing />
@@ -47,3 +49,5 @@ export default class AccountView extends PureComponent {
         );
     }
 }
+
+export default withEthAddress(AccountView)

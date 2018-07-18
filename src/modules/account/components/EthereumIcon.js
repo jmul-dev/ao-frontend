@@ -56,5 +56,9 @@ export default class EthereumIcon extends Component {
     }
 }
 
+export const EthereumIconPlaceholder = ({size = 75}) => (
+    <div className="placeholder-bg" style={{width: size, height: size, borderRadius: size / 2, overflow: 'hidden', flexShrink: 0}} />
+)
+
 EthereumIcon.propTypes = propTypes;
 EthereumIcon.defaultProps = defaultProps;

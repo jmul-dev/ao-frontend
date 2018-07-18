@@ -59,3 +59,10 @@ body {
 .App.development-bar-spacing .overlay-view-container {
     height: calc(100vh - 30px);
 }
+
+.placeholder-bg {
+    background-color: #dddddd;
+}
+.placeholder-text {
+    color: #dddddd !important;
+}

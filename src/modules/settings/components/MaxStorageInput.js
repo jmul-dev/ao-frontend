@@ -22,7 +22,7 @@ class MaxStorageInput extends Component<SettingsMutationProps> {
         })
     }
     render() {
-        const { data, ...props } = this.props
+        const { data, updateSettings, updateSettingsError, updateSettingsLoading, updateSettingsResult, ...props } = this.props
         const { settings } = data
         if ( !settings )
             return null

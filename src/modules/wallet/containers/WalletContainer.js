@@ -11,6 +11,7 @@ const mapStateToProps = (store) => {
     return {
         wallet: store.wallet,
         app: store.app,
+        isElectron: store.electron.isElectron,
     }
 }
 
