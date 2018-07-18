@@ -8,6 +8,7 @@ import { InMemoryCache } from 'apollo-cache-inmemory';
 import { createUploadLink } from 'apollo-upload-client/lib/main';
 import Web3 from 'web3';
 
+window.AO_CORE_URL = 'http://localhost:3003' // TODO: pull this from env or config
 
 if ( typeof window.web3 !== 'undefined' ) {
     window.web3 = new Web3(window.web3.currentProvider)
@@ -17,7 +18,7 @@ const store = configureStore();
 
 const client = new ApolloClient({
     link: createUploadLink({
-        uri: 'http://localhost:3003/graphql' // TODO: pull this from env or config
+        uri: `${window.AO_CORE_URL}/graphql`
     }),
     cache: new InMemoryCache(),
 })
