@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="25px" height="25px" viewBox="0 0 25 25" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50 (54983) - http://www.bohemiancoding.com/sketch -->
+    <title>Oval 2</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <radialGradient cx="50%" cy="28.5698785%" fx="50%" fy="28.5698785%" r="71.4301215%" id="radialGradient-1">
+            <stop stop-color="#FFFFFF" offset="0%"></stop>
+            <stop stop-color="#525252" offset="100%"></stop>
+        </radialGradient>
+    </defs>
+    <g id="Video-Upload-/-account" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="pricing" transform="translate(-781.000000, -190.000000)" fill="url(#radialGradient-1)">
+            <g id="Group-22" transform="translate(770.000000, 177.000000)">
+                <circle id="Oval-2" cx="23.5" cy="25.5" r="12.5"></circle>
+            </g>
+        </g>
+    </g>
+</svg>

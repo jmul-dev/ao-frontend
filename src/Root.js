@@ -4,11 +4,9 @@ import { Provider } from 'react-redux';
 import { ConnectedRouter } from 'connected-react-router';
 import AppContainer from './AppContainer';
 import { ApolloProvider } from "react-apollo";
-import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import { MuiThemeProvider } from '@material-ui/core/styles';
 import { darkTheme } from './theme';
 import CssBaseline from '@material-ui/core/CssBaseline';
-
-const theme = createMuiTheme(darkTheme);
 
 type Props = {
     store: {},
@@ -22,7 +20,7 @@ export default class Root extends Component<Props> {
             <ApolloProvider client={this.props.client}>            
                 <Provider store={this.props.store}>
                     <ConnectedRouter history={this.props.history}>
-                        <MuiThemeProvider theme={theme}>
+                        <MuiThemeProvider theme={darkTheme}>
                             <CssBaseline>
                                 <AppContainer />
                             </CssBaseline>

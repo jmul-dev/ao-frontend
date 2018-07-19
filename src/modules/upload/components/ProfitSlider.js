@@ -5,20 +5,20 @@ import { withStyles } from '@material-ui/core/styles';
 
 const styles = {
     track: {
-        height: 8
+        height: 8,        
     },
     thumb: {
         width: 18,
         height: 18,
         border: '1px solid #546EFF',
         boxShadow: '0 2px 4px 0 #546EFF',
-        background: 'white',
+        backgroundColor: 'white',
     },
     trackBefore: {
-        background: 'linear-gradient(to right, #6425FB, #546EFF)'
+        backgroundColor: '#4A546D !important',
     },
     trackAfter: {
-        background: 'linear-gradient(to right, #A5E833, #17BB59)'
+        backgroundColor: 'rgba(0, 204, 71, 0.5) !important',
     }
 }
 

@@ -2,18 +2,21 @@ import { graphql, compose } from 'react-apollo';
 import withStateMutation from '../../../utils/withStateMutation';
 import gql from 'graphql-tag';
 import { connect } from 'react-redux';
-import { triggerStakeTransaction } from '../reducers/upload.reducer';
+import { triggerStakeTransaction, updateLastReachedStep, resetUploadForm } from '../reducers/upload.reducer';
 
 
 export type UploadFormMutationProps = {
     submitContent: Function,
     submitContentLoading: boolean,
     submitContentError?: Error,
+    submitContentResult?: Object,
 };
 
 // Redux
 const mapDispatchToProps = {
-    triggerStakeTransaction
+    triggerStakeTransaction,
+    updateLastReachedStep,
+    resetUploadForm,
 }
 const mapStateToProps = (store) => {
     return {

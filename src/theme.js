@@ -4,7 +4,9 @@
  * NOTE: these do not merge very well via nested MuiThemeProvider, lightTheme will
  * not inherit all of darkTheme values. 
  */
-export const darkTheme = {
+import { createMuiTheme } from '@material-ui/core/styles';
+
+export const darkTheme = createMuiTheme({
     typography: {
         fontFamily: 'Arimo',
         title: {
@@ -29,12 +31,17 @@ export const darkTheme = {
             main: 'rgba(0, 204, 71, 1)',
             dark: '#2445FC',
         },
+        secondary: {
+            main: '#4A546D',
+            contrastText: "#FFFFFF",
+        },
         background: {
-            default: '#000000'
+            default: '#222222'
         },
     }
-}
-export const lightTheme = {
+})
+
+export const lightTheme = createMuiTheme({
     typography: {
         fontFamily: 'Arimo',
         title: {
@@ -58,9 +65,14 @@ export const lightTheme = {
             light: 'rgba(0, 204, 71, 0.5)',
             main: 'rgba(0, 204, 71, 1)',
             dark: '#2445FC',
+            contrastText: "#FFFFFF",
+        },
+        secondary: {
+            main: '#4A546D',
+            contrastText: "#FFFFFF",
         },
         background: {
-            default: '#FFFFFF'
+            default: '#F8F8F8'
         },
     },
     overrides: {
@@ -74,4 +86,8 @@ export const lightTheme = {
             },
         },
     },
-}
+    slider: {
+        selectionColor: '#F76B1C',
+        handleFillColor: '#F76B1C'
+    }
+})

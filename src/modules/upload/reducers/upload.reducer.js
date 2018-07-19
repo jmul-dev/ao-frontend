@@ -39,9 +39,16 @@ export const updateUploadFormField = (inputName, inputValue) => ({
 export const resetUploadForm = () => {
     return (dispatch, getState) => {
         const state = getState()
-        const video = state.upload.form.video
+        const { video, videoTeaser, featuredImage } = state.upload.form
+        // Cleanup file resources
         if ( video ) {
             window.URL.revokeObjectURL(video.preview);
+        }
+        if ( videoTeaser ) {
+            window.URL.revokeObjectURL(videoTeaser.preview);
+        }
+        if ( featuredImage ) {
+            window.URL.revokeObjectURL(featuredImage.preview);
         }
         dispatch({
             type: RESET_UPLOAD_FORM,
@@ -77,26 +84,36 @@ export const updatePricingOption = (pricingOption, stake = undefined, profit = u
 }
 export const triggerStakeTransaction = () => {
     return (dispatch, getState) => {
-        const state = getState()
-        const stakeParams = {
-            stake: state.upload.form.stake,
-            split: state.upload.form.profit,
-        }
-        const messageToSign = JSON.stringify(stakeParams)
-        const hashedMessage = window.web3.sha3(messageToSign)
-        window.web3.eth.sign(state.app.ethAddress, hashedMessage, function(error, result) {
-            if ( error ) {
-                dispatch({
-                    type: STAKE_TRANSACTION_ERROR,
-                    payload: error
-                })
-            } else {
-                dispatch({
-                    type: STAKE_TRANSACTION_SUCCESS,
-                    payload: result
-                })
+        // reset the stake transaction state
+        dispatch({type: STAKE_TRANSACTION_ERROR, payload: undefined})
+        dispatch({type: STAKE_TRANSACTION_SUCCESS, payload: undefined})
+        return new Promise((resolve, reject) => {        
+            const state = getState()
+            if ( state.electron.isElectron ) {
+                window.chrome.ipcRenderer.send('open-metamask-popup')
             }
-        })
+            const stakeParams = {
+                stake: state.upload.form.stake,
+                split: state.upload.form.profit,
+            }
+            const messageToSign = JSON.stringify(stakeParams)
+            const hashedMessage = window.web3.sha3(messageToSign)
+            window.web3.eth.sign(state.app.ethAddress, hashedMessage, function(error, result) {
+                if ( error ) {
+                    dispatch({
+                        type: STAKE_TRANSACTION_ERROR,
+                        payload: error
+                    })
+                    reject(error)
+                } else {
+                    dispatch({
+                        type: STAKE_TRANSACTION_SUCCESS,
+                        payload: result
+                    })
+                    resolve(result)
+                }
+            })
+        })        
     }
 }
 
@@ -107,8 +124,8 @@ const initialState = {
         video: undefined,
         videoTeaser: undefined,
         featuredImage: undefined,
-        title: undefined,
-        description: undefined,
+        title: '',
+        description: '',
         pricingOption: 1,  // 0 = custom, 1-3 predefined inputs
         stake: undefined,
         profit: undefined,
@@ -119,7 +136,7 @@ const initialState = {
     }
 }
 export type UploadReducerType = {
-    lastReachedUploadStep: 'start' | 'pricing' | 'reload' | 'content',
+    lastReachedUploadStep: 'start' | 'pricing' | 'reload' | 'content' | 'submit',
 }
 
 // Reducer
@@ -150,7 +167,9 @@ export default function uploadReducer(state = initialState, action) {
             return {
                 ...state,
                 lastReachedUploadStep: 'start',
-                form: {}
+                form: {
+                    ...initialState.form
+                }
             }
         case STAKE_TRANSACTION_SUCCESS:
             return {

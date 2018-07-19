@@ -37,48 +37,53 @@ class UploadFormContent extends Component {
             return <Redirect to={'/app/view/upload/start'} />
         }
         return (
-            <Grid container spacing={16}>
-                <Grid item xs={3}>
-                    <OverviewAside form={form} includePricing={true} />
-                </Grid>
-                <Grid item xs={8} style={{marginLeft: 'auto'}}>                    
-                    <Grid container spacing={24} className="gutter-bottom">
-                        <Grid item xs={6}>
-                            <Typography variant="body1" gutterBottom>
-                                {`featured image (png, jpg)`}
-                            </Typography>
-                            <FileUpload inputName="featuredImage" accept="image/*">
-                                <AddIcon />
-                            </FileUpload>
-                        </Grid>
-                        <Grid item xs={6}>
-                            <Typography variant="body1" gutterBottom>
-                                {`teaser (mp4, mov)`}
-                            </Typography>
-                            <FileUpload inputName="videoTeaser" accept="video/*" onInputChange={this._onTeaserInputChange}>
-                                <AddIcon />
-                            </FileUpload>
-                        </Grid>
+            <div>
+                <Typography className="title" variant="title">
+                    {`Video Upload`}
+                </Typography>            
+                <Grid container spacing={16}>
+                    <Grid item xs={3}>
+                        <OverviewAside form={form} includePricing={true} />
                     </Grid>
-                    <div className="text-inputs gutter-bottom">                    
-                        <TextInput
-                            value={form.title}
-                            onChange={this._handleTextInput("title")}
-                            label="video title"
-                        />
-                        <TextInput
-                            value={form.description}
-                            onChange={this._handleTextInput("description")}
-                            label="description"
-                            multiline rows={4}
-                        />
-                    </div>
-                    <nav className="upload-form-nav gutter-bottom">
-                        <BackButton onClick={this._navBack}>{'back'}</BackButton>
-                        <PrimaryButton onClick={this._submit}>{'finish & upload'}</PrimaryButton>
-                    </nav>
+                    <Grid item xs={8} style={{marginLeft: 'auto'}}>                    
+                        <Grid container spacing={24} className="gutter-bottom">
+                            <Grid item xs={6}>
+                                <Typography variant="body1" gutterBottom>
+                                    {`featured image (png, jpg)`}
+                                </Typography>
+                                <FileUpload inputName="featuredImage" accept="image/*">
+                                    <AddIcon />
+                                </FileUpload>
+                            </Grid>
+                            <Grid item xs={6}>
+                                <Typography variant="body1" gutterBottom>
+                                    {`teaser (mp4, mov)`}
+                                </Typography>
+                                <FileUpload inputName="videoTeaser" accept="video/*" onInputChange={this._onTeaserInputChange}>
+                                    <AddIcon />
+                                </FileUpload>
+                            </Grid>
+                        </Grid>
+                        <div className="text-inputs gutter-bottom">                    
+                            <TextInput
+                                value={form.title}
+                                onChange={this._handleTextInput("title")}
+                                label="video title"
+                            />
+                            <TextInput
+                                value={form.description}
+                                onChange={this._handleTextInput("description")}
+                                label="description"
+                                multiline rows={4}
+                            />
+                        </div>
+                        <nav className="upload-form-nav gutter-bottom">
+                            <BackButton onClick={this._navBack}>{'back'}</BackButton>
+                            <PrimaryButton onClick={this._submit}>{'finish & upload'}</PrimaryButton>
+                        </nav>
+                    </Grid>
                 </Grid>
-            </Grid>
+            </div>
         )
     }
 }

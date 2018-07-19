@@ -1,0 +1,19 @@
+.UploadFormSubmit .OverviewAside b.em-submit {
+    color: white;
+}
+
+.UploadFormSubmit .upload-status-container {
+    background-color: #000;
+    position: relative;
+    width: 100%;
+    padding-bottom: 100%;
+    border-radius: 4px;
+    overflow: hidden;
+}
+.UploadFormSubmit .upload-status-container > div {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
