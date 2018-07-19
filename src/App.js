@@ -3,6 +3,7 @@ import React, { Component, Node } from 'react';
 import MainLayout from './layouts/main/MainLayout';
 import BootLayout from './layouts/boot/BootLayout';
 import DevelopmentBarContainer from './modules/devbar/containers/DevelopmentBarContainer';
+import RegisterContainer from './modules/registration/containers/RegisterContainer';
 import { APP_STATES } from './store/app.reducer';
 import './app-variables.css';
 import './app.css';
@@ -58,6 +59,7 @@ export default class App extends Component<Props> {
         }
         return (
             <div className={`App ${process.env.NODE_ENV !== 'production' ? 'development-bar-spacing' : ''}`}>
+                <RegisterContainer />
                 <MainLayout />
                 {process.env.NODE_ENV !== 'production' ? (
                     <DevelopmentBarContainer />

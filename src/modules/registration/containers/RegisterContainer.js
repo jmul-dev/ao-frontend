@@ -8,8 +8,7 @@ import withStateMutation from '../../../utils/withStateMutation'
 // Redux
 const mapStateToProps = (store) => {
     return {
-        app: store.app,
-        isElectron: store.electron.isElectron
+        ethAddress: store.app.ethAddress,
     }
 }
 
@@ -30,7 +29,7 @@ export default compose(
         options: (props) => ({
             variables: {
                 inputs: {
-                    ethAddress: props.app.ethAddress 
+                    ethAddress: props.ethAddress 
                 }
             },
             refetchQueries: [
