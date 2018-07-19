@@ -1,3 +1,9 @@
 .Exchange {
     padding: 50px 70px;
 }
+
+.Exchange .grid {
+    border-bottom: 1px solid #333333;
+    padding-top: 20px;
+    padding-bottom: 12px;
+}

@@ -43,12 +43,12 @@ class Exchange extends Component<Props> {
             <div className="Exchange" style={{backgroundColor: theme.palette.background.default}}>
                 <Typography variant="title" align="center" style={{marginBottom: 8}}>{title}</Typography>
                 <Typography variant="body1" align="center" style={{marginBottom: 48, fontSize: '1.125rem'}}>{subtitle}</Typography>
-                <Grid className="grid" container spacing={16}>
+                <Grid className="grid" container spacing={16} alignItems="center">
                     <Grid item xs={4}>
-                        <div style={{display: 'flex'}}>
+                        <div style={{display: 'flex', alignItems: 'center'}}>
                             <Account display="ethIcon" size={25} />
-                            <Typography>{'My Wallet'}</Typography>
-                        </div>                        
+                            <Typography variant="subheading" style={{marginLeft: 8}}>{'My Wallet'}</Typography>
+                        </div>
                     </Grid>
                     <Grid item xs={4}>
                         <Typography><b>{wallet.tokenBalance.toNumber()}</b> {'AO'}</Typography>
@@ -59,27 +59,27 @@ class Exchange extends Component<Props> {
                 </Grid>
                 <Grid className="grid" container spacing={16}>
                     <Grid item xs={4}>
-                        <Typography>{'Purchase:'}</Typography>
-                        <Typography>{`1 AO = ${exchange.exchangeRate.toNumber()} ETH`}</Typography>
+                        <Typography variant="subheading">{'Purchase:'}</Typography>
+                        <Typography variant="caption">{`1 AO = ${exchange.exchangeRate.toNumber()} ETH`}</Typography>
                     </Grid>
                     <Grid item xs={8}>
                         <TextField />
                     </Grid>
                 </Grid>
-                <Grid className="grid" container spacing={16}>
+                <Grid className="grid" container spacing={16} alignItems="center">
                     <Grid item xs={4}>
-                        <Typography>{'cost'}</Typography>
+                        <Typography variant="caption">{'cost'}</Typography>
                     </Grid>
                     <Grid item xs={8}>
-                        <Typography>{`${exchange.exchangeAmountEth.toNumber()} ETH`}</Typography>
+                        <Typography variant="subheading">{`${exchange.exchangeAmountEth.toNumber()} ETH`}</Typography>
                     </Grid>
                 </Grid>
                 <Grid className="grid" container spacing={16}>
                     <Grid item xs={4}>
-                        <Typography>{'with funds from'}</Typography>                        
+                        <Typography variant="caption">{'with funds from'}</Typography>                        
                     </Grid>
                     <Grid item xs={8}>
-                        <Typography>{'account:'}</Typography>
+                        <Typography variant="caption">{'account:'}</Typography>
                         <Typography>{ethAddress}</Typography>
                     </Grid>
                 </Grid>
