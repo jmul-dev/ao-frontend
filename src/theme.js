@@ -38,7 +38,18 @@ export const darkTheme = createMuiTheme({
         background: {
             default: '#222222'
         },
-    }
+    },
+    overrides: {
+        MuiButton: {
+            root: {
+                textTransform: 'none'
+            },
+            flatPrimary: {
+                background: 'rgba(0, 204, 71, 1)',
+                color: 'white',
+            },
+        },
+    },
 })
 
 export const lightTheme = createMuiTheme({

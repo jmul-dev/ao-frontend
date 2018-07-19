@@ -33,6 +33,7 @@ export default class BrowseView extends Component {
                         <Exchange 
                             title={'You have insufficient funds'}
                             subtitle={'Purchase more ao to continue streaming.'}
+                            requiredTokenAmount={100}
                         />
                     </div>
                 </Modal>

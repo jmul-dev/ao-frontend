@@ -15,6 +15,7 @@ type Props = {
     // props
     title: string,
     subtitle: string,
+    requiredTokenAmount?: number,
     // withTheme
     theme: Object,  // material-ui theme
     // redux bound state
@@ -27,6 +28,7 @@ type Props = {
     getTokenBalanceForAccount: Function,
     getExchangeRate: Function,
     purchaseTokens: Function,
+    updateTokenExchangeAmount: Function,
 }
 
 class Exchange extends Component<Props> {
@@ -37,13 +39,17 @@ class Exchange extends Component<Props> {
         getTokenBalanceForAccount(ethAddress)
         getExchangeRate()
     }
+    _onTokenExchangeAmountChange = (event) => {
+        let inputValue = event.target.value
+        this.props.updateTokenExchangeAmount(inputValue)
+    }
     render() {
-        const { ethAddress, exchange, wallet, theme, title, subtitle } = this.props
+        const { ethAddress, exchange, wallet, theme, title, subtitle, requiredTokenAmount } = this.props
         return (
             <div className="Exchange" style={{backgroundColor: theme.palette.background.default}}>
                 <Typography variant="title" align="center" style={{marginBottom: 8}}>{title}</Typography>
                 <Typography variant="body1" align="center" style={{marginBottom: 48, fontSize: '1.125rem'}}>{subtitle}</Typography>
-                <Grid className="grid" container spacing={16} alignItems="center">
+                <Grid className="grid" container spacing={16} alignItems="center" style={{paddingBottom: requiredTokenAmount ? 38 : undefined}}>
                     <Grid item xs={4}>
                         <div style={{display: 'flex', alignItems: 'center'}}>
                             <Account display="ethIcon" size={25} />
@@ -51,10 +57,19 @@ class Exchange extends Component<Props> {
                         </div>
                     </Grid>
                     <Grid item xs={4}>
-                        <Typography><b>{wallet.tokenBalance.toNumber()}</b> {'AO'}</Typography>
+                        <div style={{display: 'flex', alignItems: 'flex-end'}}>
+                            <Typography variant="title">{wallet.tokenBalance.toFixed(3)}</Typography>
+                            <Typography>{'AO'}</Typography>
+                        </div>
+                        {requiredTokenAmount ? (
+                            <Typography variant="caption" className="required-token-amount" color="error">{`need ${requiredTokenAmount} AO to watch`}</Typography>
+                        ) : null}                        
                     </Grid>
                     <Grid item xs={4}>
-                        <Typography><b>{wallet.ethBalance.toNumber()}</b> {'ETH'}</Typography>
+                        <div style={{display: 'flex', alignItems: 'flex-end'}}> 
+                            <Typography variant="title">{wallet.ethBalance.toFixed(3)}</Typography> 
+                            <Typography>{'ETH'}</Typography>
+                        </div>
                     </Grid>
                 </Grid>
                 <Grid className="grid" container spacing={16}>
@@ -63,7 +78,18 @@ class Exchange extends Component<Props> {
                         <Typography variant="caption">{`1 AO = ${exchange.exchangeRate.toNumber()} ETH`}</Typography>
                     </Grid>
                     <Grid item xs={8}>
-                        <TextField />
+                        <div className="input-container">
+                            <TextField 
+                                fullWidth 
+                                InputProps={{
+                                    disableUnderline: true,
+                                    type: "number"
+                                }}
+                                value={exchange.exchangeAmountToken.toString()}
+                                onChange={this._onTokenExchangeAmountChange}
+                            />
+                            <Typography style={{marginBottom: 8}}>{'AO'}</Typography>
+                        </div>                        
                     </Grid>
                 </Grid>
                 <Grid className="grid" container spacing={16} alignItems="center">
@@ -79,13 +105,15 @@ class Exchange extends Component<Props> {
                         <Typography variant="caption">{'with funds from'}</Typography>                        
                     </Grid>
                     <Grid item xs={8}>
-                        <Typography variant="caption">{'account:'}</Typography>
-                        <Typography>{ethAddress}</Typography>
+                        <div style={{overflow: 'hidden', wordWrap: 'break-word'}}>
+                            <Typography variant="caption">{'account:'}</Typography>
+                            <Typography>{ethAddress}</Typography>
+                        </div>
                     </Grid>
                 </Grid>
                 <Grid className="grid" container spacing={16}>
                     <Grid item xs={8} style={{marginLeft: 'auto'}}>
-                        <Button color="primary" variant="flat">{'Purchase'}</Button>
+                        <Button color="primary" variant="flat" fullWidth>{'Purchase'}</Button>
                     </Grid>
                 </Grid>
             </div>

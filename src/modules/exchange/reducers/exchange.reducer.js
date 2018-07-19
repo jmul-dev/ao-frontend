@@ -4,6 +4,7 @@ import BigNumber from 'bignumber.js'
 export const EXCHANGE_TRANSACTION_ERROR = 'EXCHANGE_TRANSACTION_ERROR'
 export const EXCHANGE_TRANSACTION_SUCCESS = 'EXCHANGE_TRANSACTION_SUCCESS'
 export const UPDATE_EXCHANGE_RATE = 'UPDATE_EXCHANGE_RATE'
+export const UPDATE_EXCHANGE_VALUES = 'UPDATE_EXCHANGE_VALUES'
 
 // Actions
 export const purchaseTokens = ( ethAmount, tokenAmount ) => {
@@ -47,6 +48,31 @@ export const getExchangeRate = () => {
         })
     }
 }
+export const updateTokenExchangeAmount = (tokenAmount) => {
+    console.log(tokenAmount)
+    return (dispatch, getState) => {
+        const state = getState()
+        // Verify that the tokenAmount * exchangeRate <= wallet balance
+        const ethBalance = state.wallet.ethBalance
+        const exchangeRate = state.exchange.exchangeRate
+        let exchangeAmountToken = new BigNumber(parseFloat(tokenAmount) || 0)
+        let exchangeAmountEth = exchangeAmountToken.multipliedBy(exchangeRate)
+        if ( exchangeAmountToken.lt(0) ) {
+            exchangeAmountToken = new BigNumber(0)
+            exchangeAmountEth = new BigNumber(0)
+        } else if ( exchangeAmountToken.multipliedBy(exchangeRate).gt(ethBalance) ) {
+            exchangeAmountToken = ethBalance.dividedBy(exchangeRate)
+            exchangeAmountEth = new BigNumber(ethBalance)
+        }
+        dispatch({
+            type: UPDATE_EXCHANGE_VALUES,
+            payload: {
+                exchangeAmountToken,
+                exchangeAmountEth
+            }
+        })
+    }
+}
 
 // State
 const initialState = {
@@ -80,6 +106,11 @@ export default function walletReducer(state = initialState, action) {
                 exchangeTransaction: {
                     result: action.payload
                 }
+            }
+        case UPDATE_EXCHANGE_VALUES:
+            return {
+                ...state,
+                ...action.payload,
             }
         default:
             return state

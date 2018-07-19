@@ -1,6 +1,6 @@
 import { connect } from 'react-redux'
 import { getEthBalanceForAccount, getTokenBalanceForAccount } from '../../wallet/reducers/wallet.reducer'
-import { getExchangeRate, purchaseTokens } from '../reducers/exchange.reducer';
+import { getExchangeRate, purchaseTokens, updateTokenExchangeAmount } from '../reducers/exchange.reducer';
 
 // Redux
 const mapDispatchToProps = {
@@ -8,6 +8,7 @@ const mapDispatchToProps = {
     getTokenBalanceForAccount,
     getExchangeRate,
     purchaseTokens,
+    updateTokenExchangeAmount,
 }
 
 const mapStateToProps = (store) => {
