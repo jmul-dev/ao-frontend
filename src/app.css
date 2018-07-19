@@ -67,3 +67,7 @@ body {
 .placeholder-text {
     color: #dddddd !important;
 }
+
+.modal-content-container:focus {
+    outline: none;
+}

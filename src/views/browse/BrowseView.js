@@ -29,7 +29,7 @@ export default class BrowseView extends Component {
                 <VideoListingContainer />
                 {/* TODO: remove */}
                 <Modal open={true}>
-                    <div style={{width: 580, position: 'absolute', top: `50%`, left: `50%`, transform: `translate(-50%, -50%)`}}>
+                    <div className="modal-content-container" style={{width: 580, position: 'absolute', top: `50%`, left: `50%`, transform: `translate(-50%, -50%)`}}>
                         <Exchange 
                             title={'You have insufficient funds'}
                             subtitle={'Purchase more ao to continue streaming.'}

@@ -7,6 +7,8 @@ import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 import '../styles/exchange.css';
+import Account from '../../account/components/Account';
+import Button from '@material-ui/core/Button';
 
 
 type Props = {
@@ -43,37 +45,47 @@ class Exchange extends Component<Props> {
                 <Typography variant="body1" align="center" style={{marginBottom: 48, fontSize: '1.125rem'}}>{subtitle}</Typography>
                 <Grid className="grid" container spacing={16}>
                     <Grid item xs={4}>
-                        [my wallet]
+                        <div style={{display: 'flex'}}>
+                            <Account display="ethIcon" size={25} />
+                            <Typography>{'My Wallet'}</Typography>
+                        </div>                        
                     </Grid>
                     <Grid item xs={4}>
-                        [ao balance]
+                        <Typography><b>{wallet.tokenBalance.toNumber()}</b> {'AO'}</Typography>
                     </Grid>
                     <Grid item xs={4}>
-                        [eth balance]
+                        <Typography><b>{wallet.ethBalance.toNumber()}</b> {'ETH'}</Typography>
                     </Grid>
                 </Grid>
                 <Grid className="grid" container spacing={16}>
                     <Grid item xs={4}>
-                        [exchange rate]
+                        <Typography>{'Purchase:'}</Typography>
+                        <Typography>{`1 AO = ${exchange.exchangeRate.toNumber()} ETH`}</Typography>
                     </Grid>
                     <Grid item xs={8}>
-                        [input]
+                        <TextField />
                     </Grid>
                 </Grid>
                 <Grid className="grid" container spacing={16}>
                     <Grid item xs={4}>
-                        [cost]
+                        <Typography>{'cost'}</Typography>
                     </Grid>
                     <Grid item xs={8}>
-                        [cost value]
+                        <Typography>{`${exchange.exchangeAmountEth.toNumber()} ETH`}</Typography>
                     </Grid>
                 </Grid>
                 <Grid className="grid" container spacing={16}>
                     <Grid item xs={4}>
-                        [with funds from]
+                        <Typography>{'with funds from'}</Typography>                        
                     </Grid>
                     <Grid item xs={8}>
-                        [account address]
+                        <Typography>{'account:'}</Typography>
+                        <Typography>{ethAddress}</Typography>
+                    </Grid>
+                </Grid>
+                <Grid className="grid" container spacing={16}>
+                    <Grid item xs={8} style={{marginLeft: 'auto'}}>
+                        <Button color="primary" variant="flat">{'Purchase'}</Button>
                     </Grid>
                 </Grid>
             </div>
