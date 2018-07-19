@@ -1,6 +1,7 @@
 import BigNumber from 'bignumber.js'
 
 // Constants
+export const EXCHANGE_TRANSACTION_INITIALIZED = 'EXCHANGE_TRANSACTION_INITIALIZED'
 export const EXCHANGE_TRANSACTION_ERROR = 'EXCHANGE_TRANSACTION_ERROR'
 export const EXCHANGE_TRANSACTION_SUCCESS = 'EXCHANGE_TRANSACTION_SUCCESS'
 export const UPDATE_EXCHANGE_RATE = 'UPDATE_EXCHANGE_RATE'
@@ -36,6 +37,7 @@ export const purchaseTokens = ( ethAmount, tokenAmount ) => {
                     resolve(result)
                 }
             })
+            dispatch({type: EXCHANGE_TRANSACTION_INITIALIZED})
         })     
     }
 }
@@ -80,6 +82,8 @@ const initialState = {
     exchangeAmountEth: new BigNumber(0),
     exchangeAmountToken: new BigNumber(0),
     exchangeTransaction: {
+        initialized: undefined,
+        id: undefined,
         result: undefined,
         error: undefined,
     }
@@ -88,6 +92,14 @@ const initialState = {
 // Reducer
 export default function walletReducer(state = initialState, action) {
     switch (action.type) {
+        case EXCHANGE_TRANSACTION_INITIALIZED:
+            return {
+                ...state,
+                exchangeTransaction: {
+                    ...state.exchangeTransaction,
+                    initialized: true
+                }
+            }
         case UPDATE_EXCHANGE_RATE:
             return {
                 ...state,
@@ -97,6 +109,7 @@ export default function walletReducer(state = initialState, action) {
             return {
                 ...state,
                 exchangeTransaction: {
+                    ...state.exchangeTransaction,
                     error: action.payload
                 }
             }
@@ -104,7 +117,9 @@ export default function walletReducer(state = initialState, action) {
             return {
                 ...state,
                 exchangeTransaction: {
-                    result: action.payload
+                    ...state.exchangeTransaction,
+                    result: action.payload,
+                    error: undefined
                 }
             }
         case UPDATE_EXCHANGE_VALUES:

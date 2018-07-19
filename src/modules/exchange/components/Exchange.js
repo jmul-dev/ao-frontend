@@ -43,8 +43,12 @@ class Exchange extends Component<Props> {
         let inputValue = event.target.value
         this.props.updateTokenExchangeAmount(inputValue)
     }
+    _handlePurchase = () => {
+        const { exchangeAmountToken, exchangeAmountEth } = this.props.exchange
+        this.props.purchaseTokens( exchangeAmountToken, exchangeAmountEth )
+    }
     render() {
-        const { ethAddress, exchange, wallet, theme, title, subtitle, requiredTokenAmount } = this.props
+        const { ethAddress, exchange, wallet, theme, title, subtitle, requiredTokenAmount } = this.props        
         return (
             <div className="Exchange" style={{backgroundColor: theme.palette.background.default}}>
                 <Typography variant="title" align="center" style={{marginBottom: 8}}>{title}</Typography>
@@ -87,6 +91,7 @@ class Exchange extends Component<Props> {
                                 }}
                                 value={exchange.exchangeAmountToken.toString()}
                                 onChange={this._onTokenExchangeAmountChange}
+                                disabled={exchange.exchangeTransaction.initialized && !exchange.exchangeTransaction.error}
                             />
                             <Typography style={{marginBottom: 8}}>{'AO'}</Typography>
                         </div>                        
@@ -113,7 +118,15 @@ class Exchange extends Component<Props> {
                 </Grid>
                 <Grid className="grid" container spacing={16}>
                     <Grid item xs={8} style={{marginLeft: 'auto'}}>
-                        <Button color="primary" variant="flat" fullWidth>{'Purchase'}</Button>
+                        <Button 
+                            color="primary" 
+                            variant="flat" 
+                            fullWidth 
+                            onClick={this._handlePurchase}
+                            disabled={exchange.exchangeTransaction.initialized && !exchange.exchangeTransaction.error}
+                            >
+                            {'Purchase'}
+                        </Button>
                     </Grid>
                 </Grid>
             </div>
