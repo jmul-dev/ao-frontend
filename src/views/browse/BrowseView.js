@@ -8,6 +8,10 @@ import VideoListingContainer from '../../modules/video/containers/VideoListingCo
 import Stats from '../../modules/stats/components/Stats';
 import './browse-view.css';
 
+// TODO: remove
+import Exchange from '../../modules/exchange/components/Exchange';
+import Modal from '@material-ui/core/Modal';
+
 
 export default class BrowseView extends Component {
     render() {
@@ -23,6 +27,15 @@ export default class BrowseView extends Component {
                     </div>
                 </header>
                 <VideoListingContainer />
+                {/* TODO: remove */}
+                <Modal open={true}>
+                    <div style={{width: 580, position: 'absolute', top: `50%`, left: `50%`, transform: `translate(-50%, -50%)`}}>
+                        <Exchange 
+                            title={'You have insufficient funds'}
+                            subtitle={'Purchase more ao to continue streaming.'}
+                        />
+                    </div>
+                </Modal>
             </View>
         );
     }

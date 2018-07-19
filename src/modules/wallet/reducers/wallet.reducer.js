@@ -7,6 +7,8 @@ export const WEB3_TOKEN_BALANCE_CHANGE = 'WEB3_TOKEN_BALANCE_CHANGE'
 // Actions
 export const getEthBalanceForAccount = ( account ) => {
     return (dispatch, getState) => {
+        if ( !account )
+            return console.warn('getEthBalanceForAccount called without an account')        
         window.web3.eth.getBalance( account, undefined, function(err, result) {
             if ( err )
                 return console.error( 'error fetching balance', err )
@@ -20,6 +22,8 @@ export const getEthBalanceForAccount = ( account ) => {
 }
 export const getTokenBalanceForAccount = ( account ) => {
     return (dispatch, getState) => {
+        if ( !account )
+            return console.warn('getTokenBalanceForAccount called without an account')
         // TODO:
         dispatch({
             type: WEB3_TOKEN_BALANCE_CHANGE,
