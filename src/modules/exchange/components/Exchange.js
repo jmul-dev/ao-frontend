@@ -8,7 +8,8 @@ import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 import '../styles/exchange.css';
 import Account from '../../account/components/Account';
-import Button from '@material-ui/core/Button';
+import { PrimaryButton } from '../../../theme';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 
 type Props = {
@@ -48,12 +49,14 @@ class Exchange extends Component<Props> {
         this.props.purchaseTokens( exchangeAmountToken, exchangeAmountEth )
     }
     render() {
-        const { ethAddress, exchange, wallet, theme, title, subtitle, requiredTokenAmount } = this.props        
+        const { ethAddress, exchange, wallet, theme, title, subtitle, requiredTokenAmount } = this.props   
+        const { exchangeTransaction } = exchange     
+        const exchangeInProgress = exchangeTransaction.initialized && !exchangeTransaction.error
         return (
-            <div className="Exchange" style={{backgroundColor: theme.palette.background.default}}>
+            <div className={`Exchange ${exchangeInProgress ? 'disabled' : ''}`} style={{backgroundColor: theme.palette.background.default}}>
                 <Typography variant="title" align="center" style={{marginBottom: 8}}>{title}</Typography>
                 <Typography variant="body1" align="center" style={{marginBottom: 48, fontSize: '1.125rem'}}>{subtitle}</Typography>
-                <Grid className="grid" container spacing={16} alignItems="center" style={{paddingBottom: requiredTokenAmount ? 38 : undefined}}>
+                <Grid className="grid on-pending" container spacing={16} alignItems="center" style={{paddingBottom: requiredTokenAmount ? 38 : undefined}}>
                     <Grid item xs={4}>
                         <div style={{display: 'flex', alignItems: 'center'}}>
                             <Account display="ethIcon" size={25} />
@@ -76,7 +79,7 @@ class Exchange extends Component<Props> {
                         </div>
                     </Grid>
                 </Grid>
-                <Grid className="grid" container spacing={16}>
+                <Grid className="grid on-pending" container spacing={16}>
                     <Grid item xs={4}>
                         <Typography variant="subheading">{'Purchase:'}</Typography>
                         <Typography variant="caption">{`1 AO = ${exchange.exchangeRate.toNumber()} ETH`}</Typography>
@@ -91,13 +94,13 @@ class Exchange extends Component<Props> {
                                 }}
                                 value={exchange.exchangeAmountToken.toString()}
                                 onChange={this._onTokenExchangeAmountChange}
-                                disabled={exchange.exchangeTransaction.initialized && !exchange.exchangeTransaction.error}
+                                disabled={exchangeInProgress}
                             />
                             <Typography style={{marginBottom: 8}}>{'AO'}</Typography>
                         </div>                        
                     </Grid>
                 </Grid>
-                <Grid className="grid" container spacing={16} alignItems="center">
+                <Grid className="grid on-pending" container spacing={16} alignItems="center">
                     <Grid item xs={4}>
                         <Typography variant="caption">{'cost'}</Typography>
                     </Grid>
@@ -105,7 +108,7 @@ class Exchange extends Component<Props> {
                         <Typography variant="subheading">{`${exchange.exchangeAmountEth.toNumber()} ETH`}</Typography>
                     </Grid>
                 </Grid>
-                <Grid className="grid" container spacing={16}>
+                <Grid className="grid on-pending" container spacing={16}>
                     <Grid item xs={4}>
                         <Typography variant="caption">{'with funds from'}</Typography>                        
                     </Grid>
@@ -117,16 +120,24 @@ class Exchange extends Component<Props> {
                     </Grid>
                 </Grid>
                 <Grid className="grid" container spacing={16}>
+                    {exchangeTransaction.error ? (
+                        <Grid item xs={12}>
+                            <Typography color="error">{exchangeTransaction.error.message}</Typography>
+                        </Grid>
+                    ) : null}                    
                     <Grid item xs={8} style={{marginLeft: 'auto'}}>
-                        <Button 
+                        <PrimaryButton 
                             color="primary" 
                             variant="flat" 
                             fullWidth 
                             onClick={this._handlePurchase}
-                            disabled={exchange.exchangeTransaction.initialized && !exchange.exchangeTransaction.error}
+                            disabled={exchangeInProgress}
                             >
-                            {'Purchase'}
-                        </Button>
+                            {exchangeInProgress ? 'Pending...' : 'Purchase'}
+                            {exchangeInProgress ? (
+                                <CircularProgress size={25} style={{position: 'absolute', right: 6}} />
+                            ) : null}
+                        </PrimaryButton>
                     </Grid>
                 </Grid>
             </div>

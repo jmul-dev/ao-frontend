@@ -96,8 +96,7 @@ export default function walletReducer(state = initialState, action) {
             return {
                 ...state,
                 exchangeTransaction: {
-                    ...state.exchangeTransaction,
-                    initialized: true
+                    initialized: true,                    
                 }
             }
         case UPDATE_EXCHANGE_RATE:
