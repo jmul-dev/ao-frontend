@@ -23,10 +23,8 @@ export default class ExchangeModal extends Component<Props> {
                 BackdropProps={{style: {backgroundColor: 'rgba(0,0,0,0.8)'}}}
                 className="ExchangeModal"
                 >
-                <div className="modal-content-container" style={{width: 580, position: 'absolute', top: `50%`, left: `50%`, transform: `translate(-50%, -50%)`}}>
-                    <div style={{position: 'absolute', top: 0, left: '50%', transform: 'translate(-50%, -60px)'}}>
-                        <LogoIcon />
-                    </div>                    
+                <div className="modal-content-container">
+                    <LogoIcon />
                     <Exchange {...this.props.exchangeProps} />
                 </div>
             </Modal>
