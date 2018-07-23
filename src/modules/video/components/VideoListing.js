@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { AutoSizer, ColumnSizer, Grid } from 'react-virtualized';
 import 'react-virtualized/styles.css';
 import Button from '@material-ui/core/Button';
+import ButtonBase from '@material-ui/core/ButtonBase';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import Typography from '@material-ui/core/Typography';
 import '../styles/video-listing.css';
@@ -116,11 +117,11 @@ export default class VideoListing extends Component<Props> {
         return (
             <div className="Cell" key={key} style={{...style, opacity: isActive ? 0 : 1}}>
                 <div className="clickable" onClick={this._enterTeaserListingAtVideo.bind(this, videoIndex)}>
-                    <div
+                    <ButtonBase
                         className="cover-image"
                         style={{backgroundImage: `url(${video.coverImageUrl})`}}
-                    ></div>
-                    <Typography variant="title">
+                    ></ButtonBase>
+                    <Typography variant="subheading">
                         {video.title}
                     </Typography>
                 </div>

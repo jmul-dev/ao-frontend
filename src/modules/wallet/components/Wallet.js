@@ -52,11 +52,11 @@ class Wallet extends PureComponent<Props> {
                         </header>
                         <div className="balances">
                             <div>
-                                <div className="balance">{tokenBalance.toNumber()}</div>
+                                <div className="balance">{tokenBalance.toFixed(2)}</div>
                                 <Typography className="label" variant="body1">{'AO'}</Typography>
                             </div>
                             <div>
-                                <div className="balance">{ethBalance.toNumber()}</div>
+                                <div className="balance">{ethBalance.toFixed(2)}</div>
                                 <Typography className="label" variant="body1">{'ETH'}</Typography>
                             </div>
                         </div>
@@ -65,14 +65,14 @@ class Wallet extends PureComponent<Props> {
                         <div className="triangle"></div>
                         <div className="token-metric">
                             <div style={{display: 'flex'}}>
-                                <div className="metric-value">{tokenStaked.toNumber()}</div>
+                                <div className="metric-value">{tokenStaked.toFixed(2)}</div>
                                 <Typography className="label" variant="body1">{'AO'}</Typography>
                             </div>
                             <Typography variant="body1">{'staked'}</Typography>
                         </div>
                         <div className="token-metric">
                             <div style={{display: 'flex'}}>
-                                <div className="metric-value">{tokenEarned.toNumber()}</div>
+                                <div className="metric-value">{tokenEarned.toFixed(2)}</div>
                                 <Typography className="label" variant="body1">{'AO'}</Typography>
                             </div>
                             <Typography variant="body1">{'earned'}</Typography>

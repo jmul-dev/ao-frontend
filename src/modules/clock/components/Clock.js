@@ -23,7 +23,7 @@ export default class Console extends Component {
     }
     render() {
         return (
-            <Typography variant="display1" style={{color: '#555555'}}>{this.state.currentTime}</Typography>
+            <Typography variant="display1" style={{color: 'white'}}>{this.state.currentTime}</Typography>
         );
     }
 }

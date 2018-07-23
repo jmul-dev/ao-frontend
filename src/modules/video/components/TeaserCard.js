@@ -96,7 +96,7 @@ export default class TeaserCard extends Component<Props> {
                                 </div>
                             ):null}
                         </div>
-                        <Typography variant="title" className="title">
+                        <Typography variant="subheading" className="title">
                             {video.title}
                         </Typography>
                         <div className="action-pane hide-fullscreen">

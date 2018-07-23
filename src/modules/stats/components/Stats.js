@@ -10,7 +10,7 @@ class Stats extends Component {
             return null
         return (
             <div className="Stats">
-                <Typography variant="body1" component="div" style={{color: '#555555'}}>
+                <Typography variant="body1" component="div">
                     <div>{`Videos available: ${statistics.videosAvailable}`}</div>
                     <div>{`Peers connected: ${statistics.peersConnected}`}</div>
                 </Typography>
