@@ -22,7 +22,7 @@ const mapStateToProps = (store) => {
 const videosQuery = gql(`
     query {
         videos {
-            id, title, description, fileName, contentType, fileUrl, coverImageUrl, teaserUrl
+            id, title, description, fileName, contentType, fileUrl, coverImageUrl, teaserUrl, stake
         }
     }
 `)

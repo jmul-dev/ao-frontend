@@ -4,7 +4,24 @@
  * NOTE: these do not merge very well via nested MuiThemeProvider, lightTheme will
  * not inherit all of darkTheme values. 
  */
-import { createMuiTheme } from '@material-ui/core/styles';
+import React from 'react';
+import { createMuiTheme, withStyles } from '@material-ui/core/styles';
+import Button from '@material-ui/core/Button';
+
+
+const primaryButton = ({...props}) => (
+    <Button {...props} />
+)
+export const PrimaryButton = withStyles(({palette}) => ({
+    flatPrimary: {
+        background: palette.primary.main,
+        color: '#FFFFFF',
+    },
+    disabled: {
+        background: palette.primary.light,
+    },
+}))(primaryButton)
+
 
 export const darkTheme = createMuiTheme({
     typography: {
@@ -38,7 +55,18 @@ export const darkTheme = createMuiTheme({
         background: {
             default: '#222222'
         },
-    }
+    },
+    overrides: {
+        MuiButton: {
+            root: {
+                textTransform: 'none'
+            },
+            flatPrimary: {
+                background: 'rgba(0, 204, 71, 1)',
+                color: 'white',
+            },
+        },
+    },
 })
 
 export const lightTheme = createMuiTheme({
