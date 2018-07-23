@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
-import IconButton from '@material-ui/core/IconButton';
 import PlayIcon from '@material-ui/icons/PlayArrow';
 import { CSSTransition } from 'react-transition-group';
 import ReactPlayer from 'react-player'
 import '../styles/teaser-card.css';
 import { LogoIcon } from '../../../assets/Icons';
 import ExchangeModal from '../../exchange/components/ExchangeModal';
+import { PrimaryButton } from '../../../theme';
 
 
 type Props = {
@@ -100,13 +100,14 @@ export default class TeaserCard extends Component<Props> {
                             {video.title}
                         </Typography>
                         <div className="action-pane hide-fullscreen">
-                            <Typography variant="body1">{`LIVE | 15 AO | watch for free`}</Typography>
-                            <div className="play-button-container">
-                                <IconButton onClick={this._playVideo}>
+                            <Typography variant="body1">{`${video.stake} AO / view`}</Typography>
+                            <Typography variant="caption">{`your balance: ${tokenBalance.toNumber()} AO`}</Typography>
+                            <PrimaryButton onClick={this._playVideo} className="play-button">
+                                <div className="play-icon">
                                     <PlayIcon />
-                                </IconButton>
-                                <Typography variant="subheading">{`Watch`}</Typography>
-                            </div>
+                                </div>
+                                <Typography variant="subheading">{`watch now`}</Typography>
+                            </PrimaryButton>
                         </div>
                     </div>
                     <div className="content-container hide-fullscreen">

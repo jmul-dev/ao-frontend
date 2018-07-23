@@ -22,15 +22,27 @@
 .TeaserCard .media-container .action-pane {
     width: 50%;
 }
-.TeaserCard .media-container .play-button-container {
+.TeaserCard .media-container .play-button {
+    position: relative;
+    margin-top: 16px;
+    padding-left: 50px;
+    background: #03B742;
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+}
+.TeaserCard .media-container .play-button .play-icon {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 40px;
     display: flex;
     align-items: center;
-    margin-top: 16px;
+    justify-content: center;
+    background: #00CC47;
 }
 .TeaserCard .media-container .action-pane button {
     pointer-events: all;
-    background: gray; 
-    margin-right: 16px;   
 }
 .TeaserCard .video-container {
     position: relative;

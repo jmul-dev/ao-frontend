@@ -10,7 +10,7 @@ import Button from '@material-ui/core/Button';
 
 
 const primaryButton = ({...props}) => (
-    <Button {...props} />
+    <Button color="primary" {...props} />
 )
 export const PrimaryButton = withStyles(({palette}) => ({
     flatPrimary: {
