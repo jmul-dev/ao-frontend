@@ -11,6 +11,7 @@ const mapDispatchToProps = {
 const mapStateToProps = (store) => {
     return {
         activeVideo: store.video.activeVideo,
+        tokenBalance: store.wallet.tokenBalance,
     }
 }
 

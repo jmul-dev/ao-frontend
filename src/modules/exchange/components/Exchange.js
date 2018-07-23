@@ -35,10 +35,13 @@ type Props = {
 class Exchange extends Component<Props> {
     props: Props;
     componentDidMount() {
-        const { getEthBalanceForAccount, getTokenBalanceForAccount, getExchangeRate, ethAddress } = this.props
+        const { getEthBalanceForAccount, getTokenBalanceForAccount, getExchangeRate, ethAddress, requiredTokenAmount, updateTokenExchangeAmount } = this.props
         getEthBalanceForAccount(ethAddress)
         getTokenBalanceForAccount(ethAddress)
-        getExchangeRate()
+        getExchangeRate()        
+        if ( requiredTokenAmount ) {
+            updateTokenExchangeAmount( requiredTokenAmount )
+        }
     }
     _onTokenExchangeAmountChange = (event) => {
         let inputValue = event.target.value
@@ -54,8 +57,8 @@ class Exchange extends Component<Props> {
         const exchangeInProgress = exchangeTransaction.initialized && !exchangeTransaction.error
         return (
             <div className={`Exchange ${exchangeInProgress ? 'disabled' : ''}`} style={{backgroundColor: theme.palette.background.default}}>
-                <Typography variant="title" align="center" style={{marginBottom: 8}}>{title}</Typography>
-                <Typography variant="body1" align="center" style={{marginBottom: 48, fontSize: '1.125rem'}}>{subtitle}</Typography>
+                <Typography variant="title" align="center" style={{marginBottom: 0}}>{title}</Typography>
+                <Typography variant="body1" align="center" style={{marginBottom: 36, fontSize: '1.125rem', color: '#777'}}>{subtitle}</Typography>
                 <Grid className="grid on-pending" container spacing={16} alignItems="center" style={{paddingBottom: requiredTokenAmount ? 38 : undefined}}>
                     <Grid item xs={4}>
                         <div style={{display: 'flex', alignItems: 'center'}}>
@@ -106,6 +109,9 @@ class Exchange extends Component<Props> {
                     </Grid>
                     <Grid item xs={8}>
                         <Typography variant="subheading">{`${exchange.exchangeAmountEth.toNumber()} ETH`}</Typography>
+                        {exchange.exchangeAmountEth.gte(wallet.ethBalance) ? (
+                            <Typography variant="caption" color="error" style={{marginTop: -2}}>{`max ETH balance reached!`}</Typography>
+                        ) : null}
                     </Grid>
                 </Grid>
                 <Grid className="grid on-pending" container spacing={16}>
@@ -119,7 +125,7 @@ class Exchange extends Component<Props> {
                         </div>
                     </Grid>
                 </Grid>
-                <Grid className="grid" container spacing={16}>
+                <Grid className="grid" container spacing={16} style={{paddingBottom: 0}}>
                     {exchangeTransaction.error ? (
                         <Grid item xs={12}>
                             <Typography color="error">{exchangeTransaction.error.message}</Typography>

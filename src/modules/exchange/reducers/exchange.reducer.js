@@ -44,6 +44,7 @@ export const purchaseTokens = ( ethAmount, tokenAmount ) => {
 export const getExchangeRate = () => {
     return (dispatch, getState) => {
         // TODO: contract call
+        // TODO: update the exchangeAmountToken & exchangeAmountEth according to new exchange rate
         dispatch({
             type: UPDATE_EXCHANGE_RATE,
             payload: new BigNumber(1)

@@ -7,6 +7,7 @@ import { CSSTransition } from 'react-transition-group';
 import ReactPlayer from 'react-player'
 import '../styles/teaser-card.css';
 import { LogoIcon } from '../../../assets/Icons';
+import ExchangeModal from '../../exchange/components/ExchangeModal';
 
 
 type Props = {
@@ -14,6 +15,9 @@ type Props = {
     isActive: boolean,
     isFullscreen: boolean,
     isTeaserEntered: boolean,
+    // redux bound state
+    tokenBalance: Object,  // bignumber
+    // redux bound methods
     setActiveVideo: Function,
 }
 
@@ -24,11 +28,19 @@ export default class TeaserCard extends Component<Props> {
             videoSrc: props.video.teaserUrl,
             usingTeaserSrc: true,
             videoSrcReady: false,
+            exchangeModalOpen: false,
         }
     }
+    _onExchangeModalClose = () => {
+        this.setState({exchangeModalOpen: false})
+    }
     _playVideo = () => {
-        const { setActiveVideo } = this.props
-        setActiveVideo(this.props.video)
+        const { setActiveVideo, tokenBalance, video } = this.props
+        if ( tokenBalance.lt(video.stake) ) {
+            this.setState({exchangeModalOpen: true})
+        } else {
+            setActiveVideo(this.props.video)
+        }
     }
     _onEnteredFullscreen = () => {
         this.setState({
@@ -43,8 +55,9 @@ export default class TeaserCard extends Component<Props> {
     }
     _onExitingFullscreen = () => {}
     render() {
-        const { video, isActive, isFullscreen, isTeaserEntered } = this.props
+        const { video, isActive, isFullscreen, isTeaserEntered, tokenBalance } = this.props
         const { videoSrc, usingTeaserSrc, videoSrcReady } = this.state
+        const insufficientBalance = tokenBalance.lt(video.stake) ? tokenBalance.minus(video.stake).multipliedBy(-1).toNumber() : undefined
         return (
             <CSSTransition
                 in={isFullscreen}
@@ -105,6 +118,17 @@ export default class TeaserCard extends Component<Props> {
                             </Grid>
                         </Grid>
                     </div>
+                    {insufficientBalance ? (
+                        <ExchangeModal 
+                            open={this.state.exchangeModalOpen}
+                            onClose={this._onExchangeModalClose}
+                            exchangeProps={{
+                                title: 'You have insufficient funds',
+                                subtitle: 'Purchase more ao to continue streaming.',
+                                requiredTokenAmount: insufficientBalance
+                            }}
+                        />
+                    ) : null}
                 </div>
             </CSSTransition>
         )
