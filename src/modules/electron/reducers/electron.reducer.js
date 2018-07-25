@@ -5,7 +5,8 @@ export const ELECTRON_EVENT_LOG = 'ELECTRON_EVENT_LOG'
 // Actions
 export const listenOnIpcChannel = () => {
     return (dispatch, getState) => {
-        if ( window.IS_ELECTRON ) {
+        const isElectron = getState().electron.isElectron
+        if ( isElectron ) {
             // TODO: pull EVENT_LOG from ao-core constants
             window.chrome.ipcRenderer.on('EVENT_LOG', function(event, data) {
                 dispatch({

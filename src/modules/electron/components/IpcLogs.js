@@ -5,14 +5,10 @@ import withElectronEventLogs from '../containers/withElectronEventLogs';
 
 type Props = {
     eventLogs: Array<object>;
-    listenOnIpcChannel: Function;
 }
 
 class IpcLogs extends Component<Props> {
     props: Props;
-    componentDidMount() {
-        this.props.listenOnIpcChannel()
-    }
     render() {
         const { eventLogs } = this.props
         return (

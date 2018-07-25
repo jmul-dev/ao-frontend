@@ -23,12 +23,14 @@ type Props = {
     // redux connected actions
     updateAppState: Function,
     connectToWeb3: Function,
+    listenOnIpcChannel: Function,
 };
 
 export default class App extends Component<Props> {
     props: Props;
     componentDidMount() {
-        const { app, connectToWeb3 } = this.props
+        const { app, connectToWeb3, listenOnIpcChannel } = this.props
+        listenOnIpcChannel()
         if ( app.states[APP_STATES.WEB3_AVAILABLE] ) {
             window.web3.version.getNetwork((error, networkId) => {
                 connectToWeb3(networkId)
