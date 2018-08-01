@@ -1,8 +1,7 @@
 import BigNumber from 'bignumber.js'
 
 // Constants
-export const WEB3_ETH_BALANCE_CHANGE = 'WEB3_ETH_BALANCE_CHANGE'
-export const WEB3_TOKEN_BALANCE_CHANGE = 'WEB3_TOKEN_BALANCE_CHANGE'
+export const BALANCE_CHANGE = 'BALANCE_CHANGE'
 
 // Actions
 export const getEthBalanceForAccount = ( account ) => {
@@ -14,8 +13,10 @@ export const getEthBalanceForAccount = ( account ) => {
                 return console.error( 'error fetching balance', err )
             let balance = new BigNumber( window.web3.fromWei(result, 'ether') )
             dispatch({
-                type: WEB3_ETH_BALANCE_CHANGE,
-                payload: { balance }
+                type: BALANCE_CHANGE,
+                payload: { 
+                    ethBalance: balance 
+                }
             })
         })
     }
@@ -24,11 +25,29 @@ export const getTokenBalanceForAccount = ( account ) => {
     return (dispatch, getState) => {
         if ( !account )
             return console.warn('getTokenBalanceForAccount called without an account')
-        // TODO:
-        dispatch({
-            type: WEB3_TOKEN_BALANCE_CHANGE,
-            payload: { balance: new BigNumber(0) }
-        })
+        const { contracts, app } = getState()
+        if ( !contracts.initialized )
+            return console.warn('Attempting to make contract call before contract initialized')
+        contracts.aoToken.balanceOf(account, function(err, result) {
+            if ( !err ) {
+                dispatch({
+                    type: BALANCE_CHANGE,
+                    payload: { 
+                        tokenBalance: new BigNumber(result) 
+                    }
+                })
+            }
+        })   
+        contracts.aoToken.icoBalanceOf(account, function(err, result) {
+            if ( !err ) {
+                dispatch({
+                    type: BALANCE_CHANGE,
+                    payload: {
+                        icoTokenBalance: new BigNumber(result) 
+                    }
+                })
+            }
+        })        
     }
 }
 
@@ -37,12 +56,14 @@ export const getTokenBalanceForAccount = ( account ) => {
 const initialState = {
     ethBalance: new BigNumber(0),
     tokenBalance: new BigNumber(0),
+    icoTokenBalance: new BigNumber(0),
     tokenStaked: new BigNumber(0),
     tokenEarned: new BigNumber(0),
 }
 export type WalletReducerType = {
     ethBalance: BigNumber,
     tokenBalance: BigNumber,
+    icoTokenBalance: BigNumber,
     tokenStaked: BigNumber,
     tokenEarned: BigNumber,
 }
@@ -50,15 +71,10 @@ export type WalletReducerType = {
 // Reducer
 export default function walletReducer(state = initialState, action) {
     switch (action.type) {
-        case WEB3_ETH_BALANCE_CHANGE:
+        case BALANCE_CHANGE:
             return {
                 ...state,
-                ethBalance: action.payload.balance
-            }
-        case WEB3_TOKEN_BALANCE_CHANGE:
-            return {
-                ...state,
-                tokenBalance: action.payload.balance
+                ...action.payload,
             }
         default:
             return state

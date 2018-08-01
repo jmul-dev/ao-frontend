@@ -10,10 +10,11 @@ export const CONTRACTS_INITIALIZED = 'CONTRACTS_INITIALIZED'
 export const initializeContracts = (networkId) => {
     return (dispatch, getState) => {
         try {
-            networkId = 1533066469022
-            if ( !AOToken.networks[networkId] ) {
+            if ( !AOToken.networks[networkId] || !AOTreasury.networks[networkId] || !AOContent.networks[networkId]) {
                 alert('Smart contracts have not been deployed on this network['+networkId+']')
+                networkId = "1533066469022"  // TODO: remove (local testing)
             }
+            console.log('Network id being used: ', networkId)
             const contracts = {
                 aoToken: window.web3.eth.contract(AOToken.abi).at(AOToken.networks[networkId].address),
                 aoTreasury: window.web3.eth.contract(AOTreasury.abi).at(AOTreasury.networks[networkId].address),
@@ -31,7 +32,7 @@ export const initializeContracts = (networkId) => {
 
 // State
 const initialState = {
-    
+    initialized: false,
 }
 
 // Reducer
@@ -41,6 +42,7 @@ export default function contractsReducer(state = initialState, action) {
             return {
                 ...state,
                 ...action.payload,
+                initialized: true,
             }        
         default:
             return state
