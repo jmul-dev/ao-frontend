@@ -7,6 +7,7 @@ import gql from "graphql-tag"
 const mapStateToProps = (store) => {
     return {
         app: store.app,
+        latestBlockNumber: store.contracts.latestBlockNumber,
         isElectron: store.electron.isElectron,
     }
 }

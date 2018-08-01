@@ -18,6 +18,7 @@
     "bignumber.js": "^7.2.1",
     "classnames": "^2.2.6",
     "connected-react-router": "^4.3.0",
+    "debounce": "^1.1.0",
     "drizzle": "^1.2.2",
     "drizzle-react": "^1.1.1",
     "gitlab-ci-releaser": "^1.5.0",

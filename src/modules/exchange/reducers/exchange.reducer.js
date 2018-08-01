@@ -1,10 +1,10 @@
 import BigNumber from 'bignumber.js'
+import { waitForTransactionReceipt } from '../../../contracts/contracts.reducer'
 
 // Constants
 export const EXCHANGE_TRANSACTION = Object.freeze({
     INITIALIZED: 'EXCHANGE_TRANSACTION.INITIALIZED',
     SUBMITTED: 'EXCHANGE_TRANSACTION.SUBMITTED',
-    SUCCESS: 'EXCHANGE_TRANSACTION.SUCCESS',
     ERROR: 'EXCHANGE_TRANSACTION.ERROR',
     RESET: 'EXCHANGE_TRANSACTION.RESET',
 })
@@ -51,7 +51,9 @@ export const purchaseTokens = ( ethAmount, tokenAmount ) => {
                                     type: EXCHANGE_TRANSACTION.SUBMITTED,
                                     payload: transactionHash
                                 })
-                                // TODO: listen for tx status
+                                waitForTransactionReceipt(transactionHash).catch(err => {
+                                    rejectAndDispatchError(err)
+                                })
                             }
                         })
                     }
@@ -136,15 +138,6 @@ export default function walletReducer(state = initialState, action) {
                 exchangeTransaction: {
                     ...state.exchangeTransaction,
                     error: action.payload
-                }
-            }
-        case EXCHANGE_TRANSACTION.SUCCESS:
-            return {
-                ...state,
-                exchangeTransaction: {
-                    ...state.exchangeTransaction,
-                    result: action.payload,
-                    error: undefined
                 }
             }
         case EXCHANGE_TRANSACTION.RESET:
