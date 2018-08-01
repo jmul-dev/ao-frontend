@@ -5,6 +5,7 @@ import { waitForTransactionReceipt } from '../../../contracts/contracts.reducer'
 export const EXCHANGE_TRANSACTION = Object.freeze({
     INITIALIZED: 'EXCHANGE_TRANSACTION.INITIALIZED',
     SUBMITTED: 'EXCHANGE_TRANSACTION.SUBMITTED',
+    RESULT: 'EXCHANGE_TRANSACTION.RESULT',
     ERROR: 'EXCHANGE_TRANSACTION.ERROR',
     RESET: 'EXCHANGE_TRANSACTION.RESET',
 })
@@ -32,14 +33,14 @@ export const purchaseTokens = ( ethAmount, tokenAmount ) => {
                 dispatch({type: EXCHANGE_TRANSACTION.INITIALIZED})
                 if ( electron.isElectron ) {
                     window.chrome.ipcRenderer.send('open-metamask-popup')
-                }
+                }                
                 contracts.aoToken.icoEnded(function(err, ended) {
                     if ( err ) {
                         rejectAndDispatchError(err)
                     } else if ( ended ) {
                         rejectAndDispatchError(new Error('The AO ICO has ended, you can no longer purchase AO tokens directly through the contract.'))
                     } else {
-                        const ethAmountInWei = new BigNumber(window.web3.toWei(ethAmount, 'ether'))
+                        const ethAmountInWei = new BigNumber(window.web3.toWei(ethAmount, 'ether'))                                                
                         contracts.aoToken.buyIcoToken.sendTransaction({
                             from: app.ethAddress,
                             value: ethAmountInWei.toNumber()
@@ -47,11 +48,21 @@ export const purchaseTokens = ( ethAmount, tokenAmount ) => {
                             if ( err ) {
                                 rejectAndDispatchError(err)
                             } else {
+                                let eventListener = contracts.aoToken.LotCreation({lotOwner: app.ethAddress}, function(error, result) {
+                                    if ( result && result.transactionHash == transactionHash ) {
+                                        dispatch({
+                                            type: EXCHANGE_TRANSACTION.RESULT,
+                                            payload: result.args
+                                        })
+                                        eventListener.stopWatching()
+                                    }
+                                })
                                 dispatch({
                                     type: EXCHANGE_TRANSACTION.SUBMITTED,
                                     payload: transactionHash
                                 })
                                 waitForTransactionReceipt(transactionHash).catch(err => {
+                                    eventListener.stopWatching()
                                     rejectAndDispatchError(err)
                                 })
                             }
@@ -62,7 +73,7 @@ export const purchaseTokens = ( ethAmount, tokenAmount ) => {
         })     
     }
 }
-export const resetExchange = ({
+export const resetExchange = () => ({
     type: EXCHANGE_TRANSACTION.RESET
 })
 export const getExchangeRate = () => {
@@ -130,6 +141,14 @@ export default function walletReducer(state = initialState, action) {
                 exchangeTransaction: {
                     ...state.exchangeTransaction,
                     transactionHash: action.payload,
+                }
+            }
+        case EXCHANGE_TRANSACTION.RESULT:
+            return {
+                ...state,
+                exchangeTransaction: {
+                    ...state.exchangeTransaction,
+                    result: action.payload,
                 }
             }
         case EXCHANGE_TRANSACTION.ERROR:

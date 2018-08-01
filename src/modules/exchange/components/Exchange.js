@@ -134,20 +134,20 @@ class Exchange extends Component<Props> {
                 </Grid>
                 <Grid className="grid" container spacing={16} style={{paddingBottom: 0}}>
                     {showExchangeTransactionMessage ? (
-                        <Grid item xs={12}>
+                        <Grid item xs={12} style={{textAlign: 'right'}}>
                             {exchangeTransaction.error ? (
                                 <Typography color="error">{exchangeTransaction.error.message}</Typography>                                
                             ) : null}
                             {exchangeTransaction.initialized && !exchangeTransaction.transactionHash && !exchangeTransaction.error ? (
                                 <Typography color="default">{`Please check Metamask to approve this transaction`}</Typography>
                             ) : null}
-                            {exchangeTransaction.transactionHash ? (
+                            {exchangeTransaction.transactionHash && !exchangeTransaction.result ? (
                                 <Typography color="default">
                                     {'tx: '} <EtherscanLink type="tx" value={exchangeTransaction.transactionHash} style={{maxWidth: '80%'}} />
                                 </Typography>
                             ) : null}
                             {exchangeTransaction.result ? (
-                                <Typography color="secondary">{`Your AO purchase was succesful!`}</Typography>
+                                <Typography color="primary">{`Your AO purchase was succesful!`}</Typography>
                             ) : null}
                         </Grid>
                     ) : null}
@@ -160,7 +160,7 @@ class Exchange extends Component<Props> {
                                 onClick={this._resetExchangeForm}
                                 disabled={false}
                                 >
-                                {'Make another purchase ↺'}
+                                {'Make another purchase   ↺'}
                             </PrimaryButton>
                         ) : (
                             <PrimaryButton 
