@@ -11,10 +11,11 @@ export const initializeContracts = (networkId) => {
     return (dispatch, getState) => {
         try {
             if ( !AOToken.networks[networkId] || !AOTreasury.networks[networkId] || !AOContent.networks[networkId]) {
+                // TODO: some sort of notification
                 alert('Smart contracts have not been deployed on this network['+networkId+']')
                 networkId = "1533066469022"  // TODO: remove (local testing)
             }
-            console.log('Network id being used: ', networkId)
+            console.log('Network id: ', networkId)
             const contracts = {
                 aoToken: window.web3.eth.contract(AOToken.abi).at(AOToken.networks[networkId].address),
                 aoTreasury: window.web3.eth.contract(AOTreasury.abi).at(AOTreasury.networks[networkId].address),
