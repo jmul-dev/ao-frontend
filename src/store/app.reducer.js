@@ -2,6 +2,8 @@
  * This reducer is for global app state
  */
 import { getEthBalanceForAccount } from '../modules/wallet/reducers/wallet.reducer'
+import { initializeContracts } from '../contracts/contracts.reducer'
+
 
 // Constants
 export const WEB3_CONNECTED = 'WEB3_CONNECTED'
@@ -34,6 +36,7 @@ export const connectToWeb3 = (networkId) => {
                 ethNetworkLink: networkLink,
             }
         })
+        dispatch(initializeContracts(networkId))
         // web3 interface is connected, lets listen for changes to the active/selected account
         const getCurrentAccount = () => {
             window.web3.eth.getAccounts((err, accounts) => {
