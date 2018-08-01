@@ -10,6 +10,7 @@ import '../styles/exchange.css';
 import Account from '../../account/components/Account';
 import { PrimaryButton } from '../../../theme';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import EtherscanLink from '../../etherscan/EtherscanLink';
 
 
 type Props = {
@@ -30,6 +31,7 @@ type Props = {
     getExchangeRate: Function,
     purchaseTokens: Function,
     updateTokenExchangeAmount: Function,
+    resetExchange: Function,
 }
 
 class Exchange extends Component<Props> {
@@ -51,12 +53,17 @@ class Exchange extends Component<Props> {
         const { exchangeAmountToken, exchangeAmountEth } = this.props.exchange
         this.props.purchaseTokens( exchangeAmountToken, exchangeAmountEth )
     }
+    _resetExchangeForm = () => {
+        this.props.resetExchange()
+    }
     render() {
         const { ethAddress, exchange, wallet, theme, title, subtitle, requiredTokenAmount } = this.props   
         const { exchangeTransaction } = exchange     
         const exchangeInProgress = exchangeTransaction.initialized && !exchangeTransaction.error
+        const formDisabled = !ethAddress || exchangeInProgress
+        const showExchangeTransactionMessage = exchangeTransaction.error || exchangeTransaction.initialized || exchangeTransaction.transactionHash || exchangeTransaction.result
         return (
-            <div className={`Exchange ${exchangeInProgress ? 'disabled' : ''}`} style={{backgroundColor: theme.palette.background.default}}>
+            <div className={`Exchange ${formDisabled ? 'disabled' : ''}`} style={{backgroundColor: theme.palette.background.default}}>
                 <Typography variant="title" align="center" style={{marginBottom: 0}}>{title}</Typography>
                 <Typography variant="body1" align="center" style={{marginBottom: 36, fontSize: '1.125rem', color: '#777'}}>{subtitle}</Typography>
                 <Grid className="grid on-pending" container spacing={16} alignItems="center" style={{paddingBottom: requiredTokenAmount ? 38 : undefined}}>
@@ -73,7 +80,7 @@ class Exchange extends Component<Props> {
                         </div>
                         {requiredTokenAmount ? (
                             <Typography variant="caption" className="required-token-amount" color="error">{`need ${requiredTokenAmount} AO to watch`}</Typography>
-                        ) : null}                        
+                        ) : null}
                     </Grid>
                     <Grid item xs={4}>
                         <div style={{display: 'flex', alignItems: 'flex-end'}}> 
@@ -97,7 +104,7 @@ class Exchange extends Component<Props> {
                                 }}
                                 value={exchange.exchangeAmountToken.toString()}
                                 onChange={this._onTokenExchangeAmountChange}
-                                disabled={exchangeInProgress}
+                                disabled={formDisabled}
                             />
                             <Typography style={{marginBottom: 8}}>{'AO'}</Typography>
                         </div>                        
@@ -126,24 +133,49 @@ class Exchange extends Component<Props> {
                     </Grid>
                 </Grid>
                 <Grid className="grid" container spacing={16} style={{paddingBottom: 0}}>
-                    {exchangeTransaction.error ? (
+                    {showExchangeTransactionMessage ? (
                         <Grid item xs={12}>
-                            <Typography color="error">{exchangeTransaction.error.message}</Typography>
-                        </Grid>
-                    ) : null}                    
-                    <Grid item xs={8} style={{marginLeft: 'auto'}}>
-                        <PrimaryButton 
-                            color="primary" 
-                            variant="flat" 
-                            fullWidth 
-                            onClick={this._handlePurchase}
-                            disabled={exchangeInProgress}
-                            >
-                            {exchangeInProgress ? 'Pending...' : 'Purchase'}
-                            {exchangeInProgress ? (
-                                <CircularProgress size={25} style={{position: 'absolute', right: 6}} />
+                            {exchangeTransaction.error ? (
+                                <Typography color="error">{exchangeTransaction.error.message}</Typography>                                
                             ) : null}
-                        </PrimaryButton>
+                            {exchangeTransaction.initialized && !exchangeTransaction.transactionHash && !exchangeTransaction.error ? (
+                                <Typography color="default">{`Please check Metamask to approve this transaction`}</Typography>
+                            ) : null}
+                            {exchangeTransaction.transactionHash ? (
+                                <Typography color="default">
+                                    {'tx: '} <EtherscanLink type="tx" value={exchangeTransaction.transactionHash} style={{maxWidth: '80%'}} />
+                                </Typography>
+                            ) : null}
+                            {exchangeTransaction.result ? (
+                                <Typography color="secondary">{`Your AO purchase was succesful!`}</Typography>
+                            ) : null}
+                        </Grid>
+                    ) : null}
+                    <Grid item xs={8} style={{marginLeft: 'auto'}}>
+                        {exchangeTransaction.result ? (
+                            <PrimaryButton 
+                                color="primary" 
+                                variant="flat" 
+                                fullWidth 
+                                onClick={this._resetExchangeForm}
+                                disabled={false}
+                                >
+                                {'Make another purchase ↺'}
+                            </PrimaryButton>
+                        ) : (
+                            <PrimaryButton 
+                                color="primary" 
+                                variant="flat" 
+                                fullWidth 
+                                onClick={this._handlePurchase}
+                                disabled={formDisabled}
+                                >
+                                {exchangeInProgress ? 'Pending...' : 'Purchase'}
+                                {exchangeInProgress ? (
+                                    <CircularProgress size={25} style={{position: 'absolute', right: 6}} />
+                                ) : null}
+                            </PrimaryButton>
+                        )}
                     </Grid>
                 </Grid>
             </div>

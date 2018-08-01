@@ -1,9 +1,13 @@
 import BigNumber from 'bignumber.js'
 
 // Constants
-export const EXCHANGE_TRANSACTION_INITIALIZED = 'EXCHANGE_TRANSACTION_INITIALIZED'
-export const EXCHANGE_TRANSACTION_ERROR = 'EXCHANGE_TRANSACTION_ERROR'
-export const EXCHANGE_TRANSACTION_SUCCESS = 'EXCHANGE_TRANSACTION_SUCCESS'
+export const EXCHANGE_TRANSACTION = Object.freeze({
+    INITIALIZED: 'EXCHANGE_TRANSACTION.INITIALIZED',
+    SUBMITTED: 'EXCHANGE_TRANSACTION.SUBMITTED',
+    SUCCESS: 'EXCHANGE_TRANSACTION.SUCCESS',
+    ERROR: 'EXCHANGE_TRANSACTION.ERROR',
+    RESET: 'EXCHANGE_TRANSACTION.RESET',
+})
 export const UPDATE_EXCHANGE_RATE = 'UPDATE_EXCHANGE_RATE'
 export const UPDATE_EXCHANGE_VALUES = 'UPDATE_EXCHANGE_VALUES'
 
@@ -11,36 +15,54 @@ export const UPDATE_EXCHANGE_VALUES = 'UPDATE_EXCHANGE_VALUES'
 export const purchaseTokens = ( ethAmount, tokenAmount ) => {
     return (dispatch, getState) => {
         return new Promise((resolve, reject) => {
+            const rejectAndDispatchError = (err) => {
+                dispatch({
+                    type: EXCHANGE_TRANSACTION.ERROR,
+                    payload: err
+                })
+                reject(err)
+            }
             const state = getState()
-            if ( state.electron.isElectron ) {
-                window.chrome.ipcRenderer.send('open-metamask-popup')
-            }
-            // Placeholder transaction!
-            const exchangeParams = {
-                tokenAmount: tokenAmount,
-                ethAmount: ethAmount,
-            }
-            const messageToSign = JSON.stringify(exchangeParams)
-            const hashedMessage = window.web3.sha3(messageToSign)
-            window.web3.eth.sign(state.app.ethAddress, hashedMessage, function(error, result) {
-                if ( error ) {
-                    dispatch({
-                        type: EXCHANGE_TRANSACTION_ERROR,
-                        payload: error
-                    })
-                    reject(error)
-                } else {
-                    dispatch({
-                        type: EXCHANGE_TRANSACTION_SUCCESS,
-                        payload: result
-                    })
-                    resolve(result)
+            const { app, contracts, electron, wallet } = state
+            if ( !app.ethAddress ) {
+                rejectAndDispatchError(new Error('Unlock your ethereum account to purchase AO'))
+            } else if ( wallet.ethBalance.lt( ethAmount ) ) {
+                rejectAndDispatchError(new Error('Insufficient Eth balance'))
+            } else {
+                dispatch({type: EXCHANGE_TRANSACTION.INITIALIZED})
+                if ( electron.isElectron ) {
+                    window.chrome.ipcRenderer.send('open-metamask-popup')
                 }
-            })
-            dispatch({type: EXCHANGE_TRANSACTION_INITIALIZED})
+                contracts.aoToken.icoEnded(function(err, ended) {
+                    if ( err ) {
+                        rejectAndDispatchError(err)
+                    } else if ( ended ) {
+                        rejectAndDispatchError(new Error('The AO ICO has ended, you can no longer purchase AO tokens directly through the contract.'))
+                    } else {
+                        const ethAmountInWei = new BigNumber(window.web3.toWei(ethAmount, 'ether'))
+                        contracts.aoToken.buyIcoToken.sendTransaction({
+                            from: app.ethAddress,
+                            value: ethAmountInWei.toNumber()
+                        }, function(err, transactionHash) {
+                            if ( err ) {
+                                rejectAndDispatchError(err)
+                            } else {
+                                dispatch({
+                                    type: EXCHANGE_TRANSACTION.SUBMITTED,
+                                    payload: transactionHash
+                                })
+                                // TODO: listen for tx status
+                            }
+                        })
+                    }
+                })                
+            }
         })     
     }
 }
+export const resetExchange = ({
+    type: EXCHANGE_TRANSACTION.RESET
+})
 export const getExchangeRate = () => {
     return (dispatch, getState) => {
         // TODO: contract call
@@ -84,7 +106,7 @@ const initialState = {
     exchangeAmountToken: new BigNumber(0),
     exchangeTransaction: {
         initialized: undefined,
-        id: undefined,
+        transactionHash: undefined,
         result: undefined,
         error: undefined,
     }
@@ -93,19 +115,22 @@ const initialState = {
 // Reducer
 export default function walletReducer(state = initialState, action) {
     switch (action.type) {
-        case EXCHANGE_TRANSACTION_INITIALIZED:
+        case EXCHANGE_TRANSACTION.INITIALIZED:
             return {
                 ...state,
                 exchangeTransaction: {
                     initialized: true,                    
                 }
             }
-        case UPDATE_EXCHANGE_RATE:
+        case EXCHANGE_TRANSACTION.SUBMITTED:
             return {
                 ...state,
-                exchangeRate: action.payload
+                exchangeTransaction: {
+                    ...state.exchangeTransaction,
+                    transactionHash: action.payload,
+                }
             }
-        case EXCHANGE_TRANSACTION_ERROR:
+        case EXCHANGE_TRANSACTION.ERROR:
             return {
                 ...state,
                 exchangeTransaction: {
@@ -113,7 +138,7 @@ export default function walletReducer(state = initialState, action) {
                     error: action.payload
                 }
             }
-        case EXCHANGE_TRANSACTION_SUCCESS:
+        case EXCHANGE_TRANSACTION.SUCCESS:
             return {
                 ...state,
                 exchangeTransaction: {
@@ -121,6 +146,18 @@ export default function walletReducer(state = initialState, action) {
                     result: action.payload,
                     error: undefined
                 }
+            }
+        case EXCHANGE_TRANSACTION.RESET:
+            return {
+                ...state,
+                exchangeTransaction: {
+                    ...initialState.exchangeTransaction
+                }
+            }
+        case UPDATE_EXCHANGE_RATE:
+            return {
+                ...state,
+                exchangeRate: action.payload
             }
         case UPDATE_EXCHANGE_VALUES:
             return {
