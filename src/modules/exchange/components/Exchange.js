@@ -88,7 +88,7 @@ class Exchange extends Component<Props> {
                         <Typography variant="caption">{`1 AO = ${exchange.exchangeRate.toNumber()} ETH`}</Typography>
                     </Grid>
                     <Grid item xs={8}>
-                        <div className="input-container">
+                        <div className="input-container" style={{backgroundColor: theme.palette.type === 'dark' ? '#333333' : '#AAAAAA'}}>
                             <TextField 
                                 fullWidth 
                                 InputProps={{

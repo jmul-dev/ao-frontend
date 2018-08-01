@@ -7,6 +7,7 @@ import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import ArrowIcon from '@material-ui/icons/ArrowUpward';
+import ExchangeModal from '../../exchange/components/ExchangeModal';
 import '../styles/wallet.css';
 
 
@@ -20,6 +21,12 @@ type Props = {
 
 class Wallet extends PureComponent<Props> {
     props: Props;
+    constructor() {
+        super()
+        this.state = {
+            exchangeModalOpen: false,
+        }
+    }
     componentDidMount() {
         if ( this.props.ethAddress ) {
             this._getUpdatedBalances( this.props.ethAddress )
@@ -36,6 +43,9 @@ class Wallet extends PureComponent<Props> {
         const { getEthBalanceForAccount, getTokenBalanceForAccount } = this.props
         getEthBalanceForAccount( address )
         getTokenBalanceForAccount( address )
+    }
+    _onExchangeModalClose = () => {
+        this.setState({exchangeModalOpen: false})
     }
     render() {
         const { ethBalance, tokenBalance, tokenStaked, tokenEarned } = this.props.wallet
@@ -77,9 +87,24 @@ class Wallet extends PureComponent<Props> {
                             </div>
                             <Typography variant="body1">{'earned'}</Typography>
                         </div>
-                        <Button size="small" variant="flat" color={ethAddress ? "primary" : "default"} style={{padding: '4px 10px'}} disabled={!ethAddress}>
+                        <Button 
+                            size="small" 
+                            variant="flat" 
+                            color={ethAddress ? "primary" : "default"} 
+                            style={{padding: '4px 10px'}} 
+                            disabled={!ethAddress}
+                            onClick={() => this.setState({exchangeModalOpen: true})}
+                            >
                             {'reload wallet'} <ArrowIcon style={{transform: 'rotate(45deg)'}}/>
                         </Button>
+                        <ExchangeModal 
+                            open={this.state.exchangeModalOpen}
+                            onClose={this._onExchangeModalClose}
+                            exchangeProps={{
+                                title: 'Purchase AO',
+                                subtitle: 'AO+ Primordial tokens have additional staking and purchasing benefits.'
+                            }}
+                        />
                     </Grid>
                 </Grid>               
             </div>
