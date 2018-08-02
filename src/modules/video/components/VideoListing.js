@@ -119,7 +119,7 @@ export default class VideoListing extends Component<Props> {
                 <div className="clickable" onClick={this._enterTeaserListingAtVideo.bind(this, videoIndex)}>
                     <ButtonBase
                         className="cover-image"
-                        style={{backgroundImage: `url(${video.coverImageUrl})`}}
+                        style={{backgroundImage: `url(${video.featuredImageUrl})`}}
                     ></ButtonBase>
                     <Typography variant="subheading">
                         {video.title}

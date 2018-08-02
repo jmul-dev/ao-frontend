@@ -8,6 +8,7 @@ import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import ArrowIcon from '@material-ui/icons/ArrowUpward';
 import ExchangeModal from '../../exchange/components/ExchangeModal';
+import { formattedTokenAmount } from '../../../utils/denominations';
 import '../styles/wallet.css';
 
 
@@ -50,6 +51,7 @@ class Wallet extends PureComponent<Props> {
     render() {
         const { ethBalance, tokenBalance, tokenStaked, tokenEarned } = this.props.wallet
         const { ethAddress } = this.props
+        const tokenBalanceFormat = formattedTokenAmount(tokenBalance, 1)
         return (
             <div className="Wallet" style={{opacity: ethAddress ? 1 : 0.5}}>
                 <Grid container spacing={0}>
@@ -62,8 +64,8 @@ class Wallet extends PureComponent<Props> {
                         </header>
                         <div className="balances">
                             <div>
-                                <div className="balance">{tokenBalance.toFixed(2)}</div>
-                                <Typography className="label" variant="body1">{'AO'}</Typography>
+                                <div className="balance">{tokenBalanceFormat.value}</div>
+                                <Typography className="label" variant="body1">{tokenBalanceFormat.label}</Typography>
                             </div>
                             <div>
                                 <div className="balance">{ethBalance.toFixed(2)}</div>

@@ -1,5 +1,7 @@
 import BigNumber from 'bignumber.js'
 import { waitForTransactionReceipt } from '../../../contracts/contracts.reducer'
+import { denominations } from '../../../utils/denominations'
+
 
 // Constants
 export const EXCHANGE_TRANSACTION = Object.freeze({
@@ -11,9 +13,11 @@ export const EXCHANGE_TRANSACTION = Object.freeze({
 })
 export const UPDATE_EXCHANGE_RATE = 'UPDATE_EXCHANGE_RATE'
 export const UPDATE_EXCHANGE_VALUES = 'UPDATE_EXCHANGE_VALUES'
+export const UPDATE_EXCHANGE_DENOMINATION = 'UPDATE_EXCHANGE_DENOMINATION'
+
 
 // Actions
-export const purchaseTokens = ( ethAmount, tokenAmount ) => {
+export const purchaseTokens = ( exchangeAmountToken, exchangeDenomination, exchangeRate ) => {
     return (dispatch, getState) => {
         return new Promise((resolve, reject) => {
             const rejectAndDispatchError = (err) => {
@@ -25,9 +29,10 @@ export const purchaseTokens = ( ethAmount, tokenAmount ) => {
             }
             const state = getState()
             const { app, contracts, electron, wallet } = state
+            const ethCost = exchangeAmountToken.multipliedBy(Math.pow(10, exchangeDenomination.powerOfTen)).multipliedBy(exchangeRate)
             if ( !app.ethAddress ) {
                 rejectAndDispatchError(new Error('Unlock your ethereum account to purchase AO'))
-            } else if ( wallet.ethBalance.lt( ethAmount ) ) {
+            } else if ( wallet.ethBalance.lt( ethCost ) ) {
                 rejectAndDispatchError(new Error('Insufficient Eth balance'))
             } else {
                 dispatch({type: EXCHANGE_TRANSACTION.INITIALIZED})
@@ -40,10 +45,10 @@ export const purchaseTokens = ( ethAmount, tokenAmount ) => {
                     } else if ( ended ) {
                         rejectAndDispatchError(new Error('The AO ICO has ended, you can no longer purchase AO tokens directly through the contract.'))
                     } else {
-                        const ethAmountInWei = new BigNumber(window.web3.toWei(ethAmount, 'ether'))                                                
+                        const ethCostInWei = new BigNumber(window.web3.toWei(ethCost, 'ether'))                                                
                         contracts.aoToken.buyIcoToken.sendTransaction({
                             from: app.ethAddress,
-                            value: ethAmountInWei.toNumber()
+                            value: ethCostInWei.toNumber()
                         }, function(err, transactionHash) {
                             if ( err ) {
                                 rejectAndDispatchError(err)
@@ -73,21 +78,29 @@ export const purchaseTokens = ( ethAmount, tokenAmount ) => {
         })     
     }
 }
+
 export const resetExchange = () => ({
     type: EXCHANGE_TRANSACTION.RESET
 })
+
 export const getExchangeRate = () => {
     return (dispatch, getState) => {
-        // TODO: contract call
-        // TODO: update the exchangeAmountToken & exchangeAmountEth according to new exchange rate
-        dispatch({
-            type: UPDATE_EXCHANGE_RATE,
-            payload: new BigNumber(1)
+        const state = getState()
+        const { contracts } = state
+        contracts.aoToken.icoBuyPrice(function(err, result) {
+            if ( result ) {
+                dispatch({
+                    type: UPDATE_EXCHANGE_RATE,
+                    payload: new BigNumber(window.web3.fromWei(result, 'ether'))
+                })
+                // Update the exchangeAmountEth according to new exchange rate
+                dispatch(updateTokenExchangeAmount(getState().exchange.exchangeAmountToken))
+            }
         })
     }
 }
-export const updateTokenExchangeAmount = (tokenAmount) => {
-    console.log(tokenAmount)
+
+export const updateTokenExchangeAmount = (tokenAmount, denomination) => {
     return (dispatch, getState) => {
         const state = getState()
         // Verify that the tokenAmount * exchangeRate <= wallet balance
@@ -112,11 +125,28 @@ export const updateTokenExchangeAmount = (tokenAmount) => {
     }
 }
 
+export const updateExchangeDenomination = (denomination) => {
+    return (dispatch, getState) => {
+        const state = getState()
+        const { exchangeAmountToken } = state.exchange
+        // TODO: calculate the new cost based on the exchangeAmountToken & new denomination
+        let exchangeAmountEth = new BigNumber(0)
+        dispatch({
+            type: UPDATE_EXCHANGE_DENOMINATION,
+            payload: {
+                exchangeDenomination: denomination,
+                exchangeAmountEth,
+            }
+        })
+    }
+}
+
 // State
 const initialState = {
-    exchangeRate: new BigNumber(0),
-    exchangeAmountEth: new BigNumber(0),
-    exchangeAmountToken: new BigNumber(0),
+    exchangeRate: new BigNumber(0),  // eth/AO
+    exchangeAmountEth: new BigNumber(0),  // eth
+    exchangeAmountToken: new BigNumber(0),  // AO
+    exchangeDenomination: denominations[2],
     exchangeTransaction: {
         initialized: undefined,
         transactionHash: undefined,
@@ -172,10 +202,11 @@ export default function walletReducer(state = initialState, action) {
                 exchangeRate: action.payload
             }
         case UPDATE_EXCHANGE_VALUES:
+        case UPDATE_EXCHANGE_DENOMINATION:
             return {
                 ...state,
                 ...action.payload,
-            }
+            }        
         default:
             return state
     }
