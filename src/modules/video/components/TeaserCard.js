@@ -8,6 +8,7 @@ import '../styles/teaser-card.css';
 import { LogoIcon } from '../../../assets/Icons';
 import ExchangeModal from '../../exchange/components/ExchangeModal';
 import { PrimaryButton } from '../../../theme';
+import { TokenBalance } from '../../../utils/denominations';
 
 
 type Props = {
@@ -100,8 +101,12 @@ export default class TeaserCard extends Component<Props> {
                             {video.title}
                         </Typography>
                         <div className="action-pane hide-fullscreen">
-                            <Typography variant="body1">{`${video.stake} AO / view`}</Typography>
-                            <Typography variant="caption">{`your balance: ${tokenBalance.toNumber()} AO`}</Typography>
+                            <Typography variant="body1">
+                                <TokenBalance baseAmount={video.stake} /> {' / view'}
+                            </Typography>
+                            <Typography variant="caption">
+                                {`your balance: `}<TokenBalance baseAmount={tokenBalance} />
+                            </Typography>
                             <PrimaryButton onClick={this._playVideo} className="play-button">
                                 <div className="play-icon">
                                     <PlayIcon />

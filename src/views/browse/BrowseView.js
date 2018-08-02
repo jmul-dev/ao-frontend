@@ -15,7 +15,6 @@ export default class BrowseView extends Component {
             <View className={'BrowseView'} padding="none">
                 <header>
                     <Clock />
-                    <Stats />
                     <div style={{marginLeft: 'auto'}}>
                         <IconButton style={{marginRight: '-14px'}}>
                             <SearchIcon />
