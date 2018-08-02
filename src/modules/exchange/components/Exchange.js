@@ -126,7 +126,7 @@ class Exchange extends Component<Props> {
                                 disableUnderline={true}
                                 >
                                 {denominations.map((denomination) => (
-                                    <option value={denomination.name}>{`${denomination.prefix} AO`}</option>
+                                    <option key={denomination.name} value={denomination.name}>{`${denomination.prefix} AO`}</option>
                                 ))}
                             </DenominationSelect>
                         </div>                        

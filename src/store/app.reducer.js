@@ -1,7 +1,7 @@
 /**
  * This reducer is for global app state
  */
-import { getEthBalanceForAccount } from '../modules/wallet/reducers/wallet.reducer'
+import { getEthBalanceForAccount, getTokenBalanceForAccount } from '../modules/wallet/reducers/wallet.reducer'
 import { initializeContracts } from '../contracts/contracts.reducer'
 
 
@@ -46,6 +46,7 @@ export const connectToWeb3 = (networkId) => {
                     dispatch({type: WEB3_ETH_ACCOUNT_CHANGE, payload: { ethAddress: account }})
                     if ( account ) {
                         dispatch(getEthBalanceForAccount(account))
+                        dispatch(getTokenBalanceForAccount(account))
                     }
                 }
                 // Poll for account change
