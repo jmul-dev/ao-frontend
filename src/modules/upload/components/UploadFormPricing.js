@@ -14,6 +14,8 @@ import { Redirect } from 'react-router-dom';
 import { BackButton, PrimaryButton } from './UploadFormNavButtons';
 import OverviewAside from './OverviewAside';
 import { withTheme } from '@material-ui/core/styles';
+import { compose } from 'react-apollo';
+import withUserWallet from '../../wallet/containers/withUserWallet';
 
 
 const PricingInputCard = withTheme()(({headline, label, iconClassName, stake, profit, selected, onClick, theme}) => (
@@ -98,11 +100,16 @@ class UploadFormPricing extends Component {
         this.props.updatePricingOption(pricingOptionIndex, stake, profit)
     }
     _navBack = () => {
-        this.context.router.history.goBack()
+        // this.context.router.history.goBack()
+        this.context.router.history.replace('/app/view/upload/start')
     }
     _navForward = () => {
+        const { wallet, form } = this.props
         // TODO: if balance > stake: nav to /app/view/upload/content; else: nav to /app/view/upload/reload
         let nextRoute = '/app/view/upload/content'
+        if ( wallet.tokenBalance.lt(form.stake) ) {
+            nextRoute = '/app/view/upload/reload'   
+        }
         this.context.router.history.push(nextRoute)
     }
     render() {
@@ -180,4 +187,7 @@ class UploadFormPricing extends Component {
         )
     }
 }
-export default withUploadFormData(UploadFormPricing)
+export default compose(
+    withUploadFormData,
+    withUserWallet,
+)(UploadFormPricing)

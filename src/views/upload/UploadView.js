@@ -25,7 +25,7 @@ class UploadView extends PureComponent {
                         <Switch>
                             <Route exact path="/app/view/upload/start" component={UploadForm} />
                             <Route exact path="/app/view/upload/pricing" component={UploadFormPricing} />
-                            <Route exact path="/app/view/upload/reload" component={UploadFormPricing} />
+                            <Route exact path="/app/view/upload/reload" component={UploadFormReload} />
                             <Route exact path="/app/view/upload/content" component={UploadFormContent} />
                             <Route exact path="/app/view/upload/submit" component={UploadFormSubmit} />
                             {/* UploadFormContinue redirects to one of the routes above */}

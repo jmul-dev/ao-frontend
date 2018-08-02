@@ -19,7 +19,8 @@ class UploadFormContent extends Component {
         this.props.updateLastReachedStep('content')
     }
     _navBack = () => {
-        this.context.router.history.goBack()
+        // this.context.router.history.goBack()
+        this.context.router.history.replace('/app/view/upload/pricing')
     }
     _submit = () => {
         // TODO: validation
