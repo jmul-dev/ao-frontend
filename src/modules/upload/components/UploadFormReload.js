@@ -5,7 +5,9 @@ import Grid from '@material-ui/core/Grid';
 import withUploadFormData from '../containers/withUploadFormData';
 import { Redirect } from 'react-router-dom';
 import { BackButton } from './UploadFormNavButtons';
-import Exchange from '../../exchange/components/Exchange'
+import Exchange from '../../exchange/components/Exchange';
+import { compose } from 'react-apollo';
+import withUserWallet from '../../wallet/containers/withUserWallet';
 
 
 class UploadFormReload extends Component {
@@ -18,7 +20,13 @@ class UploadFormReload extends Component {
     _navBack = () => {
         // this.context.router.history.goBack()
         this.context.router.history.replace('/app/view/upload/pricing')
-    }    
+    }
+    componentWillReceiveProps( nextProps ) {
+        const { wallet, form } = nextProps
+        if ( nextProps.tokenBalance.gte(form.stake) ) {
+            this.context.router.history.replace('/app/view/upload/content')
+        }
+    }
     render() {
         const { form } = this.props
         if ( !form.video ) {
@@ -44,4 +52,7 @@ class UploadFormReload extends Component {
         )
     }
 }
-export default withUploadFormData(UploadFormReload)
+export default compose(
+    withUploadFormData,
+    withUserWallet,
+)(UploadFormReload)

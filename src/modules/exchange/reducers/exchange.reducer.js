@@ -1,6 +1,7 @@
 import BigNumber from 'bignumber.js'
 import { waitForTransactionReceipt } from '../../../contracts/contracts.reducer'
 import { denominations } from '../../../utils/denominations'
+import { getEthBalanceForAccount, getTokenBalanceForAccount } from '../../wallet/reducers/wallet.reducer'
 
 
 // Constants
@@ -59,6 +60,8 @@ export const purchaseTokens = ( exchangeAmountToken, exchangeDenomination, excha
                                             type: EXCHANGE_TRANSACTION.RESULT,
                                             payload: result.args
                                         })
+                                        dispatch(getEthBalanceForAccount(app.ethAddress))
+                                        dispatch(getTokenBalanceForAccount(app.ethAddress))
                                         eventListener.stopWatching()
                                     }
                                 })
