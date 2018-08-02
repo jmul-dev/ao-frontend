@@ -11,6 +11,7 @@ type Props = {
         error?: string
     },
     app: AppReducerType,
+    latestBlockNumber: number,
     isElectron: boolean,
 };
 
@@ -22,18 +23,21 @@ export default class DevelopmentBar extends PureComponent<Props> {
         const web3Available = states[APP_STATES.WEB3_AVAILABLE]
         const web3Connected = states[APP_STATES.WEB3_CONNECTED]
         const coreConnected = states[APP_STATES.CORE_CONNECTED]
+        const contractsInitialized = states[APP_STATES.CONTRACTS_INITIALIZED]
         if ( loading )
             return null
         return (
             <div className="DevelopmentBar">
                 <div className={`status`}>frontend v{packageJson.version}</div>
-                <div className={`status`}>core v{version}</div>
-                <div className={`status ${coreConnected ? 'success' : 'error'}`}>ao-core</div>
-                <div className={`status ${this.props.isElectron ? 'success' : 'error'}`}>electron</div>
-                <div className={`status ${web3Available ? 'success' : 'error'}`}>web3</div>
+                <div className={`status ${coreConnected ? 'success' : 'error'}`}>core v{version}</div>
                 <div className={`status ${!error ? 'success' : 'error'}`}>graphql</div>
+                <div className={`status ${this.props.isElectron ? 'success' : 'error'}`}>electron</div>
+                <div className={`status ${web3Available ? 'success' : 'error'}`}>web3</div>                
                 {web3Connected ? (
-                    <div className={`status success`}>{getNetworkName(ethNetworkId)}</div>
+                    <div className={`status success`}>{getNetworkName(ethNetworkId)}{this.props.latestBlockNumber ? ` #${this.props.latestBlockNumber}` : ''}</div>
+                ):null}
+                {web3Connected ? (
+                    <div className={`status ${contractsInitialized ? 'success' : 'error'}`}>ao-contracts</div>
                 ):null}
             </div>
         );

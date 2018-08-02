@@ -28,7 +28,7 @@ class AccountVideoListItem extends Component {
                 <Grid container spacing={16} alignItems="center">
                     <Grid item sm={4}>
                         <ButtonBase style={{width: '100%'}}>
-                            <div className="featured-image" style={{backgroundImage: `url(${video.coverImageUrl})`}}>
+                            <div className="featured-image" style={{backgroundImage: `url(${video.featuredImageUrl})`}}>
                                 <PlayIcon className="play-icon" />
                             </div>
                         </ButtonBase>

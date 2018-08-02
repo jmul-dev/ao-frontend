@@ -15,7 +15,7 @@ const accountVideos = gql(`
                     fileName, 
                     contentType, 
                     fileUrl,
-                    coverImageUrl,
+                    featuredImageUrl,
                     teaserUrl,
                     stake,
                     split,

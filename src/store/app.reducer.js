@@ -15,7 +15,7 @@ export const APP_STATES = {
     CORE_READY: 'CORE_READY',
     WEB3_AVAILABLE: 'WEB3_AVAILABLE',
     WEB3_CONNECTED: 'WEB3_CONNECTED',
-    WEB3_READY: 'WEB3_READY',
+    CONTRACTS_INITIALIZED: 'CONTRACTS_INITIALIZED',
     APP_READY: 'APP_READY',
 }
 
@@ -90,7 +90,7 @@ const initialState = {
         [APP_STATES.CORE_READY]: false,
         [APP_STATES.WEB3_AVAILABLE]: typeof window.web3 !== 'undefined',
         [APP_STATES.WEB3_CONNECTED]: false,
-        [APP_STATES.WEB3_READY]: false,
+        [APP_STATES.CONTRACTS_INITIALIZED]: false,
         [APP_STATES.APP_READY]: false,
     },
     ethNetworkId: undefined,

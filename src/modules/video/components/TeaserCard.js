@@ -79,7 +79,7 @@ export default class TeaserCard extends Component<Props> {
                                 config={{
                                     file: {
                                         attributes: {
-                                            poster: video.coverImageUrl
+                                            poster: video.featuredImageUrl
                                         }
                                     }
                                 }}
