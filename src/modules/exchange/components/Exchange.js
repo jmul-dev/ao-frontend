@@ -12,7 +12,7 @@ import { PrimaryButton } from '../../../theme';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import EtherscanLink from '../../etherscan/EtherscanLink';
 import { TokenBalance, formattedTokenAmount, denominations } from '../../../utils/denominations';
-import Select from '@material-ui/core/Select';
+import DenominationSelect from './DenominationSelect';
 
 
 type Props = {
@@ -119,7 +119,7 @@ class Exchange extends Component<Props> {
                                 onChange={this._onTokenExchangeAmountChange}
                                 disabled={formDisabled}
                             />
-                            <Select
+                            <DenominationSelect
                                 native
                                 value={exchange.exchangeDenomination.name}
                                 onChange={this._onDenominationInputChange}
@@ -128,7 +128,7 @@ class Exchange extends Component<Props> {
                                 {denominations.map((denomination) => (
                                     <option value={denomination.name}>{`${denomination.prefix} AO`}</option>
                                 ))}
-                            </Select>
+                            </DenominationSelect>
                         </div>                        
                     </Grid>
                 </Grid>
