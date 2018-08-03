@@ -13,7 +13,7 @@ const graphqlQuery = gql(`
 export default compose(
     graphql(graphqlQuery, {
         options: {
-            pollInterval: 500
+            pollInterval: 1000
         }
     }),
 )(Console);

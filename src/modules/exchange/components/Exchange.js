@@ -20,6 +20,7 @@ type Props = {
     title: string,
     subtitle: string,
     requiredTokenAmount?: number,
+    requiredTokenCopy?: string,  // required {tokenAmount} to {copy} <--
     // withTheme
     theme: Object,  // material-ui theme
     // redux bound state
@@ -66,7 +67,7 @@ class Exchange extends Component<Props> {
         this.props.resetExchange()
     }
     render() {
-        const { ethAddress, exchange, wallet, theme, title, subtitle, requiredTokenAmount } = this.props   
+        const { ethAddress, exchange, wallet, theme, title, subtitle, requiredTokenAmount, requiredTokenCopy } = this.props   
         const { exchangeTransaction, exchangeDenomination, exchangeAmountToken, exchangeRate } = exchange     
         const exchangeInProgress = exchangeTransaction.initialized && !exchangeTransaction.error
         const formDisabled = !ethAddress || exchangeInProgress
@@ -91,7 +92,7 @@ class Exchange extends Component<Props> {
                         </div>
                         {requiredTokenAmount ? (
                             <Typography variant="caption" className="required-token-amount" color="error">
-                                {`need `}<TokenBalance baseAmount={requiredTokenAmount} />{` to watch`}
+                                {`need `}<TokenBalance baseAmount={requiredTokenAmount} />{` to ${requiredTokenCopy ? requiredTokenCopy : 'watch'}`}
                             </Typography>
                         ) : null}
                     </Grid>

@@ -23,7 +23,7 @@ export default class SettingsView extends PureComponent {
                             <Typography variant="subheading" gutterBottom>
                                 {'General'}
                             </Typography>
-                            <SettingsInput disabled inputName="runOnStartup" inputLabel="Run AO on startup" />
+                            <SettingsInput inputName="runOnStartup" inputLabel="Run AO on startup" />
                             <SettingsInput disabled inputName="runInBackground" inputLabel="Run AO in background" />
                             <SettingsInput disabled inputName="checkForUpdates" inputLabel="Check for updates on startup" />
                         </section>

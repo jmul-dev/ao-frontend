@@ -41,6 +41,7 @@ class UploadFormReload extends Component {
                                 title="Insufficient AO"
                                 subtitle="Purchase AO in order to stake your content within the network"
                                 requiredTokenAmount={form.stake}
+                                requiredTokenCopy={'stake'}
                             />
                         </div>                   
                         <nav className="upload-form-nav gutter-bottom">
