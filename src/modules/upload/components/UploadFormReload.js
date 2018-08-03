@@ -23,7 +23,7 @@ class UploadFormReload extends Component {
     }
     componentWillReceiveProps( nextProps ) {
         const { wallet, form } = nextProps
-        if ( nextProps.tokenBalance.gte(form.stake) ) {
+        if ( wallet.tokenBalance.gte(form.stake) ) {
             this.context.router.history.replace('/app/view/upload/content')
         }
     }
