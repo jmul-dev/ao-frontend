@@ -63,6 +63,9 @@
     box-sizing: content-box;
     z-index: 1;
 }
+.TeaserCard .content-container::-webkit-scrollbar { 
+    display: none;
+}
 .TeaserCard .loading-overlay {
     position: absolute;
     top: -1px;
