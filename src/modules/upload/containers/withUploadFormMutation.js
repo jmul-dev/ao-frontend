@@ -20,6 +20,7 @@ const mapDispatchToProps = {
 }
 const mapStateToProps = (store) => {
     return {
+        ethAddress: store.app.ethAddress,
         form: store.upload.form,
         stakeTransaction: store.upload.stakeTransaction
     }
@@ -41,9 +42,10 @@ export default compose(
         // Pull inputs straight from redux props
         options: (props) => ({
             variables: {
-                inputs: {
-                    ...props.form,
-                    pricingOption: undefined // remove from form inputs
+                inputs: {                    
+                    ...props.form,                    
+                    pricingOption: undefined, // remove from form inputs
+                    ethAddress: props.ethAddress,
                 }
             }
         })

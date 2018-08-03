@@ -27,8 +27,7 @@
     margin-top: 16px;
     padding-left: 50px;
     background: #03B742;
-    border-top-right-radius: 20px;
-    border-bottom-right-radius: 20px;
+    border-radius: 0;
 }
 .TeaserCard .media-container .play-button .play-icon {
     position: absolute;
