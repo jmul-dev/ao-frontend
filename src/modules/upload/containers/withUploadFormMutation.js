@@ -2,7 +2,7 @@ import { graphql, compose } from 'react-apollo';
 import withStateMutation from '../../../utils/withStateMutation';
 import gql from 'graphql-tag';
 import { connect } from 'react-redux';
-import { triggerStakeTransaction, updateLastReachedStep, resetUploadForm } from '../reducers/upload.reducer';
+import { stakeContent, setContentSubmittionResult, updateLastReachedStep, resetUploadForm } from '../reducers/upload.reducer';
 
 
 export type UploadFormMutationProps = {
@@ -14,15 +14,17 @@ export type UploadFormMutationProps = {
 
 // Redux
 const mapDispatchToProps = {
-    triggerStakeTransaction,
+    stakeContent,
+    setContentSubmittionResult,
     updateLastReachedStep,
-    resetUploadForm,
+    resetUploadForm,    
 }
 const mapStateToProps = (store) => {
     return {
         ethAddress: store.app.ethAddress,
         form: store.upload.form,
-        stakeTransaction: store.upload.stakeTransaction
+        stakeTransaction: store.upload.stakeTransaction,
+        contentSubmittionResult: store.upload.contentSubmittionResult,
     }
 }
 
@@ -30,7 +32,7 @@ const mapStateToProps = (store) => {
 const submitContentMutation = gql(`
     mutation submitVideoContent($inputs: VideoContentSubmissionInputs) {
         submitVideoContent(inputs: $inputs) {
-            id
+            id, datKey, fileSize
         }
     }
 `)

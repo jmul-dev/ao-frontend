@@ -1,10 +1,19 @@
+import { waitForTransactionReceipt } from '../../../contracts/contracts.reducer'
+
 // Constants
 export const UPDATE_CURRENT_UPLOAD_STEP = 'UPDATE_CURRENT_UPLOAD_STEP'
 export const UPDATE_UPLOAD_FORM_FIELD = 'UPDATE_UPLOAD_FORM_FIELD'
 export const UPDATE_PRICING = 'UPDATE_PRICING'
 export const RESET_UPLOAD_FORM = 'RESET_UPLOAD_FORM'
-export const STAKE_TRANSACTION_SUCCESS = 'STAKE_TRANSACTION_SUCCESS'
-export const STAKE_TRANSACTION_ERROR = 'STAKE_TRANSACTION_ERROR'
+export const CONTENT_SUBMITTION_RESULT = 'CONTENT_SUBMITTION_RESULT'
+
+export const STAKE_TRANSACTION = Object.freeze({
+    INITIALIZED: 'STAKE_TRANSACTION.INITIALIZED',
+    SUBMITTED: 'STAKE_TRANSACTION.SUBMITTED',
+    RESULT: 'STAKE_TRANSACTION.RESULT',
+    ERROR: 'STAKE_TRANSACTION.ERROR',
+    RESET: 'STAKE_TRANSACTION.RESET',
+})
 
 
 export const PRICING_DEFAULTS = [{
@@ -82,40 +91,69 @@ export const updatePricingOption = (pricingOption, stake = undefined, profit = u
         })
     }
 }
-export const triggerStakeTransaction = () => {
+export const stakeContent = ({tokenAmount, primordialTokenAmount, datKey, fileSizeInBytes, profitPercentage}) => {
     return (dispatch, getState) => {
-        // reset the stake transaction state
-        dispatch({type: STAKE_TRANSACTION_ERROR, payload: undefined})
-        dispatch({type: STAKE_TRANSACTION_SUCCESS, payload: undefined})
-        return new Promise((resolve, reject) => {        
+        return new Promise((resolve, reject) => {  
+            const rejectAndDispatchError = (err) => {
+                dispatch({
+                    type: STAKE_TRANSACTION.ERROR,
+                    payload: err
+                })
+                reject(err)
+            }
             const state = getState()
             if ( state.electron.isElectron ) {
                 window.chrome.ipcRenderer.send('open-metamask-popup')
             }
-            const stakeParams = {
-                stake: state.upload.form.stake,
-                split: state.upload.form.profit,
-            }
-            const messageToSign = JSON.stringify(stakeParams)
-            const hashedMessage = window.web3.sha3(messageToSign)
-            window.web3.eth.sign(state.app.ethAddress, hashedMessage, function(error, result) {
-                if ( error ) {
-                    dispatch({
-                        type: STAKE_TRANSACTION_ERROR,
-                        payload: error
-                    })
-                    reject(error)
-                } else {
-                    dispatch({
-                        type: STAKE_TRANSACTION_SUCCESS,
-                        payload: result
-                    })
-                    resolve(result)
+            const { contracts, app } = state
+            // 1. Contract method
+            // NOTE: for now token & primordial token amounts are in base denomination
+            const profitPercentageWithDivisor = parseInt(profitPercentage) * 10000  // 10^4
+            contracts.aoContent.stakeContent(
+                parseInt(tokenAmount),
+                'ao',
+                parseInt(primordialTokenAmount),
+                datKey,
+                fileSizeInBytes,
+                profitPercentageWithDivisor,
+                { from: app.ethAddress },
+                function(err, transactionHash) {
+                    if ( err ) {
+                        rejectAndDispatchError(err)
+                    } else {
+                        // 2. 
+                        let eventListener = contracts.aoContent.StakeContent({stakeOwner: app.ethAddress}, function(error, result) {
+                            if ( result && result.transactionHash == transactionHash ) {
+                                dispatch({
+                                    type: STAKE_TRANSACTION.RESULT,
+                                    payload: result.args
+                                })
+                                // TODO: update all balances (eth, token, primordial, and staked)
+                                // dispatch(getEthBalanceForAccount(app.ethAddress))
+                                // dispatch(getTokenBalanceForAccount(app.ethAddress))
+                                eventListener.stopWatching()
+                            }
+                        })
+                        dispatch({
+                            type: STAKE_TRANSACTION.SUBMITTED,
+                            payload: transactionHash
+                        })
+                        waitForTransactionReceipt(transactionHash).then(() => {
+                            eventListener.stopWatching()
+                        }).catch(err => {
+                            eventListener.stopWatching()
+                            rejectAndDispatchError(err)
+                        })
+                    }
                 }
-            })
+            )
         })        
     }
 }
+export const setContentSubmittionResult = (result) => ({
+    type: CONTENT_SUBMITTION_RESULT,
+    payload: result
+})
 
 // State
 const initialState = {
@@ -130,7 +168,10 @@ const initialState = {
         stake: undefined,
         profit: undefined,
     },
+    contentSubmittionResult: undefined,
     stakeTransaction: {
+        initialized: undefined,
+        transactionHash: undefined,
         result: undefined,
         error: undefined,
     }
@@ -171,19 +212,41 @@ export default function uploadReducer(state = initialState, action) {
                     ...initialState.form
                 }
             }
-        case STAKE_TRANSACTION_SUCCESS:
+        case STAKE_TRANSACTION.INITIALIZED:
             return {
                 ...state,
                 stakeTransaction: {
-                    result: action.payload
+                    initialized: true,                    
                 }
             }
-        case STAKE_TRANSACTION_ERROR:
+        case STAKE_TRANSACTION.SUBMITTED:
             return {
                 ...state,
                 stakeTransaction: {
+                    ...state.stakeTransaction,
+                    transactionHash: action.payload,
+                }
+            }
+        case STAKE_TRANSACTION.RESULT:
+            return {
+                ...state,
+                stakeTransaction: {
+                    ...state.stakeTransaction,
+                    result: action.payload,
+                }
+            }
+        case STAKE_TRANSACTION.ERROR:
+            return {
+                ...state,
+                stakeTransaction: {
+                    ...state.stakeTransaction,
                     error: action.payload
                 }
+            }
+        case CONTENT_SUBMITTION_RESULT:
+            return {
+                ...state,
+                contentSubmittionResult: action.payload
             }
         default:
             return state
