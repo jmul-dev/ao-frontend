@@ -49,7 +49,7 @@
     padding-bottom: 64px;
     border-radius: 4px;
     background: white;
-    height: 300px;
+    height: 350px;
     width: 100%;
     overflow: hidden;
 }
@@ -85,13 +85,10 @@
 }
 .UploadView .pricing-card .pricing-table {
     width: 100%;
+    margin-top: 16px;
 }
 .UploadView .pricing-card .pricing-table > div {
-    display: flex;
-    align-items: center;
-}
-.UploadView .pricing-card .pricing-table > div > * {
-    width: 50%;
+    margin-bottom: 8px;
 }
 .UploadView .custom-pricing .profit-input-container {    
     margin-top: 16px;
@@ -101,20 +98,7 @@
     font-size: 1.5rem;
 }
 .UploadView .custom-pricing .stake-input-container {
-    display: flex;
-    align-items: center;
     margin-top: 16px;
-}
-.UploadView .custom-pricing .stake-input-container > :first-child {
-    margin-right: 8px;
-}
-.UploadView .custom-pricing .stake-input-container input {
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    text-align: right;
-    width: 140px;
-    font-size: 1.5rem;
-    color: var(--brand-secondary);
 }
 .UploadView .custom-pricing .custom-pricing-tooltip {
     margin-left: -24px;

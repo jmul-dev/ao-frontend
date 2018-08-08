@@ -5,14 +5,12 @@ import { withTheme } from '@material-ui/core/styles';
 import { compose } from 'react-apollo';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
-import TextField from '@material-ui/core/TextField';
 import '../styles/exchange.css';
 import Account from '../../account/components/Account';
 import { PrimaryButton } from '../../../theme';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import EtherscanLink from '../../etherscan/EtherscanLink';
-import { TokenBalance, formattedTokenAmount, denominations } from '../../../utils/denominations';
-import DenominationSelect from './DenominationSelect';
+import { TokenBalance, formattedTokenAmount, denominations, DenominationInput } from '../../../utils/denominations';
 
 
 type Props = {
@@ -49,16 +47,10 @@ class Exchange extends Component<Props> {
             updateTokenExchangeAmount( requiredTokenAmount )
         }
     }
-    _onTokenExchangeAmountChange = (event) => {
-        let inputValue = event.target.value
-        this.props.updateTokenExchangeAmount(inputValue)
-    }
-    _onDenominationInputChange = (event) => {
-        const nextDenom = denominations.find(function(denom) { return denom.name === event.target.value})
-        if ( nextDenom ) {
-            this.props.updateExchangeDenomination(nextDenom)
-        }
-    }
+    _onInputChange = ({baseInputValue, denominationValue, denomination}) => {
+        this.props.updateTokenExchangeAmount(baseInputValue)
+        // this.props.updateExchangeDenomination(denomination)  // TODO: remove
+    }    
     _handlePurchase = () => {
         const { exchangeAmountToken, exchangeDenomination, exchangeRate } = this.props.exchange
         this.props.purchaseTokens( exchangeAmountToken, exchangeDenomination, exchangeRate )
@@ -73,7 +65,7 @@ class Exchange extends Component<Props> {
         const formDisabled = !ethAddress || exchangeInProgress
         const showExchangeTransactionMessage = exchangeTransaction.error || exchangeTransaction.initialized || exchangeTransaction.transactionHash || exchangeTransaction.result
         const formattedTokenBalance = formattedTokenAmount(wallet.tokenBalance)
-        const ethCostInCurrentDenomination = exchangeAmountToken.multipliedBy(Math.pow(10, exchangeDenomination.powerOfTen)).multipliedBy(exchangeRate)
+        const ethCost = exchangeAmountToken.multipliedBy(exchangeRate)
         return (
             <div className={`Exchange ${formDisabled ? 'disabled' : ''}`} style={{backgroundColor: theme.palette.background.default}}>
                 <Typography variant="title" align="center" style={{marginBottom: 0}}>{title}</Typography>
@@ -110,26 +102,11 @@ class Exchange extends Component<Props> {
                     </Grid>
                     <Grid item xs={8}>
                         <div className="input-container" style={{backgroundColor: theme.palette.type === 'dark' ? '#333333' : '#AAAAAA'}}>
-                            <TextField 
-                                fullWidth 
-                                InputProps={{
-                                    disableUnderline: true,
-                                    type: "number"
-                                }}
-                                value={exchange.exchangeAmountToken.toString()}
-                                onChange={this._onTokenExchangeAmountChange}
+                            <DenominationInput 
+                                baseInputValue={exchange.exchangeAmountToken}
                                 disabled={formDisabled}
+                                onChange={this._onInputChange}
                             />
-                            <DenominationSelect
-                                native
-                                value={exchange.exchangeDenomination.name}
-                                onChange={this._onDenominationInputChange}
-                                disableUnderline={true}
-                                >
-                                {denominations.map((denomination) => (
-                                    <option key={denomination.name} value={denomination.name}>{`${denomination.prefix} AO`}</option>
-                                ))}
-                            </DenominationSelect>
                         </div>                        
                     </Grid>
                 </Grid>
@@ -138,8 +115,8 @@ class Exchange extends Component<Props> {
                         <Typography variant="caption">{'cost'}</Typography>
                     </Grid>
                     <Grid item xs={8}>
-                        <Typography variant="subheading">{`${ethCostInCurrentDenomination.toNumber()} ETH`}</Typography>
-                        {ethCostInCurrentDenomination.gte(wallet.ethBalance) ? (
+                        <Typography variant="subheading">{`${ethCost.toNumber()} ETH`}</Typography>
+                        {ethCost.gte(wallet.ethBalance) ? (
                             <Typography variant="caption" color="error" style={{marginTop: -2}}>{`max ETH balance reached!`}</Typography>
                         ) : null}
                     </Grid>

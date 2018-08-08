@@ -10,39 +10,54 @@ import ReplayIcon from '@material-ui/icons/Replay';
 import { BackButton, PrimaryButton } from './UploadFormNavButtons';
 import '../styles/upload-form-submit.css';
 import { Prompt } from 'react-router';
+import EtherscanLink from '../../etherscan/EtherscanLink';
+import LinearProgress from '@material-ui/core/LinearProgress';
 
 
 type Props = {
+    // Redux bound state
     form: Object,
     stakeTransaction: {
+        initialized: any,
+        transactionHash: any,
         result: any,
-        error: any
+        error: any,
     },
-    triggerStakeTransaction: Function,
+    contentSubmittionResult: any,
+    // Redux connected props
+    stakeContent: Function,
+    setContentSubmittionResult: Function,
+    updateLastReachedStep: Function,
+    resetUploadForm: Function,
+    // Graphql connected props
     ...UploadFormMutationProps
 }
 
 class UploadFormSubmit extends Component<Props> {
     props: Props;
-    _triggerStakeTimeout: number;
     componentDidMount() {
-        const { updateLastReachedStep, form, stakeTransaction } = this.props
+        const { updateLastReachedStep, form, stakeTransaction, submitContentLoading, contentSubmittionResult } = this.props
         updateLastReachedStep('submit')
-        // NOTE: need to account for the user coming back to this view after they already started upload process
-        // TODO: check if form is valid
-        if ( form.video && !stakeTransaction.error && !stakeTransaction.result ) {
-            this._triggerStakeTimeout = setTimeout(this._triggerStakeTransaction, 1500)            
+        if ( !form.video || !contentSubmittionResult && !submitContentLoading ) {
+            this._submitContent()
         }
     }
-    componentWillUnmount() {
-        clearTimeout(this._triggerStakeTimeout)
+    _submitContent = () => {
+        const { submitContent, setContentSubmittionResult } = this.props
+        submitContent().then(() => {
+            const contentSubmission = this.props.submitContentResult.data.submitVideoContent
+            setContentSubmittionResult(contentSubmission)        
+            this._stakeContent()
+        })
     }
-    _triggerStakeTransaction = () => {
-        this.props.triggerStakeTransaction().then(result => {
-            // Stake successful, proceed to submit content
-            this.props.submitContent()
-        }).catch(error => {
-            
+    _stakeContent = () => {
+        const { form, stakeContent, contentSubmittionResult } = this.props
+        stakeContent({
+            tokenAmount: form.stake,
+            primordialTokenAmount: 0, // TODO
+            datKey: contentSubmittionResult.datKey,
+            fileSizeInBytes: contentSubmittionResult.fileSize,
+            profitPercentage: form.profit,
         })
     }
     _cancel = () => {
@@ -88,34 +103,45 @@ class UploadFormSubmit extends Component<Props> {
     _renderActions() {
         const { submitContentResult, submitContentLoading, submitContentError, stakeTransaction } = this.props
         // logic in reverse order of event occurances
-        if ( submitContentResult ) {
+        if ( stakeTransaction.result ) {
             return (
                 <PrimaryButton onClick={this._continue}>{'continue'}</PrimaryButton>
-            )
-        } else if ( submitContentLoading ) {
-            return (
-                <BackButton onClick={this._cancel} disabled>{'cancel upload'}</BackButton>
-            )
-        } else if ( submitContentError ) {
-            // TODO: allow user to re-submit? Likely a bigger issue though :/
-            return (
-                <BackButton onClick={this._cancel}>{'cancel upload'}</BackButton>
-            )
-        } else if ( stakeTransaction.result ) {
-            return (
-                <BackButton onClick={this._cancel}>{'cancel upload'}</BackButton>
             )
         } else if ( stakeTransaction.error ) {
             return (
                 <React.Fragment>
                     <BackButton onClick={this._cancel}>{'cancel upload'}</BackButton>
-                    <PrimaryButton onClick={this._triggerStakeTransaction}>{'retry'}<ReplayIcon /></PrimaryButton>
+                    <PrimaryButton onClick={this._stakeContent}>{'stake content'}<ReplayIcon /></PrimaryButton>
+                </React.Fragment>
+            )
+        } else if ( stakeTransaction.transactionHash ) {
+            return (
+                <React.Fragment>
+                    <BackButton disabled onClick={this._cancel}>{'cancel upload'}</BackButton>
+                </React.Fragment>
+            )
+        } else if ( submitContentResult ) {
+            return (
+                <React.Fragment>
+                    <BackButton onClick={this._cancel}>{'cancel upload'}</BackButton>
+                    <PrimaryButton onClick={this._stakeContent}>{'stake content'}</PrimaryButton>
+                </React.Fragment>
+            )
+        } else if ( submitContentLoading ) {
+            return (
+                <React.Fragment>
+                    <BackButton onClick={this._cancel} disabled>{'cancel upload'}</BackButton>
+                </React.Fragment>
+            )
+        } else if ( submitContentError ) {
+            // TODO: allow user to re-submit? Likely a bigger issue though :/
+            return (
+                <React.Fragment>
+                    <BackButton onClick={this._cancel}>{'cancel upload'}</BackButton>
                 </React.Fragment>
             )
         } else {
-            return (
-                <BackButton onClick={this._cancel}>{'cancel upload'}</BackButton>
-            )
+            return null // ?
         }
     }
     _renderUploadState() {
@@ -126,7 +152,31 @@ class UploadFormSubmit extends Component<Props> {
             textAlign: 'center',
         }
         // logic in reverse order of event occurances
-        if ( submitContentResult ) {
+        if ( stakeTransaction.result ) {
+            return (
+                <React.Fragment>
+                    <Typography variant="body1">{'Content succesfully staked!'}</Typography>
+                    <Typography variant="caption" style={messageStyle}>{'You can now view your content and update your staking parameters within your account view.'}</Typography>
+                </React.Fragment>
+            )
+        } else if ( stakeTransaction.error ) {
+            return (
+                <React.Fragment>
+                    <Typography variant="body1">{'Stake transaction error'}</Typography>
+                    <Typography variant="caption" style={messageStyle}>{stakeTransaction.error.message}</Typography>
+                </React.Fragment>
+            )
+        } else if ( stakeTransaction.transactionHash ) {
+            return (
+                <React.Fragment>
+                    <Typography variant="body1">{'Staking transaction in progress...'}</Typography>
+                    <Typography variant="caption" style={messageStyle}>
+                        <EtherscanLink type="tx" value={stakeTransaction.transactionHash} />
+                    </Typography>
+                    <LinearProgress color="primary" style={{position: 'absolute', bottom: 16, left: 16, right: 16}}/>
+                </React.Fragment>
+            )
+        } else if ( submitContentResult ) {
             return (
                 <React.Fragment>
                     <CheckIcon color="primary" style={{ fontSize: 48 }} />
@@ -137,6 +187,7 @@ class UploadFormSubmit extends Component<Props> {
             return (
                 <React.Fragment>
                     <Typography variant="body1">{'registering content...'}</Typography>
+                    <LinearProgress color="primary" style={{position: 'absolute', bottom: 16, left: 16, right: 16}}/>
                 </React.Fragment>
             )
         } else if ( submitContentError ) {
@@ -146,26 +197,8 @@ class UploadFormSubmit extends Component<Props> {
                     <Typography variant="caption" style={messageStyle}>{submitContentError.message}</Typography>
                 </React.Fragment>
             )
-        } else if ( stakeTransaction.result ) {
-            return (
-                <React.Fragment>
-                    <Typography variant="body1">{'Stake transaction success'}</Typography>
-                    <Typography variant="caption" style={messageStyle}>{stakeTransaction.result}</Typography>
-                </React.Fragment>
-            )
-        } else if ( stakeTransaction.error ) {
-            return (
-                <React.Fragment>
-                    <Typography variant="body1">{'Stake transaction error'}</Typography>
-                    <Typography variant="caption" style={messageStyle}>{stakeTransaction.error.message}</Typography>
-                </React.Fragment>
-            )
         } else {
-            return (
-                <React.Fragment>
-                    <Typography variant="body1">{'Waiting for stake transaction...'}</Typography>
-                </React.Fragment>
-            )
+            return null // ?
         }
     }
 }

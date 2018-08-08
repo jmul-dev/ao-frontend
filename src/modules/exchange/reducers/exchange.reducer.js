@@ -18,67 +18,64 @@ export const UPDATE_EXCHANGE_DENOMINATION = 'UPDATE_EXCHANGE_DENOMINATION'
 
 
 // Actions
-export const purchaseTokens = ( exchangeAmountToken, exchangeDenomination, exchangeRate ) => {
+export const purchaseTokens = ( baseAmount, exchangeRate ) => {
     return (dispatch, getState) => {
-        return new Promise((resolve, reject) => {
-            const rejectAndDispatchError = (err) => {
-                dispatch({
-                    type: EXCHANGE_TRANSACTION.ERROR,
-                    payload: err
-                })
-                reject(err)
-            }
-            const state = getState()
-            const { app, contracts, electron, wallet } = state
-            const ethCost = exchangeAmountToken.multipliedBy(Math.pow(10, exchangeDenomination.powerOfTen)).multipliedBy(exchangeRate)
-            if ( !app.ethAddress ) {
-                rejectAndDispatchError(new Error('Unlock your ethereum account to purchase AO'))
-            } else if ( wallet.ethBalance.lt( ethCost ) ) {
-                rejectAndDispatchError(new Error('Insufficient Eth balance'))
-            } else {
-                dispatch({type: EXCHANGE_TRANSACTION.INITIALIZED})
-                if ( electron.isElectron ) {
-                    window.chrome.ipcRenderer.send('open-metamask-popup')
-                }                
-                contracts.aoToken.icoEnded(function(err, ended) {
-                    if ( err ) {
-                        rejectAndDispatchError(err)
-                    } else if ( ended ) {
-                        rejectAndDispatchError(new Error('The AO ICO has ended, you can no longer purchase AO tokens directly through the contract.'))
-                    } else {
-                        const ethCostInWei = new BigNumber(window.web3.toWei(ethCost, 'ether'))                                                
-                        contracts.aoToken.buyIcoToken.sendTransaction({
-                            from: app.ethAddress,
-                            value: ethCostInWei.toNumber()
-                        }, function(err, transactionHash) {
-                            if ( err ) {
-                                rejectAndDispatchError(err)
-                            } else {
-                                let eventListener = contracts.aoToken.LotCreation({lotOwner: app.ethAddress}, function(error, result) {
-                                    if ( result && result.transactionHash == transactionHash ) {
-                                        dispatch({
-                                            type: EXCHANGE_TRANSACTION.RESULT,
-                                            payload: result.args
-                                        })
-                                        dispatch(getEthBalanceForAccount(app.ethAddress))
-                                        dispatch(getTokenBalanceForAccount(app.ethAddress))
-                                        eventListener.stopWatching()
-                                    }
-                                })
-                                dispatch({
-                                    type: EXCHANGE_TRANSACTION.SUBMITTED,
-                                    payload: transactionHash
-                                })
-                                waitForTransactionReceipt(transactionHash).catch(err => {
+        const dispatchError = (err) => {
+            dispatch({
+                type: EXCHANGE_TRANSACTION.ERROR,
+                payload: err
+            })
+        }
+        const state = getState()
+        const { app, contracts, electron, wallet } = state
+        const ethCost = baseAmount.multipliedBy(exchangeRate)
+        if ( !app.ethAddress ) {
+            dispatchError(new Error('Unlock your ethereum account to purchase AO'))
+        } else if ( wallet.ethBalance.lt( ethCost ) ) {
+            dispatchError(new Error('Insufficient Eth balance'))
+        } else {
+            dispatch({type: EXCHANGE_TRANSACTION.INITIALIZED})
+            if ( electron.isElectron ) {
+                window.chrome.ipcRenderer.send('open-metamask-popup')
+            }                
+            contracts.aoToken.icoEnded(function(err, ended) {
+                if ( err ) {
+                    dispatchError(err)
+                } else if ( ended ) {
+                    dispatchError(new Error('The AO ICO has ended, you can no longer purchase AO tokens directly through the contract.'))
+                } else {
+                    const ethCostInWei = new BigNumber(window.web3.toWei(ethCost, 'ether'))                                                
+                    contracts.aoToken.buyIcoToken.sendTransaction({
+                        from: app.ethAddress,
+                        value: ethCostInWei.toNumber()
+                    }, function(err, transactionHash) {
+                        if ( err ) {
+                            dispatchError(err)
+                        } else {
+                            let eventListener = contracts.aoToken.LotCreation({lotOwner: app.ethAddress}, function(error, result) {
+                                if ( result && result.transactionHash == transactionHash ) {
+                                    dispatch({
+                                        type: EXCHANGE_TRANSACTION.RESULT,
+                                        payload: result.args
+                                    })
+                                    dispatch(getEthBalanceForAccount(app.ethAddress))
+                                    dispatch(getTokenBalanceForAccount(app.ethAddress))
                                     eventListener.stopWatching()
-                                    rejectAndDispatchError(err)
-                                })
-                            }
-                        })
-                    }
-                })                
-            }
-        })     
+                                }
+                            })
+                            dispatch({
+                                type: EXCHANGE_TRANSACTION.SUBMITTED,
+                                payload: transactionHash
+                            })
+                            waitForTransactionReceipt(transactionHash).catch(err => {
+                                eventListener.stopWatching()
+                                dispatchError(err)
+                            })
+                        }
+                    })
+                }
+            })                
+        }
     }
 }
 
@@ -103,7 +100,7 @@ export const getExchangeRate = () => {
     }
 }
 
-export const updateTokenExchangeAmount = (tokenAmount, denomination) => {
+export const updateTokenExchangeAmount = (tokenAmount) => {
     return (dispatch, getState) => {
         const state = getState()
         // Verify that the tokenAmount * exchangeRate <= wallet balance
@@ -148,7 +145,7 @@ export const updateExchangeDenomination = (denomination) => {
 const initialState = {
     exchangeRate: new BigNumber(0),  // eth/AO
     exchangeAmountEth: new BigNumber(0),  // eth
-    exchangeAmountToken: new BigNumber(0),  // AO
+    exchangeAmountToken: new BigNumber(Math.pow(10, 9)),  // 1 Giga AO
     exchangeDenomination: denominations[2],
     exchangeTransaction: {
         initialized: undefined,

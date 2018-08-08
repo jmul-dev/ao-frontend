@@ -23,7 +23,9 @@ export const waitForTransactionReceipt = (transactionHash) => {
                     filter.stopWatching()
                     // The TX has been added to the chain, now determine status
                     if ( receipt.status === '0x0' ) {
-                        reject(new Error(`Transaction failed`))
+                        console.log(receipt)
+                        let error = new Error(`Transaction failed`)
+                        reject(error)
                     } else {
                         resolve()
                     }

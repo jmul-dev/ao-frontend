@@ -16,3 +16,6 @@
     margin-left: 12px;
     margin-right: 12px;
 }
+.OverviewAside ul li > :last-child {
+    flex-shrink: 0;
+}
