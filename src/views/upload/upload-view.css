@@ -98,20 +98,7 @@
     font-size: 1.5rem;
 }
 .UploadView .custom-pricing .stake-input-container {
-    display: flex;
-    align-items: center;
     margin-top: 16px;
-}
-.UploadView .custom-pricing .stake-input-container > :first-child {
-    margin-right: 8px;
-}
-.UploadView .custom-pricing .stake-input-container input {
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    text-align: right;
-    width: 140px;
-    font-size: 1.5rem;
-    color: var(--brand-secondary);
 }
 .UploadView .custom-pricing .custom-pricing-tooltip {
     margin-left: -24px;

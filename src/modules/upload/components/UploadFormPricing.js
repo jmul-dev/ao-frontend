@@ -16,7 +16,8 @@ import OverviewAside from './OverviewAside';
 import { withTheme } from '@material-ui/core/styles';
 import { compose } from 'react-apollo';
 import withUserWallet from '../../wallet/containers/withUserWallet';
-import { TokenBalance } from '../../../utils/denominations';
+import { TokenBalance, DenominationInput } from '../../../utils/denominations';
+import BigNumber from 'bignumber.js';
 
 
 const PricingInputCard = withTheme()(({headline, label, iconClassName, stake, profit, selected, onClick, theme}) => (
@@ -59,15 +60,14 @@ const CustomPricingCard = withTheme()(({expanded, stake, profit, onSelected, onC
         <ExpansionPanelDetails>
             <div>
                 <div className="gutter-bottom">
-                    <Typography>{'1. How much would you like to charge?'}</Typography>
+                    <Typography>{'1. How much would you like to charge (AO/view)?'}</Typography>
                     <div className="stake-input-container indent">
-                        <Input 
-                            type="number"
-                            disableUnderline={true}
-                            value={stake}
-                            onChange={(event) => onChange(parseInt(event.target.value, 10))}
-                        />
-                        <Typography>{'ao/view'}</Typography>
+                        <div style={{background: '#CCC', maxWidth: 300, padding: 6, borderRadius: 3}}>
+                            <DenominationInput 
+                                baseInputValue={new BigNumber(stake)}
+                                onChange={({baseInputValue}) => onChange(baseInputValue)}
+                            />
+                        </div>
                     </div>
                 </div>
                 <div className="gutter-bottom">

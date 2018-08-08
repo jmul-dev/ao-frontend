@@ -103,7 +103,7 @@ class Exchange extends Component<Props> {
                     <Grid item xs={8}>
                         <div className="input-container" style={{backgroundColor: theme.palette.type === 'dark' ? '#333333' : '#AAAAAA'}}>
                             <DenominationInput 
-                                baseInputValue={exchange.exchangeAmountToken.toNumber()}
+                                baseInputValue={exchange.exchangeAmountToken}
                                 disabled={formDisabled}
                                 onChange={this._onInputChange}
                             />
