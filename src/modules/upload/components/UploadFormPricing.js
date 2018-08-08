@@ -16,6 +16,7 @@ import OverviewAside from './OverviewAside';
 import { withTheme } from '@material-ui/core/styles';
 import { compose } from 'react-apollo';
 import withUserWallet from '../../wallet/containers/withUserWallet';
+import { TokenBalance } from '../../../utils/denominations';
 
 
 const PricingInputCard = withTheme()(({headline, label, iconClassName, stake, profit, selected, onClick, theme}) => (
@@ -25,11 +26,16 @@ const PricingInputCard = withTheme()(({headline, label, iconClassName, stake, pr
         <div className="pricing-table">
             <div>
                 <Typography variant="caption">{'you stake'}</Typography>
-                <Typography variant="body2">{`${stake}ao`}</Typography>
+                <Typography variant="body2">
+                    <TokenBalance baseAmount={stake} decimals={1} includeAO={true} />
+                </Typography>
             </div>
             <div>
                 <Typography variant="caption">{'you charge'}</Typography>
-                <Typography variant="body2">{`${stake}ao`} <Typography variant="caption" style={{display: 'inline'}}>{'/view'}</Typography></Typography>
+                <Typography variant="body2">
+                    <TokenBalance baseAmount={stake} decimals={1} includeAO={true} />
+                    <Typography variant="caption" style={{display: 'inline'}}>{' / view'}</Typography>
+                </Typography>
             </div>
             <div>
                 <Typography variant="caption">{'you make'}</Typography>
@@ -117,7 +123,7 @@ class UploadFormPricing extends Component {
         if ( !form.video ) {
             return <Redirect to={'/app/view/upload/start'} />
         }
-        const fileSizeInMb = ~~(form.video.size / 1000 / 1000)
+        const fileSize = form.video.size
         return (
             <div>
                 <Typography className="title" variant="title">
@@ -138,7 +144,7 @@ class UploadFormPricing extends Component {
                                         headline={'new content creators'}
                                         label={'great exposure'}
                                         iconClassName={'pricing-icon-a'}
-                                        stake={fileSizeInMb}
+                                        stake={fileSize}
                                         profit={10}
                                         selected={form.pricingOption === 1}
                                         onClick={this._selectPricingOption.bind(this, 1)}
@@ -149,7 +155,7 @@ class UploadFormPricing extends Component {
                                         headline={'established content creators'}
                                         label={'moderate pricing'}
                                         iconClassName={'pricing-icon-b'}
-                                        stake={~~(fileSizeInMb * 1.4)}
+                                        stake={~~(fileSize * 1.4)}
                                         profit={25}
                                         selected={form.pricingOption === 2}
                                         onClick={this._selectPricingOption.bind(this, 2)}
@@ -160,7 +166,7 @@ class UploadFormPricing extends Component {
                                         headline={'premium high demand content'}
                                         label={'premium pricing'}
                                         iconClassName={'pricing-icon-c'}
-                                        stake={~~(fileSizeInMb * 2.2)}
+                                        stake={~~(fileSize * 2.2)}
                                         profit={60}
                                         selected={form.pricingOption === 3}
                                         onClick={this._selectPricingOption.bind(this, 3)}

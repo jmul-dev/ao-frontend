@@ -15,17 +15,8 @@
 .Exchange .input-container {
     border: 1px solid #DDDDDD;
     background-color: #333333;
-    display: flex;
-    align-items: flex-end;
-    padding: 10px 24px;
+    padding: 8px;
     border-radius: 5px;
-}
-.Exchange .input-container input {
-    padding: 0 8px;
-    font-size: 50px;
-    color: #FFFFFF;
-    letter-spacing: 0;
-    text-align: right;
 }
 .Exchange .required-token-amount {
     position: absolute;

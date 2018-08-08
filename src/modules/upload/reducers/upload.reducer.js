@@ -69,19 +69,19 @@ export const updatePricingOption = (pricingOption, stake = undefined, profit = u
     return (dispatch, getState) => {
         const state = getState()
         const file = state.upload.form.video
-        const fileSizeInMb = ~~(file.size / 1000 / 1000)
+        const fileSize = file.size
         let payload = null
         if ( pricingOption > 0 ) {
             let pricingConstraints = PRICING_DEFAULTS[pricingOption - 1]
             payload = {
                 pricingOption,
-                stake: fileSizeInMb * pricingConstraints.stakeRatio,
+                stake: fileSize * pricingConstraints.stakeRatio,
                 profit: pricingConstraints.profitPercentage
             }
         } else {            
             payload = {
                 pricingOption,
-                stake: stake ? Math.max(stake, fileSizeInMb) : state.upload.form.stake,
+                stake: stake ? Math.max(stake, fileSize) : state.upload.form.stake,
                 profit: profit ? Math.min(Math.max(profit, 1), 99) : state.upload.form.profit,
             }
         }
