@@ -57,44 +57,56 @@ const snackbarStyles = ({palette, spacing}) => ({
     },
 })
 
-const NotificationSnackbar = ({classes, variant, message, theme, ...props}) => {
+const NotificationSnackbar = ({classes, variant, message, action, theme, onDismiss, ...props}) => {
     const Icon = variantIcon[variant]
+    let actions = []
+    if ( action === 'dismiss' ) {
+        actions.push((
+            <IconButton
+                key="close"
+                aria-label="Close"
+                color="inherit"
+                className={classes.action}
+                onClick={onDismiss}
+            >
+                <CloseIcon className={classes.icon} />
+            </IconButton>
+        ))
+    }
     return (
-        <Snackbar 
-            className={classes.root}
+        <Snackbar
             {...props}
+            className={classes.root}            
         >
             <SnackbarContent
                 className={classNames(classes.contentRoot, classes[variant])}
                 classes={{
                     action: classes.action,  
                     message: classes.message,                  
-                }}
-                aria-describedby="notification"
+                }}                
                 message={
                     <div className={classes.message}>
                         <Icon className={classes.variantIcon} />
                         {message}
                     </div>
                 }
-                action={[
-                    <IconButton
-                        key="close"
-                        aria-label="Close"
-                        color="inherit"
-                        className={classes.action}
-                    >
-                        <CloseIcon className={classes.icon} />
-                    </IconButton>,
-                ]}
+                action={actions}
+                aria-describedby="notification"
             />
         </Snackbar>
     )
 }
 
 NotificationSnackbar.propTypes = {
-    message: PropTypes.node,
+    message: PropTypes.node.isRequired,
     variant: PropTypes.oneOf(['warning', 'error', 'success']).isRequired,
+    action: PropTypes.oneOf(['dismiss']).isRequired,
+    onDismiss: PropTypes.func.isRequired,
+}
+
+NotificationSnackbar.defaultProps = {
+    variant: 'warning',
+    action: 'dismiss',
 }
 
 export default withStyles(snackbarStyles, {withTheme: true})( NotificationSnackbar )

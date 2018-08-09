@@ -5,51 +5,71 @@
  * This is a chance to render what is happening in the background
  * and possibly notify user that we cannot connect to ao-core.
  */
-import React from 'react';
+import React, { Component } from 'react';
 import IpcLogs from '../../modules/electron/components/IpcLogs';
 import { connect } from 'react-redux';
 import Typography from '@material-ui/core/Typography';
-import Snackbar from '@material-ui/core/Snackbar';
-import NotificationSnackbar from '../../modules/notifications/components/NotificationSnackbar'
 import Lottie from 'react-lottie';
-import * as loadingAnimation from './loadingAnimation.json'
+import * as loadingAnimation from './loadingAnimation.json';
+import { addNotification, dismissNotification } from '../../modules/notifications/reducers/notifications.reducer'
 
 
-const BootLayout = ({networkError, states, isElectron}) => (
-    <div className="BootLayout">
-        <div className="loading-container" style={{padding: 16}}>
-            <Typography variant="body1" style={{color: '#03B742'}}>{'starting up...'}</Typography>
-            <div style={{position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: '#000000', zIndex: -1}}>
-                <Lottie
-                    style={{position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)'}}
-                    height={1000}
-                    width={1000}
-                    options={{
-                        loop: true,
-                        autoplay: true,
-                        animationData: loadingAnimation,
-                        rendererSettings: {
-                            preserveAspectRatio: 'xMidYMid slice'
-                        }
-                    }}
-                />
+class BootLayout extends Component {
+    constructor() {
+        super()        
+    }
+    componentDidMount() {
+        this._connectionTimeout = setTimeout(() => {
+            this._networkErrorNotId = this.props.addNotification({
+                message: `Unable to connect to ao-core, make sure it is running at: ${window.AO_CORE_URL}`,
+                variant: 'warning',
+            })
+        }, 3000)
+    }
+    componentWillUnmount() {
+        clearTimeout(this._connectionTimeout)
+        if ( this._networkErrorNotId ) {
+            this.props.dismissNotification(this._networkErrorNotId)
+        }
+    }
+    render() {
+        const { networkError, states, isElectron } = this.props
+        return (
+            <div className="BootLayout">
+                <div className="loading-container" style={{padding: 16}}>
+                    <Typography variant="body1" style={{color: '#03B742', position: 'relative', zIndex: 1}}>{'starting up...'}</Typography>
+                    <div style={{position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: '#000000', zIndex: 0}}>
+                        <Lottie
+                            style={{position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)'}}
+                            height={1000}
+                            width={1000}
+                            options={{
+                                loop: true,
+                                autoplay: true,
+                                animationData: loadingAnimation,
+                                rendererSettings: {
+                                    preserveAspectRatio: 'xMidYMid slice'
+                                }
+                            }}
+                        />
+                    </div>
+                </div>        
+                {isElectron ? (
+                    <IpcLogs />
+                ) : null}
             </div>
-        </div>        
-        {isElectron ? (
-            <IpcLogs />
-        ) : null}
-        <NotificationSnackbar
-            open={!!networkError}
-            variant="warning"
-            message={`Unable to connect to ao-core, make sure it is running at: ${window.AO_CORE_URL}`}
-        />
+        )
+    }
+}
 
-    </div>
-)
+const mapDispatchToProps = {
+    addNotification,
+    dismissNotification,
+}
 
 const mapStateToProps = (state) => ({
     states: state.app.states,
     isElectron: state.electron.isElectron,
 })
 
-export default connect(mapStateToProps)(BootLayout)
+export default connect(mapStateToProps, mapDispatchToProps)(BootLayout)
