@@ -9,6 +9,7 @@ import moment from 'moment';
 import Collapse from '@material-ui/core/Collapse';
 import '../styles/account-video-listing.css';
 import { compose } from 'react-apollo';
+import { TokenBalance } from '../../../utils/denominations'
 
 
 class AccountVideoListItem extends Component {
@@ -38,10 +39,10 @@ class AccountVideoListItem extends Component {
                             {video.title}
                         </Typography>
                         <Typography variant="body1" gutterBottom color="textSecondary">
-                            {`uploaded: ${moment(video.createdAt).format('M/D/YYYY')}`}
+                            {`uploaded: ${moment(parseInt(video.createdAt)).format('M/D/YYYY')}`}
                         </Typography>
-                        <Typography variant="body1" gutterBottom color="textSecondary">
-                            {`XXX ao earned | ${video.stake}ao staked`}
+                        <Typography variant="body1" gutterBottom color="textSecondary">                            
+                            <TokenBalance baseAmount={video.stake} includeAO={true} />{' staked'}
                         </Typography>
                         <Typography className="description" variant="body1" gutterBottom color="textSecondary">
                             {video.description}
