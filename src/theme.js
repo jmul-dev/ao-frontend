@@ -61,7 +61,7 @@ export const darkTheme = createMuiTheme({
         // custom palette colors
         warning: {
             main: '#FFBE00'
-        },        
+        },
     },
     overrides: {
         MuiButton: {
@@ -106,8 +106,15 @@ export const lightTheme = createMuiTheme({
             main: '#4A546D',
             contrastText: "#FFFFFF",
         },
+        error: {
+            main: '#f44336'
+        },
         background: {
             default: '#F8F8F8'
+        },
+        // custom palette colors
+        warning: {
+            main: '#FFBE00'
         },
     },
     overrides: {
