@@ -1,0 +1,14 @@
+.IpcLogs {
+    position: fixed;
+    top: 48px;
+    bottom: 0;
+    padding-bottom: 78px;
+    right: 16px;
+    overflow: auto;
+    left: 16px;
+    z-index: 99;
+    color: #333;
+}
+.IpcLogs > div {
+    margin-bottom: 4px;
+}

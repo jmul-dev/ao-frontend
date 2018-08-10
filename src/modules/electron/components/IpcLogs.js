@@ -1,6 +1,7 @@
 // @flow
 import React, { Component } from 'react';
 import withElectronEventLogs from '../containers/withElectronEventLogs';
+import '../styles/ipc-logs.css';
 
 
 type Props = {
