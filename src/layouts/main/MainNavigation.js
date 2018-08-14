@@ -2,7 +2,7 @@
 import React from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
-import { LogoIcon, AccountIcon, UploadIcon, SettingsIcon } from '../../assets/Icons';
+import { LogoIcon, AccountIcon, UploadIcon, SettingsIcon, MetamaskIcon } from '../../assets/Icons';
 import { connect } from 'react-redux';
 import classnames from 'classnames';
 import { withRouter } from 'react-router';
@@ -13,7 +13,11 @@ const AccountLink = ({overlayViewsActive, ...props}) => <NavLink to="/app/view/a
 const UploadLink = ({overlayViewsActive, ...props}) => <NavLink to="/app/view/upload" replace={overlayViewsActive} {...props} />
 const SettingsLink = ({overlayViewsActive, ...props}) => <NavLink to="/app/view/settings" replace={overlayViewsActive} {...props} />
 
-const MainNavigation = ({teaserListingActive, overlayViewsActive, light, dark}) => (
+const openMetamask = () => {
+    window.chrome.ipcRenderer.send('open-metamask-popup')
+}
+
+const MainNavigation = ({isElectron, teaserListingActive, overlayViewsActive, light, dark}) => (
     <nav className={classnames('MainNavigation', {light, dark, offcanvas: teaserListingActive})}>
         <div style={{display: 'flex'}}>
             <Button component={BrowseLink} overlayViewsActive={overlayViewsActive}>
@@ -28,13 +32,19 @@ const MainNavigation = ({teaserListingActive, overlayViewsActive, light, dark}) 
             <Button component={SettingsLink} overlayViewsActive={overlayViewsActive}>
                 <SettingsIcon color={light ? '#000000' : '#FFFFFF'} />
             </Button>
+            {isElectron ? (
+                <Button style={{height: 80, marginTop: 'auto'}} onClick={openMetamask}>
+                    <MetamaskIcon />
+                </Button>
+            ) : null}
         </div>
     </nav>
 )
 const mapStateToProps = (store) => {
     return {
         teaserListingActive: store.video.teaserListingActive,
-        overlayViewsActive: store.router.location.pathname.indexOf('/app/view') > -1
+        overlayViewsActive: store.router.location.pathname.indexOf('/app/view') > -1,
+        isElectron: store.electron.isElectron,
     }
 }
 export default withRouter(connect(mapStateToProps)(MainNavigation))
