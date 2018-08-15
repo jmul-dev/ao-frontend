@@ -4,11 +4,13 @@ import { graphql, compose } from 'react-apollo'
 import gql from "graphql-tag"
 import { localNodeQuery } from '../../../AppContainer'
 import withStateMutation from '../../../utils/withStateMutation'
+import { APP_STATES } from '../../../store/app.reducer'
 
 // Redux
 const mapStateToProps = (store) => {
     return {
         ethAddress: store.app.ethAddress,
+        coreConnected: store.app.states[APP_STATES.CORE_CONNECTED],
     }
 }
 

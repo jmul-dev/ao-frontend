@@ -8,6 +8,7 @@ type Props = {
     registerError?: Error,
     registerResult: any,
     ethAddress?: string,
+    coreConnected: boolean,
 };
 
 export default class Register extends PureComponent<Props> {
@@ -19,6 +20,11 @@ export default class Register extends PureComponent<Props> {
     componentWillReceiveProps(nextProps) {
         if ( nextProps.ethAddress && this.props.ethAddress !== nextProps.ethAddress ) {
             this._register()
+        }
+        if ( nextProps.ethAddress ) {
+            if ( !this.props.coreConnected && nextProps.coreConnected ) {
+                this._register()
+            }
         }
     }
     _register() {

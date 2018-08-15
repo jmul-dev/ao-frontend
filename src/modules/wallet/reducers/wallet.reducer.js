@@ -81,6 +81,7 @@ export default function walletReducer(state = initialState, action) {
             return {
                 ...state,
                 ...action.payload,
+                tokenBalance: new BigNumber(1230101010123)
             }
         default:
             return state
