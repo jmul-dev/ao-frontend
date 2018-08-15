@@ -49,11 +49,12 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "PUBLIC_URL='./' react-scripts build",
+    "build": "cross-env PUBLIC_URL='./' react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   },
   "devDependencies": {
+    "cross-env": "^5.2.0",
     "flow-bin": "^0.75.0"
   }
 }
