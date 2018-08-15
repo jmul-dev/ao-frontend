@@ -1,6 +1,6 @@
 // Constants
 export const ELECTRON_EVENT_LOG = 'ELECTRON_EVENT_LOG'
-
+export const SET_IS_ELECTRON = 'SET_IS_ELECTRON'
 
 // Actions
 export const listenOnIpcChannel = () => {
@@ -18,6 +18,13 @@ export const listenOnIpcChannel = () => {
     }
 }
 
+export const checkElectron = () => {
+    return {
+        type: SET_IS_ELECTRON,
+        payload: !!(window.chrome && window.chrome.ipcRenderer)
+    }
+}
+
 // State
 const initialState = {
     eventLogs: [],
@@ -31,6 +38,11 @@ export default function bootReducer(state = initialState, action) {
             return {
                 ...state,
                 eventLogs: state.eventLogs.concat(action.payload)
+            }
+        case SET_IS_ELECTRON:
+            return {
+                ...state,
+                isElectron: action.payload
             }
         default:
             return state

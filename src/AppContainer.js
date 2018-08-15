@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { graphql, compose } from 'react-apollo'
 import gql from "graphql-tag"
 import { connectToWeb3, updateAppState } from './store/app.reducer'
-import { listenOnIpcChannel } from './modules/electron/reducers/electron.reducer'
+import { listenOnIpcChannel, checkElectron } from './modules/electron/reducers/electron.reducer'
 
 // Redux
 const mapStateToProps = (store) => {
@@ -15,6 +15,7 @@ const mapDispatchToProps = {
     connectToWeb3,
     updateAppState,
     listenOnIpcChannel,
+    checkElectron,
 }
 
 // Graphql

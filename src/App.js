@@ -25,12 +25,14 @@ type Props = {
     updateAppState: Function,
     connectToWeb3: Function,
     listenOnIpcChannel: Function,
+    checkElectron: Function,
 };
 
 export default class App extends Component<Props> {
     props: Props;
     componentDidMount() {
-        const { app, connectToWeb3, listenOnIpcChannel } = this.props
+        const { app, connectToWeb3, listenOnIpcChannel, checkElectron } = this.props
+        checkElectron()
         listenOnIpcChannel()
         if ( app.states[APP_STATES.WEB3_AVAILABLE] ) {
             window.web3.version.getNetwork((error, networkId) => {
