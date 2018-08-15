@@ -55,7 +55,7 @@ class UploadFormSubmit extends Component<Props> {
         stakeContent({
             tokenAmount: form.stake,
             primordialTokenAmount: 0, // TODO
-            datKey: contentSubmittionResult.datKey,
+            datKey: contentSubmittionResult.metadataDatKey,
             fileSizeInBytes: contentSubmittionResult.fileSize,
             profitPercentage: form.profit,
         })

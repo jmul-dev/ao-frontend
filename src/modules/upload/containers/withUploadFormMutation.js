@@ -32,7 +32,7 @@ const mapStateToProps = (store) => {
 const submitContentMutation = gql(`
     mutation submitVideoContent($inputs: VideoContentSubmissionInputs) {
         submitVideoContent(inputs: $inputs) {
-            id, datKey, fileSize
+            id, metadataDatKey, fileSize
         }
     }
 `)
