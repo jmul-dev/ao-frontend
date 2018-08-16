@@ -98,7 +98,7 @@ export const fromBaseToHighestDenomination = (baseAmount) => {
     }
 }
 
-export const formattedTokenAmount = (baseAmount, decimals = 2, includeAO = true) => {
+export const formattedTokenAmount = (baseAmount, decimals = 2, includeAO = true, isPrimordial = false) => {
     const { denomination, amount } = fromBaseToHighestDenomination(baseAmount)
     let value = `${amount.toFixed(decimals)}`
     let label = ''
@@ -106,14 +106,16 @@ export const formattedTokenAmount = (baseAmount, decimals = 2, includeAO = true)
         label += ` ${denomination.prefix}`
     if ( includeAO )
         label += ' AO'
+    if ( includeAO && isPrimordial )
+        label += '+'
     return {
         value, 
         label,
     }
 }
 
-export const TokenBalance = ({baseAmount, decimals, includeAO}) => {
-    const { value, label } = formattedTokenAmount(baseAmount, decimals, includeAO)
+export const TokenBalance = ({baseAmount, decimals, includeAO, isPrimordial}) => {
+    const { value, label } = formattedTokenAmount(baseAmount, decimals, includeAO, isPrimordial)
     return (
         <Fragment>{value} {label}</Fragment>
     )
