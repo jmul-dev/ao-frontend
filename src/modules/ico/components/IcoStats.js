@@ -17,6 +17,9 @@ type Props = {
 
 class IcoStats extends Component<Props> {
     props: Props;
+    componentDidMount() {
+        this.props.updateIcoState()
+    }
     render() {
         const { icoTotalSupply, icoMaxSupply } = this.props.ico
         const icoPercentageComplete = icoTotalSupply.div(icoMaxSupply).times(100).toFixed(0)
