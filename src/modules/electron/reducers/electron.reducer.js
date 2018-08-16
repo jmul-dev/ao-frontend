@@ -14,6 +14,9 @@ export const listenOnIpcChannel = () => {
                     payload: data
                 })
             })
+            window.onerror = function(error, url, line) {
+                window.chrome.ipcRenderer.send('mainWindowError', error);
+            }
         }        
     }
 }
