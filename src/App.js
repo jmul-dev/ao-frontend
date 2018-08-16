@@ -59,8 +59,9 @@ export default class App extends Component<Props> {
     }
     render() {
         const { query, app } = this.props
+        const includeDevBar = false // process.env.NODE_ENV !== 'production'
         return (
-            <div className={`App ${process.env.NODE_ENV !== 'production' ? 'development-bar-spacing' : ''}`}>                
+            <div className={`App ${includeDevBar ? 'development-bar-spacing' : ''}`}>                
                 {!app.states[APP_STATES.CORE_READY] ? (
                     <BootLayout networkError={query.error} />
                 ) : (
@@ -70,7 +71,7 @@ export default class App extends Component<Props> {
                     </React.Fragment>
                 )}
                 <Notifications />
-                {process.env.NODE_ENV !== 'production' ? (
+                {includeDevBar ? (
                     <DevelopmentBarContainer />
                 ):null}
             </div>

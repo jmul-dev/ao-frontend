@@ -1,7 +1,5 @@
 // @flow
 import React, { Component } from 'react';
-import IconButton from '@material-ui/core/IconButton';
-import SearchIcon from '@material-ui/icons/Search';
 import Exchange from './Exchange';
 import Modal from '@material-ui/core/Modal';
 import { LogoIcon } from '../../../assets/Icons';

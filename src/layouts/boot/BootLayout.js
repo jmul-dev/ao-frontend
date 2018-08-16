@@ -15,9 +15,6 @@ import { addNotification, dismissNotification } from '../../modules/notification
 
 
 class BootLayout extends Component {
-    constructor() {
-        super()        
-    }
     componentDidMount() {
         this._connectionTimeout = setTimeout(() => {
             this._networkErrorNotId = this.props.addNotification({
@@ -33,7 +30,7 @@ class BootLayout extends Component {
         }
     }
     render() {
-        const { networkError, states, isElectron } = this.props
+        const { isElectron } = this.props
         return (
             <div className="BootLayout">
                 <div className="loading-container" style={{padding: 16}}>

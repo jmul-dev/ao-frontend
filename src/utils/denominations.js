@@ -152,7 +152,7 @@ export class DenominationInput extends Component {
     }
     constructor(props) {
         super(props)
-        const { denomination, amount } = fromBaseToHighestDenomination(props.baseInputValue || Math.pow(10, 9))
+        const { denomination } = fromBaseToHighestDenomination(props.baseInputValue || Math.pow(10, 9))
         this.state = {
             denomination: denomination,
         }
@@ -171,7 +171,7 @@ export class DenominationInput extends Component {
     _onDenominationInputChange = (event) => {
         const nextDenom = denominations.find(function(denom) { return denom.name === event.target.value})
         if ( nextDenom ) {
-            const baseInputValue = parseInt(this.props.baseInputValue) || Math.pow(10, 9)
+            const baseInputValue = parseInt(this.props.baseInputValue, 10) || Math.pow(10, 9)
             const amountInDenomination = new BigNumber(baseInputValue / Math.pow(10, nextDenom.powerOfTen))
             this.setState({
                 denomination: nextDenom,
@@ -195,6 +195,7 @@ export class DenominationInput extends Component {
                         disableUnderline: true,
                         type: "number",                        
                     }}
+                    // eslint-disable-next-line
                     inputProps={{
                         style: {
                             padding: '0 8px',

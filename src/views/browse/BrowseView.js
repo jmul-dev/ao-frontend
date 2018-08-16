@@ -5,7 +5,6 @@ import IconButton from '@material-ui/core/IconButton';
 import SearchIcon from '@material-ui/icons/Search';
 import Clock from '../../modules/clock/components/Clock';
 import VideoListingContainer from '../../modules/video/containers/VideoListingContainer';
-import Stats from '../../modules/stats/components/Stats';
 import './browse-view.css';
 
 

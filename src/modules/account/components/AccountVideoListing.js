@@ -39,7 +39,7 @@ class AccountVideoListItem extends Component {
                             {video.title}
                         </Typography>
                         <Typography variant="body1" gutterBottom color="textSecondary">
-                            {`uploaded: ${moment(parseInt(video.createdAt)).format('M/D/YYYY')}`}
+                            {`uploaded: ${moment(parseInt(video.createdAt, 10)).format('M/D/YYYY')}`}
                         </Typography>
                         <Typography variant="body1" gutterBottom color="textSecondary">                            
                             <TokenBalance baseAmount={video.stake} includeAO={true} />{' staked'}

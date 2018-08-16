@@ -10,7 +10,7 @@ import Account from '../../account/components/Account';
 import { PrimaryButton } from '../../../theme';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import EtherscanLink from '../../etherscan/EtherscanLink';
-import { TokenBalance, formattedTokenAmount, denominations, DenominationInput } from '../../../utils/denominations';
+import { TokenBalance, formattedTokenAmount, DenominationInput } from '../../../utils/denominations';
 
 
 type Props = {
@@ -33,7 +33,6 @@ type Props = {
     purchaseTokens: Function,
     updateTokenExchangeAmount: Function,
     resetExchange: Function,
-    updateExchangeDenomination: Function,
 }
 
 class Exchange extends Component<Props> {
@@ -49,7 +48,6 @@ class Exchange extends Component<Props> {
     }
     _onInputChange = ({baseInputValue, denominationValue, denomination}) => {
         this.props.updateTokenExchangeAmount(baseInputValue)
-        // this.props.updateExchangeDenomination(denomination)  // TODO: remove
     }    
     _handlePurchase = () => {
         const { exchangeAmountToken, exchangeDenomination, exchangeRate } = this.props.exchange
@@ -60,7 +58,7 @@ class Exchange extends Component<Props> {
     }
     render() {
         const { ethAddress, exchange, wallet, theme, title, subtitle, requiredTokenAmount, requiredTokenCopy } = this.props   
-        const { exchangeTransaction, exchangeDenomination, exchangeAmountToken, exchangeRate } = exchange     
+        const { exchangeTransaction, exchangeAmountToken, exchangeRate } = exchange     
         const exchangeInProgress = exchangeTransaction.initialized && !exchangeTransaction.error
         const formDisabled = !ethAddress || exchangeInProgress
         const showExchangeTransactionMessage = exchangeTransaction.error || exchangeTransaction.initialized || exchangeTransaction.transactionHash || exchangeTransaction.result
