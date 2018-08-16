@@ -4,7 +4,7 @@ import FileUpload from '../components/FileUpload';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import withUploadFormData from '../containers/withUploadFormData';
-import UnlockIcon from '@material-ui/icons/LockOpen';
+import UnlockIcon from '@material-ui/icons/Lock';
 
 
 type Props = {
