@@ -1,4 +1,5 @@
 import BigNumber from "bignumber.js";
+import { CONTRACTS_INITIALIZED } from "../../../contracts/contracts.reducer";
 
 // Constants
 export const UPDATE_ICO_STATE = 'UPDATE_ICO_STATE'
@@ -7,7 +8,11 @@ export const UPDATE_ICO_STATE = 'UPDATE_ICO_STATE'
 export const updateIcoState = () => {
     return (dispatch, getState) => {
         const state = getState()
-        const { contracts } = state
+        const { contracts, app } = state
+        if ( !app.states[CONTRACTS_INITIALIZED] ) {
+            console.warn('Calling contract methods before contracts initialized')
+            return;
+        }
         contracts.aoToken.icoEnded(function(err, ended) {
             if ( ended ) {
                 dispatch({
