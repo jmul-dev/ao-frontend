@@ -3,6 +3,7 @@ import AOTreasury from 'ao-contracts/build/contracts/AOTreasury.json';
 import AOContent from 'ao-contracts/build/contracts/AOContent.json';
 import debounce from 'debounce';
 import { APP_STATES, updateAppState } from '../store/app.reducer';
+import { updateIcoState } from '../modules/ico/reducers/ico.reducer';
 
 
 // Constants
@@ -58,6 +59,7 @@ export const initializeContracts = (networkId) => {
             })
             dispatch(updateAppState(APP_STATES.CONTRACTS_INITIALIZED, true))
             dispatch(watchBlockNumber())
+            dispatch(updateIcoState())
         } catch ( error ) {
             console.error('Error initializing contracts', error)
         }

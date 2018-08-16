@@ -1,6 +1,5 @@
 // @flow
-import React, { PureComponent } from 'react';
-import { AppReducerType, APP_STATES } from '../../../store/app.reducer';
+import { PureComponent } from 'react';
 
 type Props = {
     register: Function,

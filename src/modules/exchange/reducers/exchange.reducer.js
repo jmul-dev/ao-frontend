@@ -2,6 +2,7 @@ import BigNumber from 'bignumber.js'
 import { waitForTransactionReceipt } from '../../../contracts/contracts.reducer'
 import { denominations } from '../../../utils/denominations'
 import { getEthBalanceForAccount, getTokenBalanceForAccount } from '../../wallet/reducers/wallet.reducer'
+import { updateIcoState } from '../../ico/reducers/ico.reducer'
 
 
 // Constants
@@ -53,13 +54,14 @@ export const purchaseTokens = ( baseAmount, exchangeRate ) => {
                             dispatchError(err)
                         } else {
                             let eventListener = contracts.aoToken.LotCreation({lotOwner: app.ethAddress}, function(error, result) {
-                                if ( result && result.transactionHash == transactionHash ) {
+                                if ( result && result.transactionHash === transactionHash ) {
                                     dispatch({
                                         type: EXCHANGE_TRANSACTION.RESULT,
                                         payload: result.args
                                     })
                                     dispatch(getEthBalanceForAccount(app.ethAddress))
                                     dispatch(getTokenBalanceForAccount(app.ethAddress))
+                                    dispatch(updateIcoState())
                                     eventListener.stopWatching()
                                 }
                             })
@@ -120,22 +122,6 @@ export const updateTokenExchangeAmount = (tokenAmount) => {
             payload: {
                 exchangeAmountToken,
                 exchangeAmountEth
-            }
-        })
-    }
-}
-
-export const updateExchangeDenomination = (denomination) => {
-    return (dispatch, getState) => {
-        const state = getState()
-        const { exchangeAmountToken } = state.exchange
-        // TODO: calculate the new cost based on the exchangeAmountToken & new denomination
-        let exchangeAmountEth = new BigNumber(0)
-        dispatch({
-            type: UPDATE_EXCHANGE_DENOMINATION,
-            payload: {
-                exchangeDenomination: denomination,
-                exchangeAmountEth,
             }
         })
     }

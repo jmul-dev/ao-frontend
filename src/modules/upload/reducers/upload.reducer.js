@@ -108,11 +108,11 @@ export const stakeContent = ({tokenAmount, primordialTokenAmount, datKey, fileSi
             const { contracts, app } = state
             // 1. Contract method
             // NOTE: for now token & primordial token amounts are in base denomination
-            const profitPercentageWithDivisor = parseInt(profitPercentage) * 10000  // 10^4
+            const profitPercentageWithDivisor = parseInt(profitPercentage, 10) * 10000  // 10^4
             contracts.aoContent.stakeContent(
-                parseInt(tokenAmount),
+                parseInt(tokenAmount, 10),
                 'ao',
-                parseInt(primordialTokenAmount),
+                parseInt(primordialTokenAmount, 10),
                 datKey,
                 fileSizeInBytes,
                 profitPercentageWithDivisor,
@@ -123,7 +123,7 @@ export const stakeContent = ({tokenAmount, primordialTokenAmount, datKey, fileSi
                     } else {
                         // 2. 
                         let eventListener = contracts.aoContent.StakeContent({stakeOwner: app.ethAddress}, function(error, result) {
-                            if ( result && result.transactionHash == transactionHash ) {
+                            if ( result && result.transactionHash === transactionHash ) {
                                 dispatch({
                                     type: STAKE_TRANSACTION.RESULT,
                                     payload: result.args

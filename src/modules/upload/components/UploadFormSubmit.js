@@ -36,9 +36,9 @@ type Props = {
 class UploadFormSubmit extends Component<Props> {
     props: Props;
     componentDidMount() {
-        const { updateLastReachedStep, form, stakeTransaction, submitContentLoading, contentSubmittionResult } = this.props
+        const { updateLastReachedStep, form, submitContentLoading, contentSubmittionResult } = this.props
         updateLastReachedStep('submit')
-        if ( !form.video || !contentSubmittionResult && !submitContentLoading ) {
+        if ( !form.video || (!contentSubmittionResult && !submitContentLoading) ) {
             this._submitContent()
         }
     }
@@ -69,7 +69,7 @@ class UploadFormSubmit extends Component<Props> {
         this.props.resetUploadForm()
     }
     render() {
-        const { form, submitContentLoading, submitContentError } = this.props
+        const { form, submitContentLoading } = this.props
         if ( !form.video ) {
             return <Redirect to={'/app/view/upload/start'} />
         }

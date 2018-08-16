@@ -6,6 +6,7 @@ import SettingsView from '../../views/settings/SettingsView';
 import AccountView from '../../views/account/AccountView';
 import BrowseView from '../../views/browse/BrowseView';
 import UploadView from '../../views/upload/UploadView';
+import IcoView from '../../views/ico/IcoView';
 import MainNavigation from './MainNavigation';
 import { AnimatedRoute } from 'react-router-transition';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
@@ -19,6 +20,7 @@ const ViewRoutes = () => (
         <div className="overlay-view-container">
             <Switch>
                 <Route path="/app/view/account" component={AccountView} />
+                <Route path="/app/view/ico" component={IcoView} />
                 <Route path="/app/view/settings" component={SettingsView} />
                 <Route path="/app/view/upload/:step?" component={UploadView} />
             </Switch>

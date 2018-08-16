@@ -8,6 +8,7 @@ import electron from '../modules/electron/reducers/electron.reducer'
 import exchange from '../modules/exchange/reducers/exchange.reducer'
 import contracts from '../contracts/contracts.reducer'
 import notifications from '../modules/notifications/reducers/notifications.reducer'
+import ico from '../modules/ico/reducers/ico.reducer'
 
 const rootReducer = combineReducers({
     app,
@@ -18,6 +19,7 @@ const rootReducer = combineReducers({
     exchange,
     contracts,
     notifications,
+    ico,
 });
 
 export default rootReducer;
