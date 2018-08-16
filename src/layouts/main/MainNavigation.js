@@ -3,6 +3,7 @@ import React from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 import { LogoIcon, AccountIcon, UploadIcon, SettingsIcon, MetamaskIcon } from '../../assets/Icons';
+import IcoIcon from '@material-ui/icons/ThreeDRotation'
 import { connect } from 'react-redux';
 import classnames from 'classnames';
 import { withRouter } from 'react-router';
@@ -12,6 +13,7 @@ const BrowseLink = ({overlayViewsActive, ...props}) => <Link to="/app" {...props
 const AccountLink = ({overlayViewsActive, ...props}) => <NavLink to="/app/view/account" replace={overlayViewsActive} {...props} />
 const UploadLink = ({overlayViewsActive, ...props}) => <NavLink to="/app/view/upload" replace={overlayViewsActive} {...props} />
 const SettingsLink = ({overlayViewsActive, ...props}) => <NavLink to="/app/view/settings" replace={overlayViewsActive} {...props} />
+const IcoLink = ({overlayViewsActive, ...props}) => <NavLink to="/app/view/ico" replace={overlayViewsActive} {...props} />
 
 const openMetamask = () => {
     window.chrome.ipcRenderer.send('open-metamask-popup')
@@ -23,6 +25,9 @@ const MainNavigation = ({isElectron, teaserListingActive, overlayViewsActive, li
             <Button component={BrowseLink} overlayViewsActive={overlayViewsActive}>
                 <LogoIcon />
             </Button>
+            <Button component={IcoLink} overlayViewsActive={overlayViewsActive}>
+                <IcoIcon color={light ? '#000000' : '#FFFFFF'} />
+            </Button>
             <Button component={AccountLink} overlayViewsActive={overlayViewsActive}>
                 <AccountIcon color={light ? '#000000' : '#FFFFFF'} />
             </Button>
@@ -31,7 +36,7 @@ const MainNavigation = ({isElectron, teaserListingActive, overlayViewsActive, li
             </Button>
             <Button component={SettingsLink} overlayViewsActive={overlayViewsActive}>
                 <SettingsIcon color={light ? '#000000' : '#FFFFFF'} />
-            </Button>
+            </Button>            
             {isElectron ? (
                 <Button style={{height: 80, marginTop: 'auto'}} onClick={openMetamask}>
                     <MetamaskIcon />
