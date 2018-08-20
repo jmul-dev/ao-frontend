@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment, PureComponent } from 'react';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import ButtonBase from '@material-ui/core/ButtonBase';
@@ -9,10 +9,10 @@ import moment from 'moment';
 import Collapse from '@material-ui/core/Collapse';
 import '../styles/account-video-listing.css';
 import { compose } from 'react-apollo';
-import { TokenBalance } from '../../../utils/denominations'
+import { TokenBalance, FileSize } from '../../../utils/denominations'
 
 
-class AccountVideoListItem extends Component {
+class AccountVideoListItem extends PureComponent {
     constructor() {
         super()
         this.state = {
@@ -41,8 +41,16 @@ class AccountVideoListItem extends Component {
                         <Typography variant="body1" gutterBottom color="textSecondary">
                             {`uploaded: ${moment(parseInt(video.createdAt, 10)).format('M/D/YYYY')}`}
                         </Typography>
-                        <Typography variant="body1" gutterBottom color="textSecondary">                            
-                            <TokenBalance baseAmount={video.stake} includeAO={true} />{' staked'}
+                        <Typography variant="body1" gutterBottom color="textSecondary">
+                            {video.stakeId ? (
+                                <Fragment>
+                                    <TokenBalance baseAmount={video.stake} includeAO={true} />{' staked'}
+                                </Fragment>
+                            ) : (
+                                <Fragment>
+                                    {`Video has not been staked!`}
+                                </Fragment>
+                            )}                            
                         </Typography>
                         <Typography className="description" variant="body1" gutterBottom color="textSecondary">
                             {video.description}
@@ -51,9 +59,18 @@ class AccountVideoListItem extends Component {
                 </Grid>
                 <div>
                     <Collapse in={this.state.expanded}>
-                        <div className="expansion-container">                            
+                        <div className="expansion-container">
                             <Typography className="description" variant="body1" gutterBottom color="textSecondary">
                                 {video.description}
+                            </Typography>
+                            <Typography variant="body1" gutterBottom color="textSecondary">
+                                {`Content dat key: dat://${video.fileDatKey}`}
+                            </Typography>
+                            <Typography variant="body1" gutterBottom color="textSecondary">
+                                {`Metadata dat key: dat://${video.metadataDatKey}`}
+                            </Typography>
+                            <Typography variant="body1" gutterBottom color="textSecondary">
+                                {`File size: `}<FileSize sizeInBytes={video.fileSize} />
                             </Typography>
                         </div>
                     </Collapse>
@@ -95,8 +112,10 @@ class AccountVideoListing extends Component {
         if ( !ethAddress )
             return this._renderPlaceholderAccountListing()
         const { loading, error, node } = this.props.query
-        if ( loading || error )
-            return null  // TODO: loading or error state
+        if ( loading )
+            return null  // TODO: loading
+        if ( error )
+            return this._renderErrorState()
         if ( !node || !node.creator || !node.creator.content )
             return this._renderNoAccountVideos()
         const videos = node.creator.content
@@ -111,6 +130,15 @@ class AccountVideoListing extends Component {
                 </ul>
             </div>
         );
+    }
+    _renderErrorState() {
+        return (
+            <div className="AccountVideoListing">
+                <Typography variant="body1" style={{marginTop: 16, marginBottom: 24, color: '#AAAAAA'}}>
+                    {`An error occured while trying to fetch your videos :/`}
+                </Typography>
+            </div>
+        )
     }
     _renderNoAccountVideos() {
         return (

@@ -1,6 +1,6 @@
 import { graphql, compose } from 'react-apollo'
 import gql from "graphql-tag"
-
+import VideoContentFragment from '../../../graphql/fragments/VideoContentFragment'
 
 // GraphQL
 const accountVideos = gql(`
@@ -9,21 +9,12 @@ const accountVideos = gql(`
             id,
             creator {
                 content {
-                    id, 
-                    title, 
-                    description, 
-                    fileName, 
-                    contentType, 
-                    fileUrl,
-                    featuredImageUrl,
-                    teaserUrl,
-                    stake,
-                    split,
-                    createdAt,
+                    ...VideoContentFragment
                 }
             }
         }
     }
+    ${VideoContentFragment}
 `)
 
 export default compose(

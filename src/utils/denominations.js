@@ -121,6 +121,13 @@ export const TokenBalance = ({baseAmount, decimals, includeAO, isPrimordial}) =>
     )
 }
 
+export const FileSize = ({sizeInBytes, decimals = 1}) => {
+    const { amount, denomination } = fromBaseToHighestDenomination(sizeInBytes)
+    return (
+        <Fragment>{amount.toFixed(decimals)} {denomination.fileSizeSuffix}</Fragment>
+    )
+}
+
 
 /**
  * 
