@@ -9,14 +9,12 @@ import UploadView from '../../views/upload/UploadView';
 import IcoView from '../../views/ico/IcoView';
 import MainNavigation from './MainNavigation';
 import { AnimatedRoute } from 'react-router-transition';
-import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import { MuiThemeProvider } from '@material-ui/core/styles';
 import { lightTheme } from '../../theme';
 import './main-layout.css';
 
-const muiThemeLight = createMuiTheme(lightTheme)
-
 const ViewRoutes = () => (
-    <MuiThemeProvider theme={muiThemeLight}>
+    <MuiThemeProvider theme={lightTheme}>
         <div className="overlay-view-container">
             <Switch>
                 <Route path="/app/view/account" component={AccountView} />

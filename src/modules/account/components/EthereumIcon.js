@@ -39,7 +39,7 @@ export default class EthereumIcon extends Component {
         container.appendChild(jazzEl)
     }
     render() {
-        const { size } = this.props
+        const { size, ...props } = this.props
         const style = {
             display: 'inline-block',
             alignItems: 'center',
@@ -51,13 +51,13 @@ export default class EthereumIcon extends Component {
             overflow: 'hidden',
         }
         return (
-            <div style={style} />
+            <div style={style} {...props} />
         );
     }
 }
 
-export const EthereumIconPlaceholder = ({size = 75}) => (
-    <div className="placeholder-bg" style={{width: size, height: size, borderRadius: size / 2, overflow: 'hidden', flexShrink: 0}} />
+export const EthereumIconPlaceholder = ({size = 75, ...props}) => (
+    <div className="placeholder-bg" style={{width: size, height: size, borderRadius: size / 2, overflow: 'hidden', flexShrink: 0}} {...props} />
 )
 
 EthereumIcon.propTypes = propTypes;
