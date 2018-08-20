@@ -9,3 +9,7 @@
 .AccountView > header, .AccountView > section {
     padding: 64px;
 }
+.AccountView > section {
+    padding-top: 24px;
+    padding-bottom: 50vh;
+}

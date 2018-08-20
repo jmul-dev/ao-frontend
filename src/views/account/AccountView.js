@@ -5,6 +5,7 @@ import Wallet from '../../modules/wallet/components/Wallet';
 import Typography from '@material-ui/core/Typography';
 import Account from '../../modules/account/components/Account';
 import AccountVideoListing from '../../modules/account/components/AccountVideoListing';
+import AccountVideoFilters from '../../modules/account/components/AccountVideoFilters';
 import Grid from '@material-ui/core/Grid';
 import withEthAddress from '../../modules/account/containers/withEthAddress';
 import './account-view.css';
@@ -43,9 +44,7 @@ class AccountView extends PureComponent {
                 <section>
                     <Grid container spacing={16}> 
                         <Grid item xs={12}>
-                            <Typography variant="title" gutterBottom className={ethAddress ? '' : 'placeholder-text'}>
-                                {'My videos'}
-                            </Typography>
+                            <AccountVideoFilters disabled={!ethAddress} />
                             <AccountVideoListing />
                         </Grid>
                     </Grid>
