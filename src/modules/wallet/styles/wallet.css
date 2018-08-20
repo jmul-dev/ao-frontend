@@ -1,64 +1,41 @@
-.Wallet {
-    height: 100%;
-    display: flex;
+.Wallet .balance-container {
+    background-image: linear-gradient(-90deg, #525D7A 0%, #4A546D 100%);
+    border: 1px solid rgba(255,255,255,0.10);
+    box-shadow: -40px 25px 75px -40px rgba(0,0,0,0.50);
+    border-radius: 10px;
+    padding: 24px;
+    margin-bottom: 28px;
 }
-.Wallet .balance-container, .Wallet .token-container {
-    padding: 14px 16px;
-}
-.Wallet .balance-container header {
-    display: flex;
-    align-items: center;
+.Wallet .balance-container > header {
+    margin-left: -24px;
+    margin-right: -24px;
+    background: rgba(0,0,0,0.07);
+    padding-left: 24px;
+    padding-right: 24px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    margin-bottom: 40px;
 }
 .Wallet .balance-container .balances {
     display: flex;
     align-items: center;
-    margin-top: 24px;
-    margin-bottom: 18px;
-}
-.Wallet .balance-container .balances > div {
-    flex: 1;
-    text-align: center;
-}
-.Wallet .balance-container .balances > div + div {
-    border-left: 1px solid #CCCCCC;
-}
-.Wallet .balance-container .balances .label {
-    letter-spacing: 5px;
-    margin-right: -5px;
-}
-
-.Wallet .balance-container .balance {
-    font-weight: bold;
-    font-size: 2.5rem;
-    color: #4A546D;
-    letter-spacing: 0;
-}
-.Wallet .token-container > .triangle {
-    position: absolute;
-    top: 0;
-    right: 100%;
-    width: 0;
-    height: 0;
-    border-style: solid;
-    border-width: 0 20px 25px 0;
-    border-color: transparent #bcbcbc transparent transparent;
-}
-.Wallet .token-container {
-    position: relative;
-    background-color: #BCBCBC;    
-}
-.Wallet .token-container .token-metric {
     margin-bottom: 16px;
 }
-.Wallet .token-container .token-metric .metric-value {
-    font-weight: bold;
-    font-size: 1.5rem;
-    color: #FFFFFF;
-    letter-spacing: 0;
-    margin-right: 4px;
+.Wallet .balance-container .balances > div {
+    width: 50%;
+    flex-shrink: 0;
 }
-.Wallet .token-container .token-metric .label {
+
+.Wallet .token-metrics-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 32px;
+    padding-right: 24px;
+}
+.Wallet .token-metrics-container > div {
+    width: 50%;
+    flex-shrink: 0;
+}
+.Wallet .token-metrics-container b {
     font-size: 1rem;
-    color: #FFFFFF;
-    letter-spacing: 0;
 }

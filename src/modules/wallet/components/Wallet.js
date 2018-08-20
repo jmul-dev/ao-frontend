@@ -2,7 +2,6 @@
 import React, { PureComponent } from 'react';
 import { WalletReducerType } from '../reducers/wallet.reducer';
 import withUserWallet from '../containers/withUserWallet';
-import Account from '../../account/components/Account';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
@@ -49,66 +48,59 @@ class Wallet extends PureComponent<Props> {
         this.setState({exchangeModalOpen: false})
     }
     render() {
-        const { ethBalance, tokenBalance, tokenStaked, tokenEarned } = this.props.wallet
+        const { ethBalance, tokenBalance, tokenStaked, tokenEarned, icoTokenBalance, networkTokenBalance } = this.props.wallet
         const { ethAddress } = this.props
-        const tokenBalanceFormat = formattedTokenAmount(tokenBalance, 1)
+        const networkTokenBalanceFormatted = formattedTokenAmount(networkTokenBalance, 1, true, false)
+        const icoTokenBalanceFormatted = formattedTokenAmount(icoTokenBalance, 1, true, true)
+        const tokenStakedFormatted = formattedTokenAmount(tokenStaked, 1, true, false)
+        const tokenEarnedFormatted = formattedTokenAmount(tokenEarned, 1, true, false)
         return (
             <div className="Wallet" style={{opacity: ethAddress ? 1 : 0.5}}>
-                <Grid container spacing={0}>
-                    <Grid item xs={7} sm={7} lg={8} className="balance-container">
-                        <header>
-                            <Account display="ethIcon" size={25} />
-                            <Typography variant="display3" style={{marginLeft: 12}}>
-                                {'My Wallet'}
-                            </Typography>
-                        </header>
-                        <div className="balances">
-                            <div>
-                                <div className="balance">{tokenBalanceFormat.value}</div>
-                                <Typography className="label" variant="body1">{tokenBalanceFormat.label}</Typography>
-                            </div>
-                            <div>
-                                <div className="balance">{ethBalance.toFixed(2)}</div>
-                                <Typography className="label" variant="body1">{'ETH'}</Typography>
-                            </div>
+                <div className="balance-container">
+                    <header>
+                        <Typography variant="display3">
+                            {'My Wallet'}
+                        </Typography>
+                    </header>
+                    <div className="balances">
+                        <div>
+                            <Typography variant="display1">{networkTokenBalanceFormatted.value}</Typography>
+                            <Typography variant="body1">{networkTokenBalanceFormatted.label}</Typography>
                         </div>
-                    </Grid>
-                    <Grid item xs={5} sm={5} lg={4} className="token-container">
-                        <div className="triangle"></div>
-                        <div className="token-metric">
-                            <div style={{display: 'flex'}}>
-                                <div className="metric-value">{tokenStaked.toFixed(2)}</div>
-                                <Typography className="label" variant="body1">{'AO'}</Typography>
-                            </div>
-                            <Typography variant="body1">{'staked'}</Typography>
+                        <div>
+                            <Typography variant="display1">{icoTokenBalanceFormatted.value}</Typography>
+                            <Typography variant="body1">{icoTokenBalanceFormatted.label}</Typography>
                         </div>
-                        <div className="token-metric">
-                            <div style={{display: 'flex'}}>
-                                <div className="metric-value">{tokenEarned.toFixed(2)}</div>
-                                <Typography className="label" variant="body1">{'AO'}</Typography>
-                            </div>
-                            <Typography variant="body1">{'earned'}</Typography>
-                        </div>
-                        <Button 
-                            size="small" 
-                            variant="flat" 
-                            color={ethAddress ? "primary" : "default"} 
-                            style={{padding: '4px 10px'}} 
-                            disabled={!ethAddress}
-                            onClick={() => this.setState({exchangeModalOpen: true})}
-                            >
-                            {'reload wallet'} <ArrowIcon style={{transform: 'rotate(45deg)'}}/>
-                        </Button>
-                        <ExchangeModal 
-                            open={this.state.exchangeModalOpen}
-                            onClose={this._onExchangeModalClose}
-                            exchangeProps={{
-                                title: 'Purchase AO',
-                                subtitle: 'AO+ Primordial tokens have additional staking and purchasing benefits.'
-                            }}
-                        />
-                    </Grid>
-                </Grid>               
+                    </div>
+                </div>
+                <div className="token-metrics-container">
+                    <div>
+                        <Typography variant="caption">{'Tokens staked'}</Typography>
+                        <Typography variant="body1"><b>{tokenStakedFormatted.value}</b> {tokenStakedFormatted.label}</Typography>
+                    </div>
+                    <div>
+                        <Typography variant="caption">{'Tokens earned'}</Typography>
+                        <Typography variant="body1"><b>{tokenEarnedFormatted.value}</b> {tokenEarnedFormatted.label}</Typography>
+                    </div>
+                </div>
+                <Button 
+                    size="small" 
+                    variant="flat" 
+                    color={ethAddress ? "primary" : "default"} 
+                    style={{borderRadius: 0, fontSize: '1rem', padding: '8px 16px'}} 
+                    disabled={!ethAddress}
+                    onClick={() => this.setState({exchangeModalOpen: true})}
+                    >
+                    {'exchange tokens'} <ArrowIcon style={{transform: 'rotate(45deg)', fontSize: '1rem', marginLeft: 12}}/>
+                </Button>
+                <ExchangeModal 
+                    open={this.state.exchangeModalOpen}
+                    onClose={this._onExchangeModalClose}
+                    exchangeProps={{
+                        title: 'Purchase AO',
+                        subtitle: 'AO+ Primordial tokens have additional staking and purchasing benefits.'
+                    }}
+                />             
             </div>
         );
     }

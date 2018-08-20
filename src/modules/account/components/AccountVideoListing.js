@@ -26,7 +26,7 @@ class AccountVideoListItem extends PureComponent {
         const { video } = this.props
         return (
             <div className="AccountVideoListItem">
-                <Grid container spacing={16} alignItems="center">
+                <Grid container spacing={16}>
                     <Grid item sm={4}>
                         <ButtonBase style={{width: '100%'}}>
                             <div className="featured-image" style={{backgroundImage: `url(${window.AO_CORE_URL}/${video.featuredImageUrl})`}}>
@@ -35,7 +35,7 @@ class AccountVideoListItem extends PureComponent {
                         </ButtonBase>
                     </Grid>
                     <Grid item sm={8} className="card-container">
-                        <Typography variant="title" gutterBottom>
+                        <Typography variant="display3" gutterBottom>
                             {video.title}
                         </Typography>
                         <Typography variant="body1" gutterBottom color="textSecondary">
@@ -50,7 +50,7 @@ class AccountVideoListItem extends PureComponent {
                                 <Fragment>
                                     {`Video has not been staked!`}
                                 </Fragment>
-                            )}                            
+                            )}
                         </Typography>
                         <Typography className="description" variant="body1" gutterBottom color="textSecondary">
                             {video.description}
@@ -84,12 +84,12 @@ class AccountVideoListItem extends PureComponent {
 }
 const AccountVideoListItemPlaceholder = () => (
     <div className="AccountVideoListItem placeholder">
-        <Grid container spacing={16} alignItems="center">
+        <Grid container spacing={16}>
             <Grid item sm={4}>
                 <div className="featured-image placeholder-bg"></div>
             </Grid>
             <Grid item sm={8} className="card-container">
-                <Typography className="placeholder-text" variant="title" gutterBottom>
+                <Typography className="placeholder-text" variant="display3" gutterBottom>
                     {'Lorem ipsum dolor'}
                 </Typography>
                 <Typography className="placeholder-text" variant="body1" gutterBottom color="textSecondary">

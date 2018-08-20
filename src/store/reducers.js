@@ -9,6 +9,7 @@ import exchange from '../modules/exchange/reducers/exchange.reducer'
 import contracts from '../contracts/contracts.reducer'
 import notifications from '../modules/notifications/reducers/notifications.reducer'
 import ico from '../modules/ico/reducers/ico.reducer'
+import account from '../modules/account/reducers/account.reducer'
 
 const rootReducer = combineReducers({
     app,
@@ -20,6 +21,7 @@ const rootReducer = combineReducers({
     contracts,
     notifications,
     ico,
+    account,
 });
 
 export default rootReducer;
