@@ -39,7 +39,7 @@ export default class EthereumIcon extends Component {
         container.appendChild(jazzEl)
     }
     render() {
-        const { size, ...props } = this.props
+        const { size, ethAddress, ...props } = this.props
         const style = {
             display: 'inline-block',
             alignItems: 'center',

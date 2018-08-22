@@ -48,10 +48,10 @@ class Wallet extends PureComponent<Props> {
         this.setState({exchangeModalOpen: false})
     }
     render() {
-        const { ethBalance, tokenBalance, tokenStaked, tokenEarned, icoTokenBalance, networkTokenBalance } = this.props.wallet
+        const { ethBalance, tokenBalance, tokenStaked, tokenEarned, primordialTokenBalance, networkTokenBalance } = this.props.wallet
         const { ethAddress } = this.props
         const networkTokenBalanceFormatted = formattedTokenAmount(networkTokenBalance, 1, true, false)
-        const icoTokenBalanceFormatted = formattedTokenAmount(icoTokenBalance, 1, true, true)
+        const icoTokenBalanceFormatted = formattedTokenAmount(primordialTokenBalance, 1, true, true)
         const tokenStakedFormatted = formattedTokenAmount(tokenStaked, 1, true, false)
         const tokenEarnedFormatted = formattedTokenAmount(tokenEarned, 1, true, false)
         return (

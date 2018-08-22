@@ -17,6 +17,7 @@ const mapStateToProps = (store) => {
         ethAddress: store.app.ethAddress,
         wallet: store.wallet,
         exchange: store.exchange,
+        ico: store.ico,
         isElectron: store.electron.isElectron,
     }
 }

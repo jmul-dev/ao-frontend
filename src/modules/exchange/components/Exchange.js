@@ -50,17 +50,17 @@ class Exchange extends Component<Props> {
         this.props.updateTokenExchangeAmount(baseInputValue)
     }    
     _handlePurchase = () => {
-        const { exchangeAmountToken, exchangeDenomination, exchangeRate } = this.props.exchange
-        this.props.purchaseTokens( exchangeAmountToken, exchangeDenomination, exchangeRate )
+        const { exchangeAmountToken, exchangeRate } = this.props.exchange
+        this.props.purchaseTokens( exchangeAmountToken, exchangeRate )
     }
     _resetExchangeForm = () => {
         this.props.resetExchange()
     }
     render() {
         const { ethAddress, exchange, wallet, theme, title, subtitle, requiredTokenAmount, requiredTokenCopy } = this.props   
-        const { exchangeTransaction, exchangeAmountToken, exchangeRate } = exchange     
+        const { exchangeTransaction, exchangeAmountToken, exchangeRate } = exchange
         const exchangeInProgress = exchangeTransaction.initialized && !exchangeTransaction.error
-        const formDisabled = !ethAddress || exchangeInProgress
+        const formDisabled = !ethAddress || exchangeInProgress || !this.props.ico.primordialSaleActive
         const showExchangeTransactionMessage = exchangeTransaction.error || exchangeTransaction.initialized || exchangeTransaction.transactionHash || exchangeTransaction.result
         const formattedTokenBalance = formattedTokenAmount(wallet.tokenBalance)
         const ethCost = exchangeAmountToken.multipliedBy(exchangeRate)

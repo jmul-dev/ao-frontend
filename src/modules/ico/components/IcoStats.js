@@ -7,9 +7,9 @@ import { TokenBalance } from '../../../utils/denominations';
 type Props = {
     // redux bound state
     ico: {
-        icoEnded: boolean,
-        icoTotalSupply: BigNumber,
-        icoMaxSupply: BigNumber,
+        primordialSaleActive: boolean,
+        primordialTotalSupply: BigNumber,
+        primordialMaxSupply: BigNumber,
     },
     // redux bound actions
     updateIcoState: Function,
@@ -21,14 +21,14 @@ class IcoStats extends Component<Props> {
         this.props.updateIcoState()
     }
     render() {
-        const { icoTotalSupply, icoMaxSupply } = this.props.ico
-        const icoPercentageComplete = icoTotalSupply.div(icoMaxSupply).times(100).toFixed(0)
-        const icoRemainingSupply = icoMaxSupply.minus(icoTotalSupply)
+        const { primordialTotalSupply, primordialMaxSupply } = this.props.ico
+        const icoPercentageComplete = primordialTotalSupply.div(primordialMaxSupply).times(100).toFixed(0)
+        const icoRemainingSupply = primordialMaxSupply.minus(primordialTotalSupply)
         return (
             <div className={'IcoStats'}>
                 {`Primordial Network Exchange: ${icoPercentageComplete}%`}
                 <br />
-                {`Total exchanged: `}<TokenBalance baseAmount={icoTotalSupply} decimals={0} isPrimordial={true} />
+                {`Total exchanged: `}<TokenBalance baseAmount={primordialTotalSupply} decimals={0} isPrimordial={true} />
                 <br />
                 {`Remaining: `}<TokenBalance baseAmount={icoRemainingSupply} decimals={0} isPrimordial={true} />
             </div>

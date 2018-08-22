@@ -31,24 +31,20 @@ export const getTokenBalanceForAccount = ( account ) => {
             return console.warn('Attempting to make contract call before contract initialized')
         contracts.aoToken.balanceOf(account, function(err, result) {
             if ( !err ) {
-                const icoTokenBalance = getState().wallet.icoTokenBalance
                 dispatch({
                     type: BALANCE_CHANGE,
                     payload: { 
                         networkTokenBalance: new BigNumber(result),
-                        tokenBalance: icoTokenBalance.plus(result),
                     }
                 })
             }
         })   
-        contracts.aoToken.icoBalanceOf(account, function(err, result) {
+        contracts.aoToken.primordialBalanceOf(account, function(err, result) {
             if ( !err ) {
-                const networkTokenBalance = getState().wallet.networkTokenBalance
                 dispatch({
                     type: BALANCE_CHANGE,
                     payload: {
-                        icoTokenBalance: new BigNumber(result),
-                        tokenBalance: networkTokenBalance.plus(result)
+                        primordialTokenBalance: new BigNumber(result),
                     }
                 })
             }
@@ -61,7 +57,7 @@ export const getTokenBalanceForAccount = ( account ) => {
 const initialState = {
     ethBalance: new BigNumber(0),
     tokenBalance: new BigNumber(0),  // Normal + Primordial AO
-    icoTokenBalance: new BigNumber(0),  // Primordial AO
+    primordialTokenBalance: new BigNumber(0),  // Primordial AO
     networkTokenBalance: new BigNumber(0),  // Normal AO
     tokenStaked: new BigNumber(0),
     tokenEarned: new BigNumber(0),
@@ -69,7 +65,7 @@ const initialState = {
 export type WalletReducerType = {
     ethBalance: BigNumber,
     tokenBalance: BigNumber,
-    icoTokenBalance: BigNumber,
+    primordialTokenBalance: BigNumber,
     tokenStaked: BigNumber,
     tokenEarned: BigNumber,
 }
@@ -78,11 +74,12 @@ export type WalletReducerType = {
 export default function walletReducer(state = initialState, action) {
     switch (action.type) {
         case BALANCE_CHANGE:
-            return {
+            let updatedState = {
                 ...state,
                 ...action.payload,
-                tokenBalance: new BigNumber(1230101010123)
             }
+            updatedState.tokenBalance = updatedState.primordialTokenBalance.plus(updatedState.networkTokenBalance)
+            return updatedState
         default:
             return state
     }

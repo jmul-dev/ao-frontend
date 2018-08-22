@@ -8,7 +8,7 @@ type Props = {
     ethAddress?: string,
 }
 
-const Account = ({display, ethAddress, ...props}: Props) => {
+const Account = ({display, ethAddress, dispatch, ...props}: Props) => {
     switch (display) {
         case "ethAddress":
             if ( ethAddress )
