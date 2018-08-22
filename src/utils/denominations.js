@@ -156,6 +156,7 @@ const DenominationSelectWrapped = withStyles(denominationSelectStyles, {withThem
 export class DenominationInput extends Component {
     static propTypes = {
         baseInputValue: PropTypes.instanceOf(BigNumber),
+        isPrimordial: PropTypes.bool.isRequired,
         onChange: PropTypes.func.isRequired,  // ({baseInputValue, denominationValue, denomination})
         disabled: PropTypes.bool,
     }
@@ -165,6 +166,12 @@ export class DenominationInput extends Component {
         this.state = {
             denomination: denomination,
         }
+    }
+    componentDidMount() {
+        this.props.onChange({
+            baseInputValue: this.props.baseInputValue.toNumber(),
+            denomination: this.state.denomination
+        })
     }
     _onDenominationInputValueChange = (event) => {
         let denominationInputValue = event.target.value
@@ -193,7 +200,7 @@ export class DenominationInput extends Component {
         }
     }
     render() {
-        const { baseInputValue } = this.props
+        const { baseInputValue, isPrimordial } = this.props
         const { denomination } = this.state      
         const denominationInputValue = new BigNumber(baseInputValue / Math.pow(10, denomination.powerOfTen))
         return (
@@ -225,7 +232,7 @@ export class DenominationInput extends Component {
                     disableUnderline={true}
                     >
                     {denominations.map((denomination) => (
-                        <option key={denomination.name} value={denomination.name}>{`${denomination.prefix} AO`}</option>
+                        <option key={denomination.name} value={denomination.name}>{`${denomination.prefix} ${isPrimordial ? 'AO+' : 'AO'}`}</option>
                     ))}
                 </DenominationSelectWrapped>
             </div>
