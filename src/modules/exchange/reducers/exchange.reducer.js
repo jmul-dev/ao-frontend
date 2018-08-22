@@ -104,7 +104,11 @@ export const getExchangeRate = () => {
     }
 }
 
-export const updateTokenExchangeAmount = (tokenAmount) => {
+/**
+ * NOTE: denomination is strictly for UI purposes. `tokenAmount` will always
+ * be in base AO.
+ */
+export const updateTokenExchangeAmount = (tokenAmount, denomination) => {
     return (dispatch, getState) => {
         const state = getState()
         // Verify that the tokenAmount * exchangeRate <= wallet balance
@@ -123,7 +127,8 @@ export const updateTokenExchangeAmount = (tokenAmount) => {
             type: UPDATE_EXCHANGE_VALUES,
             payload: {
                 exchangeAmountToken,
-                exchangeAmountEth
+                exchangeAmountEth,
+                exchangeDenomination: denomination ? denomination : state.exchange.exchangeDenomination
             }
         })
     }
@@ -133,7 +138,7 @@ export const updateTokenExchangeAmount = (tokenAmount) => {
 const initialState = {
     exchangeRate: new BigNumber(0),  // eth/AO
     exchangeAmountEth: new BigNumber(0),  // eth
-    exchangeAmountToken: new BigNumber(Math.pow(10, 9)),  // 1 Giga AO
+    exchangeAmountToken: new BigNumber(0),
     exchangeDenomination: denominations[2],
     exchangeTransaction: {
         initialized: undefined,
