@@ -147,12 +147,9 @@ const denominationSelectStyles = ({palette}) => ({
     },
 })
 
-const DenominationSelect = ({...props}) => {
-    console.log(props.value)
-    return (
+const DenominationSelect = ({...props}) => (
     <Select {...props} />
 )
-}
 
 const DenominationSelectWrapped = withStyles(denominationSelectStyles, {withTheme: true})(DenominationSelect)
 
