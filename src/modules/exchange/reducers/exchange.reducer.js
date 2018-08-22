@@ -39,14 +39,16 @@ export const purchaseTokens = ( baseAmount, exchangeRate ) => {
             if ( electron.isElectron ) {
                 window.chrome.ipcRenderer.send('open-metamask-popup')
             }                
-            contracts.aoToken.icoEnded(function(err, ended) {
+            contracts.aoToken.networkExchangeEnded(function(err, ended) {
                 if ( err ) {
                     dispatchError(err)
                 } else if ( ended ) {
                     dispatchError(new Error('The AO ICO has ended, you can no longer purchase AO tokens directly through the contract.'))
                 } else {
-                    const ethCostInWei = new BigNumber(window.web3.toWei(ethCost, 'ether'))                                                
-                    contracts.aoToken.buyIcoToken.sendTransaction({
+                    console.log(ethCost)
+                    const ethCostInWei = new BigNumber(window.web3.toWei(ethCost, 'ether'));
+                    console.log(ethCostInWei.toNumber())
+                    contracts.aoToken.buyPrimordialToken({
                         from: app.ethAddress,
                         value: ethCostInWei.toNumber()
                     }, function(err, transactionHash) {
@@ -89,7 +91,7 @@ export const getExchangeRate = () => {
     return (dispatch, getState) => {
         const state = getState()
         const { contracts } = state
-        contracts.aoToken.icoBuyPrice(function(err, result) {
+        contracts.aoToken.primordialBuyPrice(function(err, result) {
             if ( result ) {
                 dispatch({
                     type: UPDATE_EXCHANGE_RATE,
