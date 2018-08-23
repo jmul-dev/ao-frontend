@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import PlayIcon from '@material-ui/icons/PlayArrow';
@@ -107,7 +107,6 @@ class TeaserCard extends Component<Props> {
                         <Typography variant="subheading">{`watch now`}</Typography>
                     </PrimaryButton>
                 )
-                break;
         }        
     }
     render() {

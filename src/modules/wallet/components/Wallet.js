@@ -3,7 +3,6 @@ import React, { PureComponent } from 'react';
 import { WalletReducerType } from '../reducers/wallet.reducer';
 import withUserWallet from '../containers/withUserWallet';
 import Typography from '@material-ui/core/Typography';
-import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import ArrowIcon from '@material-ui/icons/ArrowUpward';
 import ExchangeModal from '../../exchange/components/ExchangeModal';
@@ -48,7 +47,7 @@ class Wallet extends PureComponent<Props> {
         this.setState({exchangeModalOpen: false})
     }
     render() {
-        const { ethBalance, tokenBalance, tokenStaked, tokenEarned, primordialTokenBalance, networkTokenBalance } = this.props.wallet
+        const { tokenStaked, tokenEarned, primordialTokenBalance, networkTokenBalance } = this.props.wallet
         const { ethAddress } = this.props
         const networkTokenBalanceFormatted = formattedTokenAmount(networkTokenBalance, 1, true, false)
         const icoTokenBalanceFormatted = formattedTokenAmount(primordialTokenBalance, 1, true, true)

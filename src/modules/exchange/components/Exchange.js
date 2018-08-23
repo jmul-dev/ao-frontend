@@ -4,13 +4,11 @@ import withExchangeContainer from '../containers/withExchangeContainer';
 import { withTheme } from '@material-ui/core/styles';
 import { compose } from 'react-apollo';
 import Typography from '@material-ui/core/Typography';
-import Grid from '@material-ui/core/Grid';
 import '../styles/exchange.css';
-import Account from '../../account/components/Account';
 import { PrimaryButton } from '../../../theme';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import EtherscanLink from '../../etherscan/EtherscanLink';
-import { TokenBalance, formattedTokenAmount, DenominationInput } from '../../../utils/denominations';
+import { TokenBalance, DenominationInput } from '../../../utils/denominations';
 import BigNumber from 'bignumber.js';
 
 
@@ -68,7 +66,6 @@ class Exchange extends Component<Props> {
         const exchangeInProgress = exchangeTransaction.initialized && !exchangeTransaction.error
         const formDisabled = !ethAddress || exchangeInProgress || !this.props.ico.primordialSaleActive
         const showExchangeTransactionMessage = exchangeTransaction.error || exchangeTransaction.initialized || exchangeTransaction.transactionHash || exchangeTransaction.result
-        const formattedTokenBalance = formattedTokenAmount(wallet.tokenBalance)
         const ethCost = exchangeAmountToken.multipliedBy(exchangeRate)
         const tokensNeeded = requiredTokenAmount ? new BigNumber(requiredTokenAmount).minus(wallet.networkTokenBalance) : new BigNumber(0)
         const tokensInput = tokensNeeded.gt(exchange.exchangeAmountToken) ? tokensNeeded : exchange.exchangeAmountToken
@@ -158,115 +155,7 @@ class Exchange extends Component<Props> {
                                 ) : null}
                             </PrimaryButton>
                         )}
-                    </div>
-                    {/* <Grid className="grid on-pending" container spacing={16} alignItems="center" style={{paddingBottom: requiredTokenAmount ? 38 : undefined}}>
-                        <Grid item xs={4}>
-                            <div style={{display: 'flex', alignItems: 'center'}}>
-                                <Account display="ethIcon" size={25} />
-                                <Typography variant="subheading" style={{marginLeft: 8}}>{'My Wallet'}</Typography>
-                            </div>
-                        </Grid>
-                        <Grid item xs={4}>
-                            <div style={{display: 'flex', alignItems: 'flex-end'}}>
-                                <Typography variant="title">{formattedTokenBalance.value}</Typography>
-                                <Typography>{formattedTokenBalance.label}</Typography>
-                            </div>
-                            {requiredTokenAmount ? (
-                                <Typography variant="caption" className="required-token-amount" color="error">
-                                    {`need `}<TokenBalance baseAmount={requiredTokenAmount} />{` to ${requiredTokenCopy ? requiredTokenCopy : 'watch'}`}
-                                </Typography>
-                            ) : null}
-                        </Grid>
-                        <Grid item xs={4}>
-                            <div style={{display: 'flex', alignItems: 'flex-end'}}> 
-                                <Typography variant="title">{wallet.ethBalance.toFixed(3)}</Typography> 
-                                <Typography>{'ETH'}</Typography>
-                            </div>
-                        </Grid>
-                    </Grid>
-                    <Grid className="grid on-pending" container spacing={16}>
-                        <Grid item xs={4}>
-                            <Typography variant="subheading">{'Purchase:'}</Typography>
-                            <Typography variant="caption">{`1 Giga AO = ${exchange.exchangeRate.multipliedBy(Math.pow(10, 9)).toNumber()} ETH`}</Typography>
-                        </Grid>
-                        <Grid item xs={8}>
-                            <div className="input-container" style={{backgroundColor: theme.palette.type === 'dark' ? '#333333' : '#AAAAAA'}}>
-                                <DenominationInput 
-                                    baseInputValue={exchange.exchangeAmountToken}
-                                    disabled={formDisabled}
-                                    onChange={this._onInputChange}
-                                />
-                            </div>                        
-                        </Grid>
-                    </Grid>
-                    <Grid className="grid on-pending" container spacing={16} alignItems="center">
-                        <Grid item xs={4}>
-                            <Typography variant="caption">{'cost'}</Typography>
-                        </Grid>
-                        <Grid item xs={8}>
-                            <Typography variant="subheading">{`${ethCost.toNumber()} ETH`}</Typography>
-                            {ethCost.gte(wallet.ethBalance) ? (
-                                <Typography variant="caption" color="error" style={{marginTop: -2}}>{`max ETH balance reached!`}</Typography>
-                            ) : null}
-                        </Grid>
-                    </Grid>
-                    <Grid className="grid on-pending" container spacing={16}>
-                        <Grid item xs={4}>
-                            <Typography variant="caption">{'with funds from'}</Typography>                        
-                        </Grid>
-                        <Grid item xs={8}>
-                            <div style={{overflow: 'hidden', wordWrap: 'break-word'}}>
-                                <Typography variant="caption">{'account:'}</Typography>
-                                <Typography>{ethAddress}</Typography>
-                            </div>
-                        </Grid>
-                    </Grid>
-                    <Grid className="grid" container spacing={16} style={{paddingBottom: 0}}>
-                        {showExchangeTransactionMessage ? (
-                            <Grid item xs={12} style={{textAlign: 'right'}}>
-                                {exchangeTransaction.error ? (
-                                    <Typography color="error">{exchangeTransaction.error.message}</Typography>                                
-                                ) : null}
-                                {exchangeTransaction.initialized && !exchangeTransaction.transactionHash && !exchangeTransaction.error ? (
-                                    <Typography color="default">{`Please check Metamask to approve this transaction`}</Typography>
-                                ) : null}
-                                {exchangeTransaction.transactionHash && !exchangeTransaction.result ? (
-                                    <Typography color="default">
-                                        {'tx: '} <EtherscanLink type="tx" value={exchangeTransaction.transactionHash} style={{maxWidth: '80%'}} />
-                                    </Typography>
-                                ) : null}
-                                {exchangeTransaction.result ? (
-                                    <Typography color="primary">{`Your AO purchase was succesful!`}</Typography>
-                                ) : null}
-                            </Grid>
-                        ) : null}
-                        <Grid item xs={8} style={{marginLeft: 'auto'}}>
-                            {exchangeTransaction.result ? (
-                                <PrimaryButton 
-                                    color="primary" 
-                                    variant="flat" 
-                                    fullWidth 
-                                    onClick={this._resetExchangeForm}
-                                    disabled={false}
-                                    >
-                                    {'Make another purchase   ↺'}
-                                </PrimaryButton>
-                            ) : (
-                                <PrimaryButton 
-                                    color="primary" 
-                                    variant="flat" 
-                                    fullWidth 
-                                    onClick={this._handlePurchase}
-                                    disabled={formDisabled}
-                                    >
-                                    {exchangeInProgress ? 'Pending...' : 'Purchase'}
-                                    {exchangeInProgress ? (
-                                        <CircularProgress size={25} style={{position: 'absolute', right: 6}} />
-                                    ) : null}
-                                </PrimaryButton>
-                            )}
-                        </Grid>
-                    </Grid> */}
+                    </div>                    
                 </div>
             </div>
         )
