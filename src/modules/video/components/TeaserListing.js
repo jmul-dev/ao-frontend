@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import TeaserCardContainer from '../containers/TeaserCardContainer';
+import TeaserCard from './TeaserCard';
 import '../styles/teaser-listing.css';
 
 
@@ -57,7 +57,7 @@ export default class TeaserListing extends Component<Props> {
                                 style={index === 2 ? this.props.activeTeaserVideoCellPosition : undefined}
                                 onClick={index !== 2 ? () => updateActiveVideoIndex(activeTeaserVideoIndex + index - 2) : undefined}
                                 >
-                                <TeaserCardContainer 
+                                <TeaserCard 
                                     video={video}                                    
                                     isActive={slideIsActive}
                                     isFullscreen={slideIsFullscreen}

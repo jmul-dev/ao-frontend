@@ -116,9 +116,9 @@ class AccountVideoListing extends Component {
             return null  // TODO: loading
         if ( error )
             return this._renderErrorState()
-        if ( !node || !node.creator || !node.creator.content )
+        if ( !node || !node.content || !node.content.staked )
             return this._renderNoAccountVideos()
-        const videos = node.creator.content
+        const videos = node.content.staked
         return (
             <div className="AccountVideoListing">
                 <ul style={{listStyle: 'none', padding: 0, margin: 0}}>

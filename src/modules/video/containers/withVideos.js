@@ -1,4 +1,3 @@
-import VideoListing from '../components/VideoListing'
 import { connect } from 'react-redux'
 import { graphql, compose } from 'react-apollo'
 import gql from "graphql-tag"
@@ -22,7 +21,15 @@ const mapStateToProps = (store) => {
 const videosQuery = gql(`
     query {
         videos {
-            id, title, description, fileName, contentType, fileUrl, featuredImageUrl, teaserUrl, stake
+            id, 
+            title, 
+            description, 
+            fileName, 
+            contentType, 
+            fileUrl, 
+            featuredImageUrl, 
+            teaserUrl, 
+            stake
         }
     }
 `)
@@ -39,4 +46,4 @@ export default compose(
             }
         })
     }),
-)(VideoListing);
+);

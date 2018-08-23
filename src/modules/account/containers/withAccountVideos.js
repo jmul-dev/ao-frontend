@@ -7,8 +7,11 @@ const accountVideos = gql(`
     query {
         node {
             id,
-            creator {
-                content {
+            content {
+                staked {
+                    ...VideoContentFragment
+                },
+                hosted {
                     ...VideoContentFragment
                 }
             }

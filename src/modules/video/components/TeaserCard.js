@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import PlayIcon from '@material-ui/icons/PlayArrow';
@@ -9,6 +9,8 @@ import { LogoIcon } from '../../../assets/Icons';
 import ExchangeModal from '../../exchange/components/ExchangeModal';
 import { PrimaryButton } from '../../../theme';
 import { TokenBalance } from '../../../utils/denominations';
+import withVideo from '../containers/withVideo';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 
 type Props = {
@@ -20,9 +22,15 @@ type Props = {
     tokenBalance: Object,  // bignumber
     // redux bound methods
     setActiveVideo: Function,
+    // graphql props
+    videoQuery: {
+        video: Object,
+        refetch: Function,
+        loading: boolean,
+    }
 }
 
-export default class TeaserCard extends Component<Props> {
+class TeaserCard extends Component<Props> {
     constructor(props) {
         super(props)
         this.state = {
@@ -36,11 +44,24 @@ export default class TeaserCard extends Component<Props> {
         this.setState({exchangeModalOpen: false})
     }
     _playVideo = () => {
-        const { setActiveVideo, tokenBalance, video } = this.props
-        if ( tokenBalance.lt(video.stake) ) {
-            this.setState({exchangeModalOpen: true})
-        } else {
+        const { setActiveVideo, tokenBalance, video, videoQuery } = this.props
+        if ( !videoQuery.video )
+            return console.warn('attempted playing video before video state was fetched')        
+        if ( videoQuery.video.state === 'STAKED' || videoQuery.video.state === 'DISCOVERABLE' ) {
+            // A: Video is in a playable state
             setActiveVideo(this.props.video)
+        } else if ( videoQuery.video.state === 'DISCOVERED' ) {
+            // B: Content has not began the purchase process
+            if ( tokenBalance.lt(video.stake) ) {
+                // B.1: Exchange modal if balance sucks
+                this.setState({exchangeModalOpen: true})
+            } else {
+                // B.2: TODO: Begin download
+                
+            }
+        } else {
+            // C: Content is going through the purchase process
+            return null;
         }
     }
     _onEnteredFullscreen = () => {
@@ -55,6 +76,40 @@ export default class TeaserCard extends Component<Props> {
         })
     }
     _onExitingFullscreen = () => {}
+    _renderActionState = () => {
+        let contentState = 'DISCOVERED'
+        if ( this.props.videoQuery.video ) {
+            contentState = this.props.videoQuery.video.state
+        }
+        switch (contentState) {
+            case 'DOWNLOADING':
+            case 'DOWNLOADED':
+            case 'PURCHASED':
+            case 'DECRYPTION_KEY_RECEIVED':
+            case 'DECRYPTED':
+            case 'VERIFIED':
+            case 'ENCRYPTED':
+            case 'STAKED':
+                return (
+                    <PrimaryButton disabled className="play-button" style={{paddingLeft: 16, background: '#333333'}}>
+                        <CircularProgress size={25} style={{marginRight: 16}}/>
+                        <Typography variant="body1">{`Processing`}</Typography>
+                    </PrimaryButton>
+                )
+            case 'DISCOVERABLE':
+            case 'DISCOVERED':
+            default:
+                return (
+                    <PrimaryButton onClick={this._playVideo} className="play-button">
+                        <div className="play-icon">
+                            <PlayIcon />
+                        </div>
+                        <Typography variant="subheading">{`watch now`}</Typography>
+                    </PrimaryButton>
+                )
+                break;
+        }        
+    }
     render() {
         const { video, isActive, isFullscreen, isTeaserEntered, tokenBalance } = this.props
         const { videoSrc, usingTeaserSrc, videoSrcReady } = this.state
@@ -104,15 +159,10 @@ export default class TeaserCard extends Component<Props> {
                             <Typography variant="body1">
                                 <TokenBalance baseAmount={video.stake} /> {' / view'}
                             </Typography>
-                            <Typography variant="caption">
+                            <Typography variant="caption" gutterBottom>
                                 {`your balance: `}<TokenBalance baseAmount={tokenBalance} />
                             </Typography>
-                            <PrimaryButton onClick={this._playVideo} className="play-button">
-                                <div className="play-icon">
-                                    <PlayIcon />
-                                </div>
-                                <Typography variant="subheading">{`watch now`}</Typography>
-                            </PrimaryButton>
+                            {this._renderActionState()}
                         </div>
                     </div>
                     <div className="content-container hide-fullscreen">
@@ -140,3 +190,5 @@ export default class TeaserCard extends Component<Props> {
         )
     }
 }
+
+export default withVideo(TeaserCard)

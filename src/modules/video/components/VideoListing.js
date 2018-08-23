@@ -9,6 +9,7 @@ import Typography from '@material-ui/core/Typography';
 import '../styles/video-listing.css';
 import TeaserListing from './TeaserListing';
 import { CSSTransition } from 'react-transition-group';
+import withVideos from '../containers/withVideos';
 
 
 const propertySelection = (({ top, right, bottom, left, width, height }) => ({ top, right, bottom, left, width, height }))
@@ -24,7 +25,7 @@ type Props = {
     videosResult: any,
 };
 
-export default class VideoListing extends Component<Props> {
+class VideoListing extends Component<Props> {
     props: Props;
     constructor() {
         super()
@@ -162,3 +163,5 @@ export default class VideoListing extends Component<Props> {
         this.setState({enteredTeaser: true})
     }
 }
+
+export default withVideos(VideoListing)
