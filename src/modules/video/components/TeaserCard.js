@@ -107,7 +107,7 @@ class TeaserCard extends Component<Props> {
                         <Typography variant="subheading">{`watch now`}</Typography>
                     </PrimaryButton>
                 )
-        }        
+        }
     }
     render() {
         const { video, isActive, isFullscreen, isTeaserEntered, tokenBalance } = this.props
