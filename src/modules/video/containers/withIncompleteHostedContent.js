@@ -27,6 +27,7 @@ const mapStateToProps = (store) => {
 const incompleteHostedContentQuery = gql(`
     query {
         node {
+            id,
             hostedContent(incomplete: true) {
                 ...VideoContentFragment
             }

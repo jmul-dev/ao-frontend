@@ -5,6 +5,7 @@ import IconButton from '@material-ui/core/IconButton';
 import SearchIcon from '@material-ui/icons/Search';
 import Clock from '../../modules/clock/components/Clock';
 import VideoListing from '../../modules/video/components/VideoListing';
+import EnqueuedVideos from '../../modules/video/components/EnqueuedVideos';
 import './browse-view.css';
 
 
@@ -21,6 +22,7 @@ export default class BrowseView extends Component {
                     </div>
                 </header>
                 <VideoListing />
+                <EnqueuedVideos />
             </View>
         );
     }
