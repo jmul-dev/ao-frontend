@@ -6,7 +6,7 @@ import { withTheme } from '@material-ui/core/styles';
 import AlertIcon from '@material-ui/icons/ErrorOutline';
 import '../styles/enqueued-videos.css';
 import { CircularProgress } from '@material-ui/core';
-import { ContentPurchaseState } from './ContentPurchaseActions';
+import { ContentPurchaseState, ContentPurchaseAction, statesPendingUserAction } from './ContentPurchaseActions';
 
 
 type Props = {
@@ -44,7 +44,7 @@ class EnqueuedVideos extends Component<Props> {
 }
 
 const EnqueuedVideoListItem = withTheme()(({theme, content, ...props}) => {
-    const actionRequired = false
+    const actionRequired = statesPendingUserAction.indexOf(content.state) > -1
     const actionText = 'Pay for video'
     const loadingText = 'Downloading...'
     return (
@@ -67,11 +67,13 @@ const EnqueuedVideoListItem = withTheme()(({theme, content, ...props}) => {
             <div style={{marginLeft: 'auto'}}>
                 <div className="featured-image" style={{backgroundImage: `url(${window.AO_CORE_URL}/${content.featuredImageUrl})`}}>
                     {actionRequired ? (
-                        <ButtonBase className="action-button">
-                            <div className="action-text">
-                                <Typography variant="body1">{actionText}</Typography>                                
-                            </div>
-                        </ButtonBase>
+                        <ContentPurchaseAction content={content}>{({action, loading}) => (
+                            <ButtonBase className="action-button" disabled={!action || loading} onClick={action}>
+                                <div className="action-text">
+                                    <Typography variant="body1">{actionText}</Typography>                                
+                                </div>
+                            </ButtonBase>
+                        )}</ContentPurchaseAction>                        
                     ) : null}
                 </div>
             </div>
