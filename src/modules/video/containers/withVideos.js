@@ -22,6 +22,7 @@ const videosQuery = gql(`
     query {
         videos {
             id, 
+            state,
             title, 
             description, 
             fileName, 

@@ -11,6 +11,7 @@ import { PrimaryButton } from '../../../theme';
 import { TokenBalance } from '../../../utils/denominations';
 import withVideo from '../containers/withVideo';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import { ContentPurchaseState } from './ContentPurchaseActions';
 
 
 type Props = {
@@ -78,22 +79,25 @@ class TeaserCard extends Component<Props> {
     _onExitingFullscreen = () => {}
     _renderActionState = () => {
         let contentState = 'DISCOVERED'
+        let content = this.props.video
         if ( this.props.videoQuery.video ) {
             contentState = this.props.videoQuery.video.state
+            content = this.props.videoQuery.video
         }
         switch (contentState) {
             case 'DOWNLOADING':
             case 'DOWNLOADED':
-            case 'PURCHASED':
+            case 'PURCHASING':
+            case 'PURCHASED':            
             case 'DECRYPTION_KEY_RECEIVED':
             case 'DECRYPTED':
             case 'VERIFIED':
             case 'ENCRYPTED':
+            case 'STAKING':
             case 'STAKED':
                 return (
-                    <PrimaryButton disabled className="play-button" style={{paddingLeft: 16, background: '#333333'}}>
-                        <CircularProgress size={25} style={{marginRight: 16}}/>
-                        <Typography variant="body1">{`Processing`}</Typography>
+                    <PrimaryButton disabled className="play-button" style={{background: '#333333'}}>
+                        <ContentPurchaseState content={content} />
                     </PrimaryButton>
                 )
             case 'DISCOVERABLE':
@@ -101,10 +105,7 @@ class TeaserCard extends Component<Props> {
             default:
                 return (
                     <PrimaryButton onClick={this._playVideo} className="play-button">
-                        <div className="play-icon">
-                            <PlayIcon />
-                        </div>
-                        <Typography variant="subheading">{`watch now`}</Typography>
+                        <ContentPurchaseState content={content} />
                     </PrimaryButton>
                 )
         }

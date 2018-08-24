@@ -6,6 +6,7 @@ import { withTheme } from '@material-ui/core/styles';
 import AlertIcon from '@material-ui/icons/ErrorOutline';
 import '../styles/enqueued-videos.css';
 import { CircularProgress } from '@material-ui/core';
+import { ContentPurchaseState } from './ContentPurchaseActions';
 
 
 type Props = {
@@ -51,7 +52,8 @@ const EnqueuedVideoListItem = withTheme()(({theme, content, ...props}) => {
             <div style={{overflow: 'hidden', marginRight: 16}}>
                 <Typography variant="subheading" gutterBottom noWrap>{content.title}</Typography>
                 <Typography variant="body1" component="div" className="action-status">
-                    {actionRequired ? (
+                    <ContentPurchaseState content={content} />
+                    {/* {actionRequired ? (                        
                         <Fragment>
                             <AlertIcon style={{marginRight: 4}} />{'Action required'}
                         </Fragment>
@@ -59,7 +61,7 @@ const EnqueuedVideoListItem = withTheme()(({theme, content, ...props}) => {
                         <Fragment>
                             <CircularProgress size={20} style={{marginRight: 8}} />{loadingText}
                         </Fragment>
-                    )}
+                    )} */}
                 </Typography>
             </div>
             <div style={{marginLeft: 'auto'}}>
