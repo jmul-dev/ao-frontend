@@ -1,7 +1,11 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import Typography from '@material-ui/core/Typography';
-import '../styles/teaser-card.css';
+import ButtonBase from '@material-ui/core/ButtonBase';
 import withIncompleteHostedContent from '../containers/withIncompleteHostedContent';
+import { withTheme } from '@material-ui/core/styles';
+import AlertIcon from '@material-ui/icons/ErrorOutline';
+import '../styles/enqueued-videos.css';
+import { CircularProgress } from '@material-ui/core';
 
 
 type Props = {
@@ -25,11 +29,52 @@ class EnqueuedVideos extends Component<Props> {
         if ( node && !node.hostedContent )
             return null;  // no incomplete hosted content
         return (
-            <div style={{position: 'fixed', bottom: 0, right: 0, zIndex: 9999, width: 200, height: 200, background: 'white'}}>
-                {`We have some incomplete content`}
+            <div className="EnqueuedVideos">
+                <ul>
+                    {node.hostedContent.map(content => (
+                        <li key={content.id}>
+                            <EnqueuedVideoListItem content={content} />
+                        </li>
+                    ))}
+                </ul>
             </div>            
         )
     }
 }
+
+const EnqueuedVideoListItem = withTheme()(({theme, content, ...props}) => {
+    const actionRequired = false
+    const actionText = 'Pay for video'
+    const loadingText = 'Downloading...'
+    return (
+        <div className="EnqueuedVideo" style={{backgroundColor: actionRequired ? theme.palette.primary.main : theme.palette.background.default}}>
+            <div style={{overflow: 'hidden', marginRight: 16}}>
+                <Typography variant="subheading" gutterBottom noWrap>{content.title}</Typography>
+                <Typography variant="body1" component="div" className="action-status">
+                    {actionRequired ? (
+                        <Fragment>
+                            <AlertIcon style={{marginRight: 4}} />{'Action required'}
+                        </Fragment>
+                    ) : (
+                        <Fragment>
+                            <CircularProgress size={20} style={{marginRight: 8}} />{loadingText}
+                        </Fragment>
+                    )}
+                </Typography>
+            </div>
+            <div style={{marginLeft: 'auto'}}>
+                <div className="featured-image" style={{backgroundImage: `url(${window.AO_CORE_URL}/${content.featuredImageUrl})`}}>
+                    {actionRequired ? (
+                        <ButtonBase className="action-button">
+                            <div className="action-text">
+                                <Typography variant="body1">{actionText}</Typography>                                
+                            </div>
+                        </ButtonBase>
+                    ) : null}
+                </div>
+            </div>
+        </div>
+    )
+})
 
 export default withIncompleteHostedContent(EnqueuedVideos)
