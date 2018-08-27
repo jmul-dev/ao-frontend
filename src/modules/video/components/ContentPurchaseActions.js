@@ -111,7 +111,7 @@ const mapDispatchToProps = {
 // Redux state
 const mapStateToProps = (store, props) => {
     return {
-        buyContentTransaction: store.video.buyContentTransactions[props.content.id]  // TODO: use contentHostId
+        
     }
 }
 
@@ -128,8 +128,6 @@ const withContentPurchaseActions = compose(
  * @param {content} Object AO Content
  * @param {client} ApolloClient
  * @param {children} Function Accepting parameters {action}
- * 
- * @param {buyContentTransaction} Object buyContent state will show up on this
  */
 class ContentPurchaseActionComponent extends Component {
     constructor() {
@@ -138,9 +136,6 @@ class ContentPurchaseActionComponent extends Component {
             loading: false,
             error: null,
         }
-    }
-    componentWillReceiveProps(nextProps) {
-        
     }
     _downloadContentAction = () => {
         const { client, content } = this.props
@@ -163,13 +158,13 @@ class ContentPurchaseActionComponent extends Component {
         const { buyContent, buyContentTransaction, content, client } = this.props
         this.setState({loading: true})
         // TODO: make sure we have the actual contentHostId
-        buyContent(content.id, {
-            // onTransactionSubmitted: () => {
-                
-            // },
-            // onTransactionFailed: 
-            // onPurchaseReceipt: 
-        })  // NOTE: lifecycle of this action comes through via props.buyContentTransaction
+        buyContent(content.id).then(transactionHash => {
+            // TODO: contentPurchaseTransaction mutation!
+            
+        }).catch(error => {
+            console.error(`Error during buyContent`, error)
+            this.setState({loading: false})
+        })
     }
     render() {
         const { content, children } = this.props
@@ -189,10 +184,6 @@ class ContentPurchaseActionComponent extends Component {
                 action = this._buyContentAction
                 break;
             case 'PURCHASING':
-                const { buyContentTransaction } = this.props
-                if ( buyContentTransaction && buyContentTransaction.error ) {
-                    error = buyContentTransaction.error
-                }
                 break;
             case 'PURCHASED':  
                 // Content is purchased, waiting for decryption key
