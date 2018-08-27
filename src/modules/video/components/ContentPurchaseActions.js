@@ -12,7 +12,8 @@ import PlayIcon from '@material-ui/icons/PlayArrow';
 import { withApollo, compose } from 'react-apollo';
 import { connect } from 'react-redux';
 import gql from "graphql-tag";
-import contentRequestMutation from '../../../graphql/mutations/contentRequest'
+import contentRequestMutation from '../../../graphql/mutations/contentRequest';
+import { buyContent } from '../reducers/video.reducer';
 
 
 export const statesPendingUserAction = [
@@ -105,12 +106,12 @@ export const ContentPurchaseState = ({content}) => {
 
 // Redux actions
 const mapDispatchToProps = {
-    
+    buyContent,
 }
 // Redux state
-const mapStateToProps = (store) => {
+const mapStateToProps = (store, props) => {
     return {
-        
+        buyContentTransaction: store.video.buyContentTransactions[props.content.id]  // TODO: use contentHostId
     }
 }
 
@@ -127,48 +128,71 @@ const withContentPurchaseActions = compose(
  * @param {content} Object AO Content
  * @param {client} ApolloClient
  * @param {children} Function Accepting parameters {action}
+ * 
+ * @param {buyContentTransaction} Object buyContent state will show up on this
  */
 class ContentPurchaseActionComponent extends Component {
     constructor() {
         super()
         this.state = {
-            loading: false
+            loading: false,
+            error: null,
         }
     }
+    componentWillReceiveProps(nextProps) {
+        
+    }
+    _downloadContentAction = () => {
+        const { client, content } = this.props
+        this.setState({loading: true})
+        client.mutate({
+            mutation: contentRequestMutation,
+            variables: {
+                id: content.id
+            }
+        }).then(({data, ...props}) => {
+            console.log(data, props);
+            this.setState({loading: false})
+        }).catch(error => {
+            console.error(`Error during contentRequestMutation`, error)
+            this.setState({loading: false})
+            // TODO: we want an error state! likely handled similar to loading state
+        })
+    }
+    _buyContentAction = () => {
+        const { buyContent, buyContentTransaction, content, client } = this.props
+        this.setState({loading: true})
+        // TODO: make sure we have the actual contentHostId
+        buyContent(content.id, {
+            // onTransactionSubmitted: () => {
+                
+            // },
+            // onTransactionFailed: 
+            // onPurchaseReceipt: 
+        })  // NOTE: lifecycle of this action comes through via props.buyContentTransaction
+    }
     render() {
-        const { content, client, children } = this.props
+        const { content, children } = this.props
         const { loading } = this.state
+        let error = this.state.error
         let action = null
-        let graphqlQuery = null
-        let reduxAction = null
         switch (content.state) {
             case 'DISCOVERED':
                 // The first action, download content (bring in to core)
-                action = () => {
-                    this.setState({loading: true})
-                    client.mutate({
-                        mutation: contentRequestMutation,
-                        variables: {
-                            id: content.id
-                        }
-                    }).then(({data, ...props}) => {
-                        console.log(data, props);
-                        this.setState({loading: false})
-                    }).catch(error => {
-                        console.error(`Error during contentRequestMutation`, error)
-                        this.setState({loading: false})
-                        // TODO: we want an error state! likely handled similar to loading state
-                    })
-                }
+                action = this._downloadContentAction
                 break;
             case 'DOWNLOADING':
                 // No action to take
                 break;
             case 'DOWNLOADED':
                 // Content is download, purchase action now available
-
+                action = this._buyContentAction
                 break;
             case 'PURCHASING':
+                const { buyContentTransaction } = this.props
+                if ( buyContentTransaction && buyContentTransaction.error ) {
+                    error = buyContentTransaction.error
+                }
                 break;
             case 'PURCHASED':  
                 // Content is purchased, waiting for decryption key
@@ -193,11 +217,11 @@ class ContentPurchaseActionComponent extends Component {
             case 'STAKED':
                 break;
             case 'DISCOVERABLE':
-                break;        
+                break;
             default:
                 break;
         }
-        return children({action, loading})
+        return children({action, loading, error})
     }
 }
 

@@ -95,9 +95,12 @@ class TeaserCard extends Component<Props> {
             )
         } else {
             return (
-                <ContentPurchaseAction content={content}>{({action, loading}) => (
+                <ContentPurchaseAction content={content}>{({action, loading, error}) => (
                     <PrimaryButton disabled={!action || loading} onClick={action}>
                         <ContentPurchaseState content={content} />
+                        {error ? (
+                            <div>{typeof error === 'string' ? error : error.message}</div>
+                        ) : null}
                     </PrimaryButton>
                 )}</ContentPurchaseAction>
             )
