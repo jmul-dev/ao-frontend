@@ -27,7 +27,7 @@ class EnqueuedVideos extends Component<Props> {
         const { loading, error, node } = this.props.incompleteHostedContentQuery
         if ( loading || error )
             return null;
-        if ( node && !node.hostedContent )
+        if ( !node || (node && !node.hostedContent) )
             return null;  // no incomplete hosted content
         return (
             <div className="EnqueuedVideos">
