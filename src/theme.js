@@ -18,7 +18,7 @@ export const PrimaryButton = withStyles(({palette}) => ({
         color: '#FFFFFF',
     },
     disabled: {
-        background: palette.primary.light,
+        background: palette.background.default,
     },
 }))(primaryButton)
 

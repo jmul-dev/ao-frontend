@@ -12,6 +12,7 @@ import PlayIcon from '@material-ui/icons/PlayArrow';
 import { withApollo, compose } from 'react-apollo';
 import { connect } from 'react-redux';
 import gql from "graphql-tag";
+import contentRequestMutation from '../../../graphql/mutations/contentRequest'
 
 
 export const statesPendingUserAction = [
@@ -145,18 +146,18 @@ class ContentPurchaseActionComponent extends Component {
                 // The first action, download content (bring in to core)
                 action = () => {
                     this.setState({loading: true})
-                    client.query({
-                        query: gql(`
-                            query {
-                                state,
-                                node {
-                                    id, ethAddress
-                                }
-                            }
-                        `)
-                    }).then(({data}) => {
+                    client.mutate({
+                        mutation: contentRequestMutation,
+                        variables: {
+                            id: content.id
+                        }
+                    }).then(({data, ...props}) => {
+                        console.log(data, props);
                         this.setState({loading: false})
-                        console.log(data)
+                    }).catch(error => {
+                        console.error(`Error during contentRequestMutation`, error)
+                        this.setState({loading: false})
+                        // TODO: we want an error state! likely handled similar to loading state
                     })
                 }
                 break;
@@ -196,106 +197,8 @@ class ContentPurchaseActionComponent extends Component {
             default:
                 break;
         }
-        action = () => {
-            this.setState({loading: true})
-            setTimeout(() => {
-                client.query({
-                    query: gql(`
-                        query {
-                            state,
-                            node {
-                                id, ethAddress
-                            }
-                        }
-                    `)
-                }).then(({data}) => {
-                    this.setState({loading: false})
-                    console.log(data)
-                })
-            }, 1000)
-        }
         return children({action, loading})
     }
 }
 
 export const ContentPurchaseAction = withContentPurchaseActions(ContentPurchaseActionComponent)
-
-// export const ContentPurchaseAction = withContentPurchaseActions(({content, client, children, ...props}) => {
-//     let action = null
-//     let graphqlQuery = null
-//     let reduxAction = null
-//     let loading = false
-//     switch (content.state) {
-//         case 'DISCOVERED':
-//             // The first action, download content (bring in to core)
-//             action = () => {
-//                 loading = true
-//                 client.query({
-//                     query: gql(`
-//                         query {
-//                             state,
-//                             node {
-//                                 id, ethAddress
-//                             }
-//                         }
-//                     `)
-//                 }).then(({data}) => {
-//                     loading = false
-//                     console.log(data)
-//                 })
-//             }
-//             break;
-//         case 'DOWNLOADING':
-//             // No action to take
-//             break;
-//         case 'DOWNLOADED':
-//             // Content is download, purchase action now available
-
-//             break;
-//         case 'PURCHASING':
-//             break;
-//         case 'PURCHASED':  
-//             // Content is purchased, waiting for decryption key
-//             break;
-//         case 'DECRYPTION_KEY_RECEIVED':
-//             break;
-//         case 'DECRYPTED':
-//             // Content is purchased, waiting for decryption key
-//             break;
-//         case 'VERIFIED':
-//             // Content verified, automatically proceeds to encrypting
-//             break;
-//         case 'VERIFICATION_FAILED':
-//             break;
-//         case 'ENCRYPTING':
-//             break;
-//         case 'ENCRYPTED':
-//             // Video is encrypted, indicate need to becomeHost/stake
-//             break;
-//         case 'STAKING':
-//             break;
-//         case 'STAKED':
-//             break;
-//         case 'DISCOVERABLE':
-//             break;        
-//         default:
-//             break;
-//     }
-//     action = () => {
-//         loading = true
-//         client.query({
-//             query: gql(`
-//                 query {
-//                     state,
-//                     node {
-//                         id, ethAddress
-//                     }
-//                 }
-//             `)
-//         }).then(({data}) => {
-//             loading = false
-//             console.log(data)
-//         })
-//     }
-//     return children({action, loading})
-// })

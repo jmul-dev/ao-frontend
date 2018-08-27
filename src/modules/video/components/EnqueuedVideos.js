@@ -73,7 +73,7 @@ const EnqueuedVideoListItem = withTheme()(({theme, content, ...props}) => {
                                     <Typography variant="body1">{actionText}</Typography>                                
                                 </div>
                             </ButtonBase>
-                        )}</ContentPurchaseAction>                        
+                        )}</ContentPurchaseAction>
                     ) : null}
                 </div>
             </div>

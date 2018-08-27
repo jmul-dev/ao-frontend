@@ -11,7 +11,7 @@ import { PrimaryButton } from '../../../theme';
 import { TokenBalance } from '../../../utils/denominations';
 import withVideo from '../containers/withVideo';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import { ContentPurchaseState } from './ContentPurchaseActions';
+import { ContentPurchaseAction, ContentPurchaseState, statesPendingUserAction } from './ContentPurchaseActions';
 
 
 type Props = {
@@ -84,30 +84,23 @@ class TeaserCard extends Component<Props> {
             contentState = this.props.videoQuery.video.state
             content = this.props.videoQuery.video
         }
-        switch (contentState) {
-            case 'DOWNLOADING':
-            case 'DOWNLOADED':
-            case 'PURCHASING':
-            case 'PURCHASED':            
-            case 'DECRYPTION_KEY_RECEIVED':
-            case 'DECRYPTED':
-            case 'VERIFIED':
-            case 'ENCRYPTED':
-            case 'STAKING':
-            case 'STAKED':
-                return (
-                    <PrimaryButton disabled className="play-button" style={{background: '#333333'}}>
+        const actionRequired = statesPendingUserAction.indexOf(content.state) > -1
+
+        if ( contentState === 'DISCOVERABLE' ) {
+            // User has completed the purchase/host/discovery process, they can now play the video
+            return (
+                <PrimaryButton onClick={this._playVideo} className="play-button">
+                    <ContentPurchaseState content={content} />
+                </PrimaryButton>
+            )
+        } else {
+            return (
+                <ContentPurchaseAction content={content}>{({action, loading}) => (
+                    <PrimaryButton disabled={!action || loading} onClick={action}>
                         <ContentPurchaseState content={content} />
                     </PrimaryButton>
-                )
-            case 'DISCOVERABLE':
-            case 'DISCOVERED':
-            default:
-                return (
-                    <PrimaryButton onClick={this._playVideo} className="play-button">
-                        <ContentPurchaseState content={content} />
-                    </PrimaryButton>
-                )
+                )}</ContentPurchaseAction>
+            )
         }
     }
     render() {
