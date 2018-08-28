@@ -13,6 +13,7 @@ import { withApollo, compose } from 'react-apollo';
 import { connect } from 'react-redux';
 import gql from "graphql-tag";
 import contentRequestMutation from '../../../graphql/mutations/contentRequest';
+import contentPurchaseTransactionMutation from '../../../graphql/mutations/contentPurchaseTransaction';
 import { buyContent } from '../reducers/video.reducer';
 
 
@@ -111,7 +112,7 @@ const mapDispatchToProps = {
 // Redux state
 const mapStateToProps = (store, props) => {
     return {
-        
+
     }
 }
 
@@ -137,6 +138,11 @@ class ContentPurchaseActionComponent extends Component {
             error: null,
         }
     }
+    _dispatchErrorNotificationAndStopLoading = (error, errorMessage, errorContext) => {
+        console.error(errorContext, error)
+        // TODO: error notification
+        this.setState({loading: false})
+    }
     _downloadContentAction = () => {
         const { client, content } = this.props
         this.setState({loading: true})
@@ -149,21 +155,33 @@ class ContentPurchaseActionComponent extends Component {
             console.log(data, props);
             this.setState({loading: false})
         }).catch(error => {
-            console.error(`Error during contentRequestMutation`, error)
-            this.setState({loading: false})
-            // TODO: we want an error state! likely handled similar to loading state
+            this._dispatchErrorNotificationAndStopLoading(error, 'Failed to request content', 'Error during contentRequestMutation')
         })
     }
     _buyContentAction = () => {
         const { buyContent, buyContentTransaction, content, client } = this.props
         this.setState({loading: true})
+        // 1. Trigger the buyContent transaction via metamask
         // TODO: make sure we have the actual contentHostId
         buyContent(content.id).then(transactionHash => {
-            // TODO: contentPurchaseTransaction mutation!
-            
+            // 2. Notify core that the user is purchasing content
+            client.mutate({
+                mutation: contentPurchaseTransactionMutation,
+                variables: {
+                    inputs: {
+                        transactionHash,
+                        contentId: content.id,
+                    }
+                }
+            }).then(({data, ...props}) => {
+                console.log(data, props)
+                this.setState({loading: false})
+                // 3. Not sure we need to do anything here, state will be updated via pulling on content.state
+            }).catch(error => {
+                this._dispatchErrorNotificationAndStopLoading(error, 'Failed to move content to purchasing state', 'Error during contentPurchaseTransactionMutation')
+            })
         }).catch(error => {
-            console.error(`Error during buyContent`, error)
-            this.setState({loading: false})
+            this._dispatchErrorNotificationAndStopLoading(error, 'Buy content transaction failed', 'Error during buyContent action')
         })
     }
     render() {
