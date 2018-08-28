@@ -46,18 +46,32 @@ class UploadFormSubmit extends Component<Props> {
         const { submitContent, setContentSubmittionResult } = this.props
         submitContent().then(() => {
             const contentSubmission = this.props.submitContentResult.data.submitVideoContent
-            setContentSubmittionResult(contentSubmission)        
+            setContentSubmittionResult(contentSubmission)
             this._stakeContent()
         })
     }
     _stakeContent = () => {
-        const { form, stakeContent, contentSubmittionResult } = this.props
+        const { form, stakeContent, contentSubmittionResult, submitContentStakeTransaction, submittedContentQuery } = this.props
+        // 1. Trigger stake tx via metamask
         stakeContent({
             tokenAmount: form.stake,
             primordialTokenAmount: 0, // TODO
-            datKey: contentSubmittionResult.metadataDatKey,
+            fileDatKey: contentSubmittionResult.fileDatKey,
+            metadataDatKey: contentSubmittionResult.metadataDatKey,
             fileSizeInBytes: contentSubmittionResult.fileSize,
             profitPercentage: form.profit,
+        }).then(transactionHash => {
+            // 2. Submit the tx to core
+            submitContentStakeTransaction({
+                variables: {
+                    inputs: {
+                        contentId: contentSubmittionResult.id,
+                        transactionHash,
+                    }
+                }
+            })
+            // 3. Begin polling for content state update
+            submittedContentQuery.startPolling(3000)
         })
     }
     _cancel = () => {
@@ -101,7 +115,8 @@ class UploadFormSubmit extends Component<Props> {
         )
     }
     _renderActions() {
-        const { submitContentResult, submitContentLoading, submitContentError, stakeTransaction } = this.props
+        const { submitContentResult, submitContentLoading, submitContentError, stakeTransaction, submittedContentQuery } = this.props
+        // TODO: use the content.state coming in from submittedContentQuery.data.video.state === 'STAKED' | 'STAKING' | 'DAT_INITIALIZED'
         // logic in reverse order of event occurances
         if ( stakeTransaction.result ) {
             return (

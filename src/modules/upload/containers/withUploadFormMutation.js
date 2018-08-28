@@ -3,6 +3,8 @@ import withStateMutation from '../../../utils/withStateMutation';
 import gql from 'graphql-tag';
 import { connect } from 'react-redux';
 import { stakeContent, setContentSubmittionResult, updateLastReachedStep, resetUploadForm } from '../reducers/upload.reducer';
+import VideoContentFragment from '../../../graphql/fragments/VideoContentFragment'
+import videoQuery from '../../../graphql/queries/video'
 
 
 export type UploadFormMutationProps = {
@@ -10,6 +12,10 @@ export type UploadFormMutationProps = {
     submitContentLoading: boolean,
     submitContentError?: Error,
     submitContentResult?: Object,
+
+    submitContentStakeTransaction: Function,
+
+    submittedContentQuery: Function,
 };
 
 // Redux
@@ -32,9 +38,18 @@ const mapStateToProps = (store) => {
 const submitContentMutation = gql(`
     mutation submitVideoContent($inputs: VideoContentSubmissionInputs) {
         submitVideoContent(inputs: $inputs) {
-            id, metadataDatKey, fileSize
+            ...VideoContentFragment
         }
     }
+    ${VideoContentFragment}
+`)
+const contentUploadStakeTransaction = gql(`
+    mutation contentUploadStakeTransaction($inputs: ContentUploadStakeTransactionInputs) {
+        contentUploadStakeTransaction(inputs: $inputs) {
+            ...VideoContentFragment
+        }
+    }
+    ${VideoContentFragment}
 `)
 
 export default compose(
@@ -45,10 +60,23 @@ export default compose(
         options: (props) => ({
             variables: {
                 inputs: {                    
-                    ...props.form,                    
-                    pricingOption: undefined, // remove from form inputs
+                    ...props.form,
                     ethAddress: props.ethAddress,
+                    pricingOption: undefined, // remove from form inputs
+                    stakeTokenType: undefined, // remove from form inputs
+                    stakeTokenSplit: undefined, // remove from form inputs                    
                 }
+            }
+        })
+    }),
+    graphql(contentUploadStakeTransaction, {
+        name: 'submitContentStakeTransaction',
+    }),
+    graphql(videoQuery, {
+        name: 'submittedContentQuery',
+        options: (props) => ({
+            variables: {
+                id: props.contentSubmittionResult ? props.contentSubmittionResult.id : undefined
             }
         })
     }),
