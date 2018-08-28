@@ -81,7 +81,9 @@ export const updatePricingOption = (pricingOption, stake = undefined, profit = u
             payload = {
                 pricingOption,
                 stake: fileSize * pricingConstraints.stakeRatio,
-                profit: pricingConstraints.profitPercentage
+                profit: pricingConstraints.profitPercentage,
+                stakeTokenType: 'primordial',
+                stakeTokenSplit: 100,
             }
         } else {            
             payload = {
@@ -98,7 +100,7 @@ export const updatePricingOption = (pricingOption, stake = undefined, profit = u
         })
     }
 }
-export const stakeContent = ({tokenAmount, primordialTokenAmount, fileDatKey, metadataDatKey, fileSizeInBytes, profitPercentage}) => {
+export const stakeContent = ({networkTokenAmount, primordialTokenAmount, fileDatKey, metadataDatKey, fileSizeInBytes, profitPercentage}) => {
     return (dispatch, getState) => {
         return new Promise((resolve, reject) => {  
             const rejectAndDispatchError = (err) => {
@@ -117,7 +119,7 @@ export const stakeContent = ({tokenAmount, primordialTokenAmount, fileDatKey, me
             // NOTE: for now token & primordial token amounts are in base denomination
             const profitPercentageWithDivisor = parseInt(profitPercentage, 10) * 10000;  // 10^4
             contracts.aoContent.stakeContent(
-                parseInt(tokenAmount, 10),  // networkTokenIntegerAmount
+                parseInt(networkTokenAmount, 10),  // networkTokenIntegerAmount
                 0,  // networkTokenFractionalAmount
                 'ao',  // denomination                
                 parseInt(primordialTokenAmount, 10),  // primordialTokenAmount

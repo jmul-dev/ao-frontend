@@ -52,10 +52,23 @@ class UploadFormSubmit extends Component<Props> {
     }
     _stakeContent = () => {
         const { form, stakeContent, contentSubmittionResult, submitContentStakeTransaction, submittedContentQuery } = this.props
+        let networkTokenAmount = 0
+        let primordialTokenAmount = form.stake
+        if ( form.stakeTokenType === 'primordial' ) {
+            networkTokenAmount = 0
+            primordialTokenAmount = form.stake
+        } else if ( form.stakeTokenType === 'network' ) {
+            networkTokenAmount = form.stake
+            primordialTokenAmount = 0
+        } else if ( form.stakeTokenType === 'both' ) {
+            networkTokenAmount = form.stake * (1 - form.stakeTokenSplit / 100)
+            primordialTokenAmount = form.stake * (form.stakeTokenSplit / 100)
+        }
+
         // 1. Trigger stake tx via metamask
         stakeContent({
-            tokenAmount: form.stake,
-            primordialTokenAmount: 0, // TODO
+            networkTokenAmount,
+            primordialTokenAmount, // TODO
             fileDatKey: contentSubmittionResult.fileDatKey,
             metadataDatKey: contentSubmittionResult.metadataDatKey,
             fileSizeInBytes: contentSubmittionResult.fileSize,
