@@ -17,6 +17,10 @@ import { compose } from 'react-apollo';
 import withUserWallet from '../../wallet/containers/withUserWallet';
 import { TokenBalance, DenominationInput } from '../../../utils/denominations';
 import BigNumber from 'bignumber.js';
+import Radio from '@material-ui/core/Radio';
+import RadioGroup from '@material-ui/core/RadioGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Slider from '@material-ui/lab/Slider';
 
 
 const PricingInputCard = withTheme()(({headline, label, iconClassName, stake, profit, selected, onClick, theme}) => (
@@ -49,7 +53,7 @@ const PricingInputCard = withTheme()(({headline, label, iconClassName, stake, pr
 ))
 
 
-const CustomPricingCard = withTheme()(({expanded, stake, profit, onSelected, onChange, theme, ...props}) => (
+const CustomPricingCard = withTheme()(({expanded, stake, stakeTokenType, stakeTokenSplit, profit, onSelected, onChange, theme, ...props}) => (
     <ExpansionPanel className={expanded ? 'expanded' : ''} expanded={expanded} onChange={onSelected} style={{boxShadow: expanded ? `0px 5px 15px 0px ${theme.palette.secondary.light}` : undefined, transition: theme.transitions.create('box-shadow'), borderRadius: '4px'}} {...props}>
         <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
             <Typography variant="display3" className="headline" style={{color: expanded ? theme.palette.secondary.main : undefined}}>
@@ -58,33 +62,68 @@ const CustomPricingCard = withTheme()(({expanded, stake, profit, onSelected, onC
         </ExpansionPanelSummary>
         <ExpansionPanelDetails>
             <div>
-                <div className="gutter-bottom">
-                    <Typography>{'1. How much would you like to charge (AO/view)?'}</Typography>
-                    <div className="stake-input-container indent">
-                        <div style={{background: '#CCC', maxWidth: 300, padding: 6, borderRadius: 3}}>
-                            <DenominationInput 
-                                baseInputValue={new BigNumber(stake)}
-                                onChange={({baseInputValue}) => onChange(baseInputValue)}
-                            />
-                        </div>
+                <Typography>{'1. How much would you like to charge (AO/view)?'}</Typography>
+                <div className="stake-input-container indent">
+                    <div style={{background: '#CCC', maxWidth: 300, padding: 6, borderRadius: 3}}>
+                        <DenominationInput 
+                            baseInputValue={new BigNumber(stake)}
+                            isPrimordial={stakeTokenType === 'primordial'}
+                            onChange={({baseInputValue}) => {
+                                // Make sure to not update if we are not expanded (slight hack)
+                                if ( expanded )
+                                    onChange(baseInputValue)
+                            }}
+                        />
                     </div>
                 </div>
-                <div className="gutter-bottom">
-                    <Typography>{'2. What percentage of the earnings would you like to make?'}</Typography>
-                    <div className="profit-input-container indent">
-                        <div style={{display: 'flex', alignItems: 'flex-end', width: '100%'}}>
-                            <Typography variant="display3" className="profit-label">{`${profit}%`}</Typography>
-                            <Typography style={{color: '#17BB59', marginLeft: 'auto'}}>{profit < 25 ? 'great exposure' : (profit < 50 ? 'good exposure' : (profit < 75 ? 'average exposure' : 'less exposure'))}</Typography>
-                        </div>
-                        <ProfitSlider
+                <div className="section-divider"></div>
+                <Typography>{'2. Would you like to stake AO+, AO, or both?'}</Typography>
+                <div className="token-type-container indent">
+                    <div>
+                        <RadioGroup
+                            name="tokenType"
+                            value={stakeTokenType}
+                            onChange={(event) => onChange(undefined, undefined, event.target.value)}
+                        >
+                            <FormControlLabel value="primordial" control={<Radio />} label="AO+ (recommended)" />
+                            <FormControlLabel value="network" control={<Radio />} label="AO" />
+                            <FormControlLabel value="both" control={<Radio />} label="Both" />
+                        </RadioGroup>
+                    </div>
+                    <div style={{flex: 1, position: 'relative', marginLeft: 24, marginRight: 8, visibility: stakeTokenType === 'both' ? 'visible' : 'hidden'}}>
+                        <Slider 
+                            value={stakeTokenSplit}
+                            onChange={(event, value) => onChange(undefined, undefined, undefined, value)}
                             min={0}
                             max={100}
                             step={1}
-                            value={profit}
-                            onChange={(event, value) => onChange(undefined, parseInt(value, 10))}
-                        />                        
+                        />
+                        <Typography variant="caption" className="primordial-amount">
+                            <TokenBalance baseAmount={new BigNumber(stake).multipliedBy(stakeTokenSplit / 100)} decimals={1} includeAO={true} isPrimordial={true} />
+                        </Typography>
+                        <Typography variant="caption" className="network-amount">
+                            <TokenBalance baseAmount={new BigNumber(stake).multipliedBy(1 - stakeTokenSplit / 100)} decimals={1} includeAO={true} isPrimordial={false} />
+                        </Typography>
+                        <Typography variant="caption" className="token-split">
+                            {`${100 - stakeTokenSplit}/${stakeTokenSplit}`}
+                        </Typography>
                     </div>
                 </div>
+                <div className="section-divider"></div>
+                <Typography>{'3. What percentage of the earnings would you like to make?'}</Typography>
+                <div className="profit-input-container indent">
+                    <div style={{display: 'flex', alignItems: 'flex-end', width: '100%'}}>
+                        <Typography variant="display3" className="profit-label">{`${profit}%`}</Typography>
+                        <Typography style={{color: '#17BB59', marginLeft: 'auto'}}>{profit < 25 ? 'great exposure' : (profit < 50 ? 'good exposure' : (profit < 75 ? 'average exposure' : 'less exposure'))}</Typography>
+                    </div>
+                    <Slider
+                        min={0}
+                        max={100}
+                        step={1}
+                        value={profit}
+                        onChange={(event, value) => onChange(undefined, parseInt(value, 10))}
+                    />                        
+                </div>                
                 {expanded ? (
                     <div className="custom-pricing-tooltip">
                         <Typography variant="caption" style={{color: 'white'}}>
@@ -101,8 +140,8 @@ class UploadFormPricing extends Component {
     static contextTypes = {
         router: PropTypes.object.isRequired
     }
-    _selectPricingOption = (pricingOptionIndex, stake, profit) => {
-        this.props.updatePricingOption(pricingOptionIndex, stake, profit)
+    _selectPricingOption = (pricingOptionIndex, stake, profit, stakeTokenType, stakeTokenSplit) => {
+        this.props.updatePricingOption(pricingOptionIndex, stake, profit, stakeTokenType, stakeTokenSplit)
     }
     _navBack = () => {
         // this.context.router.history.goBack()
@@ -178,6 +217,8 @@ class UploadFormPricing extends Component {
                                 expanded={form.pricingOption === 0}
                                 stake={form.stake}
                                 profit={form.profit}
+                                stakeTokenType={form.stakeTokenType}
+                                stakeTokenSplit={form.stakeTokenSplit}
                                 onSelected={(_, expanded) => expanded ? this._selectPricingOption(0) : this._selectPricingOption(1)}
                                 onChange={this._selectPricingOption.bind(this, 0)}
                             />

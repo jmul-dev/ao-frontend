@@ -65,7 +65,12 @@ export const resetUploadForm = () => {
     }
 }
 // Only provide stake/profit if custom pricingOption = 0
-export const updatePricingOption = (pricingOption, stake = undefined, profit = undefined) => {
+// stakeTokenType: 'primordial' | 'network' | 'both'
+// stakeTokenSplit: 'primordial' / 'network'
+//      1 = 100% primordial, 
+//      0 = 0% primordial, 100% network
+//      0.5 = 50/50 split
+export const updatePricingOption = (pricingOption, stake = undefined, profit = undefined, stakeTokenType = undefined, stakeTokenSplit = undefined) => {
     return (dispatch, getState) => {
         const state = getState()
         const file = state.upload.form.video
@@ -76,13 +81,17 @@ export const updatePricingOption = (pricingOption, stake = undefined, profit = u
             payload = {
                 pricingOption,
                 stake: fileSize * pricingConstraints.stakeRatio,
-                profit: pricingConstraints.profitPercentage
+                profit: pricingConstraints.profitPercentage,
+                stakeTokenType: 'primordial',
+                stakeTokenSplit: 100,
             }
         } else {            
             payload = {
                 pricingOption,
                 stake: stake ? Math.max(stake, fileSize) : state.upload.form.stake,
                 profit: profit ? Math.min(Math.max(profit, 1), 99) : state.upload.form.profit,
+                stakeTokenType: stakeTokenType ? stakeTokenType : state.upload.form.stakeTokenType,
+                stakeTokenSplit: stakeTokenSplit !== undefined ? stakeTokenSplit : state.upload.form.stakeTokenSplit,
             }
         }
         dispatch({
@@ -91,7 +100,7 @@ export const updatePricingOption = (pricingOption, stake = undefined, profit = u
         })
     }
 }
-export const stakeContent = ({tokenAmount, primordialTokenAmount, datKey, fileSizeInBytes, profitPercentage}) => {
+export const stakeContent = ({networkTokenAmount, primordialTokenAmount, fileDatKey, metadataDatKey, fileSizeInBytes, profitPercentage}) => {
     return (dispatch, getState) => {
         return new Promise((resolve, reject) => {  
             const rejectAndDispatchError = (err) => {
@@ -108,12 +117,16 @@ export const stakeContent = ({tokenAmount, primordialTokenAmount, datKey, fileSi
             const { contracts, app } = state
             // 1. Contract method
             // NOTE: for now token & primordial token amounts are in base denomination
-            const profitPercentageWithDivisor = parseInt(profitPercentage, 10) * 10000  // 10^4
+            const profitPercentageWithDivisor = parseInt(profitPercentage, 10) * 10000;  // 10^4
             contracts.aoContent.stakeContent(
-                parseInt(tokenAmount, 10),
-                'ao',
-                parseInt(primordialTokenAmount, 10),
-                datKey,
+                parseInt(networkTokenAmount, 10),  // networkTokenIntegerAmount
+                0,  // networkTokenFractionalAmount
+                'ao',  // denomination                
+                parseInt(primordialTokenAmount, 10),  // primordialTokenAmount
+                'TODO',  // baseChallenge public key
+                'TODO',  // encryted baseChallenge unique to host
+                fileDatKey,
+                metadataDatKey,
                 fileSizeInBytes,
                 profitPercentageWithDivisor,
                 { from: app.ethAddress },
@@ -121,6 +134,11 @@ export const stakeContent = ({tokenAmount, primordialTokenAmount, datKey, fileSi
                     if ( err ) {
                         rejectAndDispatchError(err)
                     } else {
+                        resolve(transactionHash)
+                        /**
+                         * NOTE: we are actually listening for the tx success on the backend (core)
+                         * as well. This is really only helpful for error messages.
+                         */
                         // 2. 
                         let eventListener = contracts.aoContent.StakeContent({stakeOwner: app.ethAddress}, function(error, result) {
                             if ( result && result.transactionHash === transactionHash ) {
@@ -143,7 +161,7 @@ export const stakeContent = ({tokenAmount, primordialTokenAmount, datKey, fileSi
                         }).catch(err => {
                             eventListener.stopWatching()
                             rejectAndDispatchError(err)
-                        })
+                        })                        
                     }
                 }
             )
@@ -167,6 +185,8 @@ const initialState = {
         pricingOption: 1,  // 0 = custom, 1-3 predefined inputs
         stake: undefined,
         profit: undefined,
+        stakeTokenType: 'primordial',
+        stakeTokenSplit: 100,
     },
     contentSubmittionResult: undefined,
     stakeTransaction: {
