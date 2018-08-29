@@ -36,7 +36,7 @@ class AccountVideoListItem extends PureComponent {
                     </Grid>
                     <Grid item sm={8} className="card-container">
                         <Typography variant="display3" gutterBottom>
-                            {video.title}
+                            {video.title} {`(${video.state})`}
                         </Typography>
                         <Typography variant="body1" gutterBottom color="textSecondary">
                             {`uploaded: ${moment(parseInt(video.createdAt, 10)).format('M/D/YYYY')}`}
@@ -71,6 +71,9 @@ class AccountVideoListItem extends PureComponent {
                             </Typography>
                             <Typography variant="body1" gutterBottom color="textSecondary">
                                 {`File size: `}<FileSize sizeInBytes={video.fileSize} />
+                            </Typography>
+                            <Typography component="pre">
+                                {JSON.stringify(video, null, '\t')}
                             </Typography>
                         </div>
                     </Collapse>
