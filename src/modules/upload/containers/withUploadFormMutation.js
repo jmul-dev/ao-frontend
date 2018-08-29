@@ -13,7 +13,7 @@ export type UploadFormMutationProps = {
     submitContentError?: Error,
     submitContentResult?: Object,
 
-    submitContentStakeTransaction: Function,
+    contentUploadStakeTransaction: Function,
 
     submittedContentQuery: Function,
 };
@@ -70,7 +70,7 @@ export default compose(
         })
     }),
     graphql(contentUploadStakeTransaction, {
-        name: 'submitContentStakeTransaction',
+        name: 'contentUploadStakeTransaction',
     }),
     graphql(videoQuery, {
         name: 'submittedContentQuery',

@@ -1,6 +1,7 @@
 const VideoContentFragment = `
     fragment VideoContentFragment on VideoContent {
         id,
+        state,
         stakeId,
         nodeId,
         creatorId,
@@ -25,6 +26,11 @@ const VideoContentFragment = `
             duration,
             resolution,
             encoding,
+        },
+        transactions {
+            stakeTx,
+            hostTx,
+            purchaseTx,
         }
     }
 `

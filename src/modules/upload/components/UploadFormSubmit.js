@@ -51,7 +51,7 @@ class UploadFormSubmit extends Component<Props> {
         })
     }
     _stakeContent = () => {
-        const { form, stakeContent, contentSubmittionResult, submitContentStakeTransaction, submittedContentQuery } = this.props
+        const { form, stakeContent, contentSubmittionResult, contentUploadStakeTransaction, submittedContentQuery } = this.props
         let networkTokenAmount = 0
         let primordialTokenAmount = form.stake
         if ( form.stakeTokenType === 'primordial' ) {
@@ -75,13 +75,17 @@ class UploadFormSubmit extends Component<Props> {
             profitPercentage: form.profit,
         }).then(transactionHash => {
             // 2. Submit the tx to core
-            submitContentStakeTransaction({
+            contentUploadStakeTransaction({
                 variables: {
                     inputs: {
                         contentId: contentSubmittionResult.id,
                         transactionHash,
                     }
                 }
+            }).then(data => {
+                console.log(data)
+            }).catch(error => {
+                console.error(error)
             })
             // 3. Begin polling for content state update
             submittedContentQuery.startPolling(3000)
@@ -96,7 +100,7 @@ class UploadFormSubmit extends Component<Props> {
         this.props.resetUploadForm()
     }
     render() {
-        const { form, submitContentLoading } = this.props
+        const { form, submitContentLoading, submittedContentQuery } = this.props
         if ( !form.video ) {
             return <Redirect to={'/app/view/upload/start'} />
         }
@@ -129,9 +133,10 @@ class UploadFormSubmit extends Component<Props> {
     }
     _renderActions() {
         const { submitContentResult, submitContentLoading, submitContentError, stakeTransaction, submittedContentQuery } = this.props
+        const submittedContent = (submittedContentQuery && submittedContentQuery.video) ? submittedContentQuery.video : undefined
         // TODO: use the content.state coming in from submittedContentQuery.data.video.state === 'STAKED' | 'STAKING' | 'DAT_INITIALIZED'
         // logic in reverse order of event occurances
-        if ( stakeTransaction.result ) {
+        if ( submittedContent && submittedContent.state === 'STAKED' ) {
             return (
                 <PrimaryButton onClick={this._continue}>{'continue'}</PrimaryButton>
             )
@@ -142,7 +147,7 @@ class UploadFormSubmit extends Component<Props> {
                     <PrimaryButton onClick={this._stakeContent}>{'stake content'}<ReplayIcon /></PrimaryButton>
                 </React.Fragment>
             )
-        } else if ( stakeTransaction.transactionHash ) {
+        } else if ( submittedContent && submittedContent.state === 'STAKING' ) {
             return (
                 <React.Fragment>
                     <BackButton disabled onClick={this._cancel}>{'cancel upload'}</BackButton>
@@ -173,14 +178,15 @@ class UploadFormSubmit extends Component<Props> {
         }
     }
     _renderUploadState() {
-        const { submitContentResult, submitContentLoading, submitContentError, stakeTransaction } = this.props
+        const { submitContentResult, submitContentLoading, submitContentError, stakeTransaction, submittedContentQuery } = this.props
+        const submittedContent = (submittedContentQuery && submittedContentQuery.video) ? submittedContentQuery.video : undefined
         const messageStyle = {
             wordWrap: 'break-word',
             maxWidth: '100%',
             textAlign: 'center',
-        }
+        };        
         // logic in reverse order of event occurances
-        if ( stakeTransaction.result ) {
+        if ( submittedContent && submittedContent.state === 'STAKED' ) {
             return (
                 <React.Fragment>
                     <Typography variant="body1">{'Content succesfully staked!'}</Typography>
@@ -194,7 +200,7 @@ class UploadFormSubmit extends Component<Props> {
                     <Typography variant="caption" style={messageStyle}>{stakeTransaction.error.message}</Typography>
                 </React.Fragment>
             )
-        } else if ( stakeTransaction.transactionHash ) {
+        } else if ( submittedContent && submittedContent.state === 'STAKING' ) {
             return (
                 <React.Fragment>
                     <Typography variant="body1">{'Staking transaction in progress...'}</Typography>

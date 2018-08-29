@@ -135,7 +135,10 @@ export const stakeContent = ({networkTokenAmount, primordialTokenAmount, fileDat
                         rejectAndDispatchError(err)
                     } else {
                         resolve(transactionHash)
-                        /*
+                        /**
+                         * NOTE: we are actually listening for the tx success on the backend (core)
+                         * as well. This is really only helpful for error messages.
+                         */
                         // 2. 
                         let eventListener = contracts.aoContent.StakeContent({stakeOwner: app.ethAddress}, function(error, result) {
                             if ( result && result.transactionHash === transactionHash ) {
@@ -158,8 +161,7 @@ export const stakeContent = ({networkTokenAmount, primordialTokenAmount, fileDat
                         }).catch(err => {
                             eventListener.stopWatching()
                             rejectAndDispatchError(err)
-                        })
-                        */
+                        })                        
                     }
                 }
             )
