@@ -100,7 +100,7 @@ export const updatePricingOption = (pricingOption, stake = undefined, profit = u
         })
     }
 }
-export const stakeContent = ({networkTokenAmount, primordialTokenAmount, fileDatKey, metadataDatKey, fileSizeInBytes, profitPercentage}) => {
+export const stakeContent = ({networkTokenAmount, primordialTokenAmount, fileDatKey, metadataDatKey, fileSizeInBytes, profitPercentage, baseChallenge, encChallenge}) => {
     return (dispatch, getState) => {
         return new Promise((resolve, reject) => {  
             const rejectAndDispatchError = (err) => {
@@ -123,8 +123,8 @@ export const stakeContent = ({networkTokenAmount, primordialTokenAmount, fileDat
                 0,  // networkTokenFractionalAmount
                 'ao',  // denomination                
                 parseInt(primordialTokenAmount, 10),  // primordialTokenAmount
-                'TODO',  // baseChallenge public key
-                'TODO',  // encryted baseChallenge unique to host
+                baseChallenge,  // baseChallenge public key
+                encChallenge,  // encryted baseChallenge unique to host
                 fileDatKey,
                 metadataDatKey,
                 fileSizeInBytes,

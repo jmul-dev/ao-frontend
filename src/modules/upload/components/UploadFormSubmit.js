@@ -73,6 +73,8 @@ class UploadFormSubmit extends Component<Props> {
             metadataDatKey: contentSubmittionResult.metadataDatKey,
             fileSizeInBytes: contentSubmittionResult.fileSize,
             profitPercentage: form.profit,
+            baseChallenge: contentSubmittionResult.baseChallenge,
+            encChallenge: contentSubmittionResult.encChallenge,
         }).then(transactionHash => {
             // 2. Submit the tx to core
             contentUploadStakeTransaction({

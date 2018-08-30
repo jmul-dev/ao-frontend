@@ -20,6 +20,8 @@ const VideoContentFragment = `
         split,
         adSupport,
         createdAt,
+        baseChallenge,
+        encChallenge,
         teaserUrl,
         featuredImageUrl,
         metadata {

@@ -16,12 +16,28 @@ import contentRequestMutation from '../../../graphql/mutations/contentRequest';
 import contentPurchaseTransactionMutation from '../../../graphql/mutations/contentPurchaseTransaction';
 import { buyContent } from '../reducers/video.reducer';
 
+/*
+DISCOVERED
+DOWNLOADING
+DOWNLOADED
+PURCHASING
+PURCHASED
+DECRYPTION_KEY_RECEIVED
+DECRYPTION_KEY_DECRYPTED
+VERIFIED
+VERIFICATION_FAILED
+ENCRYPTED
+DAT_INITIALIZED
+STAKING
+STAKED
+DISCOVERABLE
+*/
 
 export const statesPendingUserAction = [
     'DOWNLOADED',
     'DECRYPTION_KEY_RECEIVED',
     'VERIFIED',
-    'ENCRYPTED',
+    'DAT_INITIALIZED',
     'DISCOVERABLE',
     'DISCOVERED',
 ]
@@ -53,10 +69,9 @@ export const ContentPurchaseState = ({content}) => {
             copy = 'Decrypt video';
             Icon = AlertIcon;
             break;
-        case 'DECRYPTED':
-            // Content is purchased, waiting for decryption key
+        case 'DECRYPTION_KEY_DECRYPTED':
             isLoadingState = true;
-            copy = 'Waiting for decryption key...';
+            copy = 'Verifying content...';
             break;
         case 'VERIFIED':
             // Content verified, automatically proceeds to encrypting
@@ -67,12 +82,12 @@ export const ContentPurchaseState = ({content}) => {
             copy = 'Video failed verification';
             Icon = AlertIcon;
             break;
-        case 'ENCRYPTING':
-            isLoadingState = true;
-            copy = 'Encrypting video...';
-            break;
         case 'ENCRYPTED':
             // Video is encrypted, indicate need to becomeHost/stake
+            isLoadingState = true;
+            copy = 'Initializing content...';
+            break;
+        case 'DAT_INITIALIZED':
             copy = 'Submit verification and become host';
             Icon = AlertIcon;
             break;
@@ -207,19 +222,22 @@ class ContentPurchaseActionComponent extends Component {
                 // Content is purchased, waiting for decryption key
                 break;
             case 'DECRYPTION_KEY_RECEIVED':
+                // TODO: action = decrypt decryption key
                 break;
-            case 'DECRYPTED':
+            case 'DECRYPTION_KEY_DECRYPTED':
                 // Content is purchased, waiting for decryption key
                 break;
             case 'VERIFIED':
                 // Content verified, automatically proceeds to encrypting
                 break;
             case 'VERIFICATION_FAILED':
-                break;
-            case 'ENCRYPTING':
-                break;
+                // TODO: action = ? remove content from node?
+                break;            
             case 'ENCRYPTED':
-                // Video is encrypted, indicate need to becomeHost/stake
+                // Video is encrypted, waiting for dat initialization
+                break;
+            case 'DAT_INITIALIZED':
+                // TODO: action = becomeHost
                 break;
             case 'STAKING':
                 break;
