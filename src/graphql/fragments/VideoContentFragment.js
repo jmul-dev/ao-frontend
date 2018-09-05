@@ -1,6 +1,7 @@
 const VideoContentFragment = `
     fragment VideoContentFragment on VideoContent {
         id,
+        contentHostId,
         state,
         stakeId,
         nodeId,
