@@ -24,21 +24,26 @@ export const setActiveVideo = (video) => ({
 export const buyContent = (contentHostId) => {
     return (dispatch, getState) => {
         return new Promise((resolve, reject) => {
-            const state = getState()
-            const { contracts, app } = state
-            // 1. Get latest price
-            dispatch( getContentPrice(contentHostId) ).then(contentPrice => {
-                // 2. buyContent
-                contracts.aoContent.buyContent(contentHostId, contentPrice.toNumber(), 0, "ao", { from: app.ethAddress }, (error, transactionHash) => {
-                    if ( error ) {
-                        console.error(`buyContent error: ${error.message}`)                        
-                        reject(error)
-                        return;
-                    }
-                    // 3a. Transaction submitted succesfully (has not been confirmed)
-                    resolve(transactionHash)
-                })
-            }).catch(reject)
+            if ( !contentHostId ) {
+                // TODO: dispatch error notification
+                console.warn(`buyContent called without contentHostId`)
+            } else {
+                const state = getState()
+                const { contracts, app } = state
+                // 1. Get latest price
+                dispatch( getContentPrice(contentHostId) ).then(contentPrice => {
+                    // 2. buyContent
+                    contracts.aoContent.buyContent(contentHostId, contentPrice.toNumber(), 0, "ao", { from: app.ethAddress }, (error, transactionHash) => {
+                        if ( error ) {
+                            console.error(`buyContent error: ${error.message}`)                        
+                            reject(error)
+                            return;
+                        }
+                        // 3a. Transaction submitted succesfully (has not been confirmed)
+                        resolve(transactionHash)
+                    })
+                }).catch(reject)
+            }
         })
     }
 }

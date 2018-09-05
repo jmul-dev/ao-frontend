@@ -175,8 +175,7 @@ class ContentPurchaseActionComponent extends Component {
         const { buyContent, buyContentTransaction, content, client } = this.props
         this.setState({loading: true})
         // 1. Trigger the buyContent transaction via metamask
-        // TODO: make sure we have the actual contentHostId
-        buyContent(content.id).then(transactionHash => {
+        buyContent(content.contentHostId).then(transactionHash => {
             // 2. Notify core that the user is purchasing content
             client.mutate({
                 mutation: contentPurchaseTransactionMutation,
@@ -184,6 +183,7 @@ class ContentPurchaseActionComponent extends Component {
                     inputs: {
                         transactionHash,
                         contentId: content.id,
+                        contentHostId: content.contentHostId,
                     }
                 }
             }).then(({data, ...props}) => {
