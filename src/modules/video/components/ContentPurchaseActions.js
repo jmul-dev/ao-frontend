@@ -35,8 +35,6 @@ DISCOVERABLE
 
 export const statesPendingUserAction = [
     'DOWNLOADED',
-    'DECRYPTION_KEY_RECEIVED',
-    'VERIFIED',
     'DAT_INITIALIZED',
     'DISCOVERABLE',
     'DISCOVERED',
@@ -66,8 +64,8 @@ export const ContentPurchaseState = ({content}) => {
             copy = 'Waiting for decryption key...';
             break;
         case 'DECRYPTION_KEY_RECEIVED':
-            copy = 'Decrypt video';
-            Icon = AlertIcon;
+            isLoadingState = true;
+            copy = 'Decrypting & Verifying...';
             break;
         case 'DECRYPTION_KEY_DECRYPTED':
             isLoadingState = true;
@@ -222,7 +220,7 @@ class ContentPurchaseActionComponent extends Component {
                 // Content is purchased, waiting for decryption key
                 break;
             case 'DECRYPTION_KEY_RECEIVED':
-                // TODO: action = decrypt decryption key
+                // Decryption key received, automatically begins decryption/verification
                 break;
             case 'DECRYPTION_KEY_DECRYPTED':
                 // Content is purchased, waiting for decryption key
