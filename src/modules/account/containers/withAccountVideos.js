@@ -9,7 +9,7 @@ const accountVideos = gql(`
             id,
             stakedContent {
                 ...VideoContentFragment   
-            }
+            },
             hostedContent {
                 ...VideoContentFragment
             }
