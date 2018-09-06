@@ -5,6 +5,7 @@ import { waitForTransactionReceipt } from '../../../contracts/contracts.reducer'
 // Constants
 export const SET_TEASER_LISTING_STATE = 'SET_TEASER_LISTING_STATE'
 export const SET_ACTIVE_VIDEO = 'SET_ACTIVE_VIDEO'
+export const SET_VIDEO_PLAYBACK = 'SET_VIDEO_PLAYBACK'
 
 
 // Actions
@@ -16,6 +17,14 @@ export const setTeaserListingState = ({isActive}) => ({
 export const setActiveVideo = (video) => ({
     type: SET_ACTIVE_VIDEO,
     payload: { video }
+})
+
+export const setVideoPlayback = ({contentId, initialPosition}) => ({
+    type: SET_VIDEO_PLAYBACK,
+    payload: { 
+        contentId,
+        initialPosition,    
+    }
 })
 
 /**
@@ -82,6 +91,10 @@ export const getContentPrice = (contentHostId) => {
 const initialState = {
     teaserListingActive: false,
     activeVideo: undefined,
+    videoPlayback: {
+        contentId: undefined,
+        initialPosition: undefined,
+    }
 }
 
 // Reducer
@@ -96,6 +109,13 @@ export default function videoReducer(state = initialState, action) {
             return {
                 ...state,
                 activeVideo: action.payload.video,
+            }
+        case SET_VIDEO_PLAYBACK:
+            return {
+                ...state,
+                videoPlayback: {
+                    ...action.payload
+                }
             }
         default:
             return state

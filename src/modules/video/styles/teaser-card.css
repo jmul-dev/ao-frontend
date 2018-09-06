@@ -55,6 +55,7 @@
     transition: transform var(--fullscreen-transition-duration) var(--fullscreen-transition-ease);
     transform-origin: top center;
     transform: scale(1);
+    background: #333;
 }
 .TeaserCard .content-container {
     /* Just making room for the scroll bar */
