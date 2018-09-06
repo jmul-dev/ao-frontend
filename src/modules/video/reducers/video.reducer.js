@@ -42,6 +42,24 @@ export const buyContent = (contentHostId) => {
         })
     }
 }
+export const becomeHost = ({purchaseId, signature, encChallenge, contentDatKey, metadataDatKey}) => {
+    return (dispatch, getState) => {
+        return new Promise((resolve, reject) => {
+            const state = getState()
+            const { contracts, app } = state
+            // 1. becomeHost
+            contracts.aoContent.becomeHost(purchaseId, signature.v, signature.r, signature.s, encChallenge, contentDatKey, metadataDatKey, { from: app.ethAddress }, (error, transactionHash) => {
+                if ( error ) {
+                    console.error(`becomeHost error: ${error.message}`)                        
+                    reject(error)
+                    return;
+                }
+                // 3a. Transaction submitted succesfully (has not been confirmed)
+                resolve(transactionHash)
+            })
+        })
+    }
+}
 export const getContentPrice = (contentHostId) => {
     return (dispatch, getState) => {
         return new Promise((resolve, reject) => {

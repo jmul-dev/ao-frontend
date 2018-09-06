@@ -14,7 +14,7 @@ import { connect } from 'react-redux';
 import gql from "graphql-tag";
 import contentRequestMutation from '../../../graphql/mutations/contentRequest';
 import contentPurchaseTransactionMutation from '../../../graphql/mutations/contentPurchaseTransaction';
-import { buyContent } from '../reducers/video.reducer';
+import { buyContent, becomeHost } from '../reducers/video.reducer';
 
 /*
 DISCOVERED
@@ -23,7 +23,6 @@ DOWNLOADED
 PURCHASING
 PURCHASED
 DECRYPTION_KEY_RECEIVED
-DECRYPTION_KEY_DECRYPTED
 VERIFIED
 VERIFICATION_FAILED
 ENCRYPTED
@@ -66,12 +65,8 @@ export const ContentPurchaseState = ({content}) => {
             copy = 'Waiting for decryption key...';
             break;
         case 'DECRYPTION_KEY_RECEIVED':
-            copy = 'Decrypt video';
-            Icon = AlertIcon;
-            break;
-        case 'DECRYPTION_KEY_DECRYPTED':
-            isLoadingState = true;
             copy = 'Verifying content...';
+            Icon = AlertIcon;
             break;
         case 'VERIFIED':
             // Content verified, automatically proceeds to encrypting
@@ -123,6 +118,7 @@ export const ContentPurchaseState = ({content}) => {
 // Redux actions
 const mapDispatchToProps = {
     buyContent,
+    becomeHost,
 }
 // Redux state
 const mapStateToProps = (store, props) => {
@@ -199,6 +195,10 @@ class ContentPurchaseActionComponent extends Component {
             this._dispatchErrorNotificationAndStopLoading(error, 'Buy content transaction failed', 'Error during buyContent action')
         })
     }
+    _becomeHostAction = () => {
+        // const { buyContent, buyContentTransaction, content, client } = this.props
+        // this.setState({loading: true})
+    }
     render() {
         const { content, children } = this.props
         const { loading } = this.state
@@ -222,10 +222,7 @@ class ContentPurchaseActionComponent extends Component {
                 // Content is purchased, waiting for decryption key
                 break;
             case 'DECRYPTION_KEY_RECEIVED':
-                // TODO: action = decrypt decryption key
-                break;
-            case 'DECRYPTION_KEY_DECRYPTED':
-                // Content is purchased, waiting for decryption key
+                // Verifying content
                 break;
             case 'VERIFIED':
                 // Content verified, automatically proceeds to encrypting
@@ -237,7 +234,7 @@ class ContentPurchaseActionComponent extends Component {
                 // Video is encrypted, waiting for dat initialization
                 break;
             case 'DAT_INITIALIZED':
-                // TODO: action = becomeHost
+                action = this._becomeHostAction
                 break;
             case 'STAKING':
                 break;
