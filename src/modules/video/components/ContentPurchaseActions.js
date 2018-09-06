@@ -3,18 +3,16 @@
  * 1. Copy/Icons/Loading state for the action
  * 2. The actual actions
  */
-import React, { Component, Fragment } from 'react';
-import Typography from '@material-ui/core/Typography';
-import ButtonBase from '@material-ui/core/ButtonBase';
 import { CircularProgress } from '@material-ui/core';
 import AlertIcon from '@material-ui/icons/ErrorOutline';
 import PlayIcon from '@material-ui/icons/PlayArrow';
-import { withApollo, compose } from 'react-apollo';
+import React, { Component } from 'react';
+import { compose, withApollo } from 'react-apollo';
 import { connect } from 'react-redux';
-import gql from "graphql-tag";
-import contentRequestMutation from '../../../graphql/mutations/contentRequest';
 import contentPurchaseTransactionMutation from '../../../graphql/mutations/contentPurchaseTransaction';
-import { buyContent, becomeHost } from '../reducers/video.reducer';
+import contentBecomeHostTransactionMutation from '../../../graphql/mutations/contentBecomeHostTransaction';
+import contentRequestMutation from '../../../graphql/mutations/contentRequest';
+import { becomeHost, buyContent } from '../reducers/video.reducer';
 
 /*
 DISCOVERED
@@ -196,8 +194,35 @@ class ContentPurchaseActionComponent extends Component {
         })
     }
     _becomeHostAction = () => {
-        // const { buyContent, buyContentTransaction, content, client } = this.props
-        // this.setState({loading: true})
+        const { becomeHost, content, client } = this.props
+        this.setState({loading: true})
+        // 1. Metamask transaction
+        becomeHost({
+            purchaseId: content.purchaseId,
+            signature: content.baseChallengeSignature,
+            encChallenge: content.encChallenge,
+            contentDatKey: content.fileDatKey,
+            metadataDatKey: content.metadataDatKey,
+        }).then(transactionHash => {
+            // 2. Notify core that the user is attempting to host content
+            client.mutate({
+                mutation: contentBecomeHostTransactionMutation,
+                variables: {
+                    inputs: {
+                        transactionHash,
+                        contentId: content.id,
+                    }
+                }
+            }).then(({data, ...props}) => {
+                console.log(data, props)
+                this.setState({loading: false})
+                // 3. Not sure we need to do anything here, state will be updated via pulling on content.state
+            }).catch(error => {
+                this._dispatchErrorNotificationAndStopLoading(error, 'Failed to move content to hosting state', 'Error during contentBecomeHostTransaction mutation')
+            })
+        }).catch(error => {
+            this._dispatchErrorNotificationAndStopLoading(error, 'Host content transaction failed', 'Error during becomeHost action')
+        })
     }
     render() {
         const { content, children } = this.props
