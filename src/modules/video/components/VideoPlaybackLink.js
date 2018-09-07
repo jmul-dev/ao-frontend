@@ -22,7 +22,7 @@ class VideoPlaybackLink extends Component {
         })
     }
     render() {
-        const { contentId, ...props } = this.props
+        const { contentId, setVideoPlayback, ...props } = this.props
         return (
             <ButtonBase ref="playbackLink" {...props} onClick={this._handlePlaybackClick}>
                 {this.props.children}

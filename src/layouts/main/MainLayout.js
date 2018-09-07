@@ -7,6 +7,7 @@ import AccountView from '../../views/account/AccountView';
 import BrowseView from '../../views/browse/BrowseView';
 import UploadView from '../../views/upload/UploadView';
 import IcoView from '../../views/ico/IcoView';
+import VideoPlayback from '../../modules/video/components/VideoPlayback';
 import MainNavigation from './MainNavigation';
 import { AnimatedRoute } from 'react-router-transition';
 import { MuiThemeProvider } from '@material-ui/core/styles';
@@ -62,6 +63,8 @@ const MainLayout = () => (
             <Route path="/app/view" render={() => <MainNavigation light />} />
             <Route render={() => <MainNavigation dark />} />
         </Switch>
+        {/* Video Playback (always mounted for animation purposes) */}
+        <VideoPlayback />
     </main>
 )
 export default MainLayout
