@@ -116,7 +116,7 @@ class AccountVideoListing extends Component {
             this.props.query.refetch()
     }
     render() {
-        const { ethAddress } = this.props
+        const { ethAddress, filter, ordering } = this.props
         if ( !ethAddress )
             return this._renderPlaceholderAccountListing()
         const { loading, error, node } = this.props.query
@@ -126,7 +126,7 @@ class AccountVideoListing extends Component {
             return this._renderErrorState()
         if ( !node || !node.stakedContent )
             return this._renderNoAccountVideos()
-        const videos = node.stakedContent
+        const videos = filter === 'uploaded' ? node.stakedContent : node.hostedContent
         return (
             <div className="AccountVideoListing">
                 <ul style={{listStyle: 'none', padding: 0, margin: 0}}>

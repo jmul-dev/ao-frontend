@@ -1,4 +1,5 @@
 import { graphql, compose } from 'react-apollo'
+import { connect } from 'react-redux'
 import gql from "graphql-tag"
 import VideoContentFragment from '../../../graphql/fragments/VideoContentFragment'
 
@@ -18,6 +19,11 @@ const accountVideos = gql(`
     ${VideoContentFragment}
 `)
 
+const mapStateToProps = (state) => ({
+    filter: state.account.videoListingFilter,
+    ordering: state.account.videoListingOrdering,
+})
+
 export default compose(
     graphql(accountVideos, {
         name: 'query',
@@ -28,4 +34,5 @@ export default compose(
             }
         })
     }),
+    connect(mapStateToProps)
 );
