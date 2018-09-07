@@ -12,7 +12,7 @@ import { connect } from 'react-redux';
 import contentPurchaseTransactionMutation from '../../../graphql/mutations/contentPurchaseTransaction';
 import contentBecomeHostTransactionMutation from '../../../graphql/mutations/contentBecomeHostTransaction';
 import contentRequestMutation from '../../../graphql/mutations/contentRequest';
-import { becomeHost, buyContent } from '../reducers/video.reducer';
+import { becomeHost, buyContent, setVideoPlayback } from '../reducers/video.reducer';
 
 /*
 DISCOVERED
@@ -115,6 +115,7 @@ export const ContentPurchaseState = ({content}) => {
 const mapDispatchToProps = {
     buyContent,
     becomeHost,
+    setVideoPlayback,
 }
 // Redux state
 const mapStateToProps = (store, props) => {
@@ -222,6 +223,16 @@ class ContentPurchaseActionComponent extends Component {
             this._dispatchErrorNotificationAndStopLoading(error, 'Host content transaction failed', 'Error during becomeHost action')
         })
     }
+    _watchContent = () => {
+        const { setVideoPlayback, content, contentRef } = this.props
+        let initialPosition = {}
+        if ( contentRef ) {
+            let clientRect = contentRef.getBoundingClientRect()
+            const propertySelection = (({ top, right, bottom, left, width, height }) => ({ top, right, bottom, left, width, height }))
+            initialPosition = propertySelection(clientRect)
+        }
+        setVideoPlayback({contentId: content.id, initialPosition})
+    }
     render() {
         const { content, children } = this.props
         const { loading } = this.state
@@ -264,6 +275,7 @@ class ContentPurchaseActionComponent extends Component {
             case 'STAKED':
                 break;
             case 'DISCOVERABLE':
+                action = this._watchContent
                 break;
             default:
                 break;

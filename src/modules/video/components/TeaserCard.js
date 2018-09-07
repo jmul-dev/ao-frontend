@@ -95,7 +95,7 @@ class TeaserCard extends Component<Props> {
             )
         } else {
             return (
-                <ContentPurchaseAction content={content}>{({action, loading, error}) => (
+                <ContentPurchaseAction contentRef={this.refs.videoContainer} content={content}>{({action, loading, error}) => (
                     <PrimaryButton disabled={!action || loading} onClick={action}>
                         <ContentPurchaseState content={content} />
                         {error ? (
@@ -132,6 +132,7 @@ class TeaserCard extends Component<Props> {
                                     file: {
                                         attributes: {
                                             poster: video.featuredImageUrl
+                                            
                                         }
                                     }
                                 }}
