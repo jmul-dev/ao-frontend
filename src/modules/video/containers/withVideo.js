@@ -2,6 +2,7 @@ import { connect } from 'react-redux'
 import { setActiveVideo } from '../reducers/video.reducer'
 import { graphql, compose } from 'react-apollo'
 import gql from "graphql-tag"
+import VideoContentFragment from '../../../graphql/fragments/VideoContentFragment'
 
 
 // Redux
@@ -19,10 +20,10 @@ const mapStateToProps = (store) => {
 const videoQuery = gql(`
     query video($id: ID!) {
         video(id: $id) {
-            id,
-            state,
+            ...VideoContentFragment
         }
     }
+    ${VideoContentFragment}
 `)
 
 export default compose(    
@@ -32,7 +33,7 @@ export default compose(
         // Pull video id from props
         options: (props) => ({
             variables: {
-                id: props.video.id
+                id: props.video ? props.video.id : props.id
             }
         })
     }),

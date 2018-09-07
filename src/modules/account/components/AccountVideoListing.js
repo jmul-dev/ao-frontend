@@ -111,6 +111,10 @@ const AccountVideoListItemPlaceholder = () => (
 )
 
 class AccountVideoListing extends Component {
+    componentDidMount() {
+        if ( this.props.query.refetch )
+            this.props.query.refetch()
+    }
     render() {
         const { ethAddress } = this.props
         if ( !ethAddress )

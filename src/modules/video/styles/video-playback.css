@@ -1,18 +1,17 @@
-.VideoPlayback {
-    
-}
-
-.playback-container {
-    position: absolute;
+.VideoPlaybackModal {
+    position: fixed;
     background: #000000;
     opacity: 0;
-    transition: all 450ms ease-out;
+    transition: all 350ms ease-out;
+    pointer-events: none;
 }
-.VideoPlayback.active .playback-container {
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
+.VideoPlaybackModal.playback-modal-enter-active, .VideoPlaybackModal.playback-modal-enter-done {
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
     opacity: 1;
 }
 
