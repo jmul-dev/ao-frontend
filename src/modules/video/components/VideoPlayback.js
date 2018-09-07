@@ -8,6 +8,8 @@ import Modal from '@material-ui/core/Modal';
 import { CSSTransition } from 'react-transition-group';
 import ReactPlayer from 'react-player'
 import { LogoIcon } from '../../../assets/Icons';
+import IconButton from '@material-ui/core/IconButton';
+import CloseIcon from '@material-ui/icons/Close';
 
 
 class VideoPlaybackModal extends Component {
@@ -58,13 +60,18 @@ class VideoPlaybackModal extends Component {
             >                
                 <CSSTransition
                     in={this.state.open}
-                    timeout={350}
+                    timeout={250}
                     classNames="playback-modal"
                     unmountOnExit
                     exit={false}
                 >
                     <div className={`VideoPlaybackModal`} style={videoPlayback.initialPosition}>
-                        <span>{`[<- close]`}</span>
+                    <IconButton
+                        className="playback-close"
+                        onClick={this._exitPlayback}
+                    >
+                        <CloseIcon />
+                    </IconButton>
                         <WrappedVideoPlayback id={videoPlayback.contentId} />
                     </div>                    
                 </CSSTransition>

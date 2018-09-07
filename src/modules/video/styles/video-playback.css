@@ -2,7 +2,7 @@
     position: fixed;
     background: #000000;
     opacity: 0;
-    transition: all 350ms ease-out;
+    transition: all 250ms ease-out;
     pointer-events: none;
 }
 .VideoPlaybackModal.playback-modal-enter-active, .VideoPlaybackModal.playback-modal-enter-done {
@@ -13,5 +13,23 @@
     width: 100% !important;
     height: 100% !important;
     opacity: 1;
+}
+.VideoPlaybackModal .playback-close {
+    position: absolute;
+    top: 24px;
+    left: 24px;
+    pointer-events: all;
+}
+
+.VideoPlayback {
+    max-width: 80%;
+    max-height: 80%;
+    position: relative;
+    height: 0;
+    padding-bottom: 56.25%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: all;
 }
 
