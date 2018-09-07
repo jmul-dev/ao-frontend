@@ -10,6 +10,7 @@ import Collapse from '@material-ui/core/Collapse';
 import '../styles/account-video-listing.css';
 import { compose } from 'react-apollo';
 import { TokenBalance, FileSize } from '../../../utils/denominations'
+import VideoPlaybackLink from '../../video/components/VideoPlaybackLink'
 
 
 class AccountVideoListItem extends PureComponent {
@@ -28,11 +29,11 @@ class AccountVideoListItem extends PureComponent {
             <div className="AccountVideoListItem">
                 <Grid container spacing={16}>
                     <Grid item sm={4}>
-                        <ButtonBase style={{width: '100%'}}>
+                        <VideoPlaybackLink contentId={video.id} style={{width: '100%'}}>
                             <div className="featured-image" style={{backgroundImage: `url(${window.AO_CORE_URL}/${video.featuredImageUrl})`}}>
                                 <PlayIcon className="play-icon" />
                             </div>
-                        </ButtonBase>
+                        </VideoPlaybackLink>
                     </Grid>
                     <Grid item sm={8} className="card-container">
                         <Typography variant="display3" gutterBottom>
@@ -110,6 +111,10 @@ const AccountVideoListItemPlaceholder = () => (
 )
 
 class AccountVideoListing extends Component {
+    componentDidMount() {
+        if ( this.props.query.refetch )
+            this.props.query.refetch()
+    }
     render() {
         const { ethAddress } = this.props
         if ( !ethAddress )
