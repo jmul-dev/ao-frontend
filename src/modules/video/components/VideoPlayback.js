@@ -96,10 +96,12 @@ class VideoPlayback extends Component {
                         config={{
                             file: {
                                 attributes: {
-                                    poster: `${window.AO_CORE_URL}/${video.featuredImageUrl}`
+                                    poster: `${window.AO_CORE_URL}/${video.featuredImageUrl}`,
+                                    controlsList: 'nodownload'
                                 }
                             }
                         }}
+                        controls={true}
                         playing={true}
                         width="100%"
                         height="100%"
