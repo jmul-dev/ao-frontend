@@ -1,6 +1,4 @@
 import BigNumber from "bignumber.js";
-import { waitForTransactionReceipt } from '../../../contracts/contracts.reducer'
-
 
 // Constants
 export const SET_TEASER_LISTING_STATE = 'SET_TEASER_LISTING_STATE'

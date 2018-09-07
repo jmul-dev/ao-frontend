@@ -7,7 +7,6 @@ import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import ProfitSlider from './ProfitSlider';
 import withUploadFormData from '../containers/withUploadFormData';
 import { Redirect } from 'react-router-dom';
 import { BackButton, PrimaryButton } from './UploadFormNavButtons';

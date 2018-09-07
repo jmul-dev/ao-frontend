@@ -102,7 +102,7 @@ class UploadFormSubmit extends Component<Props> {
         this.props.resetUploadForm()
     }
     render() {
-        const { form, submitContentLoading, submittedContentQuery } = this.props
+        const { form, submitContentLoading } = this.props
         if ( !form.video ) {
             return <Redirect to={'/app/view/upload/start'} />
         }

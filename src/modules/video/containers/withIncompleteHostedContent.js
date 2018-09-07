@@ -6,7 +6,6 @@
  * has not finished the process (re-hosting)
  */
 import { connect } from 'react-redux'
-import { setActiveVideo } from '../reducers/video.reducer'
 import { graphql, compose } from 'react-apollo'
 import gql from "graphql-tag"
 import VideoContentFragment from '../../../graphql/fragments/VideoContentFragment'

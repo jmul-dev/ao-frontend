@@ -1,11 +1,9 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import Typography from '@material-ui/core/Typography';
 import ButtonBase from '@material-ui/core/ButtonBase';
 import withIncompleteHostedContent from '../containers/withIncompleteHostedContent';
 import { withTheme } from '@material-ui/core/styles';
-import AlertIcon from '@material-ui/icons/ErrorOutline';
 import '../styles/enqueued-videos.css';
-import { CircularProgress } from '@material-ui/core';
 import { ContentPurchaseState, ContentPurchaseAction, statesPendingUserAction } from './ContentPurchaseActions';
 
 
@@ -46,22 +44,12 @@ class EnqueuedVideos extends Component<Props> {
 const EnqueuedVideoListItem = withTheme()(({theme, content, ...props}) => {
     const actionRequired = statesPendingUserAction.indexOf(content.state) > -1
     const actionText = 'Pay for video'
-    const loadingText = 'Downloading...'
     return (
         <div className="EnqueuedVideo" style={{backgroundColor: actionRequired ? theme.palette.primary.main : theme.palette.background.default}}>
             <div style={{overflow: 'hidden', marginRight: 16}}>
                 <Typography variant="subheading" gutterBottom noWrap>{content.title}</Typography>
                 <Typography variant="body1" component="div" className="action-status">
                     <ContentPurchaseState content={content} />
-                    {/* {actionRequired ? (                        
-                        <Fragment>
-                            <AlertIcon style={{marginRight: 4}} />{'Action required'}
-                        </Fragment>
-                    ) : (
-                        <Fragment>
-                            <CircularProgress size={20} style={{marginRight: 8}} />{loadingText}
-                        </Fragment>
-                    )} */}
                 </Typography>
             </div>
             <div style={{marginLeft: 'auto'}}>

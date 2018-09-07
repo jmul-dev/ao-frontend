@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import ButtonBase from '@material-ui/core/ButtonBase';
 import '../styles/video-playback.css';
 import withVideoPlayback from '../containers/withVideoPlayback';
 import withVideo from '../containers/withVideo';

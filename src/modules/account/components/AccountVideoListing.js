@@ -11,6 +11,7 @@ import '../styles/account-video-listing.css';
 import { compose } from 'react-apollo';
 import { TokenBalance, FileSize } from '../../../utils/denominations'
 import VideoPlaybackLink from '../../video/components/VideoPlaybackLink'
+import PropTypes from 'prop-types';
 
 
 class AccountVideoListItem extends PureComponent {
@@ -111,12 +112,17 @@ const AccountVideoListItemPlaceholder = () => (
 )
 
 class AccountVideoListing extends Component {
+    static propTypes = {
+        ethAddress: PropTypes.string,
+        filter: PropTypes.oneOf(['downloaded', 'uploaded']),
+        ordering: PropTypes.string,
+    }
     componentDidMount() {
         if ( this.props.query.refetch )
             this.props.query.refetch()
     }
     render() {
-        const { ethAddress, filter, ordering } = this.props
+        const { ethAddress, filter } = this.props
         if ( !ethAddress )
             return this._renderPlaceholderAccountListing()
         const { loading, error, node } = this.props.query

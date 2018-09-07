@@ -135,6 +135,8 @@ const withContentPurchaseActions = compose(
  * The god class of this frontend app.
  * 
  * @param {content} Object AO Content
+ * @param {contentRef} Object A reference to the content being displayed (for animation purposes, 
+ *                            we get the bounding box of this ref and animate to fullscreen video)
  * @param {client} ApolloClient
  * @param {children} Function Accepting parameters {action}
  */
@@ -167,7 +169,7 @@ class ContentPurchaseActionComponent extends Component {
         })
     }
     _buyContentAction = () => {
-        const { buyContent, buyContentTransaction, content, client } = this.props
+        const { buyContent, content, client } = this.props
         this.setState({loading: true})
         // 1. Trigger the buyContent transaction via metamask
         buyContent(content.contentHostId).then(transactionHash => {

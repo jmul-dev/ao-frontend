@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
-import PlayIcon from '@material-ui/icons/PlayArrow';
 import { CSSTransition } from 'react-transition-group';
 import ReactPlayer from 'react-player'
 import '../styles/teaser-card.css';
@@ -10,8 +9,7 @@ import ExchangeModal from '../../exchange/components/ExchangeModal';
 import { PrimaryButton } from '../../../theme';
 import { TokenBalance } from '../../../utils/denominations';
 import withVideo from '../containers/withVideo';
-import CircularProgress from '@material-ui/core/CircularProgress';
-import { ContentPurchaseAction, ContentPurchaseState, statesPendingUserAction } from './ContentPurchaseActions';
+import { ContentPurchaseAction, ContentPurchaseState } from './ContentPurchaseActions';
 
 
 type Props = {
@@ -84,8 +82,6 @@ class TeaserCard extends Component<Props> {
             contentState = this.props.videoQuery.video.state
             content = this.props.videoQuery.video
         }
-        const actionRequired = statesPendingUserAction.indexOf(content.state) > -1
-
         if ( contentState === 'DISCOVERABLE' ) {
             // User has completed the purchase/host/discovery process, they can now play the video
             return (
