@@ -4,6 +4,8 @@ import BigNumber from "bignumber.js";
 export const SET_TEASER_LISTING_STATE = 'SET_TEASER_LISTING_STATE'
 export const SET_ACTIVE_VIDEO = 'SET_ACTIVE_VIDEO'
 export const SET_VIDEO_PLAYBACK = 'SET_VIDEO_PLAYBACK'
+export const SET_SEARCH_VALUE = 'SET_SEARCH_VALUE'
+export const SET_SEARCH_BAR_ACTIVE = 'SET_SEARCH_BAR_ACTIVE'
 
 
 // Actions
@@ -19,10 +21,20 @@ export const setActiveVideo = (video) => ({
 
 export const setVideoPlayback = ({contentId, initialPosition}) => ({
     type: SET_VIDEO_PLAYBACK,
-    payload: { 
+    payload: {
         contentId,
-        initialPosition,    
+        initialPosition,
     }
+})
+
+export const updateSearchValue = (value) => ({
+    type: SET_SEARCH_VALUE,
+    payload: value
+})
+
+export const setSearchBarActive = (state) => ({
+    type: SET_SEARCH_BAR_ACTIVE,
+    payload: state
 })
 
 /**
@@ -97,7 +109,9 @@ const initialState = {
     videoPlayback: {
         contentId: undefined,
         initialPosition: undefined,
-    }
+    },
+    searchString: undefined,
+    searchBarActive: false,
 }
 
 // Reducer
@@ -119,6 +133,16 @@ export default function videoReducer(state = initialState, action) {
                 videoPlayback: {
                     ...action.payload
                 }
+            }
+        case SET_SEARCH_VALUE:
+            return {
+                ...state,
+                searchString: action.payload
+            }
+        case SET_SEARCH_BAR_ACTIVE:
+            return {
+                ...state,
+                searchBarActive: action.payload
             }
         default:
             return state

@@ -44,6 +44,7 @@ export default compose(
             variables: {
                 // offset
                 // limit
+                // search
             }
         })
     }),

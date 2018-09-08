@@ -34,15 +34,21 @@ class VideoListing extends Component<Props> {
             enteredTeaser: false,
         }
     }
+    componentWillReceiveProps(nextProps) {
+        if ( this.props.searchString !== nextProps.searchString ) {
+            // TODO: may need to move into componentDidUpdate if props have not propogated to container withVideos
+            this.props.videos.refetch()
+        }
+    }
     render() {
         const { videos, videosLoading, teaserListingActive, activeVideo, setActiveVideo, setTeaserListingState } = this.props
-        const rowCount = videos.videos ? videos.videos.length / 3 : 0        
-        if ( videosLoading )
+        const rowCount = videos.videos ? videos.videos.length / 3 : 0
+        if (videosLoading)
             return null
-        return (            
+        return (
             <div className="VideoListing">
                 <AutoSizer disableHeight>
-                    {({width}) => (
+                    {({ width }) => (
                         <ColumnSizer
                             width={width}
                             columnMaxWidth={window.innerWidth / 3}
@@ -50,19 +56,19 @@ class VideoListing extends Component<Props> {
                             columnCount={3}
                             key="GridColumnSizer"
                         >
-                        {({adjustedWidth, columnWidth, registerChild}) => (
-                            <Grid 
-                                ref={ref => this._grid = ref}
-                                cellRenderer={this._renderCell}
-                                columnCount={3}
-                                columnWidth={columnWidth}
-                                width={adjustedWidth}
-                                rowCount={rowCount}
-                                rowHeight={adjustedWidth / 3}                    
-                                height={adjustedWidth / 3 * rowCount + 200}
-                                style={{marginTop: 200, marginBottom: 200}}
-                            />
-                        )}
+                            {({ adjustedWidth, columnWidth, registerChild }) => (
+                                <Grid
+                                    ref={ref => this._grid = ref}
+                                    cellRenderer={this._renderCell}
+                                    columnCount={3}
+                                    columnWidth={columnWidth}
+                                    width={adjustedWidth}
+                                    rowCount={rowCount}
+                                    rowHeight={adjustedWidth / 3}
+                                    height={adjustedWidth / 3 * rowCount + 200}
+                                    style={{ marginTop: 200, marginBottom: 200 }}
+                                />
+                            )}
                         </ColumnSizer>
                     )}
                 </AutoSizer>
@@ -85,12 +91,12 @@ class VideoListing extends Component<Props> {
                             enteredTeaser={this.state.enteredTeaser}
                         />
                         <nav className="video-navigation">
-                            <Button varient="contained" onClick={() => setTeaserListingState({isActive: false})}>
+                            <Button varient="contained" onClick={() => setTeaserListingState({ isActive: false })}>
                                 <ArrowBackIcon />
                                 <Typography variant="body1">{`back to browse`}</Typography>
                             </Button>
                         </nav>
-                    </div>                        
+                    </div>
                 </CSSTransition>
                 <CSSTransition
                     in={activeVideo !== undefined}
@@ -106,21 +112,21 @@ class VideoListing extends Component<Props> {
                                 <Typography variant="body1">{`back to info`}</Typography>
                             </Button>
                         </nav>
-                    </div>                        
+                    </div>
                 </CSSTransition>
-            </div>            
+            </div>
         );
     }
-    _renderCell = ({columnIndex, key, rowIndex, style}) => {
+    _renderCell = ({ columnIndex, key, rowIndex, style }) => {
         const videoIndex = rowIndex * 3 + columnIndex
         const video = this.props.videos.videos[videoIndex]
         const isActive = this.state.activeTeaserVideoIndex === videoIndex
         return (
-            <div className="Cell" key={key} style={{...style, opacity: isActive ? 0 : 1}}>
+            <div className="Cell" key={key} style={{ ...style, opacity: isActive ? 0 : 1 }}>
                 <div className="clickable" onClick={this._enterTeaserListingAtVideo.bind(this, videoIndex)}>
                     <ButtonBase
                         className="cover-image"
-                        style={{backgroundImage: `url(${video.featuredImageUrl})`}}
+                        style={{ backgroundImage: `url(${video.featuredImageUrl})` }}
                     ></ButtonBase>
                     <Typography variant="subheading">
                         {video.title}
@@ -131,7 +137,7 @@ class VideoListing extends Component<Props> {
     }
     _enterTeaserListingAtVideo = (videoIndex, event) => {
         const activeTeaserVideoCellPosition = propertySelection(event.currentTarget.getBoundingClientRect())
-        this.props.setTeaserListingState({isActive: true})
+        this.props.setTeaserListingState({ isActive: true })
         this.setState({
             activeTeaserVideoIndex: videoIndex,
             activeTeaserVideoCellPosition,
@@ -141,7 +147,7 @@ class VideoListing extends Component<Props> {
     }
     _setActiveTeaserVideoIndex = (videoIndex) => {
         const targetCell = document.querySelectorAll('.VideoListing .Cell')[videoIndex]
-        if ( !targetCell )
+        if (!targetCell)
             return console.warn(`Could not find .Cell in VideoListing at index ${videoIndex}`)
         const targetCellClickable = targetCell.querySelector('.clickable')
         const activeTeaserVideoCellPosition = propertySelection(targetCellClickable.getBoundingClientRect())
@@ -160,7 +166,7 @@ class VideoListing extends Component<Props> {
         document.querySelector('.BrowseView').style.overflow = 'auto'
     }
     _onEnteredTeaserListing = () => {
-        this.setState({enteredTeaser: true})
+        this.setState({ enteredTeaser: true })
     }
 }
 
