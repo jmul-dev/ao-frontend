@@ -14,6 +14,7 @@ const mapStateToProps = (store) => {
     return {
         teaserListingActive: store.video.teaserListingActive,
         activeVideo: store.video.activeVideo,
+        searchString: store.video.searchString,
     }
 }
 
