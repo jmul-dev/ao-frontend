@@ -11,6 +11,7 @@ import IconButton from '@material-ui/core/IconButton';
 import SearchIcon from '@material-ui/icons/Search';
 import Backdrop from '@material-ui/core/Backdrop';
 import Slide from '@material-ui/core/Slide';
+import Fade from '@material-ui/core/Fade';
 import './browse-view.css';
 
 
@@ -34,7 +35,7 @@ class BrowseView extends Component {
         })
         return (
             <View className={containerClasses} padding="none">
-                <Slide direction={'down'} in={!searchBarActive && !searchActive}>
+                <Fade in={!searchBarActive && !searchActive}>
                     <header>
                         <Clock />
                         <div style={{marginLeft: 'auto'}}>
@@ -43,7 +44,7 @@ class BrowseView extends Component {
                             </IconButton>
                         </div>
                     </header>
-                </Slide>
+                </Fade>
                 <Slide direction={'down'} in={searchBarActive || searchActive}>
                     <aside style={{transform: searchActive ? `translateY(-76px)` : undefined}}>
                         <SearchBar />
