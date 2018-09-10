@@ -1,0 +1,20 @@
+.SearchBar .close-container {
+    justify-content: flex-end;
+    display: flex;
+    margin-bottom: 24px;
+}
+
+.SearchBar .input-container {
+    position: relative;
+}
+.SearchBar .input-container .search-input {
+    margin: 0;    
+}
+.SearchBar .input-container .search-input input {
+    font-size: 1.5rem;
+}
+.SearchBar .input-container .action-button {
+    position: absolute;
+    right: -20px;
+    bottom: 0;
+}
