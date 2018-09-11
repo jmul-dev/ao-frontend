@@ -54,7 +54,9 @@ export default class App extends Component<Props> {
             updateAppState(APP_STATES.CORE_CONNECTED, false)
         }
         if ( query.state !== 'READY' && nextProps.query.state === 'READY' ) {  // TODO: pull READY from ao-core constants
-            updateAppState(APP_STATES.CORE_READY, true)
+            setTimeout(() => {
+                updateAppState(APP_STATES.CORE_READY, true)
+            }, 500)  // slight delay to avoid flashing of screens (see BootLayout.js timeout)
         }
     }
     render() {
@@ -62,13 +64,13 @@ export default class App extends Component<Props> {
         const includeDevBar = false // process.env.NODE_ENV !== 'production'
         return (
             <div className={`App ${includeDevBar ? 'development-bar-spacing' : ''}`}>                
-                {!app.states[APP_STATES.CORE_READY] ? (
-                    <BootLayout networkError={query.error} />
-                ) : (
+                {app.states[APP_STATES.CORE_READY] ? (
                     <React.Fragment>
                         <MainLayout />
                         <RegisterContainer />
                     </React.Fragment>
+                ) : (
+                    <BootLayout networkError={query.error} />
                 )}
                 <Notifications />
                 {includeDevBar ? (
