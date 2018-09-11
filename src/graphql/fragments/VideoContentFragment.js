@@ -26,9 +26,14 @@ const VideoContentFragment = `
         teaserUrl,
         featuredImageUrl,
         metadata {
-            duration,
-            resolution,
             encoding,
+            duration,
+            width,
+            height,
+            aspectRatio,
+            aspectRatioDisplay,
+            bitRate,
+            frameRate,
         },
         transactions {
             stakeTx,
