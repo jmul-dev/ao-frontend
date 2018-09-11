@@ -178,10 +178,11 @@ class VideoListingCellCard extends Component {
         const { video, ...props } = this.props
         return (
             <Fade in={this.state.imageLoaded}>
-                <div {...props}>                
+                <div {...props}>
                     <img
                         src={`${window.AO_CORE_URL}/${video.featuredImageUrl}`}
                         onLoad={() => this.setState({imageLoaded: true})}
+                        onError={() => this.setState({imageLoaded: true})}
                         style={{position: 'absolute', visibility: 'hidden'}}
                     />                
                     <ButtonBase
