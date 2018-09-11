@@ -15,7 +15,18 @@ import { addNotification, dismissNotification } from '../../modules/notification
 
 
 class BootLayout extends Component {
+    constructor() {
+        super()
+        this.state = {
+            animationStarted: false
+        }
+    }
     componentDidMount() {
+        this._animationTimeout = setTimeout(() => {
+            this.setState({
+                animationStarted: true
+            })
+        }, 500)  // slight delay to avoid flashing of animation (see App.js setTimeout)
         this._connectionTimeout = setTimeout(() => {
             this._networkErrorNotId = this.props.addNotification({
                 message: `Unable to connect to ao-core, make sure it is running at: ${window.AO_CORE_URL}`,
@@ -25,6 +36,7 @@ class BootLayout extends Component {
     }
     componentWillUnmount() {
         clearTimeout(this._connectionTimeout)
+        clearTimeout(this._animationTimeout)
         if ( this._networkErrorNotId ) {
             this.props.dismissNotification(this._networkErrorNotId)
         }
@@ -40,9 +52,10 @@ class BootLayout extends Component {
                             style={{position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)'}}
                             height={1000}
                             width={1000}
+                            isStopped={!this.state.animationStarted}
                             options={{
                                 loop: true,
-                                autoplay: true,
+                                autoplay: false,
                                 animationData: loadingAnimation,
                                 rendererSettings: {
                                     preserveAspectRatio: 'xMidYMid slice'

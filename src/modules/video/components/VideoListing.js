@@ -10,6 +10,7 @@ import '../styles/video-listing.css';
 import TeaserListing from './TeaserListing';
 import { CSSTransition } from 'react-transition-group';
 import withVideos from '../containers/withVideos';
+import Fade from '@material-ui/core/Fade';
 
 
 const propertySelection = (({ top, right, bottom, left, width, height }) => ({ top, right, bottom, left, width, height }))
@@ -35,7 +36,7 @@ class VideoListing extends Component<Props> {
         }
     }
     componentWillReceiveProps(nextProps) {
-        if ( this.props.searchString !== nextProps.searchString ) {
+        if (this.props.searchString !== nextProps.searchString) {
             // TODO: may need to move into componentDidUpdate if props have not propogated to container withVideos
             this.props.videos.refetch()
         }
@@ -120,18 +121,14 @@ class VideoListing extends Component<Props> {
     _renderCell = ({ columnIndex, key, rowIndex, style }) => {
         const videoIndex = rowIndex * 3 + columnIndex
         const video = this.props.videos.videos[videoIndex]
-        const isActive = this.state.activeTeaserVideoIndex === videoIndex        
+        const isActive = this.state.activeTeaserVideoIndex === videoIndex
         return video ? (
             <div className="Cell" key={key} style={{ ...style, opacity: isActive ? 0 : 1 }}>
-                <div className="clickable" onClick={this._enterTeaserListingAtVideo.bind(this, videoIndex)}>
-                    <ButtonBase
-                        className="cover-image"
-                        style={{ backgroundImage: `url(${window.AO_CORE_URL}/${video.featuredImageUrl})` }}
-                    ></ButtonBase>
-                    <Typography variant="subheading">
-                        {video.title}
-                    </Typography>
-                </div>
+                <VideoListingCellCard 
+                    video={video}
+                    className="clickable"
+                    onClick={this._enterTeaserListingAtVideo.bind(this, videoIndex)} 
+                />
             </div>
         ) : null;
     }
@@ -167,6 +164,36 @@ class VideoListing extends Component<Props> {
     }
     _onEnteredTeaserListing = () => {
         this.setState({ enteredTeaser: true })
+    }
+}
+
+class VideoListingCellCard extends Component {
+    constructor() {
+        super()
+        this.state = {
+            imageLoaded: false
+        }
+    }
+    render() {
+        const { video, ...props } = this.props
+        return (
+            <Fade in={this.state.imageLoaded}>
+                <div {...props}>                
+                    <img
+                        src={`${window.AO_CORE_URL}/${video.featuredImageUrl}`}
+                        onLoad={() => this.setState({imageLoaded: true})}
+                        style={{position: 'absolute', visibility: 'hidden'}}
+                    />                
+                    <ButtonBase
+                        className="cover-image"
+                        style={{ backgroundImage: `url(${window.AO_CORE_URL}/${video.featuredImageUrl})` }}
+                    ></ButtonBase>                
+                    <Typography variant="subheading">
+                        {video.title}
+                    </Typography>
+                </div>
+            </Fade>
+        )
     }
 }
 
