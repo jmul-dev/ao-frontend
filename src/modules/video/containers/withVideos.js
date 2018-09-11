@@ -20,8 +20,8 @@ const mapStateToProps = (store) => {
 
 // GraphQL
 const videosQuery = gql(`
-    query {
-        videos {
+    query videos($query: String) {
+        videos(query: $query) {
             id, 
             state,
             title, 
@@ -46,6 +46,7 @@ export default compose(
                 // offset
                 // limit
                 // search
+                query: props.searchString
             }
         })
     }),
