@@ -76,7 +76,7 @@ class SearchBar extends Component {
                     />
                     <div className="action-button">
                         {searchBarMinimized ? (
-                            <IconButton onClick={this._closeAndClearSearch}>
+                            <IconButton onClick={this._closeAndClearSearch} style={{marginRight: 6}}>
                                 <CloseIcon />
                             </IconButton>
                         ) : (
