@@ -138,6 +138,8 @@ class TeaserCard extends Component<Props> {
                                 style={{position: 'absolute', top: 0, left: 0}}
                                 onReady={usingTeaserSrc ? undefined : this._onVideoSrcReady}
                                 onPlay={usingTeaserSrc ? undefined : this._onVideoSrcReady}
+                                loop={usingTeaserSrc}
+                                controls={!usingTeaserSrc}
                             />
                             {!videoSrcReady ? (
                                 <div className="loading-overlay">
