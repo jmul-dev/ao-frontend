@@ -42,7 +42,7 @@ class VideoListing extends Component<Props> {
     }
     render() {
         const { videos, videosLoading, teaserListingActive, activeVideo, setActiveVideo, setTeaserListingState } = this.props
-        const rowCount = videos.videos ? videos.videos.length / 3 : 0
+        const rowCount = videos.videos ? Math.ceil(videos.videos.length / 3) : 0
         if (videosLoading)
             return null
         return (
@@ -120,20 +120,20 @@ class VideoListing extends Component<Props> {
     _renderCell = ({ columnIndex, key, rowIndex, style }) => {
         const videoIndex = rowIndex * 3 + columnIndex
         const video = this.props.videos.videos[videoIndex]
-        const isActive = this.state.activeTeaserVideoIndex === videoIndex
-        return (
+        const isActive = this.state.activeTeaserVideoIndex === videoIndex        
+        return video ? (
             <div className="Cell" key={key} style={{ ...style, opacity: isActive ? 0 : 1 }}>
                 <div className="clickable" onClick={this._enterTeaserListingAtVideo.bind(this, videoIndex)}>
                     <ButtonBase
                         className="cover-image"
-                        style={{ backgroundImage: `url(${video.featuredImageUrl})` }}
+                        style={{ backgroundImage: `url(${window.AO_CORE_URL}/${video.featuredImageUrl})` }}
                     ></ButtonBase>
                     <Typography variant="subheading">
                         {video.title}
                     </Typography>
                 </div>
             </div>
-        )
+        ) : null;
     }
     _enterTeaserListingAtVideo = (videoIndex, event) => {
         const activeTeaserVideoCellPosition = propertySelection(event.currentTarget.getBoundingClientRect())

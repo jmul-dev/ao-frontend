@@ -123,12 +123,12 @@ class TeaserCard extends Component<Props> {
                             >
                             <ReactPlayer 
                                 key={usingTeaserSrc ? 'teaser' : 'video' /* Unmounts on src change. TODO: factor fullscreen video into VideoPlayback component */}
-                                url={videoSrc}
+                                url={`${window.AO_CORE_URL}/${videoSrc}`}
                                 config={{
                                     file: {
                                         attributes: {
-                                            poster: video.featuredImageUrl
-                                            
+                                            poster: `${window.AO_CORE_URL}/${video.featuredImageUrl}`,
+                                            controlsList: 'nodownload'
                                         }
                                     }
                                 }}
