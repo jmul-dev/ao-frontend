@@ -52,6 +52,24 @@ export const getTokenBalanceForAccount = ( account ) => {
     }
 }
 
+export const getTokensStaked = () => {
+    return (dispatch, getState) => {
+        const { app, contracts } = getState()
+        if ( !app.ethAddress )
+            return console.warn(`getTokensStaked called with no ethAddress`)
+        // TODO
+    }
+}
+
+export const getTokensEarned = () => {
+    return (dispatch, getState) => {
+        const { app, contracts } = getState()
+        if ( !app.ethAddress )
+            return console.warn(`getTokensEarned called with no ethAddress`)
+        // TODO
+    }
+}
+
 
 // State
 const initialState = {
