@@ -159,7 +159,7 @@ class ContentPurchaseActionComponent extends Component {
         client.mutate({
             mutation: contentRequestMutation,
             variables: {
-                metadataDatKey: content._id
+                metadataDatKey: content.id
             }
         }).then(({data, ...props}) => {
             console.log(data, props);
