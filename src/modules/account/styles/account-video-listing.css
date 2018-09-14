@@ -12,6 +12,10 @@
     position: relative;
     margin-bottom: 24px;
 }
+.AccountVideoListItem .action-button {
+    display: block;
+    width: 100%;
+}
 .AccountVideoListItem .featured-image {
     position: relative;
     width: 100%;
@@ -22,17 +26,15 @@
     background-repeat: no-repeat;
     overflow: hidden;
 }
-.AccountVideoListItem .play-icon {
+.AccountVideoListItem .featured-image > div {
+    display: flex;
+    align-items: center;
     position: absolute;
-    bottom: 8px;
-    right: 8px;
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
+    bottom: 0;
+    right: 0;
     color: white;
-    padding: 2px;
-    background: rgba(204,204,204,0.50);
-    box-shadow: 0 2px 4px 0 rgba(0,0,0,0.50);
+    padding: 6px 8px;
+    background: rgba(0,226,79,0.75);
 }
 .AccountVideoListItem .card-container .description {
     margin-top: 12px;

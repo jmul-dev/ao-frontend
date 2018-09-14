@@ -12,9 +12,9 @@ import moment from 'moment';
 import Collapse from '@material-ui/core/Collapse';
 import '../styles/account-video-listing.css';
 import { compose } from 'react-apollo';
-import { TokenBalance, FileSize } from '../../../utils/denominations'
-import VideoPlaybackLink from '../../video/components/VideoPlaybackLink'
+import { TokenBalance, FileSize } from '../../../utils/denominations';
 import PropTypes from 'prop-types';
+import { ContentPurchaseAction, ContentPurchaseState } from '../../video/components/ContentPurchaseActions';
 
 
 class AccountVideoListItem extends PureComponent {
@@ -65,11 +65,18 @@ class AccountVideoListItem extends PureComponent {
             <div className="AccountVideoListItem">
                 <Grid container spacing={16}>
                     <Grid item sm={4}>
-                        <VideoPlaybackLink contentId={video.id} style={{width: '100%'}}>
+                        <ContentPurchaseAction content={video}>{({action, actionCopy, loading}) => (                            
+                            <ButtonBase className="action-button" disabled={!action || loading} onClick={action}>
+                                <div className="featured-image" style={{backgroundImage: `url(${window.AO_CORE_URL}/${video.featuredImageUrl})`}}>
+                                    <ContentPurchaseState content={video} />                                
+                                </div>
+                            </ButtonBase>
+                        )}</ContentPurchaseAction>
+                        {/* <VideoPlaybackLink contentId={video.id} style={{width: '100%'}}>
                             <div className="featured-image" style={{backgroundImage: `url(${window.AO_CORE_URL}/${video.featuredImageUrl})`}}>
                                 <PlayIcon className="play-icon" />                                
                             </div>
-                        </VideoPlaybackLink>
+                        </VideoPlaybackLink> */}
                     </Grid>
                     <Grid item sm={8} className="card-container">
                         <Typography variant="display3" gutterBottom>
