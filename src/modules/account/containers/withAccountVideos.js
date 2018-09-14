@@ -2,6 +2,7 @@ import { graphql, compose } from 'react-apollo'
 import { connect } from 'react-redux'
 import gql from "graphql-tag"
 import VideoContentFragment from '../../../graphql/fragments/VideoContentFragment'
+import DatStatsFragment from '../../../graphql/fragments/DatStatsFragment';
 
 // GraphQL
 const accountVideos = gql(`
@@ -9,14 +10,27 @@ const accountVideos = gql(`
         node {
             id,
             stakedContent {
-                ...VideoContentFragment   
+                ...VideoContentFragment,
+                metadataDatStats {
+                    ...DatStatsFragment
+                },
+                fileDatStats {
+                    ...DatStatsFragment
+                }
             },
             hostedContent {
-                ...VideoContentFragment
+                ...VideoContentFragment,
+                metadataDatStats {
+                    ...DatStatsFragment
+                },
+                fileDatStats {
+                    ...DatStatsFragment
+                }
             }
         }
     }
     ${VideoContentFragment}
+    ${DatStatsFragment}
 `)
 
 const mapStateToProps = (state) => ({
@@ -28,10 +42,11 @@ export default compose(
     graphql(accountVideos, {
         name: 'query',
         options: (props) => ({
+            pollInterval: 1500,
             variables: {
                 // offset
                 // limit
-            }
+            },            
         })
     }),
     connect(mapStateToProps)
