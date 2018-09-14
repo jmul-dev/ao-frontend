@@ -3,6 +3,9 @@ import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import ButtonBase from '@material-ui/core/ButtonBase';
 import PlayIcon from '@material-ui/icons/PlayArrow';
+import UpIcon from '@material-ui/icons/ArrowUpward';
+import DownIcon from '@material-ui/icons/ArrowDownward';
+import PeersIcon from '@material-ui/icons/People';
 import withAccountVideos from '../containers/withAccountVideos';
 import withEthAddress from '../containers/withEthAddress';
 import moment from 'moment';
@@ -24,22 +27,55 @@ class AccountVideoListItem extends PureComponent {
     _toggleExapansion = () => {
         this.setState({expanded: !this.state.expanded})
     }
+    /**
+     * NOTE: we are combining metadataDat and fileDat for metrics
+     */
+    _renderDatStats() {
+        const { video, filter } = this.props
+        let peers = 0
+        let downloadSpeed = 0
+        let uploadSpeed = 0
+        if ( video.metadataDatStats ) {
+            peers+= video.metadataDatStats.peersTotal
+            downloadSpeed+= video.metadataDatStats.downloadSpeed
+            uploadSpeed+= video.metadataDatStats.uploadSpeed
+        }
+        if ( video.fileDatStats ) {
+            peers+= video.fileDatStats.peersTotal
+            downloadSpeed+= video.fileDatStats.downloadSpeed
+            uploadSpeed+= video.fileDatStats.uploadSpeed
+        }
+        return (
+            <Typography variant="body1" gutterBottom color="textSecondary" component="div" style={{display: 'flex', alignItems: 'center'}}>
+                <div style={{marginRight: 6, display: 'flex', alignItems: 'center'}}>
+                    <PeersIcon style={{fontSize: 18, marginRight: 3}} color={peers > 0 ? 'primary' : 'default'} /> {peers}
+                </div>
+                <div style={{marginRight: 6, display: 'flex', alignItems: 'center'}}>
+                    <UpIcon style={{fontSize: 18, marginRight: 3}} color={uploadSpeed > 0 ? 'primary' : 'default'} /> <FileSize sizeInBytes={uploadSpeed} />{`/s`}
+                </div>
+                <div style={{marginRight: 6, display: 'flex', alignItems: 'center'}}>
+                    <DownIcon style={{fontSize: 18, marginRight: 3}} color={uploadSpeed > 0 ? 'primary' : 'default'} /> <FileSize sizeInBytes={downloadSpeed} />{`/s`}
+                </div>
+            </Typography>
+        )
+    }
     render() {
-        const { video } = this.props
+        const { video, filter } = this.props
         return (
             <div className="AccountVideoListItem">
                 <Grid container spacing={16}>
                     <Grid item sm={4}>
                         <VideoPlaybackLink contentId={video.id} style={{width: '100%'}}>
                             <div className="featured-image" style={{backgroundImage: `url(${window.AO_CORE_URL}/${video.featuredImageUrl})`}}>
-                                <PlayIcon className="play-icon" />
+                                <PlayIcon className="play-icon" />                                
                             </div>
                         </VideoPlaybackLink>
                     </Grid>
                     <Grid item sm={8} className="card-container">
                         <Typography variant="display3" gutterBottom>
-                            {video.title} {`(${video.state})`}
+                            {video.title}
                         </Typography>
+                        {this._renderDatStats()}
                         <Typography variant="body1" gutterBottom color="textSecondary">
                             {`uploaded: ${moment(parseInt(video.createdAt, 10)).format('M/D/YYYY')}`}
                         </Typography>
@@ -138,7 +174,7 @@ class AccountVideoListing extends Component {
                 <ul style={{listStyle: 'none', padding: 0, margin: 0}}>
                     {videos.map((video, index) => (
                         <li key={video.id}>
-                            <AccountVideoListItem video={video} />
+                            <AccountVideoListItem video={video} filter={filter} />
                         </li>
                     ))}
                 </ul>
