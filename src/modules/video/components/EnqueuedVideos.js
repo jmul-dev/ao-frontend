@@ -43,7 +43,6 @@ class EnqueuedVideos extends Component<Props> {
 
 const EnqueuedVideoListItem = withTheme()(({theme, content, ...props}) => {
     const actionRequired = statesPendingUserAction.indexOf(content.state) > -1
-    const actionText = 'Pay for video'
     return (
         <div className="EnqueuedVideo" style={{backgroundColor: actionRequired ? theme.palette.primary.main : theme.palette.background.default}}>
             <div style={{overflow: 'hidden', marginRight: 16}}>
@@ -55,10 +54,10 @@ const EnqueuedVideoListItem = withTheme()(({theme, content, ...props}) => {
             <div style={{marginLeft: 'auto'}}>
                 <div className="featured-image" style={{backgroundImage: `url(${window.AO_CORE_URL}/${content.featuredImageUrl})`}}>
                     {actionRequired ? (
-                        <ContentPurchaseAction content={content}>{({action, loading}) => (
+                        <ContentPurchaseAction content={content}>{({action, actionCopy, loading}) => (
                             <ButtonBase className="action-button" disabled={!action || loading} onClick={action}>
                                 <div className="action-text">
-                                    <Typography variant="body1">{actionText}</Typography>                                
+                                    <Typography variant="body1">{actionCopy}</Typography>                                
                                 </div>
                             </ButtonBase>
                         )}</ContentPurchaseAction>

@@ -40,9 +40,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: rgba(0,226,79,1);
-    border: 1px solid white;
-    border-radius: 4px;
+    background: rgba(0,226,79,0.5);
 }
 .EnqueuedVideos .EnqueuedVideo .action-status {
     display: flex;

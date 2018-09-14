@@ -6,6 +6,7 @@
 import { CircularProgress } from '@material-ui/core';
 import AlertIcon from '@material-ui/icons/ErrorOutline';
 import PlayIcon from '@material-ui/icons/PlayArrow';
+import ReplayIcon from '@material-ui/icons/Replay';
 import React, { Component } from 'react';
 import { compose, withApollo } from 'react-apollo';
 import { connect } from 'react-redux';
@@ -16,6 +17,8 @@ import { becomeHost, buyContent, setVideoPlayback } from '../reducers/video.redu
 
 /*
 DISCOVERED
+HOST_DISCOVERY
+HOST_DISCOVERY_FAILED
 DOWNLOADING
 DOWNLOADED
 PURCHASING
@@ -31,6 +34,7 @@ DISCOVERABLE
 */
 
 export const statesPendingUserAction = [
+    'HOST_DISCOVERY_FAILED',
     'DOWNLOADED',
     'DAT_INITIALIZED',
     'DISCOVERABLE',
@@ -42,6 +46,15 @@ export const ContentPurchaseState = ({content}) => {
     let Icon = null
     let copy = null
     switch (content.state) {
+        case 'HOST_DISCOVERY':
+            isLoadingState = true;
+            copy = 'Finding host...';
+            break;
+        case 'HOST_DISCOVERY_FAILED':
+            isLoadingState = false;
+            copy = 'Host not found, retry?';
+            Icon = ReplayIcon;
+            break;
         case 'DOWNLOADING':
             isLoadingState = true;
             copy = 'Downloading...';
@@ -235,15 +248,27 @@ class ContentPurchaseActionComponent extends Component {
         }
         setVideoPlayback({contentId: content.id, initialPosition})
     }
+    _retryHostDiscovery = () => {
+        console.warn(`TODO: _retryHostDiscovery not implemented`)
+    }
     render() {
         const { content, children } = this.props
         const { loading } = this.state
         let error = this.state.error
         let action = null
+        let actionCopy = ''
         switch (content.state) {
+            case 'HOST_DISCOVERY':
+                break;
+            case 'HOST_DISCOVERY_FAILED':
+                // TODO: retry host discovery?
+                action = this._retryHostDiscovery
+                actionCopy = 'Find host'
+                break;
             case 'DISCOVERED':
                 // The first action, download content (bring in to core)
                 action = this._downloadContentAction
+                actionCopy = 'Download content'
                 break;
             case 'DOWNLOADING':
                 // No action to take
@@ -251,6 +276,7 @@ class ContentPurchaseActionComponent extends Component {
             case 'DOWNLOADED':
                 // Content is download, purchase action now available
                 action = this._buyContentAction
+                actionCopy = 'Purchase content'
                 break;
             case 'PURCHASING':
                 break;
@@ -271,6 +297,7 @@ class ContentPurchaseActionComponent extends Component {
                 break;
             case 'DAT_INITIALIZED':
                 action = this._becomeHostAction
+                actionCopy = 'Become host'
                 break;
             case 'STAKING':
                 break;
@@ -278,11 +305,12 @@ class ContentPurchaseActionComponent extends Component {
                 break;
             case 'DISCOVERABLE':
                 action = this._watchContent
+                actionCopy = 'Watch now'
                 break;
             default:
                 break;
         }
-        return children({action, loading, error})
+        return children({action, actionCopy, loading, error})
     }
 }
 
