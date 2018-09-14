@@ -10,6 +10,7 @@ import { PrimaryButton } from '../../../theme';
 import { TokenBalance } from '../../../utils/denominations';
 import withVideo from '../containers/withVideo';
 import { ContentPurchaseAction, ContentPurchaseState } from './ContentPurchaseActions';
+import DatStats from '../../content/components/DatStats';
 
 
 type Props = {
@@ -103,7 +104,7 @@ class TeaserCard extends Component<Props> {
         }
     }
     render() {
-        const { video, isActive, isFullscreen, isTeaserEntered, tokenBalance } = this.props
+        const { video, videoQuery, isActive, isFullscreen, isTeaserEntered, tokenBalance } = this.props
         const { videoSrc, usingTeaserSrc, videoSrcReady } = this.state
         const insufficientBalance = tokenBalance.lt(video.stake) ? tokenBalance.minus(video.stake).multipliedBy(-1).toNumber() : undefined
         return (
@@ -158,6 +159,11 @@ class TeaserCard extends Component<Props> {
                                 {`your balance: `}<TokenBalance baseAmount={tokenBalance} />
                             </Typography>
                             {this._renderActionState()}
+                            {videoQuery.video ? (
+                                <div style={{marginTop: 8}}>
+                                    <DatStats stats={[videoQuery.video.metadataDatStats, videoQuery.video.fileDatStats]} />
+                                </div>
+                            ) : null}
                         </div>
                     </div>
                     <div className="content-container hide-fullscreen">
