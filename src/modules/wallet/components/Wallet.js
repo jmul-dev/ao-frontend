@@ -1,25 +1,30 @@
-// @flow
 import React, { PureComponent } from 'react';
-import { WalletReducerType } from '../reducers/wallet.reducer';
 import withUserWallet from '../containers/withUserWallet';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import ArrowIcon from '@material-ui/icons/ArrowUpward';
 import ExchangeModal from '../../exchange/components/ExchangeModal';
 import { formattedTokenAmount } from '../../../utils/denominations';
+import PropTypes from 'prop-types';
+import BigNumber from 'bignumber.js';
 import '../styles/wallet.css';
 
 
-type Props = {
-    ethAddress: string,
-    wallet: WalletReducerType,    
-    isElectron: boolean,
-    getEthBalanceForAccount: (string) => void,
-    getTokenBalanceForAccount: (string) => void,
-};
-
-class Wallet extends PureComponent<Props> {
-    props: Props;
+class Wallet extends PureComponent {
+    static propTypes = {
+        ethAddress: PropTypes.string,
+        wallet: PropTypes.shape({
+            ethBalance: PropTypes.instanceOf(BigNumber),
+            tokenBalance: PropTypes.instanceOf(BigNumber),
+            primordialTokenBalance: PropTypes.instanceOf(BigNumber),
+            tokenStaked: PropTypes.instanceOf(BigNumber),
+            tokenEarned: PropTypes.instanceOf(BigNumber),
+            aoEarnedFromStaking: PropTypes.instanceOf(BigNumber),
+            aoEarnedFromHosting: PropTypes.instanceOf(BigNumber),
+        }),    
+        isElectron: PropTypes.bool,
+        updateWallet: PropTypes.func.isRequired,
+    }
     constructor() {
         super()
         this.state = {
@@ -28,20 +33,19 @@ class Wallet extends PureComponent<Props> {
     }
     componentDidMount() {
         if ( this.props.ethAddress ) {
-            this._getUpdatedBalances( this.props.ethAddress )
+            this._getUpdatedBalances()
         } else if ( this.props.isElectron ) {
             window.chrome.ipcRenderer.send('open-metamask-popup')
         }
     }
     componentWillReceiveProps(nextProps: Props) {
         if ( this.props.ethAddress !== nextProps.ethAddress ) {
-            this._getUpdatedBalances( nextProps.ethAddress )
+            this._getUpdatedBalances()
         }
     }
-    _getUpdatedBalances = ( address ) => {
-        const { getEthBalanceForAccount, getTokenBalanceForAccount } = this.props
-        getEthBalanceForAccount( address )
-        getTokenBalanceForAccount( address )
+    _getUpdatedBalances = () => {
+        const { updateWallet } = this.props
+        updateWallet()
     }
     _onExchangeModalClose = () => {
         this.setState({exchangeModalOpen: false})
