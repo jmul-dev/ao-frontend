@@ -13,6 +13,7 @@ import { connect } from 'react-redux';
 import contentPurchaseTransactionMutation from '../../../graphql/mutations/contentPurchaseTransaction';
 import contentBecomeHostTransactionMutation from '../../../graphql/mutations/contentBecomeHostTransaction';
 import contentRequestMutation from '../../../graphql/mutations/contentRequest';
+import contentRetryHostDiscoveryMutation from '../../../graphql/mutations/contentRetryHostDiscovery';
 import { becomeHost, buyContent, setVideoPlayback } from '../reducers/video.reducer';
 
 /*
@@ -249,7 +250,18 @@ class ContentPurchaseActionComponent extends Component {
         setVideoPlayback({contentId: content.id, initialPosition})
     }
     _retryHostDiscovery = () => {
-        console.warn(`TODO: _retryHostDiscovery not implemented`)
+        const { content, client } = this.props
+        this.setState({loading: true})
+        client.mutate({
+            mutation: contentRetryHostDiscoveryMutation,
+            variables: {
+                id: content.id
+            }
+        }).then(({data, ...props}) => {
+            this.setState({loading: false})
+        }).catch(error => {
+            this._dispatchErrorNotificationAndStopLoading(error, 'Failed to retry host discovery', 'Error during contentRetryHostDiscoveryMutation')
+        })
     }
     render() {
         const { content, children } = this.props
