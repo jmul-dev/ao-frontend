@@ -68,15 +68,10 @@ class AccountVideoListItem extends PureComponent {
                         <ContentPurchaseAction content={video}>{({action, actionCopy, loading}) => (                            
                             <ButtonBase className="action-button" disabled={!action || loading} onClick={action}>
                                 <div className="featured-image" style={{backgroundImage: `url(${window.AO_CORE_URL}/${video.featuredImageUrl})`}}>
-                                    <ContentPurchaseState content={video} />                                
+                                    <ContentPurchaseState content={video} />
                                 </div>
                             </ButtonBase>
                         )}</ContentPurchaseAction>
-                        {/* <VideoPlaybackLink contentId={video.id} style={{width: '100%'}}>
-                            <div className="featured-image" style={{backgroundImage: `url(${window.AO_CORE_URL}/${video.featuredImageUrl})`}}>
-                                <PlayIcon className="play-icon" />                                
-                            </div>
-                        </VideoPlaybackLink> */}
                     </Grid>
                     <Grid item sm={8} className="card-container">
                         <Typography variant="display3" gutterBottom>
