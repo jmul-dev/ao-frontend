@@ -31,7 +31,12 @@ const videosQuery = gql(`
             fileUrl, 
             featuredImageUrl, 
             teaserUrl, 
-            stake
+            stake,
+            lastSeenContentHost {
+                contentHostId,
+                contentDatKey,
+                timestamp
+            }
         }
     }
 `)

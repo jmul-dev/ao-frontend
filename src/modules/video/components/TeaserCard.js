@@ -1,16 +1,18 @@
-import React, { Component } from 'react';
-import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
+import Typography from '@material-ui/core/Typography';
+import React, { Component } from 'react';
+import ReactPlayer from 'react-player';
 import { CSSTransition } from 'react-transition-group';
-import ReactPlayer from 'react-player'
-import '../styles/teaser-card.css';
 import { LogoIcon } from '../../../assets/Icons';
-import ExchangeModal from '../../exchange/components/ExchangeModal';
 import { PrimaryButton } from '../../../theme';
 import { TokenBalance } from '../../../utils/denominations';
-import withVideo from '../containers/withVideo';
-import { ContentPurchaseAction, ContentPurchaseState } from './ContentPurchaseActions';
 import DatStats from '../../content/components/DatStats';
+import ExchangeModal from '../../exchange/components/ExchangeModal';
+import withVideo from '../containers/withVideo';
+import '../styles/teaser-card.css';
+import { ContentPurchaseAction, ContentPurchaseState } from './ContentPurchaseActions';
+import moment from 'moment';
+import ClockIcon from '@material-ui/icons/Schedule';
 
 
 type Props = {
@@ -103,6 +105,27 @@ class TeaserCard extends Component<Props> {
             )
         }
     }
+    _renderLastSeen() {
+        const { video } = this.props
+        if ( !video.lastSeenContentHost )
+            return null
+        const lastSeenDate = moment.utc(parseInt(video.lastSeenContentHost.timestamp))
+        const likelyAvailableDate = moment().subtract(20, 'minutes')
+        const potentiallyAvailableDate = moment().subtract(1, 'hour')
+        let accentColor = 'inherit'
+        if ( lastSeenDate.isAfter( likelyAvailableDate ) ) {
+            accentColor = 'primary'
+        } else if ( lastSeenDate.isAfter( potentiallyAvailableDate ) ) {
+            accentColor = 'secondary'
+        } else {
+            accentColor = 'error'
+        }
+        return (
+            <Typography color={accentColor} variant="body1" style={{display: 'flex', alignItems: 'center'}}>
+                <ClockIcon style={{marginRight: 4}} /> {`last seen ${lastSeenDate.fromNow()}`}
+            </Typography>
+        )
+    }
     render() {
         const { video, videoQuery, isActive, isFullscreen, isTeaserEntered, tokenBalance } = this.props
         const { videoSrc, usingTeaserSrc, videoSrcReady } = this.state
@@ -158,12 +181,13 @@ class TeaserCard extends Component<Props> {
                             <Typography variant="caption" gutterBottom>
                                 {`your balance: `}<TokenBalance baseAmount={tokenBalance} />
                             </Typography>
-                            {this._renderActionState()}
+                            {this._renderLastSeen()}
+                            {this._renderActionState()}                            
                             {videoQuery.video ? (
                                 <div style={{marginTop: 8}}>
                                     <DatStats stats={[videoQuery.video.metadataDatStats, videoQuery.video.fileDatStats]} />
                                 </div>
-                            ) : null}
+                            ) : null}                            
                         </div>
                     </div>
                     <div className="content-container hide-fullscreen">
