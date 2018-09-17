@@ -33,7 +33,7 @@ export const updateIcoState = () => {
                 })
             }
         })
-        contracts.aoToken.MAX_Primordial_SUPPLY(function(err, supply) {
+        contracts.aoToken.MAX_PRIMORDIAL_SUPPLY(function(err, supply) {
             if ( supply ) {
                 dispatch({
                     type: UPDATE_PRIMORDIAL_STATE,
