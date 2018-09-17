@@ -122,7 +122,7 @@ class TeaserCard extends Component<Props> {
         }
         return (
             <Typography color={accentColor} variant="body1" style={{display: 'flex', alignItems: 'center'}}>
-                <ClockIcon style={{marginRight: 4}} /> {`last seen ${lastSeenDate.fromNow()}`}
+                <ClockIcon style={{marginRight: 4}} /> {`last host seen ${lastSeenDate.fromNow()}`}
             </Typography>
         )
     }

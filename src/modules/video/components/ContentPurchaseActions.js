@@ -185,12 +185,13 @@ class ContentPurchaseActionComponent extends Component {
     }
     _buyContentAction = () => {
         const { buyContent, content, client } = this.props
-        this.setState({loading: true})
-        // 1. Get user's public key (required for buyContent contract call)
-        client.readQuery({
-            query: localNodeQuery
-        }).then(({data}) => {
-            const publicKey = data.node.publicKey
+        this.setState({loading: true})        
+        try {
+            // 1. Get user's public key (required for buyContent contract call)
+            const { node } = client.readQuery({
+                query: localNodeQuery
+            })
+            const publicKey = node.publicKey
             // 2. Trigger the buyContent transaction via metamask
             buyContent(content.contentHostId, publicKey).then(transactionHash => {
                 // 3. Notify core that the user is purchasing content
@@ -213,9 +214,9 @@ class ContentPurchaseActionComponent extends Component {
             }).catch(error => {
                 this._dispatchErrorNotificationAndStopLoading(error, 'Buy content transaction failed', 'Error during buyContent action')
             })
-        }).catch(error => {
+        } catch (error) {
             this._dispatchErrorNotificationAndStopLoading(error, 'Unable to get user publicKey from cache', 'Error during buyContent action')
-        })
+        }
     }
     _becomeHostAction = () => {
         const { becomeHost, content, client } = this.props
