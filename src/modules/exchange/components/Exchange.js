@@ -10,6 +10,8 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import EtherscanLink from '../../etherscan/EtherscanLink';
 import { TokenBalance, DenominationInput } from '../../../utils/denominations';
 import BigNumber from 'bignumber.js';
+import { MuiThemeProvider } from '@material-ui/core/styles';
+import { darkTheme } from '../../../theme';
 
 
 type Props = {
@@ -68,34 +70,36 @@ class Exchange extends Component<Props> {
         const showExchangeTransactionMessage = exchangeTransaction.error || exchangeTransaction.initialized || exchangeTransaction.transactionHash || exchangeTransaction.result
         const ethCost = exchangeAmountToken.multipliedBy(exchangeRate)
         const tokensNeeded = requiredTokenAmount ? new BigNumber(requiredTokenAmount).minus(wallet.networkTokenBalance) : new BigNumber(0)
-        const tokensInput = tokensNeeded.gt(exchange.exchangeAmountToken) ? tokensNeeded : exchange.exchangeAmountToken
+        const tokensInput = tokensNeeded.gt(exchange.exchangeAmountToken) ? tokensNeeded : exchange.exchangeAmountToken        
         return (
             <div className={`Exchange ${formDisabled ? 'disabled' : ''}`} style={{backgroundColor: theme.palette.background.default}}>
                 {requiredTokenAmount ? (
-                    <div className="content-pane" style={{backgroundColor: '#151515'}}>
-                        <Typography variant="title" align="center" style={{marginBottom: 0}}>{title}</Typography>
-                        <Typography variant="body1" align="center" style={{marginBottom: 36, color: '#777'}}>{subtitle}</Typography>
-                        <div className="line-item">
-                            <Typography variant="caption">{`Your balance:`}</Typography>
-                            <Typography variant="body1">
-                                <TokenBalance baseAmount={wallet.networkTokenBalance} includeAO={true} isPrimordial={false} />
-                            </Typography>
+                    <MuiThemeProvider theme={darkTheme}>
+                        <div className="content-pane" style={{backgroundColor: '#151515'}}>
+                            <Typography variant="title" align="center" style={{marginBottom: 0}}>{title}</Typography>
+                            <Typography variant="body1" align="center" style={{marginBottom: 36, color: '#777'}}>{subtitle}</Typography>
+                            <div className="line-item">
+                                <Typography variant="caption">{`Your balance:`}</Typography>
+                                <Typography variant="body1">
+                                    <TokenBalance baseAmount={wallet.networkTokenBalance} includeAO={true} isPrimordial={false} />
+                                </Typography>
+                            </div>
+                            <div className="line-item">
+                                <Typography variant="caption">{requiredTokenCopy}</Typography>
+                                <Typography variant="body1">
+                                    <TokenBalance baseAmount={requiredTokenAmount} includeAO={true} isPrimordial={false} />
+                                </Typography>
+                            </div>
+                            <div className="line-item divider"></div>
+                            <div className="line-item">
+                                <Typography variant="body1">{`AO needed:`}</Typography>
+                                <Typography variant="body1">
+                                    <TokenBalance baseAmount={tokensNeeded} includeAO={true} isPrimordial={false} />
+                                </Typography>
+                            </div>
+                            <div className="triangle"></div>
                         </div>
-                        <div className="line-item">
-                            <Typography variant="caption">{requiredTokenCopy}</Typography>
-                            <Typography variant="body1">
-                                <TokenBalance baseAmount={requiredTokenAmount} includeAO={true} isPrimordial={false} />
-                            </Typography>
-                        </div>
-                        <div className="line-item divider"></div>
-                        <div className="line-item">
-                            <Typography variant="body1">{`AO needed:`}</Typography>
-                            <Typography variant="body1">
-                                <TokenBalance baseAmount={tokensNeeded} includeAO={true} isPrimordial={false} />
-                            </Typography>
-                        </div>
-                        <div className="triangle"></div>
-                    </div>
+                    </MuiThemeProvider>
                 ) : null}
                 <div className="input-pane">                
                     <Typography variant="subheading" align="center" style={{marginBottom: 24}}>{`How much AO+ would you like to purchase?`}</Typography>
