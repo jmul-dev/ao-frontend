@@ -40,7 +40,7 @@ export const setSearchBarActive = (state) => ({
 /**
  * NOTE: this method resolves once we have a transactionHash (not the actual purchase receipt)
  */
-export const buyContent = (contentHostId) => {
+export const buyContent = (contentHostId, publicKey) => {
     return (dispatch, getState) => {
         return new Promise((resolve, reject) => {
             if ( !contentHostId ) {
@@ -52,7 +52,13 @@ export const buyContent = (contentHostId) => {
                 // 1. Get latest price
                 dispatch( getContentPrice(contentHostId) ).then(contentPrice => {
                     // 2. buyContent
-                    contracts.aoContent.buyContent(contentHostId, contentPrice.toNumber(), 0, "ao", { from: app.ethAddress }, (error, transactionHash) => {
+                    contracts.aoContent.buyContent(
+                        contentHostId, 
+                        contentPrice.toNumber(), // networkIntegerAmount
+                        0, // networkFractionAmount
+                        "ao",
+                        publicKey,  // publicKey of requesting node
+                        { from: app.ethAddress }, (error, transactionHash) => {
                         if ( error ) {
                             console.error(`buyContent error: ${error.message}`)                        
                             reject(error)

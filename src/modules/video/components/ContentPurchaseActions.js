@@ -15,6 +15,7 @@ import contentBecomeHostTransactionMutation from '../../../graphql/mutations/con
 import contentRequestMutation from '../../../graphql/mutations/contentRequest';
 import contentRetryHostDiscoveryMutation from '../../../graphql/mutations/contentRetryHostDiscovery';
 import { becomeHost, buyContent, setVideoPlayback } from '../reducers/video.reducer';
+import { localNodeQuery } from '../../../AppContainer';
 
 /*
 DISCOVERED
@@ -185,27 +186,35 @@ class ContentPurchaseActionComponent extends Component {
     _buyContentAction = () => {
         const { buyContent, content, client } = this.props
         this.setState({loading: true})
-        // 1. Trigger the buyContent transaction via metamask
-        buyContent(content.contentHostId).then(transactionHash => {
-            // 2. Notify core that the user is purchasing content
-            client.mutate({
-                mutation: contentPurchaseTransactionMutation,
-                variables: {
-                    inputs: {
-                        transactionHash,
-                        contentId: content.id,
-                        contentHostId: content.contentHostId,
+        // 1. Get user's public key (required for buyContent contract call)
+        client.readQuery({
+            query: localNodeQuery
+        }).then(({data}) => {
+            const publicKey = data.node.publicKey
+            // 2. Trigger the buyContent transaction via metamask
+            buyContent(content.contentHostId, publicKey).then(transactionHash => {
+                // 3. Notify core that the user is purchasing content
+                client.mutate({
+                    mutation: contentPurchaseTransactionMutation,
+                    variables: {
+                        inputs: {
+                            transactionHash,
+                            contentId: content.id,
+                            contentHostId: content.contentHostId,
+                        }
                     }
-                }
-            }).then(({data, ...props}) => {
-                console.log(data, props)
-                this.setState({loading: false})
-                // 3. Not sure we need to do anything here, state will be updated via pulling on content.state
+                }).then(({data, ...props}) => {
+                    console.log(data, props)
+                    this.setState({loading: false})
+                    // 3. Not sure we need to do anything here, state will be updated via polling on content.state
+                }).catch(error => {
+                    this._dispatchErrorNotificationAndStopLoading(error, 'Failed to move content to purchasing state', 'Error during contentPurchaseTransactionMutation')
+                })
             }).catch(error => {
-                this._dispatchErrorNotificationAndStopLoading(error, 'Failed to move content to purchasing state', 'Error during contentPurchaseTransactionMutation')
+                this._dispatchErrorNotificationAndStopLoading(error, 'Buy content transaction failed', 'Error during buyContent action')
             })
         }).catch(error => {
-            this._dispatchErrorNotificationAndStopLoading(error, 'Buy content transaction failed', 'Error during buyContent action')
+            this._dispatchErrorNotificationAndStopLoading(error, 'Unable to get user publicKey from cache', 'Error during buyContent action')
         })
     }
     _becomeHostAction = () => {
