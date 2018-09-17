@@ -59,12 +59,14 @@ export default compose(
         // Pull inputs straight from redux props
         options: (props) => ({
             variables: {
-                inputs: {                    
+                inputs: {
                     ...props.form,
                     ethAddress: props.ethAddress,
                     pricingOption: undefined, // remove from form inputs
                     stakeTokenType: undefined, // remove from form inputs
-                    stakeTokenSplit: undefined, // remove from form inputs                    
+                    stakeTokenSplit: undefined, // remove from form inputs
+                    networkTokensRequired: undefined, // remove from form inputs
+                    primordialTokensRequired: undefined, // remove from form inputs
                 }
             }
         })

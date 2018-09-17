@@ -148,10 +148,9 @@ class UploadFormPricing extends Component {
     }
     _navForward = () => {
         const { wallet, form } = this.props
-        // TODO: if balance > stake: nav to /app/view/upload/content; else: nav to /app/view/upload/reload
         let nextRoute = '/app/view/upload/content'
-        if ( wallet.tokenBalance.lt(form.stake) ) {
-            nextRoute = '/app/view/upload/reload'   
+        if ( wallet.networkTokenBalance.lt(form.networkTokensRequired) ||  wallet.primordialTokenBalance.lt(form.primordialTokensRequired) ) {
+            nextRoute = '/app/view/upload/reload'
         }
         this.context.router.history.push(nextRoute)
     }

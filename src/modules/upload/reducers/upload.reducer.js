@@ -94,6 +94,24 @@ export const updatePricingOption = (pricingOption, stake = undefined, profit = u
                 stakeTokenSplit: stakeTokenSplit !== undefined ? stakeTokenSplit : state.upload.form.stakeTokenSplit,
             }
         }
+        let networkTokensRequired = payload.stake
+        let primordialTokensRequired = payload.stake
+        switch (payload.stakeTokenType) {
+            case 'primordial':
+                networkTokensRequired = 0;
+                primordialTokensRequired = payload.stake;
+                break;
+            case 'network':
+                networkTokensRequired = payload.stake;
+                primordialTokensRequired = 0;
+                break;
+            case 'both':
+                networkTokensRequired = (100 - payload.stakeTokenSplit) / 100.0 * payload.stake;
+                primordialTokensRequired = payload.stakeTokenSplit / 100.0 * payload.stake;
+                break;
+        }
+        payload.networkTokensRequired = networkTokensRequired
+        payload.primordialTokensRequired = primordialTokensRequired
         dispatch({
             type: UPDATE_PRICING,
             payload
@@ -129,6 +147,7 @@ export const stakeContent = ({networkTokenAmount, primordialTokenAmount, fileDat
                 metadataDatKey,
                 fileSizeInBytes,
                 profitPercentageWithDivisor,
+                '',  // extra data
                 { from: app.ethAddress },
                 function(err, transactionHash) {
                     if ( err ) {

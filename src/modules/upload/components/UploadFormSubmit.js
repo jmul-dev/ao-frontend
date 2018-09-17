@@ -138,7 +138,7 @@ class UploadFormSubmit extends Component<Props> {
         const submittedContent = (submittedContentQuery && submittedContentQuery.video) ? submittedContentQuery.video : undefined
         // TODO: use the content.state coming in from submittedContentQuery.data.video.state === 'STAKED' | 'STAKING' | 'DAT_INITIALIZED'
         // logic in reverse order of event occurances
-        if ( submittedContent && submittedContent.state === 'STAKED' ) {
+        if ( submittedContent && (submittedContent.state === 'STAKED' || submittedContent.state === 'DISCOVERABLE') ) {
             return (
                 <PrimaryButton onClick={this._continue}>{'continue'}</PrimaryButton>
             )

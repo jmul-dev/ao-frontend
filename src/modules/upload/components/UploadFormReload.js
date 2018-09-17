@@ -22,7 +22,7 @@ class UploadFormReload extends Component {
     }
     componentWillReceiveProps( nextProps ) {
         const { wallet, form } = nextProps
-        if ( wallet.tokenBalance.gte(form.stake) ) {
+        if ( wallet.networkTokenBalance.gte(form.networkTokensRequired) &&  wallet.primordialTokenBalance.gte(form.primordialTokensRequired) ) {
             this.context.router.history.replace('/app/view/upload/content')
         }
     }
@@ -39,7 +39,7 @@ class UploadFormReload extends Component {
                             <Exchange
                                 title="Insufficient AO"
                                 subtitle="Purchase AO in order to stake your content within the network"
-                                requiredTokenAmount={form.stake}
+                                requiredTokenAmount={form.primordialTokensRequired}
                                 requiredTokenCopy={'stake'}
                             />
                         </div>                   
