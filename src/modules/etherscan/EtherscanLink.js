@@ -8,7 +8,7 @@ import { connect } from 'react-redux';
  * @param {type} 'tx' | 'address'
  */
 const EtherscanLink = ({type, value, ethNetworkLink, children, style = {}, ...props}) => (
-    <a href={`${ethNetworkLink}/${type}/${value}`} target="_blank" style={{whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '100%', display: 'inline-block', verticalAlign: 'middle', ...style}} {...props}>
+    <a href={`${ethNetworkLink}/${type}/${value}`} target="_blank" style={{whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '100%', display: 'inline-block', verticalAlign: 'middle', color: 'rgba(0, 204, 71, 1)', ...style}} {...props}>
         {children ? children : value}
     </a>
 )

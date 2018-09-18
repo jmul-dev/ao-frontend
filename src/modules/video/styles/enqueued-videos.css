@@ -2,7 +2,8 @@
     position: fixed; 
     bottom: 0; 
     right: 0; 
-    z-index: 999;  /* NOTE: just below the video playback z-index */
+    z-index: 1001;  /* NOTE: needs to be above Teaser cards */
+    transition: transform 250ms ease-out;
 }
 .EnqueuedVideos > ul {
     list-style: none; 

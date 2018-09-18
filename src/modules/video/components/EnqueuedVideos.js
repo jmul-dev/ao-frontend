@@ -9,7 +9,7 @@ import { ContentPurchaseState, ContentPurchaseAction, statesPendingUserAction } 
 
 type Props = {
     // redux bound state
-
+    hideOffcanvas: boolean,
     // redux bound methods
 
     // graphql props
@@ -58,7 +58,7 @@ class EnqueuedVideos extends Component<Props> {
         if (!node || (node && !node.hostedContent))
             return null;  // no incomplete hosted content
         return (
-            <div className="EnqueuedVideos">
+            <div className="EnqueuedVideos" style={{transform: this.props.hideOffcanvas ? `translateY(100px)` : undefined }}>
                 <ul>
                     {node.hostedContent.map(content => (
                         <li key={content.id}>
@@ -74,7 +74,7 @@ class EnqueuedVideos extends Component<Props> {
 const EnqueuedVideoListItem = withTheme()(({ theme, content, ...props }) => {
     const actionRequired = statesPendingUserAction.indexOf(content.state) > -1
     return (
-        <div className="EnqueuedVideo" style={{ backgroundColor: actionRequired ? theme.palette.primary.main : theme.palette.background.default }}>
+        <div className="EnqueuedVideo" style={{ backgroundColor: actionRequired ? theme.palette.primary.main : theme.palette.background.default}}>
             <div style={{ overflow: 'hidden', marginRight: 16 }}>
                 <Typography variant="subheading" gutterBottom noWrap>{content.title}</Typography>
                 <Typography variant="body1" component="div" className="action-status">

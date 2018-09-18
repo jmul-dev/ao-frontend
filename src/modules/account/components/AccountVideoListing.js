@@ -13,6 +13,7 @@ import { TokenBalance, FileSize } from '../../../utils/denominations';
 import PropTypes from 'prop-types';
 import { ContentPurchaseAction, ContentPurchaseState } from '../../video/components/ContentPurchaseActions';
 import DatStats from '../../content/components/DatStats';
+import EtherscanLink from '../../etherscan/EtherscanLink';
 
 
 class AccountVideoListItem extends PureComponent {
@@ -27,6 +28,7 @@ class AccountVideoListItem extends PureComponent {
     }
     render() {
         const { video, filter } = this.props
+        const transactions = video.transactions || {}
         return (
             <div className="AccountVideoListItem">
                 <Grid container spacing={16}>
@@ -59,7 +61,15 @@ class AccountVideoListItem extends PureComponent {
                             )}
                         </Typography>
                         <Typography className="description" variant="body1" gutterBottom color="textSecondary">
-                            {video.description}
+                            {transactions.stakeTx ? (
+                                <EtherscanLink type={'tx'} value={transactions.stakeTx}>{`Stake Tx`}</EtherscanLink>
+                            ) : null}
+                            {transactions.hostTx ? (
+                                <EtherscanLink type={'tx'} value={transactions.hostTx}>{`Host Tx`}</EtherscanLink>
+                            ) : null}
+                            {transactions.purchaseTx ? (
+                                <EtherscanLink type={'tx'} value={transactions.purchaseTx}>{`Purchase Tx`}</EtherscanLink>
+                            ) : null}
                         </Typography>
                     </Grid>
                 </Grid>
