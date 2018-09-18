@@ -4,7 +4,7 @@ import { AppContainer as HotLoaderContainer } from 'react-hot-loader';
 import Root from './Root';
 import { configureStore, history } from './store/configureStore';
 import { ApolloClient } from 'apollo-client';
-import { InMemoryCache } from 'apollo-cache-inmemory';
+import { InMemoryCache, defaultDataIdFromObject } from 'apollo-cache-inmemory';
 import { createUploadLink } from 'apollo-upload-client/lib/main';
 import Web3 from 'web3';
 
@@ -20,7 +20,17 @@ const client = new ApolloClient({
     link: createUploadLink({
         uri: `${window.AO_CORE_URL}/graphql`
     }),
-    cache: new InMemoryCache(),
+    cache: new InMemoryCache({
+        dataIdFromObject: (object) => {
+            // We are differentiating between user content and network content, avoid sharing cache 
+            // (should have possibly been different graphql types, but saving that for another time)
+            if ( object.__typename === 'VideoContent' && object.isNetworkContent ) {
+                console.log(`network:${object.id}`)
+                return `network:${object.id}`
+            }
+            return defaultDataIdFromObject(object)
+        }
+    }),
 })
 
 render(

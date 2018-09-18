@@ -95,7 +95,7 @@ class TeaserCard extends Component<Props> {
         } else {
             return (
                 <ContentPurchaseAction contentRef={this.refs.videoContainer} content={content}>{({action, loading, error}) => (
-                    <PrimaryButton disabled={!action || loading} onClick={action}>
+                    <PrimaryButton disabled={!action || loading} onClick={() => {this._handleActionAndUpdateVideoQuery(action)}}>
                         <ContentPurchaseState content={content} />
                         {error ? (
                             <div>{typeof error === 'string' ? error : error.message}</div>
@@ -104,6 +104,15 @@ class TeaserCard extends Component<Props> {
                 )}</ContentPurchaseAction>
             )
         }
+    }
+    _handleActionAndUpdateVideoQuery = (action) => {
+        console.log(`Attempting to refetch videoQuery within TeaserModal`, this.props.videoQuery)
+        action()
+        this.props.videoQuery.refetch().then(data => {
+            console.log(`refetched:`, data)
+        }).catch(error => {
+            console.error(`refetch error:`, error)
+        })
     }
     _renderLastSeen() {
         const { video } = this.props

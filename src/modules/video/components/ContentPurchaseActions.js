@@ -16,6 +16,7 @@ import contentRequestMutation from '../../../graphql/mutations/contentRequest';
 import contentRetryHostDiscoveryMutation from '../../../graphql/mutations/contentRetryHostDiscovery';
 import { becomeHost, buyContent, setVideoPlayback } from '../reducers/video.reducer';
 import { localNodeQuery } from '../../../AppContainer';
+import { videoQuery } from '../containers/withVideo';
 
 /*
 DISCOVERED
@@ -175,7 +176,11 @@ class ContentPurchaseActionComponent extends Component {
             mutation: contentRequestMutation,
             variables: {
                 metadataDatKey: content.id
-            }
+            },
+            refetchQueries: [{
+                query: videoQuery,
+                variables: { id: content.id }
+            }],
         }).then(({data, ...props}) => {
             console.log(data, props);
             this.setState({loading: false})

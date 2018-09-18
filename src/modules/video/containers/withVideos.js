@@ -32,6 +32,7 @@ const videosQuery = gql(`
             featuredImageUrl, 
             teaserUrl, 
             stake,
+            isNetworkContent,
             lastSeenContentHost {
                 contentHostId,
                 contentDatKey,
@@ -52,7 +53,8 @@ export default compose(
                 // limit
                 // search
                 query: props.searchString
-            }
+            },
+            pollInterval: 3000,
         })
     }),
 );

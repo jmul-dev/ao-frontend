@@ -3,7 +3,7 @@ import { setActiveVideo } from '../reducers/video.reducer'
 import { graphql, compose } from 'react-apollo'
 import gql from "graphql-tag"
 import VideoContentFragment from '../../../graphql/fragments/VideoContentFragment'
-
+import DatStatsFragment from '../../../graphql/fragments/DatStatsFragment'
 
 // Redux
 const mapDispatchToProps = {
@@ -17,13 +17,20 @@ const mapStateToProps = (store) => {
 }
 
 // GraphQL
-const videoQuery = gql(`
+export const videoQuery = gql(`
     query video($id: ID!) {
         video(id: $id) {
-            ...VideoContentFragment
+            ...VideoContentFragment,
+            metadataDatStats {
+                ...DatStatsFragment
+            },
+            fileDatStats {
+                ...DatStatsFragment
+            }
         }
     }
     ${VideoContentFragment}
+    ${DatStatsFragment}
 `)
 
 export default compose(    
@@ -34,7 +41,8 @@ export default compose(
         options: (props) => ({
             variables: {
                 id: props.video ? props.video.id : props.id
-            }
+            },
+            fetchPolicy: 'cache-and-network',
         })
     }),
 );

@@ -53,7 +53,7 @@ class EnqueuedVideos extends Component<Props> {
     }
     render() {
         const { loading, error, node } = this.props.incompleteHostedContentQuery
-        if (loading || error)
+        if (loading)
             return null;
         if (!node || (node && !node.hostedContent))
             return null;  // no incomplete hosted content

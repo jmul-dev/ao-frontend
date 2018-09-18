@@ -25,6 +25,7 @@ const VideoContentFragment = `
         encChallenge,
         teaserUrl,
         featuredImageUrl,
+        isNetworkContent,
         metadata {
             encoding,
             duration,
