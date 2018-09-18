@@ -4,6 +4,7 @@ import { APP_STATES } from '../../../store/app.reducer';
 // Constants
 export const BALANCE_CHANGE = 'BALANCE_CHANGE'
 export const UPDATE_ACCOUNT_EARNINGS = 'UPDATE_ACCOUNT_EARNINGS'
+export const UPDATE_ACCOUNT_TOTAL_STAKED = 'UPDATE_ACCOUNT_TOTAL_STAKED'
 
 // Actions
 export const updateWallet = () => {
@@ -66,8 +67,14 @@ export const getTokensStaked = () => {
         const { app, contracts } = getState()
         if ( !app.ethAddress )
             return console.warn(`getTokensStaked called with no ethAddress`)
-        // TODO: not sure how to get this value yet
-        console.warn(`getTokensStaked not implemented`)
+        contracts.aoToken.stakedBalance(app.ethAddress, function(err, result) {
+            if ( !err ) {
+                dispatch({
+                    type: UPDATE_ACCOUNT_TOTAL_STAKED,
+                    payload: new BigNumber(result)
+                })
+            }
+        })
     }
 }
 export const getTokensEarned = () => {

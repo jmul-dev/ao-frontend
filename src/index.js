@@ -25,7 +25,6 @@ const client = new ApolloClient({
             // We are differentiating between user content and network content, avoid sharing cache 
             // (should have possibly been different graphql types, but saving that for another time)
             if ( object.__typename === 'VideoContent' && object.isNetworkContent ) {
-                console.log(`network:${object.id}`)
                 return `network:${object.id}`
             }
             return defaultDataIdFromObject(object)

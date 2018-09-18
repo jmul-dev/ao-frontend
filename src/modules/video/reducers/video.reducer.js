@@ -51,7 +51,6 @@ export const buyContent = (contentHostId, publicKey) => {
                 const { contracts, app } = state
                 // 1. Get latest price
                 dispatch( getContentPrice(contentHostId) ).then(contentPrice => {
-                    console.log(`Purchasing content: \n\tcontentHostId[${contentHostId}] \n\tpublicKey[${publicKey}] \n\tprice[${contentPrice.toNumber()} ao]`)
                     // 2. buyContent
                     contracts.aoContent.buyContent(
                         contentHostId, 
