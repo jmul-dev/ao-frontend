@@ -44,21 +44,21 @@ class AccountVideoListItem extends Component {
     _renderContentMetrics = () => {
         const { metrics } = this.props
         return (
-            <ul className="content-metrics">
+            <div className="content-metrics">
                 {metrics.primordialTokenStaked.gt(0) ? (
-                    <li>
+                    <div>
                         <TokenBalance baseAmount={metrics.primordialTokenStaked} includeAO={true} />{' staked'}
-                    </li>
+                    </div>
                 ) : null}
                 {metrics.primordialTokenStaked.gt(0) ? (
-                    <li>
+                    <div>
                         <TokenBalance baseAmount={metrics.networkTokenStaked} includeAO={false} />{' staked'}
-                    </li>
+                    </div>
                 ) : null}
-                <li>
+                <div>
                     <TokenBalance baseAmount={metrics.totalStakeEarning.plus(metrics.totalHostEarning)} includeAO={false} />{' earned'}
-                </li>
-            </ul>
+                </div>
+            </div>
         )
     }
     render() {
