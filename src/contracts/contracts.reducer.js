@@ -2,6 +2,7 @@ import AOToken from 'ao-contracts/build/contracts/AOToken.json';
 import AOTreasury from 'ao-contracts/build/contracts/AOTreasury.json';
 import AOContent from 'ao-contracts/build/contracts/AOContent.json';
 import AOEarning from 'ao-contracts/build/contracts/AOEarning.json';
+import AOLibrary from 'ao-contracts/build/contracts/AOLibrary.json';
 import debounce from 'debounce';
 import { APP_STATES, updateAppState } from '../store/app.reducer';
 import { updateIcoState } from '../modules/ico/reducers/ico.reducer';
@@ -54,6 +55,7 @@ export const initializeContracts = (networkId) => {
                 aoTreasury: window.web3.eth.contract(AOTreasury.abi).at(AOTreasury.networks[networkId].address),
                 aoContent: window.web3.eth.contract(AOContent.abi).at(AOContent.networks[networkId].address),
                 aoEarning: window.web3.eth.contract(AOEarning.abi).at(AOEarning.networks[networkId].address),
+                aoLibrary: window.web3.eth.contract(AOLibrary.abi).at(AOLibrary.networks[networkId].address),
             }
             dispatch({
                 type: CONTRACTS_INITIALIZED,

@@ -1,129 +1,12 @@
-import React, { Component, Fragment, PureComponent } from 'react';
+import React, { Component } from 'react';
 import Typography from '@material-ui/core/Typography';
-import Grid from '@material-ui/core/Grid';
-import ButtonBase from '@material-ui/core/ButtonBase';
-import PlayIcon from '@material-ui/icons/PlayArrow';
 import withAccountVideos from '../containers/withAccountVideos';
 import withEthAddress from '../containers/withEthAddress';
-import moment from 'moment';
-import Collapse from '@material-ui/core/Collapse';
-import '../styles/account-video-listing.css';
 import { compose } from 'react-apollo';
-import { TokenBalance, FileSize } from '../../../utils/denominations';
 import PropTypes from 'prop-types';
-import { ContentPurchaseAction, ContentPurchaseState } from '../../video/components/ContentPurchaseActions';
-import DatStats from '../../content/components/DatStats';
-import EtherscanLink from '../../etherscan/EtherscanLink';
+import AccountVideoListItem, { AccountVideoListItemPlaceholder } from './AccountVideoListItem';
+import '../styles/account-video-listing.css';
 
-
-class AccountVideoListItem extends PureComponent {
-    constructor() {
-        super()
-        this.state = {
-            expanded: false,
-        }
-    }
-    _toggleExapansion = () => {
-        this.setState({expanded: !this.state.expanded})
-    }
-    render() {
-        const { video, filter } = this.props
-        const transactions = video.transactions || {}
-        return (
-            <div className="AccountVideoListItem">
-                <Grid container spacing={16}>
-                    <Grid item sm={4}>
-                        <ContentPurchaseAction content={video}>{({action, actionCopy, loading}) => (                            
-                            <ButtonBase className="action-button" disabled={!action || loading} onClick={action}>
-                                <div className="featured-image" style={{backgroundImage: `url(${window.AO_CORE_URL}/${video.featuredImageUrl})`}}>
-                                    <ContentPurchaseState content={video} />
-                                </div>
-                            </ButtonBase>
-                        )}</ContentPurchaseAction>
-                    </Grid>
-                    <Grid item sm={8} className="card-container">
-                        <Typography variant="display3" gutterBottom>
-                            {video.title}
-                        </Typography>
-                        <DatStats stats={[video.metadataDatStats, video.fileDatStats]} />
-                        <Typography variant="body1" gutterBottom color="textSecondary">
-                            {`uploaded: ${moment(parseInt(video.createdAt, 10)).format('M/D/YYYY')}`}
-                        </Typography>
-                        <Typography variant="body1" gutterBottom color="textSecondary">
-                            {video.stakeId ? (
-                                <Fragment>
-                                    <TokenBalance baseAmount={video.stake} includeAO={true} />{' staked'}
-                                </Fragment>
-                            ) : (
-                                <Fragment>
-                                    {`Video has not been staked!`}
-                                </Fragment>
-                            )}
-                        </Typography>
-                        <Typography className="description" variant="body1" gutterBottom color="textSecondary">
-                            {transactions.stakeTx ? (
-                                <EtherscanLink type={'tx'} value={transactions.stakeTx}>{`Stake Tx`}</EtherscanLink>
-                            ) : null}
-                            {transactions.hostTx ? (
-                                <EtherscanLink type={'tx'} value={transactions.hostTx}>{`Host Tx`}</EtherscanLink>
-                            ) : null}
-                            {transactions.purchaseTx ? (
-                                <EtherscanLink type={'tx'} value={transactions.purchaseTx}>{`Purchase Tx`}</EtherscanLink>
-                            ) : null}
-                        </Typography>
-                    </Grid>
-                </Grid>
-                <div>
-                    <Collapse in={this.state.expanded}>
-                        <div className="expansion-container">
-                            <Typography className="description" variant="body1" gutterBottom color="textSecondary">
-                                {video.description}
-                            </Typography>
-                            <Typography variant="body1" gutterBottom color="textSecondary">
-                                {`Content dat key: dat://${video.fileDatKey}`}
-                            </Typography>
-                            <Typography variant="body1" gutterBottom color="textSecondary">
-                                {`Metadata dat key: dat://${video.metadataDatKey}`}
-                            </Typography>
-                            <Typography variant="body1" gutterBottom color="textSecondary">
-                                {`File size: `}<FileSize sizeInBytes={video.fileSize} />
-                            </Typography>
-                            <Typography component="pre">
-                                {JSON.stringify(video, null, '\t')}
-                            </Typography>
-                        </div>
-                    </Collapse>
-                    <ButtonBase className="more-info" onClick={this._toggleExapansion}>
-                        {this.state.expanded ? '- hide info' : '+ more info'}
-                    </ButtonBase>
-                </div>                
-            </div>
-        )
-    }
-}
-const AccountVideoListItemPlaceholder = () => (
-    <div className="AccountVideoListItem placeholder">
-        <Grid container spacing={16}>
-            <Grid item sm={4}>
-                <div className="featured-image placeholder-bg"></div>
-            </Grid>
-            <Grid item sm={8} className="card-container">
-                <Typography className="placeholder-text" variant="display3" gutterBottom>
-                    {'Lorem ipsum dolor'}
-                </Typography>
-                <Typography className="placeholder-text" variant="body1" gutterBottom color="textSecondary">
-                    {`uploaded: 1/1/1970`}
-                </Typography>
-                <Typography className="placeholder-text" variant="body1" gutterBottom color="textSecondary">
-                    {`X ao earned | X ao staked`}
-                </Typography>
-                <Typography className="placeholder-text description" variant="body1" gutterBottom color="textSecondary">
-                    {'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'}
-                </Typography>
-            </Grid>
-        </Grid>              
-    </div>
-)
 
 class AccountVideoListing extends Component {
     static propTypes = {
@@ -152,7 +35,10 @@ class AccountVideoListing extends Component {
                 <ul style={{listStyle: 'none', padding: 0, margin: 0}}>
                     {videos.map((video, index) => (
                         <li key={video.id}>
-                            <AccountVideoListItem video={video} filter={filter} />
+                            <AccountVideoListItem 
+                                video={video} 
+                                filter={filter}
+                            />
                         </li>
                     ))}
                 </ul>
