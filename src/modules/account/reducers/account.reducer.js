@@ -39,6 +39,8 @@ export const getPurchaseReceipt = (purchaseId) => {
     return (dispatch, getState) => {    
         return new Promise((resolve, reject) => {    
             const { contracts, app } = getState()
+            if ( !purchaseId )
+                return reject(new Error(`getPurchaseReceipt called with no purchaseId`))
             contracts.aoContent.purchaseReceiptById(purchaseId, function(err, result) {
                 if ( !err ) {
                     resolve({
