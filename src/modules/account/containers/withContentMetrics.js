@@ -1,8 +1,9 @@
 import { connect } from 'react-redux'
-import { getContentMetrics } from '../reducers/account.reducer'
+import { getContentMetrics, getPurchaseReceipt } from '../reducers/account.reducer'
 
 const mapDispatchToProps = {
     getContentMetrics,
+    getPurchaseReceipt,
 }
 
 const mapStateToProps = (state, props) => ({

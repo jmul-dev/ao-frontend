@@ -2,6 +2,7 @@ import React, { Component, Fragment } from 'react';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import ButtonBase from '@material-ui/core/ButtonBase';
+import Button from '@material-ui/core/Button';
 import withContentMetrics from '../containers/withContentMetrics';
 import moment from 'moment';
 import Collapse from '@material-ui/core/Collapse';
@@ -31,6 +32,7 @@ class AccountVideoListItem extends Component {
         super()
         this.state = {
             expanded: false,
+            purchaseReceipt: null,
         }
     }
     componentDidMount() {
@@ -40,6 +42,11 @@ class AccountVideoListItem extends Component {
     }
     _toggleExapansion = () => {
         this.setState({expanded: !this.state.expanded})
+    }
+    _getPurchaseReceipt = () => {
+        this.props.getPurchaseReceipt(this.props.video.purchaseId).then(result => {
+            this.setState({purchaseReceipt: result})
+        })
     }
     _renderContentMetrics = () => {
         const { metrics } = this.props
@@ -91,7 +98,7 @@ class AccountVideoListItem extends Component {
                                 </Fragment>
                             )}
                         </Typography>
-                        <Typography className="description" variant="body1" gutterBottom color="textSecondary">
+                        <Typography className="txs" variant="body1" gutterBottom color="textSecondary">
                             {transactions.stakeTx ? (
                                 <EtherscanLink type={'tx'} value={transactions.stakeTx}>{`Stake Tx`}</EtherscanLink>
                             ) : null}
@@ -118,7 +125,16 @@ class AccountVideoListItem extends Component {
                             </Typography>
                             <Typography variant="body1" gutterBottom color="textSecondary">
                                 {`File size: `}<FileSize sizeInBytes={video.fileSize} />
-                            </Typography>                            
+                            </Typography>
+                            {video.purchaseId && !this.state.purchaseReceipt ? (
+                                <Button onClick={this._getPurchaseReceipt}>{'Get purchase receipt'}</Button>
+                            ) : null}
+                            {this.state.purchaseReceipt ? (
+                                <Typography variant="body1" component="pre">
+                                    Purchase receipt:
+                                    {JSON.stringify(this.state.purchaseReceipt, null, '\t')}
+                                </Typography>
+                            ) : null}
                             <Typography component="pre">
                                 {JSON.stringify(video, null, '\t')}
                             </Typography>

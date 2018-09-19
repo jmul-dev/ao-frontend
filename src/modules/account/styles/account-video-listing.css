@@ -36,11 +36,14 @@
     padding: 6px 8px;
     background: rgba(0,226,79,0.75);
 }
-.AccountVideoListItem .card-container .description {
+.AccountVideoListItem .card-container .txs {
     margin-top: 12px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+}
+.AccountVideoListItem .card-container .txs > * {
+    margin-right: 16px;
 }
 .AccountVideoListItem .more-info {
     position: absolute;

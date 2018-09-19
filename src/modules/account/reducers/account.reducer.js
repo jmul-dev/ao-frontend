@@ -35,6 +35,26 @@ export const getContentMetrics = (stakeId) => {
         })
     }
 }
+export const getPurchaseReceipt = (purchaseId) => {
+    return (dispatch, getState) => {    
+        return new Promise((resolve, reject) => {    
+            const { contracts, app } = getState()
+            contracts.aoContent.purchaseReceiptById(purchaseId, function(err, result) {
+                if ( !err ) {
+                    resolve({
+                        contentHostId: result[0],
+                        buyer: result[1],
+                        networkAmount: result[2],
+                        publicKey: result[3],
+                        timestamp: result[4]
+                    })
+                } else {
+                    reject(err)
+                }
+            })
+        })
+    }
+}
 
 // State
 const initialState = {
