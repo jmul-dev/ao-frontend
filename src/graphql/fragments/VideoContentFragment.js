@@ -6,6 +6,7 @@ const VideoContentFragment = `
         stakeId,
         nodeId,
         creatorId,
+        purchaseId,
         contentType,
         isFolder,
         isMutable,
