@@ -15,6 +15,7 @@ import contentBecomeHostTransactionMutation from '../../../graphql/mutations/con
 import contentRequestMutation from '../../../graphql/mutations/contentRequest';
 import contentRetryHostDiscoveryMutation from '../../../graphql/mutations/contentRetryHostDiscovery';
 import { becomeHost, buyContent, setVideoPlayback } from '../reducers/video.reducer';
+import { addNotification } from '../../notifications/reducers/notifications.reducer';
 import { localNodeQuery } from '../../../AppContainer';
 import { videoQuery } from '../containers/withVideo';
 
@@ -132,6 +133,7 @@ const mapDispatchToProps = {
     buyContent,
     becomeHost,
     setVideoPlayback,
+    addNotification,
 }
 // Redux state
 const mapStateToProps = (store, props) => {
@@ -167,11 +169,15 @@ class ContentPurchaseActionComponent extends Component {
     _dispatchErrorNotificationAndStopLoading = (error, errorMessage, errorContext) => {
         console.error(errorContext, error)
         // TODO: error notification
-        this.setState({loading: false})
+        this.setState({loading: false, error: errorMessage})
+        this.props.addNotification({
+            message: `${errorMessage}: ${error.message}`,
+            variant: 'error'
+        })
     }
     _downloadContentAction = () => {
         const { client, content } = this.props
-        this.setState({loading: true})
+        this.setState({loading: true, error: null})
         client.mutate({
             mutation: contentRequestMutation,
             variables: {
@@ -190,7 +196,7 @@ class ContentPurchaseActionComponent extends Component {
     }
     _buyContentAction = () => {
         const { buyContent, content, client } = this.props
-        this.setState({loading: true})        
+        this.setState({loading: true, error: null})        
         try {
             // 1. Get user's public key (required for buyContent contract call)
             const { node } = client.readQuery({
@@ -225,7 +231,8 @@ class ContentPurchaseActionComponent extends Component {
     }
     _becomeHostAction = () => {
         const { becomeHost, content, client } = this.props
-        this.setState({loading: true})
+        this.setState({loading: true, error: null})
+        console.log(content)
         // 1. Metamask transaction
         becomeHost({
             purchaseId: content.purchaseId,
@@ -266,7 +273,7 @@ class ContentPurchaseActionComponent extends Component {
     }
     _retryHostDiscovery = () => {
         const { content, client } = this.props
-        this.setState({loading: true})
+        this.setState({loading: true, error: null})
         client.mutate({
             mutation: contentRetryHostDiscoveryMutation,
             variables: {
@@ -280,8 +287,7 @@ class ContentPurchaseActionComponent extends Component {
     }
     render() {
         const { content, children } = this.props
-        const { loading } = this.state
-        let error = this.state.error
+        const { loading, error } = this.state
         let action = null
         let actionCopy = ''
         switch (content.state) {

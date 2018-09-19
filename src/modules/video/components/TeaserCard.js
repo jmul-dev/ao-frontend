@@ -81,6 +81,7 @@ class TeaserCard extends Component<Props> {
     _renderActionState = () => {
         let contentState = 'DISCOVERED'
         let content = this.props.video
+        const videoQueryLoading = this.props.videoQuery.loading
         if ( this.props.videoQuery.video ) {
             contentState = this.props.videoQuery.video.state
             content = this.props.videoQuery.video
@@ -95,11 +96,8 @@ class TeaserCard extends Component<Props> {
         } else {
             return (
                 <ContentPurchaseAction contentRef={this.refs.videoContainer} content={content}>{({action, loading, error}) => (
-                    <PrimaryButton disabled={!action || loading} onClick={() => {this._handleActionAndUpdateVideoQuery(action)}}>
+                    <PrimaryButton disabled={!action || loading || videoQueryLoading} onClick={() => {this._handleActionAndUpdateVideoQuery(action)}}>
                         <ContentPurchaseState content={content} />
-                        {error ? (
-                            <div>{typeof error === 'string' ? error : error.message}</div>
-                        ) : null}
                     </PrimaryButton>
                 )}</ContentPurchaseAction>
             )
@@ -161,7 +159,7 @@ class TeaserCard extends Component<Props> {
                                     file: {
                                         attributes: {
                                             poster: `${window.AO_CORE_URL}/${video.featuredImageUrl}`,
-                                            controlsList: 'nodownload'
+                                            controlsList: 'nodownload',
                                         }
                                     }
                                 }}
@@ -191,12 +189,12 @@ class TeaserCard extends Component<Props> {
                                 {`your balance: `}<TokenBalance baseAmount={tokenBalance} />
                             </Typography>
                             {this._renderLastSeen()}
-                            {this._renderActionState()}                            
+                            {this._renderActionState()}
                             {videoQuery.video ? (
                                 <div style={{marginTop: 8}}>
                                     <DatStats stats={[videoQuery.video.metadataDatStats, videoQuery.video.fileDatStats]} />
                                 </div>
-                            ) : null}                            
+                            ) : null}
                         </div>
                     </div>
                     <div className="content-container hide-fullscreen">

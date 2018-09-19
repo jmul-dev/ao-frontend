@@ -22,6 +22,9 @@ const VideoContentFragment = `
         adSupport,
         createdAt,
         baseChallenge,
+        baseChallengeSignature {
+            v, r, s
+        },
         encChallenge,
         teaserUrl,
         featuredImageUrl,

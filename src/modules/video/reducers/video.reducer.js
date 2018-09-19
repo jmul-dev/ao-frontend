@@ -44,29 +44,32 @@ export const buyContent = (contentHostId, publicKey) => {
     return (dispatch, getState) => {
         return new Promise((resolve, reject) => {
             if ( !contentHostId ) {
-                // TODO: dispatch error notification
                 console.warn(`buyContent called without contentHostId`)
+                reject()
             } else {
                 const state = getState()
                 const { contracts, app } = state
-                // 1. Get latest price
-                dispatch( getContentPrice(contentHostId) ).then(contentPrice => {
-                    // 2. buyContent
-                    contracts.aoContent.buyContent(
-                        contentHostId, 
-                        contentPrice.toNumber(), // networkIntegerAmount
-                        0, // networkFractionAmount
-                        "ao",
-                        publicKey,  // publicKey of requesting node
-                        { from: app.ethAddress }, (error, transactionHash) => {
-                        if ( error ) {
-                            console.error(`buyContent error: ${error.message}`)                        
-                            reject(error)
-                            return;
-                        }
-                        // 3a. Transaction submitted succesfully (has not been confirmed)
-                        resolve(transactionHash)
-                    })
+                // 0. Let's make sure this is a valid content host before purchasing!
+                dispatch( checkContentHostIsStaked(contentHostId) ).then(() => {
+                    // 1. Get latest price
+                    dispatch( getContentPrice(contentHostId) ).then(contentPrice => {
+                        // 2. buyContent
+                        contracts.aoContent.buyContent(
+                            contentHostId, 
+                            contentPrice.toNumber(), // networkIntegerAmount
+                            0, // networkFractionAmount
+                            "ao",
+                            publicKey,  // publicKey of requesting node
+                            { from: app.ethAddress }, (error, transactionHash) => {
+                            if ( error ) {
+                                console.error(`buyContent error: ${error.message}`)                        
+                                reject(error)
+                                return;
+                            }
+                            // 3a. Transaction submitted succesfully (has not been confirmed)
+                            resolve(transactionHash)
+                        })
+                    }).catch(reject)
                 }).catch(reject)
             }
         })
@@ -106,6 +109,32 @@ export const getContentPrice = (contentHostId) => {
                     return;
                 }
                 resolve(new BigNumber(contentPrice))
+            })
+        })
+    }
+}
+export const checkContentHostIsStaked = (contentHostId) => {
+    return (dispatch, getState) => {
+        return new Promise((resolve, reject) => {
+            const state = getState()
+            const { contracts } = state
+            contracts.aoContent.contentHostById(contentHostId, function(err, result) {
+                if (err) {
+                    console.error(err)
+                    return reject(new Error(`Content host not found`))
+                }
+                const stakeId = result[0]
+                contracts.aoContent.stakedContentById(stakeId, function(err, result) {
+                    if (err) {
+                        console.error(err)
+                        return reject(new Error(`Stake not found for content host`))
+                    }
+                    if ( result[6] ) {
+                        return resolve()
+                    } else {
+                        return reject(new Error(`Content host is no longer staking`))
+                    }
+                })
             })
         })
     }
