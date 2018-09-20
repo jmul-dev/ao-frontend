@@ -36,6 +36,9 @@ export const darkTheme = createMuiTheme({
             fontWeight: 'bold',
             color: '#FFFFFF'
         },
+        display2: {
+            fontSize: '1.5rem'
+        },
         display3: {
             fontSize: '1.313rem',
             color: '#FFFFFF'
@@ -88,6 +91,9 @@ export const lightTheme = createMuiTheme({
             fontSize: '1.125rem',
             fontWeight: 'bold',
             color: '#222222'
+        },
+        display2: {
+            fontSize: '1.5rem'
         },
         display3: {
             fontSize: '1.313rem',
