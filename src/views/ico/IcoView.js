@@ -5,12 +5,13 @@ import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import IcoStats from '../../modules/ico/components/IcoStats';
 import './ico-view.css';
+import ComparisonTable from '../../modules/ico/components/ComparisonTable';
 
 
 export default class IcoView extends PureComponent {
     render() {
         return (
-            <View className={'IcoView'} padding="full">
+            <View className={'IcoView'} padding="none">
                 <header>
                     <Typography variant="display3" gutterBottom>
                         {'Network Exchange'}
@@ -19,6 +20,7 @@ export default class IcoView extends PureComponent {
                 <Grid container spacing={16}>
                     <Grid item xs={12}>
                         <IcoStats />
+                        <ComparisonTable />
                     </Grid>
                 </Grid>                
             </View>
