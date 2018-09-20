@@ -202,9 +202,9 @@ class ContentPurchaseActionComponent extends Component {
             const { node } = client.readQuery({
                 query: localNodeQuery
             })
-            const publicKey = node.publicKey
+            const publicAddress = node.publicAddress
             // 2. Trigger the buyContent transaction via metamask
-            buyContent(content.contentHostId, publicKey).then(transactionHash => {
+            buyContent(content.contentHostId, publicAddress).then(transactionHash => {
                 // 3. Notify core that the user is purchasing content
                 client.mutate({
                     mutation: contentPurchaseTransactionMutation,
@@ -226,7 +226,7 @@ class ContentPurchaseActionComponent extends Component {
                 this._dispatchErrorNotificationAndStopLoading(error, 'Buy content transaction failed', 'Error during buyContent action')
             })
         } catch (error) {
-            this._dispatchErrorNotificationAndStopLoading(error, 'Unable to get user publicKey from cache', 'Error during buyContent action')
+            this._dispatchErrorNotificationAndStopLoading(error, 'Unable to get user publicAddress from cache', 'Error during buyContent action')
         }
     }
     _becomeHostAction = () => {

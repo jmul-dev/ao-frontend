@@ -40,7 +40,7 @@ export const setSearchBarActive = (state) => ({
 /**
  * NOTE: this method resolves once we have a transactionHash (not the actual purchase receipt)
  */
-export const buyContent = (contentHostId, publicKey) => {
+export const buyContent = (contentHostId, publicAddress) => {
     return (dispatch, getState) => {
         return new Promise((resolve, reject) => {
             if ( !contentHostId ) {
@@ -59,7 +59,7 @@ export const buyContent = (contentHostId, publicKey) => {
                             contentPrice.toNumber(), // networkIntegerAmount
                             0, // networkFractionAmount
                             "ao",
-                            publicKey,  // publicKey of requesting node
+                            publicAddress, // publicAddress of requesting node
                             { from: app.ethAddress }, (error, transactionHash) => {
                             if ( error ) {
                                 console.error(`buyContent error: ${error.message}`)                        

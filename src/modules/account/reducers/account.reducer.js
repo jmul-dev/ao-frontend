@@ -47,7 +47,7 @@ export const getPurchaseReceipt = (purchaseId) => {
                         contentHostId: result[0],
                         buyer: result[1],
                         networkAmount: result[2],
-                        publicKey: result[3],
+                        publicAddress: result[3],
                         timestamp: result[4]
                     })
                 } else {
