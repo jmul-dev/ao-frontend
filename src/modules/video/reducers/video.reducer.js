@@ -55,7 +55,7 @@ export const buyContent = (contentHostId, publicAddress) => {
                     dispatch( getContentPrice(contentHostId) ).then(contentPrice => {
                         // 2. buyContent
                         contracts.aoContent.buyContent(
-                            contentHostId, 
+                            contentHostId,
                             contentPrice.toNumber(), // networkIntegerAmount
                             0, // networkFractionAmount
                             "ao",

@@ -2,7 +2,7 @@
 import React from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
-import { LogoIcon, AccountIcon, UploadIcon, SettingsIcon, MetamaskIcon } from '../../assets/Icons';
+import { LogoIcon, AccountIcon, UploadIcon, SettingsIcon, MetamaskIcon, NetworkExchangeIcon } from '../../assets/Icons';
 import { connect } from 'react-redux';
 import classnames from 'classnames';
 import { withRouter } from 'react-router';
@@ -25,7 +25,7 @@ const MainNavigation = ({isElectron, teaserListingActive, overlayViewsActive, li
                 <LogoIcon />
             </Button>
             <Button component={IcoLink} overlayViewsActive={overlayViewsActive}>
-                <SettingsIcon color={light ? '#000000' : '#FFFFFF'} />
+                <NetworkExchangeIcon color={light ? '#000000' : '#FFFFFF'} />
             </Button>
             <Button component={AccountLink} overlayViewsActive={overlayViewsActive}>
                 <AccountIcon color={light ? '#000000' : '#FFFFFF'} />
