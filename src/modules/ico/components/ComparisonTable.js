@@ -70,6 +70,12 @@ const styles = theme => ({
     },
     tr: {
         verticalAlign: 'top',
+        '&:hover > *:last-child': {
+            background: lighten(theme.palette.primary.main, 0.5),
+        },
+        '&:hover > *:first-child': {
+            background: theme.palette.grey['500'],
+        }
     }
 });
 
@@ -128,7 +134,7 @@ function ComparisonTable(props) {
                 <TableBody>
                     {rows.map(row => {
                         return (
-                            <TableRow key={row.id} className={classes.tr}>
+                            <TableRow key={row.id} className={classes.tr} hover>
                                 <TableCell component="th" scope="row" className={`${classes.cell} ${classes.cellLabel}`}>{row.label}</TableCell>
                                 <TableCell className={classes.cell}>{row.usd}</TableCell>
                                 <TableCell className={classes.cell}>{row.bitcoin}</TableCell>
