@@ -34,6 +34,13 @@ const styles = (theme) => ({
     denominationSelectRoot: {
         color: `${theme.palette.grey['600']} !important`,
     },
+    percentage: {
+        fontSize: `1.313rem`,
+        color: theme.palette.primary.main,
+        position: 'absolute',
+        bottom: 12,
+        left: theme.spacing.unit * 2,  // updated based on input length
+    },
 });
 
 class EarningsInput extends Component {
@@ -42,10 +49,15 @@ class EarningsInput extends Component {
         this.state = {
             inputValue: props.value,
             denominationValue: props.denominationValue,
+            percentageSpacing: 16 + 12,
         }
     }
     _onInputChange = (event) => {
-        this.setState({inputValue: parseInt(event.target.value) || 1})
+        const characterLength = event.target.value.length || 1
+        this.setState({
+            inputValue: parseInt(event.target.value) || 1,
+            percentageSpacing: 16 + 12 * characterLength
+        })
         // TODO: propogate up
     }
     _onDenominationChange = (nextDenom) => {
@@ -58,6 +70,7 @@ class EarningsInput extends Component {
             label,
             includeDenomination,
             denominationIsPromordial,
+            isPercentage,
         } = this.props;
         return (
             <FormControl className={classes.formControl}>
@@ -71,6 +84,9 @@ class EarningsInput extends Component {
                     className={`${classes.input} ${includeDenomination ? classes.inputDenominationSpacing : null}`}
                     disableUnderline={true}
                 />
+                {isPercentage ? (
+                    <div className={classes.percentage} style={{left: this.state.percentageSpacing}}>{`%`}</div>
+                ) : null}
                 {includeDenomination ? (
                     <DenominationSelect 
                         value={this.state.denominationValue}
@@ -96,6 +112,7 @@ EarningsInput.propTypes = {
     includeDenomination: PropTypes.bool,
     denominationValue: PropTypes.string,
     denominationIsPromordial: PropTypes.bool,
+    isPercentage: PropTypes.bool,
 
     // networkTokensStaked: PropTypes.number.isRequired,
     // primordialTokensStaked: PropTypes.number.isRequired,
@@ -112,6 +129,7 @@ EarningsInput.propTypes = {
 EarningsInput.defaultProps = {
     value: 1,
     includeDenomination: false,
+    isPercentage: false,
 }
 
 export default withStyles(styles)(EarningsInput);

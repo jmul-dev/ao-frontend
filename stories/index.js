@@ -53,6 +53,7 @@ storiesOf('Network Exchange')
     .addDecorator(withKnobs)
     .add('EarningsInput', () => {
         const denominationInputKnob = boolean('Include denomination input', false)
+        const percentageKnob = boolean('Percentage?', true)
         return (
             <MuiThemeProvider theme={darkTheme}>
                 <div style={{background: darkTheme.palette.background.default, padding: 40}}>
@@ -62,6 +63,7 @@ storiesOf('Network Exchange')
                         onChange={onCalculatorInputChange('earningInputValue')} 
                         includeDenomination={denominationInputKnob}
                         denominationValue={'ao'}
+                        isPercentage={percentageKnob}
                     />
                 </div>
             </MuiThemeProvider>
