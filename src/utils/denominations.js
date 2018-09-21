@@ -147,17 +147,32 @@ const denominationSelectStyles = ({palette}) => ({
     },
 })
 
-const DenominationSelect = ({...props}) => (
-    <Select {...props} />
+const DenominationSelectPreWrap = ({isPrimordial, theme, onChange, classes, ...props}) => (
+    <Select
+        native
+        disableUnderline={true}
+        onChange={event => {
+            const nextDenom = denominations.find(function(denom) { return denom.name === event.target.value})
+            onChange(nextDenom)
+        }}
+        classes={classes}
+        {...props}
+        >
+        {denominations.map((denomination) => (
+            <option key={denomination.name} value={denomination.name}>{`${denomination.prefix} ${isPrimordial ? 'AO+' : 'AO'}`}</option>
+        ))}
+    </Select>
 )
+export const DenominationSelect = withStyles(denominationSelectStyles, {withTheme: true})(DenominationSelectPreWrap)
 
-const DenominationSelectWrapped = withStyles(denominationSelectStyles, {withTheme: true})(DenominationSelect)
+
+
 
 export class DenominationInput extends Component {
     static propTypes = {
         baseInputValue: PropTypes.instanceOf(BigNumber),
         isPrimordial: PropTypes.bool.isRequired,
-        onChange: PropTypes.func.isRequired,  // ({baseInputValue, denominationValue, denomination})
+        onChange: PropTypes.func.isRequired,  // ({baseInputValue, denominationInputValue, denomination})
         disabled: PropTypes.bool,
     }
     constructor(props) {
@@ -184,8 +199,7 @@ export class DenominationInput extends Component {
             denominationInputValue: parseFloat(denominationInputValue),
         })
     }
-    _onDenominationInputChange = (event) => {
-        const nextDenom = denominations.find(function(denom) { return denom.name === event.target.value})
+    _onDenominationInputChange = (nextDenom) => {
         if ( nextDenom ) {
             const baseInputValue = parseInt(this.props.baseInputValue, 10) || Math.pow(10, 9)
             const amountInDenomination = new BigNumber(baseInputValue / Math.pow(10, nextDenom.powerOfTen))
@@ -225,16 +239,11 @@ export class DenominationInput extends Component {
                     onChange={this._onDenominationInputValueChange}
                     disabled={this.props.disabled}                    
                 />
-                <DenominationSelectWrapped
-                    native
+                <DenominationSelect
                     value={denomination.name}
                     onChange={this._onDenominationInputChange}
-                    disableUnderline={true}
-                    >
-                    {denominations.map((denomination) => (
-                        <option key={denomination.name} value={denomination.name}>{`${denomination.prefix} ${isPrimordial ? 'AO+' : 'AO'}`}</option>
-                    ))}
-                </DenominationSelectWrapped>
+                    isPrimordial={isPrimordial}
+                />
             </div>
         )
     }
