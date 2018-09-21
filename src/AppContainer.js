@@ -25,7 +25,8 @@ export const localNodeQuery = gql(`
         node {
             id, 
             ethAddress,
-            publicAddress
+            publicKey,
+            publicAddress,
         }
     }
 `)

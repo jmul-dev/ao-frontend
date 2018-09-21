@@ -21,7 +21,8 @@ const ThemeWrapper = (storyFn) => (
 
 
 storiesOf('Network Exchange', module)
-    .addDecorator(ThemeWrapper)
+    // .addDecorator(ThemeWrapper)
+    .addDecorator(muiTheme([lightTheme, darkTheme]))
     .add('ComparisonTable', () => (
         <ComparisonTable />
     ))

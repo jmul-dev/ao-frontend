@@ -202,9 +202,9 @@ class ContentPurchaseActionComponent extends Component {
             const { node } = client.readQuery({
                 query: localNodeQuery
             })
-            const publicAddress = node.publicAddress
+            const { publicAddress, publicKey } = node
             // 2. Trigger the buyContent transaction via metamask
-            buyContent(content.contentHostId, publicAddress).then(transactionHash => {
+            buyContent(content.contentHostId, publicKey, publicAddress).then(transactionHash => {
                 // 3. Notify core that the user is purchasing content
                 client.mutate({
                     mutation: contentPurchaseTransactionMutation,
