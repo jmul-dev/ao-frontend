@@ -8,15 +8,23 @@ import ComparisonTable from '../src/modules/ico/components/ComparisonTable';
 import { MuiThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { darkTheme, lightTheme } from '../src/theme';
+import EarningsCalculator from '../src/modules/ico/components/EarningsCalculator';
 
 
+const ThemeWrapper = (storyFn) => (
+    <CssBaseline>
+        <MuiThemeProvider theme={lightTheme}>
+            {storyFn()}
+        </MuiThemeProvider>
+    </CssBaseline>
+)
 
 
 storiesOf('Network Exchange', module)
+    .addDecorator(ThemeWrapper)
     .add('ComparisonTable', () => (
-        <CssBaseline>
-            <MuiThemeProvider theme={lightTheme}>
-                <ComparisonTable />
-            </MuiThemeProvider>
-        </CssBaseline>
+        <ComparisonTable />
+    ))
+    .add('EarningsCalculator', () => (
+        <EarningsCalculator />
     ))
