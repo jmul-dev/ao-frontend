@@ -156,6 +156,7 @@ const DenominationSelectPreWrap = ({isPrimordial, theme, onChange, classes, ...p
             onChange(nextDenom)
         }}
         classes={classes}
+        dir="rtl"
         {...props}
         >
         {denominations.map((denomination) => (

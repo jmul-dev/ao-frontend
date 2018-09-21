@@ -23,13 +23,14 @@ const styles = (theme) => ({
     },
     inputLabel: {
         left: theme.spacing.unit * 2,
+        top: theme.spacing.unit,
         color: `${theme.palette.grey['600']} !important`,
         fontWeight: 'bold'
     },
     denominationSelect: {
         position: 'absolute',
         right: theme.spacing.unit * 2,
-        bottom: theme.spacing.unit,        
+        bottom: theme.spacing.unit - 2,        
     },
     denominationSelectRoot: {
         color: `${theme.palette.grey['600']} !important`,
@@ -54,8 +55,9 @@ class EarningsInput extends Component {
     }
     _onInputChange = (event) => {
         const characterLength = event.target.value.length || 1
+        let parseFn = this.props.integerOnly ? parseInt : parseFloat
         this.setState({
-            inputValue: parseInt(event.target.value) || 1,
+            inputValue: parseFn(event.target.value) || 1,
             percentageSpacing: 16 + 12 * characterLength
         })
         // TODO: propogate up
@@ -69,11 +71,11 @@ class EarningsInput extends Component {
             classes,  
             label,
             includeDenomination,
-            denominationIsPromordial,
+            isPrimordial,
             isPercentage,
         } = this.props;
         return (
-            <FormControl className={classes.formControl}>
+            <FormControl className={classes.formControl} fullWidth>
                 <InputLabel disableAnimation={true} className={classes.inputLabel}>
                     {label}
                 </InputLabel>
@@ -91,7 +93,7 @@ class EarningsInput extends Component {
                     <DenominationSelect 
                         value={this.state.denominationValue}
                         onChange={this._onDenominationChange}
-                        isPrimordial={denominationIsPromordial}
+                        isPrimordial={isPrimordial}
                         className={classes.denominationSelect}
                         classes={{
                             root: classes.denominationSelectRoot,
@@ -111,25 +113,16 @@ EarningsInput.propTypes = {
     label: PropTypes.string.isRequired,
     includeDenomination: PropTypes.bool,
     denominationValue: PropTypes.string,
-    denominationIsPromordial: PropTypes.bool,
+    isPrimordial: PropTypes.bool,
     isPercentage: PropTypes.bool,
-
-    // networkTokensStaked: PropTypes.number.isRequired,
-    // primordialTokensStaked: PropTypes.number.isRequired,
-    // primordialTokenMultiplier: PropTypes.number.isRequired,
-    // networkNodes: PropTypes.number.isRequired,
-    // dailyGrowth: PropTypes.number.isRequired,
-    // dailyContentRequestRate: PropTypes.number.isRequired,
-    // saturation: PropTypes.number.isRequired,
-    // creatorShare: PropTypes.number.isRequired,
-    // networkInflation: PropTypes.number.isRequired,
-    // weightedPrimordialTokenMultiplier: PropTypes.number.isRequired,
+    integerOnly: PropTypes.bool,
 };
 
 EarningsInput.defaultProps = {
     value: 1,
     includeDenomination: false,
     isPercentage: false,
+    integerOnly: false,
 }
 
 export default withStyles(styles)(EarningsInput);
