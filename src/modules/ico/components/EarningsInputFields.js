@@ -22,12 +22,14 @@ class EarningsInputFields extends Component {
         }
     }
     _handleInputChange = (inputName) => (event) => {
+        const updatedInputs = {
+            ...this.state.inputs,
+            [inputName]: parseFloat(event.target.value, 10) || 1
+        }
         this.setState({
-            inputs: {
-                ...this.state.inputs,
-                [inputName]: parseFloat(event.target.value, 10) || 1
-            }
+            inputs: updatedInputs
         })
+        this.props.onChange(updatedInputs)
     }
     render() {
         const { classes } = this.props;
@@ -120,7 +122,8 @@ EarningsInputFields.propTypes = {
         creatorShare: PropTypes.number.isRequired,
         networkInflation: PropTypes.number.isRequired,
         weightedPrimordialTokenMultiplier: PropTypes.number.isRequired,
-    })    
+    }),
+    onChange: PropTypes.func.isRequired,
 };
 
 EarningsInputFields.defaultProps = {

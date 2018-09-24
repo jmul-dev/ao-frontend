@@ -17,7 +17,6 @@ import ComparisonTable from '../src/modules/ico/components/ComparisonTable';
 import EarningsCalculator from '../src/modules/ico/components/EarningsCalculator';
 import EarningsGraph from '../src/modules/ico/components/EarningsGraph';
 import EarningsInput from '../src/modules/ico/components/EarningsInput';
-import { DenominationInput } from '../src/utils/denominations';
 import BigNumber from 'bignumber.js';
 
 
@@ -69,25 +68,3 @@ storiesOf('Network Exchange')
             </MuiThemeProvider>
         )
     })
-    .add('DenominationInput', () => (
-        <MuiThemeProvider theme={darkTheme}>
-            <div style={{background: darkTheme.palette.background.default, padding: 40}}>
-                <DenominationInput 
-                    baseInputValue={calculatorInputs.denominationInput} 
-                    isPrimordial={true}
-                    onChange={onDenominationInputChange}
-                />
-            </div>
-        </MuiThemeProvider>
-    ))
-    
-
-// storiesOf('Network Exchange', module)
-//     // .addDecorator(ThemeWrapper)
-//     .addDecorator(muiTheme([lightTheme, darkTheme]))
-//     .add('ComparisonTable', () => (
-//         <ComparisonTable />
-//     ))
-//     .add('EarningsCalculator|Graph', () => (
-//         <EarningsGraph />
-//     ))

@@ -47,10 +47,11 @@ const styles = (theme) => ({
 class EarningsInput extends Component {
     constructor(props) {
         super(props)
+        const characterLength = props.value ? (`${props.value}`.length || 1) : 1
         this.state = {
             inputValue: props.value,
             denominationValue: props.denominationValue,
-            percentageSpacing: 16 + 12,
+            percentageSpacing: 16 + 12 * characterLength,
         }
     }
     _onInputChange = (event) => {
