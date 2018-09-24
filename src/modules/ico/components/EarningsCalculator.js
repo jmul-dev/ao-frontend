@@ -20,12 +20,17 @@ const styles = theme => ({
         width: 250,
         flexShrink: 0,
     },
-    paper: {
-        overflow: 'hidden'
-    },
+        paperInputs: {
+            overflow: 'hidden',
+            borderTopRightRadius: 0,
+            borderBottomRightRadius: 0,
+        },
     gridRight: {
         flex: 1,
-    }
+    },
+        paperGraph: {
+            overflow: 'hidden'
+        },
 });
 
 class EarningsCalculator extends Component {
@@ -132,8 +137,8 @@ class EarningsCalculator extends Component {
         return (
             <div className={classes.root}>
                 <div className={classes.gridLeft}>
-                    <Typography variant="subheading">{`Inputs`}</Typography>
-                    <Paper elevation={18} className={classes.paper}>
+                    <Typography variant="subheading" style={{color: '#BCBCBC'}}>{`Inputs`}</Typography>
+                    <Paper elevation={18} className={classes.paperInputs}>
                         <MuiThemeProvider theme={darkTheme}>
                             <EarningsInputFields
                                 inputs={this.state.userInputs}
@@ -143,7 +148,7 @@ class EarningsCalculator extends Component {
                     </Paper>
                 </div>
                 <div className={classes.gridRight}>
-                    <Paper elevation={24} className={classes.paper}>
+                    <Paper elevation={24} className={classes.paperGraph}>
                         <EarningsGraph dataset={dataset} />
                     </Paper>
                 </div>
