@@ -25,10 +25,9 @@ let calculatorInputs = {
     earningInputValue: 1,
     denominationInput: new BigNumber(1)
 }
-const onCalculatorInputChange = inputName => (event) => {    
-    calculatorInputs[inputName] = parseInt(event.target.value) || 1
-    onChange(event)
-    forceReRender()
+const onCalculatorInputChange = inputName => (value) => {    
+    calculatorInputs[inputName] = value
+    onChange()
 }
 const onDenominationInputChange = ({baseInputValue, denomination, denominationInputValue}) => {
     console.log(denominationInputValue)

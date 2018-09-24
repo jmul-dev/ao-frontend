@@ -21,10 +21,10 @@ class EarningsInputFields extends Component {
             inputs: props.inputs
         }
     }
-    _handleInputChange = (inputName) => (event) => {
+    _handleInputChange = (inputName) => (value) => {
         const updatedInputs = {
             ...this.state.inputs,
-            [inputName]: parseFloat(event.target.value, 10) || 1
+            [inputName]: value
         }
         this.setState({
             inputs: updatedInputs
@@ -41,14 +41,14 @@ class EarningsInputFields extends Component {
                     value={inputs.networkTokensStaked}
                     onChange={this._handleInputChange('networkTokensStaked')}
                     includeDenomination={true}
-                    denominationValue={'ao'}                    
+                    denominationValue={'giga'}                    
                 />
                 <EarningInput 
                     label={`Staked AO+`}
                     value={inputs.primordialTokensStaked}
                     onChange={this._handleInputChange('primordialTokensStaked')}
                     includeDenomination={true}
-                    denominationValue={'ao'}
+                    denominationValue={'giga'}
                     isPrimordial={true}
                 />
                 <EarningInput

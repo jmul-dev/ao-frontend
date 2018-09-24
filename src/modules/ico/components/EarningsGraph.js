@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
@@ -17,10 +17,9 @@ const styles = theme => ({
     }
 });
 
-class EarningsGraph extends Component {
+class EarningsGraph extends PureComponent {
     _renderTooltip = (props) => {
         const { payload, label } = props
-        console.log(props)
         return (
             <ul style={{listStyle: 'none', padding: 0, margin: 0}}>
                 <li><Typography>{`Days: ${label}`}</Typography></li>
@@ -45,7 +44,8 @@ class EarningsGraph extends Component {
         )
     }
     render() {
-        const { classes, dataset, yAxisRange, xAxisRange, theme } = this.props;
+        const { classes, dataset, theme } = this.props;
+        console.log(`EarningsGraph::render`)
         return (
             <div className="EarningsGraph">
                 <ContainerDimensions>
@@ -90,8 +90,6 @@ class EarningsGraph extends Component {
 
 EarningsGraph.propTypes = {
     classes: PropTypes.object.isRequired,
-    yAxisRange: PropTypes.number.isRequired,
-    xAxisRange: PropTypes.number.isRequired,
     dataset: PropTypes.array.isRequired,
 };
 

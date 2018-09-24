@@ -6,7 +6,7 @@ import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
-import { DenominationSelect } from '../../../utils/denominations';
+import { DenominationSelect, fromBaseToDenominationValue, fromDenominationValueToBase } from '../../../utils/denominations';
 
 
 const styles = (theme) => ({
@@ -34,6 +34,9 @@ const styles = (theme) => ({
     },
     denominationSelectRoot: {
         color: `${theme.palette.grey['600']} !important`,
+        '& > select + svg': {
+            color: `${theme.palette.grey['600']} !important`,
+        }
     },
     percentage: {
         fontSize: `1.313rem`,
@@ -55,17 +58,29 @@ class EarningsInput extends Component {
         }
     }
     _onInputChange = (event) => {
+        const { integerOnly, includeDenomination } = this.props
         const characterLength = event.target.value.length || 1
-        let parseFn = this.props.integerOnly ? parseInt : parseFloat
+        let parseFn = integerOnly ? parseInt : parseFloat
+        let inputValue = parseFn(event.target.value) || 1
+        // Need to convert back to baseDenom value
+        if ( includeDenomination ) {
+            inputValue = fromDenominationValueToBase(inputValue, this.state.denominationValue)
+        }
         this.setState({
-            inputValue: parseFn(event.target.value) || 1,
+            inputValue,
             percentageSpacing: 16 + 12 * characterLength
         })
-        // TODO: propogate up
+        this.props.onChange(inputValue)
     }
     _onDenominationChange = (nextDenom) => {
-        this.setState({denominationValue: nextDenom.name})
-        // TODO: propogate up
+        // this.state.inputValue === baseValue, converting from baseValue to the new denom baseValue
+        let previousDenomInputValue = fromBaseToDenominationValue(this.state.inputValue, this.state.denominationValue)
+        let inputValue = fromDenominationValueToBase(previousDenomInputValue, nextDenom.name)
+        this.setState({
+            denominationValue: nextDenom.name,
+            inputValue,
+        })
+        this.props.onChange(inputValue)
     }
     render() {
         const { 
@@ -75,6 +90,12 @@ class EarningsInput extends Component {
             isPrimordial,
             isPercentage,
         } = this.props;
+        // NOTE: if using denominations, we convert from baseDenom value to the target denom value
+        // but the baseDenom value is what is saved/passed around
+        let inputValue = this.state.inputValue
+        if ( includeDenomination ) {
+            inputValue = fromBaseToDenominationValue(inputValue, this.state.denominationValue)
+        }
         return (
             <FormControl className={classes.formControl} fullWidth>
                 <InputLabel disableAnimation={true} className={classes.inputLabel}>
@@ -82,8 +103,9 @@ class EarningsInput extends Component {
                 </InputLabel>
                 <Input
                     type="number"
-                    value={this.state.inputValue}
-                    onChange={this._onInputChange}                    
+                    step={1}
+                    value={inputValue}
+                    onChange={this._onInputChange}
                     className={`${classes.input} ${includeDenomination ? classes.inputDenominationSpacing : null}`}
                     disableUnderline={true}
                 />
@@ -98,7 +120,6 @@ class EarningsInput extends Component {
                         className={classes.denominationSelect}
                         classes={{
                             root: classes.denominationSelectRoot,
-                            icon: classes.denominationSelectRoot,
                         }}
                     />
                 ) : null}

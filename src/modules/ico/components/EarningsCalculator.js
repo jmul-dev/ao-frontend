@@ -124,14 +124,11 @@ class EarningsCalculator extends Component {
                 rowData[5]
             dataset.push(rowData)
         }
-        this.setState({
-            dataset,
-            yAxisRange: dataset[dataset.length - 1][9] // last value in Creator from AO Content series
-        })
+        this.setState({dataset})
     }
     render() {
         const { classes } = this.props;
-        const { dataset, yAxisRange } = this.state
+        const { dataset } = this.state
         return (
             <div className={classes.root}>
                 <div className={classes.gridLeft}>
@@ -147,11 +144,7 @@ class EarningsCalculator extends Component {
                 </div>
                 <div className={classes.gridRight}>
                     <Paper elevation={24} className={classes.paper}>
-                        <EarningsGraph
-                            yAxisRange={yAxisRange}
-                            xAxisRange={DAY_RANGE}
-                            dataset={dataset}
-                        />
+                        <EarningsGraph dataset={dataset} />
                     </Paper>
                 </div>
             </div>

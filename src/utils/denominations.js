@@ -79,6 +79,24 @@ export const denominations = [
     },
 ]
 
+export const fromBaseToDenominationValue = (baseAmount, denominationName) => {
+    for (let i = 0; i < denominations.length; i++) {
+        if ( denominations[i].name === denominationName ) {
+            return baseAmount / Math.pow(10, denominations[i].powerOfTen )
+        }
+    }
+    return baseAmount
+}
+
+export const fromDenominationValueToBase = (amount, denominationName) => {
+    for (let i = 0; i < denominations.length; i++) {
+        if ( denominations[i].name === denominationName ) {
+            return amount * Math.pow(10, denominations[i].powerOfTen )
+        }
+    }
+    return amount
+}
+
 export const fromBaseToHighestDenomination = (baseAmount) => {
     let highestDenomination = denominations[0];
     let highestDenominationAmount = new BigNumber(0);
@@ -147,7 +165,7 @@ const denominationSelectStyles = ({palette}) => ({
     },
 })
 
-const DenominationSelectPreWrap = ({isPrimordial, theme, onChange, classes, ...props}) => (
+const DenominationSelectPreWrap = ({isPrimordial, onChange, classes, ...props}) => (
     <Select
         native
         disableUnderline={true}
@@ -156,7 +174,6 @@ const DenominationSelectPreWrap = ({isPrimordial, theme, onChange, classes, ...p
             onChange(nextDenom)
         }}
         classes={classes}
-        dir="rtl"
         {...props}
         >
         {denominations.map((denomination) => (
@@ -164,7 +181,7 @@ const DenominationSelectPreWrap = ({isPrimordial, theme, onChange, classes, ...p
         ))}
     </Select>
 )
-export const DenominationSelect = withStyles(denominationSelectStyles, {withTheme: true})(DenominationSelectPreWrap)
+export const DenominationSelect = withStyles(denominationSelectStyles)(DenominationSelectPreWrap)
 
 
 
