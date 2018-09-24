@@ -54,7 +54,7 @@ class EarningsGraph extends PureComponent {
                             width={width}
                             height={width}
                             data={dataset}
-                            margin={{top: 48, right: 16}}
+                            margin={{top: 48, right: 16, bottom: 48}}
                         >
                             <Tooltip content={this._renderTooltip} />
                             <Legend align="left" verticalAlign="top" height={48} content={this._renderLegend} wrapperStyle={{top: 24, left: 80}} />

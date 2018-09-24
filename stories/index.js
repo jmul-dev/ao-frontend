@@ -45,9 +45,6 @@ storiesOf('Network Exchange')
     .add('EarningsCalculator', () => (
         <EarningsCalculator />
     ))
-    .add('EarningsGraph', () => (
-        <EarningsGraph />
-    ))
     .addDecorator(withKnobs)
     .add('EarningsInput', () => {
         const denominationInputKnob = boolean('Include denomination input', false)
