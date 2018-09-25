@@ -10,6 +10,8 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+import EtherscanLink from '../../etherscan/EtherscanLink';
+import LaunchIcon from '@material-ui/icons/Launch';
 
 
 class RecentTransactions extends Component<Props> {
@@ -17,6 +19,7 @@ class RecentTransactions extends Component<Props> {
         // redux bound state
         lotCreations: PropTypes.arrayOf(PropTypes.shape({
             blockNumber: PropTypes.number,
+            transactionHash: PropTypes.string,
             lotOwner: PropTypes.string,
             lotId: PropTypes.string,
             index: PropTypes.string,
@@ -43,6 +46,7 @@ class RecentTransactions extends Component<Props> {
                         <TableCell className={classes.cell}>amount</TableCell>
                         <TableCell className={classes.cell}>multiplier</TableCell>
                         <TableCell className={classes.cell}>block</TableCell>
+                        <TableCell className={classes.cell}></TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
@@ -55,6 +59,11 @@ class RecentTransactions extends Component<Props> {
                                 </TableCell>
                                 <TableCell className={classes.cell}>{row.multiplier.toFixed(2)}</TableCell>
                                 <TableCell className={classes.cell}>{row.blockNumber}</TableCell>
+                                <TableCell className={classes.cell}>
+                                    <EtherscanLink type="tx" value={row.transactionHash}>
+                                        <LaunchIcon />
+                                    </EtherscanLink>
+                                </TableCell>
                             </TableRow>
                         );
                     })}

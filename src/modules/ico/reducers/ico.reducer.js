@@ -73,7 +73,10 @@ export const startListeningForRecentTransactions = () => {
         const { contracts, app, ico } = state
         let lotCreationEvent = contracts.lotCreationEvent
         if ( !lotCreationEvent ) {
-            lotCreationEvent = contracts.aoToken.LotCreation({}, {fromBlock: 0, toBlock: 'latest'})
+            let fromBlock = contracts.latestBlockNumber - (15 * 4 * 60 * 24 * 30)  // ~30 days worth of txs
+            if ( fromBlock < 0 )
+                fromBlock = 0
+            lotCreationEvent = contracts.aoToken.LotCreation({}, {fromBlock, toBlock: 'latest'})
             dispatch({
                 type: SET_LOT_CREATION_EVENT,
                 payload: lotCreationEvent,
@@ -85,6 +88,7 @@ export const startListeningForRecentTransactions = () => {
                     type: LOT_CREATION_EVENT_RECEIVED,
                     payload: {
                         blockNumber: result.blockNumber,
+                        transactionHash: result.transactionHash,
                         ...result.args,
                         index: new BigNumber(result.args.index).toNumber(),
                         multiplier: new BigNumber(result.args.index).dividedBy(ico.weightedIndexDivisor).toNumber(),
