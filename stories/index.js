@@ -21,6 +21,7 @@ import EarningsGraph from '../src/modules/ico/components/EarningsGraph';
 import EarningsInput from '../src/modules/ico/components/EarningsInput';
 import BigNumber from 'bignumber.js';
 import { IcoStatsWithStyles } from '../src/modules/ico/components/IcoStats';
+import { RecentTransactionsWithStyles } from '../src/modules/ico/components/RecentTransactions';
 
 
 const onChange = action('onChange')
@@ -33,9 +34,9 @@ const onCalculatorInputChange = inputName => (value) => {
     onChange()
 }
 
-const ThemeWrapper = ({theme = darkTheme, children}) => (
+const ThemeWrapper = ({theme = darkTheme, background, children}) => (
     <MuiThemeProvider theme={theme}>
-        <div style={{background: darkTheme.palette.background.default, padding: 40}}>
+        <div style={{background: background || darkTheme.palette.background.default, padding: 40}}>
             {children}
         </div>
     </MuiThemeProvider>
@@ -45,6 +46,23 @@ storiesOf('Network Exchange')
     .addDecorator(muiTheme([lightTheme, darkTheme]))
     .addDecorator(story => <ReduxProvider story={story()}/>)
     .addDecorator(withKnobs)
+    .add('Recent Transactions', () => {
+        return (
+            <ThemeWrapper theme={darkTheme} background={darkTheme.palette.secondary.main}>
+                <RecentTransactionsWithStyles
+                    lotCreations={[{
+                        blockNumber: 1234567,
+                        lotOwner: '0x050aBCc712029E39fA33Fa1C2C031ddBA60E1986',
+                        lotId: '1',
+                        index: 3.5,
+                        tokenAmount: new BigNumber(4.5 * Math.pow(10, 9)),
+                    }]}
+                    startListeningForRecentTransactions={() => {}}
+                    stopListeningForRecentTransactions={() => {}}
+                />
+            </ThemeWrapper>
+        )        
+    })
     .add('Network Exchange Progress', () => {
         const totalSupplyKnob = number('Total supply', 0)
         return (
