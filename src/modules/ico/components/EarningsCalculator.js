@@ -63,18 +63,20 @@ class EarningsCalculator extends Component {
     }
     _generateDataset = () => {
         const { userInputs } = this.state
+        const networkTokensStakedGiga = userInputs.networkTokensStaked / Math.pow(10, 9)
+        const primordialTokensStakedGiga = userInputs.primordialTokensStaked / Math.pow(10, 9)
         let inputs = {
             ...userInputs,
             // Converting staked values into giga-denomination
-            networkTokensStaked: userInputs.networkTokensStaked / Math.pow(10, 9),
-            primordialTokensStaked: userInputs.primordialTokensStaked / Math.pow(10, 9),
+            networkTokensStaked: networkTokensStakedGiga,
+            primordialTokensStaked: primordialTokensStakedGiga,
             // Need to convert percentage values to decimal format
             dailyGrowth: userInputs.dailyGrowth / 100.0,
             dailyContentRequestRate: userInputs.dailyContentRequestRate / 100.0,
             saturation: userInputs.saturation / 100.0,
             creatorShare: userInputs.creatorShare / 100.0,
             networkInflation: userInputs.networkInflation / 100.0,
-            weightedPrimordialTokenMultiplier: userInputs.weightedPrimordialTokenMultiplier / 100.0,
+            weightedPrimordialTokenMultiplier: (networkTokensStakedGiga + (primordialTokensStakedGiga * userInputs.primordialTokenMultiplier)) / (networkTokensStakedGiga + primordialTokensStakedGiga) / 100.0,
         }
         let dataset = []
         // Mimicking data sheet

@@ -97,13 +97,14 @@ class EarningsInputFields extends Component {
                     integerOnly={true}
                     isPercentage={true}
                 />
-                <EarningInput
+                {/* <EarningInput
                     label={`Weighted AO+ multiplier`}
                     value={inputs.weightedPrimordialTokenMultiplier}
                     onChange={this._handleInputChange('weightedPrimordialTokenMultiplier')}
                     integerOnly={true}
                     isPercentage={true}
-                />
+                    disabled={true}
+                /> */}
             </div>
         );
     }
