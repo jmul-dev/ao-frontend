@@ -49,7 +49,7 @@ class RecentTransactions extends Component<Props> {
                         return (
                             <TableRow key={row.lotId}>
                                 <TableCell className={classes.cell}>{row.lotOwner}</TableCell>
-                                <TableCell className={classes.cell}>
+                                <TableCell className={`${classes.cell} ${classes.tokenCell}`}>
                                     <TokenBalance baseAmount={row.tokenAmount} isPrimordial={true} includeAO={true} />
                                 </TableCell>
                                 <TableCell className={classes.cell}>{row.index}</TableCell>
@@ -70,6 +70,9 @@ const styles = (theme) => ({
     cell: {
         borderBottom: `1px solid ${theme.palette.secondary.dark}`,
         letterSpacing: 0.25,
+    },
+    tokenCell: {
+        minWidth: 100,
     }
 });
 
