@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import withIcoState from '../containers/withIcoState';
+import withRecentTransactions from '../containers/withRecentTransactions';
 import BigNumber from 'bignumber.js';
 import { TokenBalance } from '../../../utils/denominations';
 import { withStyles } from '@material-ui/core/styles';
@@ -20,6 +20,7 @@ class RecentTransactions extends Component<Props> {
             lotOwner: PropTypes.string,
             lotId: PropTypes.string,
             index: PropTypes.string,
+            multiplier: PropTypes.number,
             tokenAmount: PropTypes.instanceOf(BigNumber),
         })),
         // redux bound actions
@@ -52,7 +53,7 @@ class RecentTransactions extends Component<Props> {
                                 <TableCell className={`${classes.cell} ${classes.tokenCell}`}>
                                     <TokenBalance baseAmount={row.tokenAmount} isPrimordial={true} includeAO={true} />
                                 </TableCell>
-                                <TableCell className={classes.cell}>{row.index}</TableCell>
+                                <TableCell className={classes.cell}>{row.multiplier.toFixed(2)}</TableCell>
                                 <TableCell className={classes.cell}>{row.blockNumber}</TableCell>
                             </TableRow>
                         );
@@ -79,4 +80,4 @@ const styles = (theme) => ({
 // NOTE: only exporting here for storybook rendering
 export const RecentTransactionsWithStyles = withStyles(styles)(RecentTransactions)
 
-export default withIcoState(RecentTransactionsWithStyles)
+export default withRecentTransactions(RecentTransactionsWithStyles)

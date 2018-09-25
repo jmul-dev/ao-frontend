@@ -6,6 +6,7 @@ import Grid from '@material-ui/core/Grid';
 import IcoStats from '../../modules/ico/components/IcoStats';
 import './ico-view.css';
 import ComparisonTable from '../../modules/ico/components/ComparisonTable';
+import RecentTransactions from '../../modules/ico/components/RecentTransactions';
 
 
 export default class IcoView extends PureComponent {
@@ -20,6 +21,7 @@ export default class IcoView extends PureComponent {
                 <Grid container spacing={16}>
                     <Grid item xs={12}>
                         <IcoStats />
+                        <RecentTransactions />
                         <ComparisonTable />
                     </Grid>
                 </Grid>                

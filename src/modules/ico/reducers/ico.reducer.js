@@ -55,15 +55,25 @@ export const updateIcoState = () => {
                 })
             }
         })
+        contracts.aoToken.WEIGHTED_INDEX_DIVISOR(function(err, indexDivisor) {
+            if ( indexDivisor ) {
+                dispatch({
+                    type: UPDATE_PRIMORDIAL_STATE,
+                    payload: {
+                        weightedIndexDivisor: new BigNumber(indexDivisor)
+                    }
+                })
+            }
+        })
     }
 }
 export const startListeningForRecentTransactions = () => {
     return (dispatch, getState) => {
         const state = getState()
-        const { contracts, app } = state
+        const { contracts, app, ico } = state
         let lotCreationEvent = contracts.lotCreationEvent
         if ( !lotCreationEvent ) {
-            const lotCreationEvent = contracts.aoToken.LotCreation({}, {fromBlock: contracts.latestBlockNumber - 10000, toBlock: 'latest'})
+            lotCreationEvent = contracts.aoToken.LotCreation({}, {fromBlock: 0, toBlock: 'latest'})
             dispatch({
                 type: SET_LOT_CREATION_EVENT,
                 payload: lotCreationEvent,
@@ -76,6 +86,8 @@ export const startListeningForRecentTransactions = () => {
                     payload: {
                         blockNumber: result.blockNumber,
                         ...result.args,
+                        index: new BigNumber(result.args.index).toNumber(),
+                        multiplier: new BigNumber(result.args.index).dividedBy(ico.weightedIndexDivisor).toNumber(),
                         tokenAmount: new BigNumber(result.args.tokenAmount),
                     }
                 })
@@ -101,6 +113,7 @@ const initialState = {
     primordialTotalSupply: new BigNumber(0),
     primordialMaxSupply: new BigNumber(0),
     primordialBuyPrice: new BigNumber(0),
+    weightedIndexDivisor: new BigNumber(Math.pow(10, 6)),
     // recent transactions
     lotCreations: { /* lotId => LotCreation */ },
     lotCreationEvent: undefined, // web3.contract.Event
