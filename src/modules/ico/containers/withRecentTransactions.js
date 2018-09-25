@@ -11,7 +11,7 @@ const mapStateToProps = (store) => {
     let lotCreations = Object.values(store.ico.lotCreations).sort((a, b) => {
         if ( a.blockNumber > b.blockNumber )
             return -1
-        if ( a.blockNumber > b.blockNumber )
+        if ( a.blockNumber < b.blockNumber )
             return 1
         return 0
     })

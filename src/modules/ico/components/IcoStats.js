@@ -29,7 +29,7 @@ class IcoStats extends Component<Props> {
     render() {
         const { classes } = this.props
         const { primordialTotalSupply, primordialMaxSupply, primordialSaleActive } = this.props.ico
-        const icoPercentageComplete = primordialMaxSupply.lte(0) ? 0 : primordialTotalSupply.div(primordialMaxSupply).times(100)
+        const icoPercentageComplete = primordialMaxSupply.lte(0) ? 0 : primordialTotalSupply.div(primordialMaxSupply).times(100).toNumber()
         const icoRemainingSupply = primordialMaxSupply.minus(primordialTotalSupply)
         return (
             <div className={classes.root}>
