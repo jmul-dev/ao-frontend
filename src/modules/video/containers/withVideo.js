@@ -12,7 +12,7 @@ const mapDispatchToProps = {
 
 const mapStateToProps = (store) => {
     return {
-        tokenBalance: store.wallet.tokenBalance,
+        networkTokenBalance: store.wallet.networkTokenBalance,
     }
 }
 

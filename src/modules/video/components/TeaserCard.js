@@ -134,9 +134,9 @@ class TeaserCard extends Component<Props> {
         )
     }
     render() {
-        const { video, videoQuery, isActive, isFullscreen, isTeaserEntered, tokenBalance } = this.props
+        const { video, videoQuery, isActive, isFullscreen, isTeaserEntered, networkTokenBalance } = this.props
         const { videoSrc, usingTeaserSrc, videoSrcReady } = this.state
-        const insufficientBalance = tokenBalance.lt(video.stake) ? tokenBalance.minus(video.stake).multipliedBy(-1).toNumber() : undefined
+        const insufficientBalance = networkTokenBalance.lt(video.stake) ? networkTokenBalance.minus(video.stake).multipliedBy(-1).toNumber() : undefined
         return (
             <CSSTransition
                 in={isFullscreen}
@@ -186,7 +186,7 @@ class TeaserCard extends Component<Props> {
                                 <TokenBalance baseAmount={video.stake} /> {' / view'}
                             </Typography>
                             <Typography variant="caption" gutterBottom>
-                                {`your balance: `}<TokenBalance baseAmount={tokenBalance} />
+                                {`your balance: `}<TokenBalance baseAmount={networkTokenBalance} isPrimordial={false} />
                             </Typography>
                             {this._renderLastSeen()}
                             {this._renderActionState()}
