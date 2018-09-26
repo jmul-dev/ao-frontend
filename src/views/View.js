@@ -1,5 +1,6 @@
 // @flow
 import React, { Component, Node } from 'react';
+import { StickyContainer } from 'react-sticky';
 
 type Props = {
     children: Node,
@@ -17,9 +18,9 @@ export default class View extends Component<Props> {
             transition: 'all 300ms ease-out'
         })
         return (
-            <div className={["View", this.props.className].join(' ')} style={style}>
+            <StickyContainer className={["View", this.props.className].join(' ')} style={style}>
                 {this.props.children}
-            </div>
+            </StickyContainer>
         );
     }
 }

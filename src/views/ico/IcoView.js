@@ -22,8 +22,8 @@ import Exchange from '../../modules/exchange/components/Exchange';
 
 export default class IcoView extends PureComponent {
     render() {
-        return (
-            <View className={'IcoView'} padding="none">   
+        return (            
+            <View className={'IcoView'} padding="none">
                 <MuiThemeProvider theme={darkTheme}>
                     <header className="section-padding bg-black" style={{backgroundImage: `url(${bgShapesSrc})`}}>
                         <div className="heading-copy">
@@ -126,7 +126,7 @@ export default class IcoView extends PureComponent {
                         <Typography variant="body1">{`Exchange for AO+ and receive an equal amount of AO.`}</Typography>
                         <Exchange hideInputTitle={true} />
                     </div>
-                </section>
+                </section>                
             </View>
         );
     }

@@ -21,21 +21,20 @@ const styles = theme => ({
     },
     table: {
         maxWidth: `100%`,
-        tableLayout: 'fixed'
+        tableLayout: 'fixed',
     },
     thRow: {
         height: 128,
-        display: 'flex',
-        '& > *': {
-            flex: 1
-        }
+    },
+    thCell: {
+        verticalAlign: 'top',
     },
     thFlex: {
         display: 'flex',
     },
     thLabel: {
         color: 'white',
-        fontWeight: 100
+        fontWeight: 100,
     },
     thCurrency: {
         background: theme.palette.grey['400'],
@@ -143,77 +142,72 @@ class ComparisonTable extends Component {
     render() {
         const { classes } = this.props;
         return (
-            <StickyContainer>
-                <Paper className={classes.root} elevation={0}>
-                    {/* Sticky had to exist outside of table (thead) for it to work */}
-                    <Sticky>{({style}) => (
-                        <div style={style}>
-                            <div className={classes.thRow}>
-                                <div color="primary" className={`${classes.thCurrency} ${classes.cell}`}>
-                                    <Typography variant="title" style={{color: 'white', marginRight: 'auto'}}>{`Currency`}</Typography>
+            <Paper className={classes.root} elevation={0}>                    
+                <Table className={classes.table}>   
+                    <TableHead>
+                        <TableRow className={classes.thRow}>
+                            <TableCell className={`${classes.thCell} ${classes.thCurrency} ${classes.cell}`} color="primary">
+                                <Typography variant="title" style={{color: 'white', marginRight: 'auto'}}>{`Currency`}</Typography>
+                            </TableCell>
+                            <TableCell className={`${classes.thCell} ${classes.thUsd} ${classes.cell}`}>
+                                <div className={classes.thFlex}>
+                                    <Typography variant="title" style={{color: 'white', marginRight: 'auto'}}>{`USD`}</Typography>
+                                    <UsdIcon />
                                 </div>
-                                <div className={`${classes.thUsd} ${classes.cell}`}>
-                                    <div className={classes.thFlex}>
-                                        <Typography variant="title" style={{color: 'white', marginRight: 'auto'}}>{`USD`}</Typography>
-                                        <UsdIcon />
-                                    </div>
-                                    <Typography variant="caption" className={classes.thLabel}>{`US Dollar`}</Typography>
+                                <Typography variant="caption" className={classes.thLabel}>{`US Dollar`}</Typography>
+                            </TableCell>
+                            <TableCell className={`${classes.thCell} ${classes.thBitcoin} ${classes.cell}`}>
+                                <div className={classes.thFlex}>
+                                    <Typography variant="title" style={{color: 'white', marginRight: 'auto'}}>{`BTC`}</Typography>
+                                    <BitcoinIcon />
                                 </div>
-                                <div className={`${classes.thBitcoin} ${classes.cell}`}>
-                                    <div className={classes.thFlex}>
-                                        <Typography variant="title" style={{color: 'white', marginRight: 'auto'}}>{`BTC`}</Typography>
-                                        <BitcoinIcon />
-                                    </div>
-                                    <Typography variant="caption" className={classes.thLabel}>{`Bitcoin`}</Typography>
+                                <Typography variant="caption" className={classes.thLabel}>{`Bitcoin`}</Typography>
+                            </TableCell>
+                            <TableCell className={`${classes.thCell} ${classes.thAo} ${classes.cell}`}>
+                                <div className={classes.thFlex}>
+                                    <Typography variant="title" style={{color: 'white', marginRight: 'auto'}}>{`AO`}</Typography>
+                                    <LogoIcon width={25} height={25} />
                                 </div>
-                                <div className={`${classes.thAo} ${classes.cell}`}>
-                                    <div className={classes.thFlex}>
-                                        <Typography variant="title" style={{color: 'white', marginRight: 'auto'}}>{`AO`}</Typography>
-                                        <LogoIcon width={25} height={25} />
-                                    </div>
-                                    <Typography variant="caption" className={classes.thLabel}>{`AO & AO+`}</Typography>
-                                </div>
-                            </div>
-                        </div>
-                    )}</Sticky>
-                    <Table className={classes.table}>                        
-                        <TableBody>
-                            {rows.map(row => {
-                                const rowIsSelected = this.state.selectedRowId === row.id
-                                return (
-                                    <TableRow 
-                                        key={row.id} 
-                                        className={`${classes.tr} ${rowIsSelected ? classes.trSelected : ''}`} 
-                                        hover={!rowIsSelected}
-                                        onClick={(event) => this._onRowClick(event, row.id)}
-                                        selected={rowIsSelected}
-                                        >
-                                        <TableCell component="th" scope="row" className={`${classes.cell} ${classes.cellLabel}`}>{row.label}</TableCell>
-                                        <TableCell className={classes.cell}>
-                                            {row.usd}
-                                            {rowIsSelected ? (
-                                                <div className={classes.expansionDetails}>{row.usdExpanded}</div>
-                                            ) : null}
-                                        </TableCell>
-                                        <TableCell className={classes.cell}>
-                                            {row.bitcoin}
-                                            {rowIsSelected ? (
-                                                <div className={classes.expansionDetails}>{row.bitcoinExpanded}</div>
-                                            ) : null}
-                                        </TableCell>
-                                        <TableCell className={`${classes.cell} ${classes.cellAo}`}>
-                                            {row.ao}
-                                            {rowIsSelected ? (
-                                                <div className={classes.expansionDetails}>{row.aoExpanded}</div>
-                                            ) : null}
-                                        </TableCell>
-                                    </TableRow>
-                                );
-                            })}
-                        </TableBody>
-                    </Table>
-                </Paper>
-            </StickyContainer>
+                                <Typography variant="caption" className={classes.thLabel}>{`AO & AO+`}</Typography>
+                            </TableCell>
+                        </TableRow>
+                    </TableHead>                     
+                    <TableBody>
+                        {rows.map(row => {
+                            const rowIsSelected = this.state.selectedRowId === row.id
+                            return (
+                                <TableRow 
+                                    key={row.id} 
+                                    className={`${classes.tr} ${rowIsSelected ? classes.trSelected : ''}`} 
+                                    hover={!rowIsSelected}
+                                    onClick={(event) => this._onRowClick(event, row.id)}
+                                    selected={rowIsSelected}
+                                    >
+                                    <TableCell component="th" scope="row" className={`${classes.cell} ${classes.cellLabel}`}>{row.label}</TableCell>
+                                    <TableCell className={classes.cell}>
+                                        {row.usd}
+                                        {rowIsSelected ? (
+                                            <div className={classes.expansionDetails}>{row.usdExpanded}</div>
+                                        ) : null}
+                                    </TableCell>
+                                    <TableCell className={classes.cell}>
+                                        {row.bitcoin}
+                                        {rowIsSelected ? (
+                                            <div className={classes.expansionDetails}>{row.bitcoinExpanded}</div>
+                                        ) : null}
+                                    </TableCell>
+                                    <TableCell className={`${classes.cell} ${classes.cellAo}`}>
+                                        {row.ao}
+                                        {rowIsSelected ? (
+                                            <div className={classes.expansionDetails}>{row.aoExpanded}</div>
+                                        ) : null}
+                                    </TableCell>
+                                </TableRow>
+                            );
+                        })}
+                    </TableBody>
+                </Table>
+            </Paper>
         );
     }
 }
