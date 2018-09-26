@@ -21,7 +21,7 @@ type Props = {
     isFullscreen: boolean,
     isTeaserEntered: boolean,
     // redux bound state
-    tokenBalance: Object,  // bignumber
+    networkTokenBalance: Object,  // bignumber
     // redux bound methods
     setActiveVideo: Function,
     // graphql props
@@ -46,7 +46,7 @@ class TeaserCard extends Component<Props> {
         this.setState({exchangeModalOpen: false})
     }
     _playVideo = () => {
-        const { setActiveVideo, tokenBalance, video, videoQuery } = this.props
+        const { setActiveVideo, networkTokenBalance, video, videoQuery } = this.props
         if ( !videoQuery.video )
             return console.warn('attempted playing video before video state was fetched')        
         if ( videoQuery.video.state === 'STAKED' || videoQuery.video.state === 'DISCOVERABLE' ) {
@@ -54,7 +54,7 @@ class TeaserCard extends Component<Props> {
             setActiveVideo(this.props.video)
         } else if ( videoQuery.video.state === 'DISCOVERED' ) {
             // B: Content has not began the purchase process
-            if ( tokenBalance.lt(video.stake) ) {
+            if ( networkTokenBalance.lt(video.stake) ) {
                 // B.1: Exchange modal if balance sucks
                 this.setState({exchangeModalOpen: true})
             } else {
@@ -77,16 +77,27 @@ class TeaserCard extends Component<Props> {
             videoSrcReady: true,
         })
     }
+    _openExchangeModal = () => {
+        this.setState({exchangeModalOpen: true})
+    }
     _onExitingFullscreen = () => {}
     _renderActionState = () => {
+        const { video, videoQuery, networkTokenBalance } = this.props
+        const insufficientBalance = networkTokenBalance.lt(video.stake) ? networkTokenBalance.minus(video.stake).multipliedBy(-1).toNumber() : undefined
         let contentState = 'DISCOVERED'
-        let content = this.props.video
-        const videoQueryLoading = this.props.videoQuery.loading
-        if ( this.props.videoQuery.video ) {
-            contentState = this.props.videoQuery.video.state
-            content = this.props.videoQuery.video
+        let content = video
+        const videoQueryLoading = videoQuery.loading
+        if ( videoQuery.video ) {
+            contentState = videoQuery.video.state
+            content = videoQuery.video
         }
-        if ( contentState === 'DISCOVERABLE' ) {
+        if ( insufficientBalance ) {
+            return (
+                <PrimaryButton onClick={this._openExchangeModal}>
+                    <ContentPurchaseState content={content} />
+                </PrimaryButton>
+            )
+        } else if ( contentState === 'DISCOVERABLE' ) {
             // User has completed the purchase/host/discovery process, they can now play the video
             return (
                 <PrimaryButton onClick={this._playVideo} className="play-button">
@@ -213,7 +224,8 @@ class TeaserCard extends Component<Props> {
                             exchangeProps={{
                                 title: 'You have insufficient funds',
                                 subtitle: 'Purchase more ao to continue streaming.',
-                                requiredNetworkTokenAmount: insufficientBalance
+                                requiredNetworkTokenAmount: insufficientBalance,
+                                requiredTokenCopy: 'Video cost:',
                             }}
                         />
                     ) : null}
