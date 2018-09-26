@@ -1,5 +1,5 @@
 import BigNumber from "bignumber.js";
-import { CONTRACTS_INITIALIZED } from "../../../contracts/contracts.reducer";
+import { APP_STATES } from "../../../store/app.reducer";
 
 // Constants
 export const UPDATE_PRIMORDIAL_STATE = 'UPDATE_PRIMORDIAL_STATE'
@@ -11,7 +11,7 @@ export const updateIcoState = () => {
     return (dispatch, getState) => {
         const state = getState()
         const { contracts, app } = state
-        if ( !app.states[CONTRACTS_INITIALIZED] ) {
+        if ( !app.states[APP_STATES.CONTRACTS_INITIALIZED] ) {
             console.warn('Calling contract methods before contracts initialized')
             return;
         }
@@ -71,6 +71,8 @@ export const startListeningForRecentTransactions = () => {
     return (dispatch, getState) => {
         const state = getState()
         const { contracts, app, ico } = state
+        if ( !app.states[APP_STATES.CONTRACTS_INITIALIZED] )
+            return console.warn(`Attempting to call contract method before contracts initialized`)
         let lotCreationEvent = contracts.lotCreationEvent
         if ( !lotCreationEvent ) {
             let fromBlock = contracts.latestBlockNumber - (15 * 4 * 60 * 24 * 30)  // ~30 days worth of txs

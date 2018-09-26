@@ -1,0 +1,110 @@
+.IcoView {
+    background-color: #F4F4F4;
+}
+.IcoView .section-padding {
+    padding: 60px;
+}
+.IcoView .padding-top-0 {
+    padding-top: 0;
+}
+.IcoView .vertical-padding-large {
+    padding-top: 120px;
+    padding-bottom: 120px;
+}
+.IcoView header {
+    min-height: 100vh;
+    background-position: center bottom;
+    background-size: cover;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.IcoView .heading-copy {
+    max-width: 720px;
+}
+.IcoView .progress-banner {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    left: 0;
+    padding: 24px 60px;
+}
+.IcoView .bg-black {
+    background-color: #000000;
+}
+.IcoView .infograph {
+    width: 100%;
+    height: auto;
+}
+.IcoView .centered-content {
+    max-width: 720px;
+    margin: auto;
+    text-align: center;
+}
+.IcoView .section-denominations {
+    min-height: 100vh;
+    background-position: center;
+    background-size: cover;
+}
+.IcoView .section-heading {
+    display: flex;
+    width: 50%;
+}
+.IcoView .section-heading .section-number {
+    margin-right: 40px;
+    font-weight: 100;
+}
+.IcoView .section-heading .section-label {
+    letter-spacing: 2px;
+    margin-top: 12px;
+    margin-bottom: 12px;
+    font-weight: bold;
+}
+.IcoView img.denominations {
+    width: 100%;
+    margin-top: 15vh;
+}
+.IcoView .section-tokens {
+    position: relative;
+    overflow: hidden;
+}
+.IcoView img.token-structure {
+    width: 93%;
+    display: block;
+    margin-top: 100px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: -128px;
+}
+.IcoView .calculator-container {
+    margin-top: 80px;
+    width: 100%;
+    margin-left: 30px;
+}
+.IcoView .section-split .copy-padding {
+    padding: 30px;
+}
+.IcoView .multiplier-overview {
+    margin-right: -8px;
+}
+.IcoView .transactions-container {
+    margin-left: -8px;
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    position: relative;
+}
+.IcoView .transactions-container .copy-padding {
+    margin-bottom: 30px;
+}
+.IcoView .transactions-container table {
+    margin-top: auto;
+    position: absolute;
+    bottom: 0;
+    top: 100px;
+}
+.IcoView .multiplier-overview img.multiplier-graph {
+    width: 100%;
+    margin-top: 80px;
+    margin-bottom: -12px;
+}

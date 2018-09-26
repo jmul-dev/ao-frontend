@@ -42,7 +42,7 @@ class RecentTransactions extends Component<Props> {
             <Table className={classes.table}>
                 <TableHead>
                     <TableRow>
-                        <TableCell className={classes.cell}>user</TableCell>
+                        {/* <TableCell className={classes.cell}>user</TableCell> */}
                         <TableCell className={classes.cell}>amount</TableCell>
                         <TableCell className={classes.cell}>multiplier</TableCell>
                         <TableCell className={classes.cell}>block</TableCell>
@@ -53,7 +53,7 @@ class RecentTransactions extends Component<Props> {
                     {lotCreations.map(row => {
                         return (
                             <TableRow key={row.lotId}>
-                                <TableCell className={classes.cell}>{row.lotOwner}</TableCell>
+                                {/* <TableCell className={classes.cell}>{row.lotOwner}</TableCell> */}
                                 <TableCell className={`${classes.cell} ${classes.tokenCell}`}>
                                     <TokenBalance baseAmount={row.tokenAmount} isPrimordial={true} includeAO={true} />
                                 </TableCell>
@@ -80,9 +80,10 @@ const styles = (theme) => ({
     cell: {
         borderBottom: `1px solid ${theme.palette.secondary.dark}`,
         letterSpacing: 0.25,
+        padding: `4px 28px 4px 24px`,
     },
     tokenCell: {
-        minWidth: 100,
+        minWidth: 180,
     }
 });
 
