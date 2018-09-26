@@ -1,10 +1,9 @@
-// @flow
 import React, { Component } from 'react';
 import moment from 'moment';
 import Typography from '@material-ui/core/Typography';
 
 
-export default class Console extends Component {
+export default class Clock extends Component {
     constructor() {
         super()
         this.state = {
@@ -23,7 +22,7 @@ export default class Console extends Component {
     }
     render() {
         return (
-            <Typography variant="display1" style={{color: 'white'}}>{this.state.currentTime}</Typography>
+            <Typography variant="display1" style={{color: 'white', fontSize: '2.8125rem'}}>{this.state.currentTime}</Typography>
         );
     }
 }
