@@ -10,7 +10,7 @@ import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import { UsdIcon, BitcoinIcon, LogoIcon } from '../../../assets/Icons';
 import { lighten } from '@material-ui/core/styles/colorManipulator';
-import { StickyContainer, Sticky } from 'react-sticky';
+
 
 const styles = theme => ({
     root: {
