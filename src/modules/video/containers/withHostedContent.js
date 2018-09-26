@@ -18,16 +18,17 @@ const mapDispatchToProps = {
 
 const mapStateToProps = (store) => {
     return {
-        hideOffcanvas: !!store.video.activeVideo
+        hideOffcanvas: !!store.video.activeVideo,
+        recentlyHostedContentIds: store.video.recentlyHostedContentIds,
     }
 }
 
 // GraphQL
-const incompleteHostedContentQuery = gql(`
+const hostedContentQuery = gql(`
     query {
         node {
             id,
-            hostedContent(incomplete: true) {
+            hostedContent {
                 ...VideoContentFragment
             }
         }
@@ -37,7 +38,7 @@ const incompleteHostedContentQuery = gql(`
 
 export default compose(    
     connect(mapStateToProps, mapDispatchToProps),
-    graphql(incompleteHostedContentQuery, {
-        name: 'incompleteHostedContentQuery',
+    graphql(hostedContentQuery, {
+        name: 'hostedContentQuery',
     }),
 );

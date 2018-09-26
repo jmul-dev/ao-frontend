@@ -30,6 +30,7 @@ class AccountVideoListItem extends Component {
         }),
         getContentMetrics: PropTypes.func.isRequired,
     }
+    _watchNowRef;
     constructor() {
         super()
         this.state = {
@@ -84,9 +85,9 @@ class AccountVideoListItem extends Component {
             <div className="AccountVideoListItem">
                 <Grid container spacing={16}>
                     <Grid item sm={4}>
-                        <ContentPurchaseAction content={video}>{({ action, actionCopy, loading }) => (
+                        <ContentPurchaseAction contentRef={this._watchNowRef} content={video}>{({ action, actionCopy, loading }) => (
                             <ButtonBase className="action-button" disabled={!action || loading} onClick={action}>
-                                <div className="featured-image" style={{ backgroundImage: `url(${window.AO_CORE_URL}/${video.featuredImageUrl})` }}>
+                                <div ref={ref => this._watchNowRef = ref} className="featured-image" style={{ backgroundImage: `url(${window.AO_CORE_URL}/${video.featuredImageUrl})` }}>
                                     <ContentPurchaseState content={video} />
                                 </div>
                             </ButtonBase>

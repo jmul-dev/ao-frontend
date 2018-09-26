@@ -232,9 +232,9 @@ class ContentPurchaseActionComponent extends Component {
     _becomeHostAction = () => {
         const { becomeHost, content, client } = this.props
         this.setState({loading: true, error: null})
-        console.log(content)
         // 1. Metamask transaction
         becomeHost({
+            contentId: content.id,
             purchaseId: content.purchaseId,
             signature: content.baseChallengeSignature,
             encChallenge: content.encChallenge,
@@ -251,7 +251,6 @@ class ContentPurchaseActionComponent extends Component {
                     }
                 }
             }).then(({data, ...props}) => {
-                console.log(data, props)
                 this.setState({loading: false})
                 // 3. Not sure we need to do anything here, state will be updated via pulling on content.state
             }).catch(error => {

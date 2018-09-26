@@ -6,6 +6,8 @@ export const SET_ACTIVE_VIDEO = 'SET_ACTIVE_VIDEO'
 export const SET_VIDEO_PLAYBACK = 'SET_VIDEO_PLAYBACK'
 export const SET_SEARCH_VALUE = 'SET_SEARCH_VALUE'
 export const SET_SEARCH_BAR_ACTIVE = 'SET_SEARCH_BAR_ACTIVE'
+export const PUSH_TO_RECENTLY_HOSTED_CONTENT = 'PUSH_TO_RECENTLY_HOSTED_CONTENT'
+export const REMOVE_RECENTLY_HOSTED_CONTENT = 'REMOVE_RECENTLY_HOSTED_CONTENT'
 
 
 // Actions
@@ -13,19 +15,45 @@ export const setTeaserListingState = ({isActive}) => ({
     type: SET_TEASER_LISTING_STATE,
     payload: { isActive }
 })
-
-export const setActiveVideo = (video) => ({
-    type: SET_ACTIVE_VIDEO,
-    payload: { video }
-})
-
-export const setVideoPlayback = ({contentId, initialPosition}) => ({
-    type: SET_VIDEO_PLAYBACK,
-    payload: {
-        contentId,
-        initialPosition,
+// active video: TeaserCard -> Playback
+export const setActiveVideo = (video) => {
+    return (dispatch, getState) => {
+        dispatch({
+            type: SET_ACTIVE_VIDEO,
+            payload: { video }
+        })
+        const { recentlyHostedContentIds } = getState().video
+        if ( recentlyHostedContentIds.indexOf(video.id) > -1 ) {
+            dispatch({
+                type: REMOVE_RECENTLY_HOSTED_CONTENT,
+                payload: {
+                    contentId: video.id
+                }
+            })
+        }
     }
-})
+}
+// video playback: My videos -> Playback
+export const setVideoPlayback = ({contentId, initialPosition}) => {
+    return (dispatch, getState) => {
+        dispatch({
+            type: SET_VIDEO_PLAYBACK,
+            payload: {
+                contentId,
+                initialPosition,
+            }
+        })
+        const { recentlyHostedContentIds } = getState().video
+        if ( recentlyHostedContentIds.indexOf(contentId) > -1 ) {
+            dispatch({
+                type: REMOVE_RECENTLY_HOSTED_CONTENT,
+                payload: {
+                    contentId
+                }
+            })
+        }
+    }
+}
 
 export const updateSearchValue = (value) => ({
     type: SET_SEARCH_VALUE,
@@ -76,7 +104,7 @@ export const buyContent = (contentHostId, publicKey, publicAddress) => {
         })
     }
 }
-export const becomeHost = ({purchaseId, signature, encChallenge, contentDatKey, metadataDatKey}) => {
+export const becomeHost = ({contentId, purchaseId, signature, encChallenge, contentDatKey, metadataDatKey}) => {
     return (dispatch, getState) => {
         return new Promise((resolve, reject) => {
             const state = getState()
@@ -90,6 +118,10 @@ export const becomeHost = ({purchaseId, signature, encChallenge, contentDatKey, 
                 }
                 // 3a. Transaction submitted succesfully (has not been confirmed)
                 resolve(transactionHash)
+                dispatch({
+                    type: PUSH_TO_RECENTLY_HOSTED_CONTENT,
+                    payload: contentId
+                })
             })
         })
     }
@@ -152,6 +184,7 @@ const initialState = {
     },
     searchString: undefined,
     searchBarActive: false,
+    recentlyHostedContentIds: [],
 }
 
 // Reducer
@@ -183,6 +216,16 @@ export default function videoReducer(state = initialState, action) {
             return {
                 ...state,
                 searchBarActive: action.payload
+            }
+        case PUSH_TO_RECENTLY_HOSTED_CONTENT:
+            return {
+                ...state,
+                recentlyHostedContentIds: state.recentlyHostedContentIds.concat([action.payload])
+            }
+        case REMOVE_RECENTLY_HOSTED_CONTENT:            
+            return {
+                ...state,
+                recentlyHostedContentIds: state.recentlyHostedContentIds.filter(id => id !== action.payload.contentId)
             }
         default:
             return state
