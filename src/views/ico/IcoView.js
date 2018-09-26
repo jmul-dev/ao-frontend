@@ -118,7 +118,7 @@ export default class IcoView extends PureComponent {
                         </Grid>  
                     </section>
                 </MuiThemeProvider>
-                <section className="section-padding section-exchange">
+                <section className="section-padding section-exchange" style={{backgroundImage: `url(${bgShapesSrc})`}}>
                     <div className="centered-content">
                         <Exchange
                             title={`Interest piqued? Exchange now.`}

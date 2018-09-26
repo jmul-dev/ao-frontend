@@ -13,11 +13,14 @@ const mapDispatchToProps = {
 }
 
 const mapStateToProps = (store) => {
+    const { primordialTotalSupply, primordialMaxSupply, primordialSaleActive } = store.ico
+    const icoRemainingSupply = primordialMaxSupply.minus(primordialTotalSupply)
     return {
         ethAddress: store.app.ethAddress,
         wallet: store.wallet,
         exchange: store.exchange,
         ico: store.ico,
+        icoRemainingSupply,
         isElectron: store.electron.isElectron,
     }
 }

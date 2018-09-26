@@ -91,6 +91,8 @@ export const getExchangeRate = () => {
     return (dispatch, getState) => {
         const state = getState()
         const { contracts } = state
+        if ( !contracts.aoToken )
+            return console.warn(`Attempting to call contract method before contract initialization`)
         contracts.aoToken.primordialBuyPrice(function(err, result) {
             if ( result ) {
                 dispatch({

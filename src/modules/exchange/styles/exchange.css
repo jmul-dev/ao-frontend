@@ -30,14 +30,12 @@
     transform: translateX(-50%);
 }
 
-.Exchange .input-pane .input-container {
-    padding: 8px;
-    border-radius: 4px;
+
+.Exchange .input-pane .exchange-remaining {
+    margin-right: auto;
 }
 .Exchange .input-pane .input-cost {
     text-align: right;
-    margin-top: 24px;
-    margin-bottom: 24px;
 }
 .Exchange .input-pane .tx-message {
     margin-top: 16px;

@@ -19,6 +19,7 @@ import ComparisonTable from '../src/modules/ico/components/ComparisonTable';
 import EarningsCalculator from '../src/modules/ico/components/EarningsCalculator';
 import EarningsGraph from '../src/modules/ico/components/EarningsGraph';
 import EarningsInput from '../src/modules/ico/components/EarningsInput';
+import Exchange from '../src/modules/exchange/components/Exchange';
 import BigNumber from 'bignumber.js';
 import { IcoStatsWithStyles } from '../src/modules/ico/components/IcoStats';
 import { RecentTransactionsWithStyles } from '../src/modules/ico/components/RecentTransactions';
@@ -46,6 +47,11 @@ storiesOf('Network Exchange')
     .addDecorator(muiTheme([lightTheme, darkTheme]))
     .addDecorator(story => <ReduxProvider story={story()}/>)
     .addDecorator(withKnobs)
+    .add('Exchange', () => {
+        return (
+            <Exchange />
+        )
+    })
     .add('Recent Transactions', () => {
         return (
             <ThemeWrapper theme={darkTheme} background={darkTheme.palette.secondary.main}>

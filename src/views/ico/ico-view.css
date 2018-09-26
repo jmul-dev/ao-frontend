@@ -11,7 +11,7 @@
     padding-top: 120px;
     padding-bottom: 120px;
 }
-.IcoView header {
+.IcoView header, .IcoView .section-exchange {
     min-height: 100vh;
     background-position: center bottom;
     background-size: cover;
@@ -107,4 +107,7 @@
     width: 100%;
     margin-top: 80px;
     margin-bottom: -12px;
+}
+.IcoView .section-exchange .centered-content {
+    max-width: 520px;
 }

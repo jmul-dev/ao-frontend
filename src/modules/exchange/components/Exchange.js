@@ -20,6 +20,7 @@ type Props = {
     subtitle: string,
     requiredTokenAmount?: number,
     requiredTokenCopy?: string,  // required {tokenAmount} to {copy} <--
+    icoRemainingSupply: BigNumber,
     // withTheme
     theme: Object,  // material-ui theme
     // redux bound state
@@ -37,8 +38,7 @@ type Props = {
 }
 
 class Exchange extends Component<Props> {
-    props: Props;
-    
+    props: Props;    
     componentDidMount() {
         const { getEthBalanceForAccount, getTokenBalanceForAccount, getExchangeRate, ethAddress, requiredTokenAmount, updateTokenExchangeAmount } = this.props
         getEthBalanceForAccount(ethAddress)
@@ -63,7 +63,7 @@ class Exchange extends Component<Props> {
         this.props.resetExchange()
     }
     render() {
-        const { ethAddress, exchange, wallet, theme, title, subtitle, requiredTokenAmount, requiredTokenCopy } = this.props   
+        const { ethAddress, exchange, wallet, theme, title, subtitle, requiredTokenAmount, requiredTokenCopy, icoRemainingSupply } = this.props   
         const { exchangeTransaction, exchangeAmountToken, exchangeDenomination, exchangeRate } = exchange
         const exchangeInProgress = exchangeTransaction.initialized && !exchangeTransaction.error
         const formDisabled = !ethAddress || exchangeInProgress || !this.props.ico.primordialSaleActive
@@ -103,7 +103,7 @@ class Exchange extends Component<Props> {
                 ) : null}
                 <div className="input-pane">                
                     <Typography variant="subheading" align="center" style={{marginBottom: 24}}>{`How much AO+ would you like to purchase?`}</Typography>
-                    <div className="input-container" style={{backgroundColor: theme.palette.type === 'dark' ? '#333333' : '#AAAAAA'}}>
+                    <div className="input-container">
                         <DenominationInput 
                             ref="tokenInput"
                             baseInputValue={tokensInput}
@@ -112,9 +112,17 @@ class Exchange extends Component<Props> {
                             onChange={this._onInputChange}
                         />
                     </div>
-                    <div className="input-cost">
-                        <Typography variant="body1">{`cost: ${ethCost.toNumber()} ETH`}</Typography>
-                        <Typography variant="caption">{`(1 ${exchangeDenomination.prefix} AO = ${exchange.exchangeRate.multipliedBy(Math.pow(10, exchangeDenomination.powerOfTen)).toNumber()} ETH)`}</Typography>
+                    <div style={{display: 'flex', marginTop: 24, marginBottom: 24}}>
+                        <div className="exchange-remaining">
+                            <Typography variant="body1">
+                                <TokenBalance baseAmount={icoRemainingSupply} isPrimordial={true} includeAO={true} />
+                            </Typography>
+                            <Typography variant="caption">{`remaining`}</Typography>
+                        </div>
+                        <div className="input-cost">
+                            <Typography variant="body1">{`cost: ${ethCost.toNumber()} ETH`}</Typography>
+                            <Typography variant="caption">{`(1 ${exchangeDenomination.prefix} AO+ = ${exchange.exchangeRate.multipliedBy(Math.pow(10, exchangeDenomination.powerOfTen)).toNumber()} ETH)`}</Typography>
+                        </div>
                     </div>
                     {showExchangeTransactionMessage ? (
                         <div className="tx-message" style={{textAlign: 'right'}}>
@@ -130,7 +138,7 @@ class Exchange extends Component<Props> {
                                 </Typography>
                             ) : null}
                             {exchangeTransaction.result ? (
-                                <Typography color="primary">{`Your AO purchase was succesful!`}</Typography>
+                                <Typography color="primary">{`Your exchange was succesful!`}</Typography>
                             ) : null}
                         </div>
                     ) : null}
@@ -143,7 +151,7 @@ class Exchange extends Component<Props> {
                                 onClick={this._resetExchangeForm}
                                 disabled={false}
                                 >
-                                {'Make another purchase   ↺'}
+                                {'Make another exchange   ↺'}
                             </PrimaryButton>
                         ) : (
                             <PrimaryButton 
@@ -153,7 +161,7 @@ class Exchange extends Component<Props> {
                                 onClick={this._handlePurchase}
                                 disabled={formDisabled}
                                 >
-                                {exchangeInProgress ? 'Pending...' : 'Purchase'}
+                                {exchangeInProgress ? 'Exchanging...' : 'Exchange tokens'}
                                 {exchangeInProgress ? (
                                     <CircularProgress size={25} style={{position: 'absolute', right: 6}} />
                                 ) : null}

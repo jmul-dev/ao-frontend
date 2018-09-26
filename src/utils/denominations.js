@@ -157,14 +157,13 @@ export const FileSize = ({sizeInBytes, decimals = 1}) => {
 const denominationSelectStyles = ({palette}) => ({
     root: {
         width: 100,
-        color: 'white'
+        color: palette.getContrastText(palette.background.paper)
     },
     select: {
         width: `calc(100% - 24px)`,
         paddingRight: 24,
     },
 })
-
 const DenominationSelectPreWrap = ({isPrimordial, onChange, classes, ...props}) => (
     <Select
         native
@@ -185,8 +184,24 @@ export const DenominationSelect = withStyles(denominationSelectStyles)(Denominat
 
 
 
-
-export class DenominationInput extends Component {
+const denominationInputStyles = ({palette, shape}) => ({
+    root: {
+        display: 'flex',
+        alignItems: 'flex-end',
+        backgroundColor: palette.background.paper,
+        color: palette.getContrastText(palette.background.paper),
+        padding: 4,
+        border: `1px solid ${palette.divider}`,
+        borderRadius: shape.borderRadius,
+    },
+    textFieldInput: {
+        padding: '0 8px',
+        fontSize: '50px',
+        letterSpacing: 0,
+        textAlign: 'right',
+    },
+})
+class DenominationInputPreWrap extends Component {
     static propTypes = {
         baseInputValue: PropTypes.instanceOf(BigNumber),
         isPrimordial: PropTypes.bool.isRequired,
@@ -232,26 +247,21 @@ export class DenominationInput extends Component {
         }
     }
     render() {
-        const { baseInputValue, isPrimordial } = this.props
+        const { baseInputValue, isPrimordial, classes } = this.props
         const { denomination } = this.state      
         const denominationInputValue = new BigNumber(baseInputValue / Math.pow(10, denomination.powerOfTen))
         return (
-            <div style={{display: 'flex', alignItems: 'flex-end'}}>
+            <div className={classes.root}>
                 <TextField 
                     fullWidth 
+                    className={classes.textField}
                     InputProps={{
                         disableUnderline: true,
                         type: "number",                        
                     }}
                     // eslint-disable-next-line
                     inputProps={{
-                        style: {
-                            padding: '0 8px',
-                            fontSize: '50px',
-                            color: '#FFFFFF',
-                            letterSpacing: 0,
-                            textAlign: 'right',
-                        }
+                        className: classes.textFieldInput
                     }}
                     value={denominationInputValue.toNumber()}
                     onChange={this._onDenominationInputValueChange}
@@ -266,3 +276,4 @@ export class DenominationInput extends Component {
         )
     }
 }
+export const DenominationInput = withStyles(denominationInputStyles)(DenominationInputPreWrap)
