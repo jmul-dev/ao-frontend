@@ -103,7 +103,8 @@ export const lightTheme = createMuiTheme({
             color: '#222222'
         },
         display2: {
-            fontSize: '1.5rem'
+            fontSize: '1.5rem',
+            color: '#000000'
         },
         display3: {
             fontSize: '1.313rem',

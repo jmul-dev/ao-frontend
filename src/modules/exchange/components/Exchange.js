@@ -1,8 +1,6 @@
 // @flow
 import React, { Component } from 'react';
 import withExchangeContainer from '../containers/withExchangeContainer';
-import { withTheme } from '@material-ui/core/styles';
-import { compose } from 'react-apollo';
 import Typography from '@material-ui/core/Typography';
 import '../styles/exchange.css';
 import { PrimaryButton } from '../../../theme';
@@ -10,19 +8,19 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import EtherscanLink from '../../etherscan/EtherscanLink';
 import { TokenBalance, DenominationInput } from '../../../utils/denominations';
 import BigNumber from 'bignumber.js';
-import { MuiThemeProvider } from '@material-ui/core/styles';
-import { darkTheme } from '../../../theme';
+import { compose } from 'react-apollo';
+import { withStyles } from '@material-ui/core/styles';
 
 
 type Props = {
     // props
     title: string,
     subtitle: string,
-    requiredTokenAmount?: number,
+    requiredNetworkTokenAmount?: number,
+    requiredPrimordialTokenAmount?: number,
     requiredTokenCopy?: string,  // required {tokenAmount} to {copy} <--
     icoRemainingSupply: BigNumber,
-    // withTheme
-    theme: Object,  // material-ui theme
+    hideInputTitle?: boolean,
     // redux bound state
     ethAddress: string,
     wallet: Object,
@@ -37,16 +35,24 @@ type Props = {
     resetExchange: Function,
 }
 
+const styles = ({palette}) => ({
+    contentPane: {
+        backgroundColor: palette.type === 'dark' ? '#151515' : palette.background.paper,
+    },
+    contentPaneTriangle: {
+        borderColor: palette.type === 'dark' ? '#151515 transparent transparent transparent' : `${palette.background.paper} transparent transparent transparent`,
+    }
+})
+
 class Exchange extends Component<Props> {
     props: Props;    
     componentDidMount() {
-        const { getEthBalanceForAccount, getTokenBalanceForAccount, getExchangeRate, ethAddress, requiredTokenAmount, updateTokenExchangeAmount } = this.props
+        const { getEthBalanceForAccount, getTokenBalanceForAccount, getExchangeRate, ethAddress, requiredNetworkTokenAmount, requiredPrimordialTokenAmount, updateTokenExchangeAmount } = this.props
         getEthBalanceForAccount(ethAddress)
         getTokenBalanceForAccount(ethAddress)
-        getExchangeRate()
-        if ( requiredTokenAmount ) {
-            console.log(`set initial token exchange amount: ${requiredTokenAmount}`)
-            updateTokenExchangeAmount( requiredTokenAmount )
+        getExchangeRate()        
+        if ( requiredNetworkTokenAmount || requiredPrimordialTokenAmount ) {
+            updateTokenExchangeAmount( Math.max(requiredNetworkTokenAmount, requiredPrimordialTokenAmount) )
             // setTimeout(() => {
             //     this.refs.tokenInput.updateToLargestDenomination()
             // }, 50)            
@@ -63,46 +69,54 @@ class Exchange extends Component<Props> {
         this.props.resetExchange()
     }
     render() {
-        const { ethAddress, exchange, wallet, theme, title, subtitle, requiredTokenAmount, requiredTokenCopy, icoRemainingSupply } = this.props   
+        const { ethAddress, exchange, wallet, title, subtitle, requiredNetworkTokenAmount, requiredPrimordialTokenAmount, requiredTokenCopy, icoRemainingSupply, hideInputTitle, classes } = this.props   
         const { exchangeTransaction, exchangeAmountToken, exchangeDenomination, exchangeRate } = exchange
         const exchangeInProgress = exchangeTransaction.initialized && !exchangeTransaction.error
         const formDisabled = !ethAddress || exchangeInProgress || !this.props.ico.primordialSaleActive
         const showExchangeTransactionMessage = exchangeTransaction.error || exchangeTransaction.initialized || exchangeTransaction.transactionHash || exchangeTransaction.result
         const ethCost = exchangeAmountToken.multipliedBy(exchangeRate)
-        const tokensNeeded = requiredTokenAmount ? new BigNumber(requiredTokenAmount).minus(wallet.networkTokenBalance) : new BigNumber(0)
+        // AO vs AO+
+        const primordialTokensNeeded = requiredPrimordialTokenAmount ? new BigNumber(requiredPrimordialTokenAmount).minus(wallet.primordialTokenBalance) : new BigNumber(0)
+        const networkTokensNeeded = requiredNetworkTokenAmount ? new BigNumber(requiredNetworkTokenAmount).minus(wallet.networkTokenBalance) : new BigNumber(0)
+        const tokensNeeded = primordialTokensNeeded.gt(0) || networkTokensNeeded.gt(0) ? new BigNumber(Math.max(primordialTokensNeeded, networkTokensNeeded)) : new BigNumber(0)
+        const tokensNeededIsPrimordial = primordialTokensNeeded.gt(0)
         const tokensInput = tokensNeeded.gt(exchange.exchangeAmountToken) ? tokensNeeded : exchange.exchangeAmountToken        
         return (
-            <div className={`Exchange ${formDisabled ? 'disabled' : ''}`} style={{backgroundColor: theme.palette.background.default}}>
-                {requiredTokenAmount ? (
-                    <MuiThemeProvider theme={darkTheme}>
-                        <div className="content-pane" style={{backgroundColor: '#151515'}}>
-                            <Typography variant="title" align="center" style={{marginBottom: 0}}>{title}</Typography>
-                            <Typography variant="body1" align="center" style={{marginBottom: 36, color: '#777'}}>{subtitle}</Typography>
-                            <div className="line-item">
-                                <Typography variant="caption">{`Your balance:`}</Typography>
-                                <Typography variant="body1">
+            <div className={`Exchange ${formDisabled ? 'disabled' : ''}`}>
+                {tokensNeeded.gt(0) ? (
+                    <div className={`${classes.contentPane} content-pane`}>
+                        <Typography variant="title" align="center" style={{marginBottom: 0}}>{title}</Typography>
+                        <Typography variant="body1" align="center" style={{marginBottom: 36, color: '#777'}}>{subtitle}</Typography>
+                        <div className="line-item">
+                            <Typography variant="caption">{`Your balance:`}</Typography>
+                            <Typography variant="body1">
+                                {tokensNeededIsPrimordial ? (
+                                    <TokenBalance baseAmount={wallet.primordialTokenBalance} includeAO={true} isPrimordial={true} />
+                                ) : (
                                     <TokenBalance baseAmount={wallet.networkTokenBalance} includeAO={true} isPrimordial={false} />
-                                </Typography>
-                            </div>
-                            <div className="line-item">
-                                <Typography variant="caption">{requiredTokenCopy}</Typography>
-                                <Typography variant="body1">
-                                    <TokenBalance baseAmount={requiredTokenAmount} includeAO={true} isPrimordial={false} />
-                                </Typography>
-                            </div>
-                            <div className="line-item divider"></div>
-                            <div className="line-item">
-                                <Typography variant="body1">{`AO needed:`}</Typography>
-                                <Typography variant="body1">
-                                    <TokenBalance baseAmount={tokensNeeded} includeAO={true} isPrimordial={false} />
-                                </Typography>
-                            </div>
-                            <div className="triangle"></div>
+                                )}                                
+                            </Typography>
                         </div>
-                    </MuiThemeProvider>
+                        <div className="line-item">
+                            <Typography variant="caption">{requiredTokenCopy}</Typography>
+                            <Typography variant="body1">
+                                <TokenBalance baseAmount={tokensNeeded} includeAO={true} isPrimordial={tokensNeededIsPrimordial} />
+                            </Typography>
+                        </div>
+                        <div className="line-item divider"></div>
+                        <div className="line-item">
+                            <Typography variant="body1">{tokensNeededIsPrimordial ? `AO+ needed:` : `AO needed`}</Typography>
+                            <Typography variant="body1">
+                                <TokenBalance baseAmount={tokensNeeded} includeAO={true} isPrimordial={tokensNeededIsPrimordial} />
+                            </Typography>
+                        </div>
+                        <div className={`${classes.contentPaneTriangle} triangle`}></div>
+                    </div>
                 ) : null}
-                <div className="input-pane">                
-                    <Typography variant="subheading" align="center" style={{marginBottom: 24}}>{`How much AO+ would you like to purchase?`}</Typography>
+                <div className="input-pane">
+                    {!hideInputTitle ? (
+                        <Typography variant="subheading" align="center" style={{marginBottom: 24}}>{`How much AO+ would you like to purchase?`}</Typography>
+                    ) : null}                    
                     <div className="input-container">
                         <DenominationInput 
                             ref="tokenInput"
@@ -176,5 +190,5 @@ class Exchange extends Component<Props> {
 
 export default compose(
     withExchangeContainer,
-    withTheme(),
+    withStyles(styles)
 )(Exchange)

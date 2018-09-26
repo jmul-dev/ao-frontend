@@ -9,6 +9,7 @@ import ComparisonTable from '../../modules/ico/components/ComparisonTable';
 import RecentTransactions from '../../modules/ico/components/RecentTransactions';
 import EarningsCalculator from '../../modules/ico/components/EarningsCalculator';
 import bgShapesSrc from '../../assets/bg-shapes.png';
+import bgShapesWhiteSrc from '../../assets/bg-shapes-white.png';
 import infographSrc from '../../assets/infograph.png';
 import bgDenominationsSrc from '../../assets/bg-denominations.png';
 import denominationsGraphicSrc from '../../assets/denominations-graphic.png';
@@ -118,12 +119,12 @@ export default class IcoView extends PureComponent {
                         </Grid>  
                     </section>
                 </MuiThemeProvider>
-                <section className="section-padding section-exchange" style={{backgroundImage: `url(${bgShapesSrc})`}}>
+                <section className="section-padding section-exchange" style={{backgroundImage: `url(${bgShapesWhiteSrc})`}}>
                     <div className="centered-content">
-                        <Exchange
-                            title={`Interest piqued? Exchange now.`}
-                            subtitle={`For a limited time, exhange ETH for double the value. Send 1 ETH & receive 2 AO & 2 AO+`}
-                        />
+                        <Typography variant="display2" gutterBottom>{`Interest piqued? Exchange now.`}</Typography>
+                        <Typography variant="body1">{`For a limited time, exchange ETH for double the value.`}</Typography>
+                        <Typography variant="body1">{`Exchange for AO+ and receive an equal amount of AO.`}</Typography>
+                        <Exchange hideInputTitle={true} />
                     </div>
                 </section>
             </View>

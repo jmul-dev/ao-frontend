@@ -35,11 +35,12 @@ class UploadFormReload extends Component {
             <div>      
                 <Grid container spacing={16}>
                     <Grid item xs={8} style={{marginLeft: 'auto', marginRight: 'auto'}}> 
-                        <div style={{border: '1px solid #ddd', borderRadius: 4, marginBottom: 16}}>
+                        <div style={{border: '1px solid #ddd', borderRadius: 4, marginBottom: 16, overflow: 'hidden'}}>
                             <Exchange
-                                title="Insufficient AO"
-                                subtitle="Purchase AO in order to stake your content within the network"
-                                requiredTokenAmount={form.primordialTokensRequired}
+                                title="Insufficient AO+"
+                                subtitle="Exchange AO+ in order to stake your content within the network"
+                                requiredNetworkTokenAmount={form.networkTokensRequired}
+                                requiredPrimordialTokenAmount={form.primordialTokensRequired}
                                 requiredTokenCopy={'stake'}
                             />
                         </div>                   

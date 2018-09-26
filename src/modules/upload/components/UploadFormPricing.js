@@ -63,7 +63,7 @@ const CustomPricingCard = withTheme()(({expanded, stake, stakeTokenType, stakeTo
             <div>
                 <Typography>{'1. How much would you like to charge (AO/view)?'}</Typography>
                 <div className="stake-input-container indent">
-                    <div style={{background: '#CCC', maxWidth: 300, padding: 6, borderRadius: 3}}>
+                    <div style={{maxWidth: 300}}>
                         <DenominationInput 
                             baseInputValue={new BigNumber(stake)}
                             isPrimordial={stakeTokenType === 'primordial'}

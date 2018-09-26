@@ -213,7 +213,7 @@ class TeaserCard extends Component<Props> {
                             exchangeProps={{
                                 title: 'You have insufficient funds',
                                 subtitle: 'Purchase more ao to continue streaming.',
-                                requiredTokenAmount: insufficientBalance
+                                requiredNetworkTokenAmount: insufficientBalance
                             }}
                         />
                     ) : null}
