@@ -23,7 +23,7 @@ export const setActiveVideo = (video) => {
             payload: { video }
         })
         const { recentlyHostedContentIds } = getState().video
-        if ( recentlyHostedContentIds.indexOf(video.id) > -1 ) {
+        if ( video && recentlyHostedContentIds.indexOf(video.id) > -1 ) {
             dispatch({
                 type: REMOVE_RECENTLY_HOSTED_CONTENT,
                 payload: {
@@ -44,7 +44,7 @@ export const setVideoPlayback = ({contentId, initialPosition}) => {
             }
         })
         const { recentlyHostedContentIds } = getState().video
-        if ( recentlyHostedContentIds.indexOf(contentId) > -1 ) {
+        if ( contentId && recentlyHostedContentIds.indexOf(contentId) > -1 ) {
             dispatch({
                 type: REMOVE_RECENTLY_HOSTED_CONTENT,
                 payload: {
