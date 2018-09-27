@@ -92,15 +92,14 @@
     height: 100%;
     flex-direction: column;
     position: relative;
+    overflow: auto;
 }
 .IcoView .transactions-container .copy-padding {
     margin-bottom: 30px;
 }
 .IcoView .transactions-container table {
-    margin-top: auto;
     position: absolute;
-    bottom: 0;
-    top: 100px;
+    top: 128px;
 }
 .IcoView .multiplier-overview img.multiplier-graph {
     width: 100%;

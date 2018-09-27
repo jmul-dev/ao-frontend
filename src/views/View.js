@@ -8,17 +8,18 @@ type Props = {
 
 export default class View extends Component<Props> {
     render() {
-        let padding = {padding: 24}
-        if ( this.props.padding === 'none' )
-            padding = {padding: 0}
-        else if ( this.props.padding === 'full' )
-            padding = {padding: 100}
-        const style = Object.assign({}, this.props.style, padding, {
+        const { padding, className, children, style, ...props } = this.props
+        let viewPadding = {padding: 24}
+        if ( padding === 'none' )
+            viewPadding = {padding: 0}
+        else if ( padding === 'full' )
+            viewPadding = {padding: 100}
+        const viewStyles = Object.assign({}, style, viewPadding, {
             transition: 'all 300ms ease-out'
         })
         return (
-            <div className={["View", this.props.className].join(' ')} style={style}>
-                {this.props.children}
+            <div className={["View", className].join(' ')} style={viewStyles} {...props}>
+                {children}
             </div>
         );
     }

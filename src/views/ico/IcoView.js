@@ -16,14 +16,26 @@ import denominationsGraphicSrc from '../../assets/denominations-graphic.png';
 import tokenStructureSrc from '../../assets/token-structure.png';
 import multiplierGraphSrc from '../../assets/multiplier-graph.png';
 import { MuiThemeProvider } from '@material-ui/core';
-import { darkTheme } from '../../theme';
+import { darkTheme, PrimaryButton } from '../../theme';
 import Exchange from '../../modules/exchange/components/Exchange';
 
 
 export default class IcoView extends PureComponent {
+    constructor() {
+        super()
+        // this._viewRef = React.createRef()
+        // this._exchangeRef = React.createRef()
+    }
+    _scrollToExchange = () => {
+        this._exchangeRef.scrollIntoView({behavior: 'smooth'})
+        // console.log(this._viewRef.current)
+        // this._viewRef.current.scrollTo(0, this._exchangeRef);
+        // const domNode = ReactDOM.findDOMNode(this._exchangeRef)
+        // domNode.scrollIntoView()
+    }
     render() {
         return (            
-            <View className={'IcoView'} padding="none">
+            <View ref={this._viewRef} className={'IcoView'} padding="none">
                 <MuiThemeProvider theme={darkTheme}>
                     <header className="section-padding bg-black" style={{backgroundImage: `url(${bgShapesSrc})`}}>
                         <div className="heading-copy">
@@ -35,14 +47,19 @@ export default class IcoView extends PureComponent {
                             </Typography>
                         </div>
                         <div className="progress-banner">
-                            <Grid container spacing={16}>
+                            <Grid container spacing={16} alignItems="center">
                                 <Grid item xs={6}>
-                                    [button]
+                                    <PrimaryButton 
+                                        onClick={this._scrollToExchange}
+                                        style={{width: 200}}
+                                        >
+                                        {`Exchange tokens`}
+                                    </PrimaryButton>
                                 </Grid>
                                 <Grid item xs={6}>
                                     <IcoStats />
                                 </Grid>
-                            </Grid>                                            
+                            </Grid>
                         </div>
                     </header>
                     <section className="section-padding vertical-padding-large bg-black">
@@ -119,7 +136,7 @@ export default class IcoView extends PureComponent {
                         </Grid>  
                     </section>
                 </MuiThemeProvider>
-                <section className="section-padding section-exchange" style={{backgroundImage: `url(${bgShapesWhiteSrc})`}}>
+                <section ref={ref => {this._exchangeRef = ref}} className="section-padding section-exchange" style={{backgroundImage: `url(${bgShapesWhiteSrc})`}}>
                     <div className="centered-content">
                         <Typography variant="display2" gutterBottom>{`Interest piqued? Exchange now.`}</Typography>
                         <Typography variant="body1">{`For a limited time, exchange ETH for double the value.`}</Typography>
