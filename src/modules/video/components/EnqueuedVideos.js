@@ -21,36 +21,11 @@ type Props = {
 }
 
 class EnqueuedVideos extends Component<Props> {
-    constructor() {
-        super()
-        this.state = {
-            polling: false
-        }
-    }
     componentDidUpdate() {
-        const { hostedContentQuery } = this.props
-        const hostedContent = hostedContentQuery.node ? hostedContentQuery.node.hostedContent : []
-        const numberOfIncomplete = hostedContent.filter(content => content.state !== 'STAKED').length
-        // If not polling yet and incomplete videos exist, start polling
-        if (!this.state.polling && numberOfIncomplete > 0) {
-            this._beginPollingEnqueuedVideoContent()
-        } else if (this.state.polling && numberOfIncomplete <= 0) {
-            this._stopPollingEnqueuedVideoContent()
-        }
+        this.props.hostedContentQuery.startPolling(1500)
     }
     componentWillUnmount() {
-        if ( this.state.polling )
-            this.props.hostedContentQuery.stopPolling()
-    }
-    _beginPollingEnqueuedVideoContent = () => {
-        this.setState({ polling: true }, () => {
-            this.props.hostedContentQuery.startPolling(1500)
-        })
-    }
-    _stopPollingEnqueuedVideoContent = () => {
-        this.setState({ polling: false }, () => {
-            this.props.hostedContentQuery.stopPolling()
-        })
+        this.props.hostedContentQuery.stopPolling()
     }
     render() {
         const { loading, error, node } = this.props.hostedContentQuery

@@ -12,6 +12,7 @@ const mapStateToProps = (store) => {
     return {
         searchBarActive: store.video.searchBarActive,
         searchString: store.video.searchString,
+        ethAddress: store.app.ethAddress,
     }
 }
 

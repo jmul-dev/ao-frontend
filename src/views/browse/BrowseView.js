@@ -27,7 +27,7 @@ class BrowseView extends Component {
         this.props.updateSearchValue('')
     }
     render() {
-        const { searchString, searchBarActive } = this.props
+        const { searchString, searchBarActive, ethAddress } = this.props
         const searchActive = !searchBarActive && searchString && searchString.length > 0
         const containerClasses = className('BrowseView', {
             'search-input-active': searchBarActive,
@@ -57,7 +57,9 @@ class BrowseView extends Component {
                     style={{visibility: searchBarActive ? 'visible' : 'hidden'}}
                 />
                 <VideoListing />
-                <EnqueuedVideos />                
+                {ethAddress ? (
+                    <EnqueuedVideos />
+                ) : null}                
             </View>
         );
     }

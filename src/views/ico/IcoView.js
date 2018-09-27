@@ -21,21 +21,12 @@ import Exchange from '../../modules/exchange/components/Exchange';
 
 
 export default class IcoView extends PureComponent {
-    constructor() {
-        super()
-        // this._viewRef = React.createRef()
-        // this._exchangeRef = React.createRef()
-    }
     _scrollToExchange = () => {
         this._exchangeRef.scrollIntoView({behavior: 'smooth'})
-        // console.log(this._viewRef.current)
-        // this._viewRef.current.scrollTo(0, this._exchangeRef);
-        // const domNode = ReactDOM.findDOMNode(this._exchangeRef)
-        // domNode.scrollIntoView()
     }
     render() {
         return (            
-            <View ref={this._viewRef} className={'IcoView'} padding="none">
+            <View className={'IcoView'} padding="none">
                 <MuiThemeProvider theme={darkTheme}>
                     <header className="section-padding bg-black" style={{backgroundImage: `url(${bgShapesSrc})`}}>
                         <div className="heading-copy">
