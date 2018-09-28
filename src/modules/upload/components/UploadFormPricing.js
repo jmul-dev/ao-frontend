@@ -22,7 +22,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Slider from '@material-ui/lab/Slider';
 
 
-const PricingInputCard = withTheme()(({headline, label, iconClassName, stake, profit, selected, onClick, theme}) => (
+const PricingInputCard = withTheme()(({headline, label, iconClassName, stake, profitSplitPercentage, selected, onClick, theme}) => (
     <ButtonBase focusRipple className={`pricing-card ${selected ? 'selected' : ''}`} onClick={onClick} style={{boxShadow: selected ? `0px 5px 15px 0px ${theme.palette.secondary.light}` : undefined, transition: theme.transitions.create('box-shadow')}}>
         <div className={`pricing-icon ${iconClassName}`}></div>
         <Typography variant="display3" className="headline" style={{color: selected ? theme.palette.secondary.main : undefined}}>{headline}</Typography>
@@ -42,7 +42,7 @@ const PricingInputCard = withTheme()(({headline, label, iconClassName, stake, pr
             </div>
             <div>
                 <Typography variant="caption">{'you make'}</Typography>
-                <Typography variant="body2">{`${profit}%`} <Typography variant="caption" style={{display: 'inline'}}>{'profits'}</Typography></Typography>
+                <Typography variant="body2">{`${profitSplitPercentage}%`} <Typography variant="caption" style={{display: 'inline'}}>{'profits'}</Typography></Typography>
             </div>
         </div>
         <div className="label" style={{background: selected ? theme.palette.secondary.main : undefined, transition: theme.transitions.create('background')}}>
@@ -52,7 +52,7 @@ const PricingInputCard = withTheme()(({headline, label, iconClassName, stake, pr
 ))
 
 
-const CustomPricingCard = withTheme()(({expanded, stake, stakeTokenType, stakeTokenSplit, profit, onSelected, onChange, theme, ...props}) => (
+const CustomPricingCard = withTheme()(({expanded, stake, stakeTokenType, stakePrimordialPercentage, profitSplitPercentage, onSelected, onChange, theme, ...props}) => (
     <ExpansionPanel className={expanded ? 'expanded' : ''} expanded={expanded} onChange={onSelected} style={{boxShadow: expanded ? `0px 5px 15px 0px ${theme.palette.secondary.light}` : undefined, transition: theme.transitions.create('box-shadow'), borderRadius: '4px'}} {...props}>
         <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
             <Typography variant="display3" className="headline" style={{color: expanded ? theme.palette.secondary.main : undefined}}>
@@ -91,20 +91,20 @@ const CustomPricingCard = withTheme()(({expanded, stake, stakeTokenType, stakeTo
                     </div>
                     <div style={{flex: 1, position: 'relative', marginLeft: 24, marginRight: 8, visibility: stakeTokenType === 'both' ? 'visible' : 'hidden'}}>
                         <Slider 
-                            value={stakeTokenSplit}
+                            value={stakePrimordialPercentage}
                             onChange={(event, value) => onChange(undefined, undefined, undefined, value)}
                             min={0}
                             max={100}
                             step={1}
                         />
                         <Typography variant="caption" className="primordial-amount">
-                            <TokenBalance baseAmount={new BigNumber(stake).multipliedBy(stakeTokenSplit / 100)} decimals={1} includeAO={true} isPrimordial={true} />
+                            <TokenBalance baseAmount={new BigNumber(stake).multipliedBy(stakePrimordialPercentage / 100)} decimals={1} includeAO={true} isPrimordial={true} />
                         </Typography>
                         <Typography variant="caption" className="network-amount">
-                            <TokenBalance baseAmount={new BigNumber(stake).multipliedBy(1 - stakeTokenSplit / 100)} decimals={1} includeAO={true} isPrimordial={false} />
+                            <TokenBalance baseAmount={new BigNumber(stake).multipliedBy(1 - stakePrimordialPercentage / 100)} decimals={1} includeAO={true} isPrimordial={false} />
                         </Typography>
                         <Typography variant="caption" className="token-split">
-                            {`${100 - stakeTokenSplit}/${stakeTokenSplit}`}
+                            {`${100 - stakePrimordialPercentage}/${stakePrimordialPercentage}`}
                         </Typography>
                     </div>
                 </div>
@@ -112,14 +112,14 @@ const CustomPricingCard = withTheme()(({expanded, stake, stakeTokenType, stakeTo
                 <Typography>{'3. What percentage of the earnings would you like to make?'}</Typography>
                 <div className="profit-input-container indent">
                     <div style={{display: 'flex', alignItems: 'flex-end', width: '100%'}}>
-                        <Typography variant="display3" className="profit-label">{`${profit}%`}</Typography>
-                        <Typography style={{color: '#17BB59', marginLeft: 'auto'}}>{profit < 25 ? 'great exposure' : (profit < 50 ? 'good exposure' : (profit < 75 ? 'average exposure' : 'less exposure'))}</Typography>
+                        <Typography variant="display3" className="profit-label">{`${profitSplitPercentage}%`}</Typography>
+                        <Typography style={{color: '#17BB59', marginLeft: 'auto'}}>{profitSplitPercentage < 25 ? 'great exposure' : (profitSplitPercentage < 50 ? 'good exposure' : (profitSplitPercentage < 75 ? 'average exposure' : 'less exposure'))}</Typography>
                     </div>
                     <Slider
                         min={0}
                         max={100}
                         step={1}
-                        value={profit}
+                        value={profitSplitPercentage}
                         onChange={(event, value) => onChange(undefined, parseInt(value, 10))}
                     />                        
                 </div>                
@@ -139,8 +139,8 @@ class UploadFormPricing extends Component {
     static contextTypes = {
         router: PropTypes.object.isRequired
     }
-    _selectPricingOption = (pricingOptionIndex, stake, profit, stakeTokenType, stakeTokenSplit) => {
-        this.props.updatePricingOption(pricingOptionIndex, stake, profit, stakeTokenType, stakeTokenSplit)
+    _selectPricingOption = (pricingOptionIndex, stake, profitSplitPercentage, stakeTokenType, stakePrimordialPercentage) => {
+        this.props.updatePricingOption(pricingOptionIndex, stake, profitSplitPercentage, stakeTokenType, stakePrimordialPercentage)
     }
     _navBack = () => {
         // this.context.router.history.goBack()
@@ -181,7 +181,7 @@ class UploadFormPricing extends Component {
                                         label={'great exposure'}
                                         iconClassName={'pricing-icon-a'}
                                         stake={fileSize}
-                                        profit={10}
+                                        profitSplitPercentage={10}
                                         selected={form.pricingOption === 1}
                                         onClick={this._selectPricingOption.bind(this, 1)}
                                     />
@@ -192,7 +192,7 @@ class UploadFormPricing extends Component {
                                         label={'moderate pricing'}
                                         iconClassName={'pricing-icon-b'}
                                         stake={~~(fileSize * 1.4)}
-                                        profit={25}
+                                        profitSplitPercentage={25}
                                         selected={form.pricingOption === 2}
                                         onClick={this._selectPricingOption.bind(this, 2)}
                                     />
@@ -203,7 +203,7 @@ class UploadFormPricing extends Component {
                                         label={'premium pricing'}
                                         iconClassName={'pricing-icon-c'}
                                         stake={~~(fileSize * 2.2)}
-                                        profit={60}
+                                        profitSplitPercentage={60}
                                         selected={form.pricingOption === 3}
                                         onClick={this._selectPricingOption.bind(this, 3)}
                                     />
@@ -214,9 +214,9 @@ class UploadFormPricing extends Component {
                             <CustomPricingCard
                                 expanded={form.pricingOption === 0}
                                 stake={form.stake}
-                                profit={form.profit}
+                                profitSplitPercentage={form.profitSplitPercentage}
                                 stakeTokenType={form.stakeTokenType}
-                                stakeTokenSplit={form.stakeTokenSplit}
+                                stakePrimordialPercentage={form.stakePrimordialPercentage}
                                 onSelected={(_, expanded) => expanded ? this._selectPricingOption(0) : this._selectPricingOption(1)}
                                 onChange={this._selectPricingOption.bind(this, 0)}
                             />

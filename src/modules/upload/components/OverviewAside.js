@@ -44,7 +44,7 @@ const OverviewAside = ({form, includePricing = false}) => {
                         <li>
                             <span>{'you make'}</span>
                             <span className="divider"></span>
-                            <b className="em-submit">{`${form.profit}% profits`}</b>
+                            <b className="em-submit">{`${form.profitSplitPercentage}% profits`}</b>
                         </li>
                     </React.Fragment>
                 ) : null}
