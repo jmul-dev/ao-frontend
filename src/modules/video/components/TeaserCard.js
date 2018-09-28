@@ -67,10 +67,13 @@ class TeaserCard extends Component<Props> {
         }
     }
     _onEnteredFullscreen = () => {
-        this.setState({
-            videoSrc: this.props.video.fileUrl,
-            usingTeaserSrc: false,
-        })
+        const { videoQuery } = this.props
+        if ( videoQuery && videoQuery.video ) {
+            this.setState({
+                videoSrc: videoQuery.video.fileUrl,
+                usingTeaserSrc: false,
+            })
+        }
     }
     _onVideoSrcReady = () => {
         this.setState({
