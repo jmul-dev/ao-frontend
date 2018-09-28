@@ -61,8 +61,8 @@ class UploadFormSubmit extends Component<Props> {
             networkTokenAmount = form.stake
             primordialTokenAmount = 0
         } else if ( form.stakeTokenType === 'both' ) {
-            networkTokenAmount = form.stake * (1 - form.stakeTokenSplit / 100)
-            primordialTokenAmount = form.stake * (form.stakeTokenSplit / 100)
+            networkTokenAmount = form.stake * (1 - form.stakePrimordialPercentage / 100)
+            primordialTokenAmount = form.stake * (form.stakePrimordialPercentage / 100)
         }
 
         // 1. Trigger stake tx via metamask
@@ -72,7 +72,7 @@ class UploadFormSubmit extends Component<Props> {
             fileDatKey: contentSubmittionResult.fileDatKey,
             metadataDatKey: contentSubmittionResult.metadataDatKey,
             fileSizeInBytes: contentSubmittionResult.fileSize,
-            profitPercentage: form.profit,
+            profitPercentage: form.profitSplitPercentage,
             baseChallenge: contentSubmittionResult.baseChallenge,
             encChallenge: contentSubmittionResult.encChallenge,
         }).then(transactionHash => {
@@ -94,7 +94,14 @@ class UploadFormSubmit extends Component<Props> {
         })
     }
     _cancel = () => {
-        this.props.history.push('/app/view/upload/content')
+        if ( this.props.contentSubmittionResult ) {
+            if ( window.confirm('Are you sure? Your content will be saved, allowing you to stake at a later date.') ) {
+                // TODO: should we go to account page?
+                this._continue()
+            }
+        } else {
+            this.props.history.push('/app/view/upload/content')
+        }
     }
     _continue = () => {
         // TODO: where do we go after, account?

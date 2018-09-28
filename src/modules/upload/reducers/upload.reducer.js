@@ -66,11 +66,11 @@ export const resetUploadForm = () => {
 }
 // Only provide stake/profit if custom pricingOption = 0
 // stakeTokenType: 'primordial' | 'network' | 'both'
-// stakeTokenSplit: 'primordial' / 'network'
+// stakePrimordialPercentage: 'primordial' / 'network'
 //      1 = 100% primordial, 
 //      0 = 0% primordial, 100% network
 //      0.5 = 50/50 split
-export const updatePricingOption = (pricingOption, stake = undefined, profit = undefined, stakeTokenType = undefined, stakeTokenSplit = undefined) => {
+export const updatePricingOption = (pricingOption, stake = undefined, profitSplitPercentage = undefined, stakeTokenType = undefined, stakePrimordialPercentage = undefined) => {
     return (dispatch, getState) => {
         const state = getState()
         const file = state.upload.form.video
@@ -81,17 +81,17 @@ export const updatePricingOption = (pricingOption, stake = undefined, profit = u
             payload = {
                 pricingOption,
                 stake: fileSize * pricingConstraints.stakeRatio,
-                profit: pricingConstraints.profitPercentage,
+                profitSplitPercentage: pricingConstraints.profitPercentage,
                 stakeTokenType: 'primordial',
-                stakeTokenSplit: 100,
+                stakePrimordialPercentage: 100,
             }
         } else {            
             payload = {
                 pricingOption,
                 stake: stake ? Math.max(stake, fileSize) : state.upload.form.stake,
-                profit: profit ? Math.min(Math.max(profit, 1), 99) : state.upload.form.profit,
+                profitSplitPercentage: profitSplitPercentage ? Math.min(Math.max(profitSplitPercentage, 1), 99) : state.upload.form.profitSplitPercentage,
                 stakeTokenType: stakeTokenType ? stakeTokenType : state.upload.form.stakeTokenType,
-                stakeTokenSplit: stakeTokenSplit !== undefined ? stakeTokenSplit : state.upload.form.stakeTokenSplit,
+                stakePrimordialPercentage: stakePrimordialPercentage !== undefined ? stakePrimordialPercentage : state.upload.form.stakePrimordialPercentage,
             }
         }
         let networkTokensRequired = payload.stake
@@ -106,8 +106,8 @@ export const updatePricingOption = (pricingOption, stake = undefined, profit = u
                 primordialTokensRequired = 0;
                 break;
             case 'both':
-                networkTokensRequired = (100 - payload.stakeTokenSplit) / 100.0 * payload.stake;
-                primordialTokensRequired = payload.stakeTokenSplit / 100.0 * payload.stake;
+                networkTokensRequired = (100 - payload.stakePrimordialPercentage) / 100.0 * payload.stake;
+                primordialTokensRequired = payload.stakePrimordialPercentage / 100.0 * payload.stake;
                 break;
         }
         payload.networkTokensRequired = networkTokensRequired
@@ -132,6 +132,7 @@ export const stakeContent = ({networkTokenAmount, primordialTokenAmount, fileDat
             if ( state.electron.isElectron ) {
                 window.chrome.ipcRenderer.send('open-metamask-popup')
             }
+            dispatch({type: STAKE_TRANSACTION.INITIALIZED})
             const { contracts, app } = state
             // 1. Contract method
             // NOTE: for now token & primordial token amounts are in base denomination
@@ -203,9 +204,9 @@ const initialState = {
         description: '',
         pricingOption: 1,  // 0 = custom, 1-3 predefined inputs
         stake: undefined,
-        profit: undefined,
+        profitSplitPercentage: undefined,
         stakeTokenType: 'primordial',
-        stakeTokenSplit: 100,
+        stakePrimordialPercentage: 100,
     },
     contentSubmittionResult: undefined,
     stakeTransaction: {
@@ -245,11 +246,7 @@ export default function uploadReducer(state = initialState, action) {
             }
         case RESET_UPLOAD_FORM:
             return {
-                ...state,
-                lastReachedUploadStep: 'start',
-                form: {
-                    ...initialState.form
-                }
+                ...initialState,
             }
         case STAKE_TRANSACTION.INITIALIZED:
             return {

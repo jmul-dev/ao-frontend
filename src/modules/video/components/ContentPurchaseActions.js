@@ -18,6 +18,8 @@ import { becomeHost, buyContent, setVideoPlayback } from '../reducers/video.redu
 import { addNotification } from '../../notifications/reducers/notifications.reducer';
 import { localNodeQuery } from '../../../AppContainer';
 import { videoQuery } from '../containers/withVideo';
+import { stakeContent } from '../../upload/reducers/upload.reducer';
+import { contentUploadStakeTransaction } from '../../upload/containers/withUploadFormMutation';
 
 /*
 DISCOVERED
@@ -45,7 +47,8 @@ export const statesPendingUserAction = [
     'DISCOVERED',
 ]
 
-export const ContentPurchaseState = ({content}) => {
+export const ContentPurchaseState = ({content}) => {    
+    const isUploadedContent = content.nodeId === content.creatorId  // NOTE: ideally we would compare app.ethAddress to content.creatorId
     let isLoadingState = false
     let Icon = null
     let copy = null
@@ -96,12 +99,12 @@ export const ContentPurchaseState = ({content}) => {
             copy = 'Initializing content...';
             break;
         case 'DAT_INITIALIZED':
-            copy = 'Submit verification and become host';
+            copy = isUploadedContent ? 'Stake content' : 'Submit verification and become host';
             Icon = AlertIcon;
             break;
         case 'STAKING':
             isLoadingState = true;
-            copy = 'Submitting verification...';
+            copy = isUploadedContent ? 'Staking content...' : 'Submitting verification...';
             break;
         case 'STAKED':
             isLoadingState = true;
@@ -134,6 +137,7 @@ const mapDispatchToProps = {
     becomeHost,
     setVideoPlayback,
     addNotification,
+    stakeContent,
 }
 // Redux state
 const mapStateToProps = (store, props) => {
@@ -260,6 +264,37 @@ class ContentPurchaseActionComponent extends Component {
             this._dispatchErrorNotificationAndStopLoading(error, 'Host content transaction failed', 'Error during becomeHost action')
         })
     }
+    _stakeContentAction = () => {
+        const { stakeContent, content, client } = this.props   
+        this.setState({loading: true, error: null})     
+        stakeContent({
+            networkTokenAmount: content.stake * (1 - (content.stakePrimordialPercentage / 100.0)),
+            primordialTokenAmount: content.stake * (content.stakePrimordialPercentage / 100.0),
+            fileDatKey: content.fileDatKey,
+            metadataDatKey: content.metadataDatKey,
+            fileSizeInBytes: content.fileSize,
+            profitPercentage: content.profitSplitPercentage,
+            baseChallenge: content.baseChallenge,
+            encChallenge: content.encChallenge,
+        }).then(transactionHash => {
+            // 2. Submit the tx to core
+            client.mutate({
+                mutation: contentUploadStakeTransaction,
+                variables: {
+                    inputs: {
+                        contentId: content.id,
+                        transactionHash,
+                    }
+                }
+            }).then(() => {
+                this.setState({loading: false})
+            }).catch(error => {
+                this._dispatchErrorNotificationAndStopLoading(error, 'Failed to update content\'s stake transaction', '_stakeContentAction')
+            })
+        }).catch(error => {
+            this._dispatchErrorNotificationAndStopLoading(error, 'Error during stake process', '_stakeContentAction')
+        })
+    }
     _watchContent = () => {
         const { setVideoPlayback, content, contentRef } = this.props
         let initialPosition = {}
@@ -287,6 +322,7 @@ class ContentPurchaseActionComponent extends Component {
     render() {
         const { content, children } = this.props
         const { loading, error } = this.state
+        const isUploadedContent = content.nodeId === content.creatorId  // NOTE: ideally we would compare app.ethAddress to content.creatorId
         let action = null
         let actionCopy = ''
         switch (content.state) {
@@ -328,8 +364,8 @@ class ContentPurchaseActionComponent extends Component {
                 // Video is encrypted, waiting for dat initialization
                 break;
             case 'DAT_INITIALIZED':
-                action = this._becomeHostAction
-                actionCopy = 'Become host'
+                action = isUploadedContent ? this._stakeContentAction : this._becomeHostAction
+                actionCopy = isUploadedContent ? 'Stake content' : 'Become host'
                 break;
             case 'STAKING':
                 break;

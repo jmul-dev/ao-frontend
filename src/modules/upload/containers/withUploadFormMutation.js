@@ -43,7 +43,7 @@ const submitContentMutation = gql(`
     }
     ${VideoContentFragment}
 `)
-const contentUploadStakeTransaction = gql(`
+export const contentUploadStakeTransaction = gql(`
     mutation contentUploadStakeTransaction($inputs: ContentUploadStakeTransactionInputs) {
         contentUploadStakeTransaction(inputs: $inputs) {
             ...VideoContentFragment
@@ -64,7 +64,6 @@ export default compose(
                     ethAddress: props.ethAddress,
                     pricingOption: undefined, // remove from form inputs
                     stakeTokenType: undefined, // remove from form inputs
-                    stakeTokenSplit: undefined, // remove from form inputs
                     networkTokensRequired: undefined, // remove from form inputs
                     primordialTokensRequired: undefined, // remove from form inputs
                 }
