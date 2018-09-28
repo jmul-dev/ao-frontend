@@ -18,13 +18,28 @@ export default class TeaserListing extends Component<Props> {
         this.state = {
             videosSlice: []
         }
+        this._boundNavigationKeyListener = this._navigationKeyListener.bind(this)
     }
     componentDidMount() {
         this._getVideosRangeBasedOnActiveIndex(this.props.activeTeaserVideoIndex)
+        document.addEventListener("keydown", this._boundNavigationKeyListener, false);
+    }
+    componentWillUnmount() {
+        document.removeEventListener("keydown", this._boundNavigationKeyListener, false);
     }
     componentWillReceiveProps(nextProps) {
         if ( nextProps.activeTeaserVideoIndex !== this.props.activeTeaserVideoIndex ) {
             this._getVideosRangeBasedOnActiveIndex(nextProps.activeTeaserVideoIndex)
+        }
+    }
+    _navigationKeyListener = (event) => {
+        const { activeTeaserVideoIndex, updateActiveVideoIndex } = this.props
+        if ( event.keyCode === 37 || event.keyCode === 39 ) {  // left arrow, right arrow
+            if ( event.keyCode === 37 ) {
+                updateActiveVideoIndex(activeTeaserVideoIndex - 1)
+            } else {
+                updateActiveVideoIndex(activeTeaserVideoIndex + 1)
+            }
         }
     }
     _getVideosRangeBasedOnActiveIndex = (activeIndex) => {

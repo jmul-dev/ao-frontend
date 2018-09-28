@@ -180,17 +180,12 @@ class TeaserCard extends Component<Props> {
                                 playing={isTeaserEntered && isActive}
                                 width="100%"
                                 height="100%"
-                                style={{position: 'absolute', top: 0, left: 0}}
+                                style={{position: 'absolute', top: 0, left: 0, zIndex: 1}}
                                 onReady={usingTeaserSrc ? undefined : this._onVideoSrcReady}
                                 onPlay={usingTeaserSrc ? undefined : this._onVideoSrcReady}
                                 loop={usingTeaserSrc}
                                 controls={!usingTeaserSrc}
                             />
-                            {!videoSrcReady ? (
-                                <div className="loading-overlay">
-                                    <LogoIcon />
-                                </div>
-                            ):null}
                         </div>
                         <Typography variant="subheading" className="title">
                             {video.title}

@@ -34,11 +34,27 @@ class VideoListing extends Component<Props> {
             activeTeaserVideoIndex: undefined,
             enteredTeaser: false,
         }
+        this._boundEscKeyListener = this._exitFullscreenEscKeyListener.bind(this)
+    }
+    componentDidMount() {
+        document.addEventListener("keydown", this._boundEscKeyListener, false);
+    }
+    componentWillUnmount() {
+        document.removeEventListener("keydown", this._boundEscKeyListener, false);
     }
     componentWillReceiveProps(nextProps) {
         if (this.props.searchString !== nextProps.searchString) {
             // TODO: may need to move into componentDidUpdate if props have not propogated to container withVideos
             this.props.videos.refetch()
+        }
+    }
+    _exitFullscreenEscKeyListener = (event) => {
+        const { activeVideo, teaserListingActive, setActiveVideo, setTeaserListingState } = this.props
+        if ( event.keyCode === 27 ) {  // esc
+            if ( activeVideo )
+                this.props.setActiveVideo()
+            else if ( teaserListingActive )
+                this.props.setTeaserListingState({isActive: false})
         }
     }
     render() {
