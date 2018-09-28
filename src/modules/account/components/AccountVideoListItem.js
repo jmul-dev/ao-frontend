@@ -54,9 +54,11 @@ class AccountVideoListItem extends Component {
         }
     }
     _getPurchaseReceipt = () => {
-        this.props.getPurchaseReceipt(this.props.video.purchaseId).then(result => {
-            this.setState({ purchaseReceipt: result })
-        })
+        if ( this.props.video.purchaseId ) {
+            this.props.getPurchaseReceipt(this.props.video.purchaseId).then(result => {
+                this.setState({ purchaseReceipt: result })
+            })
+        }
     }
     _renderContentMetrics = () => {
         const { metrics } = this.props
@@ -101,7 +103,7 @@ class AccountVideoListItem extends Component {
                             {`uploaded: ${moment(parseInt(video.createdAt, 10)).format('M/D/YYYY')}`}
                         </Typography>
                         <DatStats stats={[video.metadataDatStats, video.fileDatStats]} />
-                        <Typography variant="body1" gutterBottom color="textSecondary">
+                        <Typography variant="body1" gutterBottom color="textSecondary" component="div">
                             {video.stakeId && metrics ? this._renderContentMetrics() : (
                                 <Fragment>
                                     {!video.stakeId ? `Video has not been staked!` : `Video staked, fetching metrics...`}
