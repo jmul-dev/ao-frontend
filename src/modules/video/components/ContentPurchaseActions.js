@@ -47,8 +47,8 @@ export const statesPendingUserAction = [
     'DISCOVERED',
 ]
 
-export const ContentPurchaseState = ({content}) => {    
-    const isUploadedContent = content.nodeId === content.creatorId  // NOTE: ideally we would compare app.ethAddress to content.creatorId
+export const ContentPurchaseState = ({ content }) => {
+    const isUploadedContent = content.nodeId && content.nodeId === content.creatorId  // NOTE: ideally we would compare app.ethAddress to content.creatorId
     let isLoadingState = false
     let Icon = null
     let copy = null
@@ -75,7 +75,7 @@ export const ContentPurchaseState = ({content}) => {
             isLoadingState = true;
             copy = 'Paying...';
             break;
-        case 'PURCHASED':  
+        case 'PURCHASED':
             // Content is purchased, waiting for decryption key
             isLoadingState = true;
             copy = 'Waiting for decryption key...';
@@ -119,15 +119,15 @@ export const ContentPurchaseState = ({content}) => {
             break;
     }
     return (
-        <div style={{display: 'flex', alignItems: 'center'}}>
+        <div style={{ display: 'flex', alignItems: 'center' }}>
             {isLoadingState ? (
-                <CircularProgress size={20} style={{marginRight: 8}} />
+                <CircularProgress size={20} style={{ marginRight: 8 }} />
             ) : null}
             {Icon ? (
-                <Icon style={{marginRight: 4}} />
+                <Icon style={{ marginRight: 4 }} />
             ) : null}
             {copy}
-        </div>        
+        </div>
     )
 }
 
@@ -173,7 +173,7 @@ class ContentPurchaseActionComponent extends Component {
     _dispatchErrorNotificationAndStopLoading = (error, errorMessage, errorContext) => {
         console.error(errorContext, error)
         // TODO: error notification
-        this.setState({loading: false, error: errorMessage})
+        this.setState({ loading: false, error: errorMessage })
         this.props.addNotification({
             message: `${errorMessage}: ${error.message}`,
             variant: 'error'
@@ -181,7 +181,7 @@ class ContentPurchaseActionComponent extends Component {
     }
     _downloadContentAction = () => {
         const { client, content } = this.props
-        this.setState({loading: true, error: null})
+        this.setState({ loading: true, error: null })
         client.mutate({
             mutation: contentRequestMutation,
             variables: {
@@ -191,16 +191,16 @@ class ContentPurchaseActionComponent extends Component {
                 query: videoQuery,
                 variables: { id: content.id }
             }],
-        }).then(({data, ...props}) => {
+        }).then(({ data, ...props }) => {
             console.log(data, props);
-            this.setState({loading: false})
+            this.setState({ loading: false })
         }).catch(error => {
             this._dispatchErrorNotificationAndStopLoading(error, 'Failed to request content', 'Error during contentRequestMutation')
         })
     }
     _buyContentAction = () => {
         const { buyContent, content, client } = this.props
-        this.setState({loading: true, error: null})        
+        this.setState({ loading: true, error: null })
         try {
             // 1. Get user's public key (required for buyContent contract call)
             const { node } = client.readQuery({
@@ -219,9 +219,9 @@ class ContentPurchaseActionComponent extends Component {
                             contentHostId: content.contentHostId,
                         }
                     }
-                }).then(({data, ...props}) => {
+                }).then(({ data, ...props }) => {
                     console.log(data, props)
-                    this.setState({loading: false})
+                    this.setState({ loading: false })
                     // 3. Not sure we need to do anything here, state will be updated via polling on content.state
                 }).catch(error => {
                     this._dispatchErrorNotificationAndStopLoading(error, 'Failed to move content to purchasing state', 'Error during contentPurchaseTransactionMutation')
@@ -235,7 +235,7 @@ class ContentPurchaseActionComponent extends Component {
     }
     _becomeHostAction = () => {
         const { becomeHost, content, client } = this.props
-        this.setState({loading: true, error: null})
+        this.setState({ loading: true, error: null })
         // 1. Metamask transaction
         becomeHost({
             contentId: content.id,
@@ -254,8 +254,8 @@ class ContentPurchaseActionComponent extends Component {
                         contentId: content.id,
                     }
                 }
-            }).then(({data, ...props}) => {
-                this.setState({loading: false})
+            }).then(({ data, ...props }) => {
+                this.setState({ loading: false })
                 // 3. Not sure we need to do anything here, state will be updated via pulling on content.state
             }).catch(error => {
                 this._dispatchErrorNotificationAndStopLoading(error, 'Failed to move content to hosting state', 'Error during contentBecomeHostTransaction mutation')
@@ -265,8 +265,8 @@ class ContentPurchaseActionComponent extends Component {
         })
     }
     _stakeContentAction = () => {
-        const { stakeContent, content, client } = this.props   
-        this.setState({loading: true, error: null})     
+        const { stakeContent, content, client } = this.props
+        this.setState({ loading: true, error: null })
         stakeContent({
             networkTokenAmount: content.stake * (1 - (content.stakePrimordialPercentage / 100.0)),
             primordialTokenAmount: content.stake * (content.stakePrimordialPercentage / 100.0),
@@ -287,7 +287,7 @@ class ContentPurchaseActionComponent extends Component {
                     }
                 }
             }).then(() => {
-                this.setState({loading: false})
+                this.setState({ loading: false })
             }).catch(error => {
                 this._dispatchErrorNotificationAndStopLoading(error, 'Failed to update content\'s stake transaction', '_stakeContentAction')
             })
@@ -298,23 +298,23 @@ class ContentPurchaseActionComponent extends Component {
     _watchContent = () => {
         const { setVideoPlayback, content, contentRef } = this.props
         let initialPosition = {}
-        if ( contentRef ) {
+        if (contentRef) {
             let clientRect = contentRef.getBoundingClientRect()
             const propertySelection = (({ top, right, bottom, left, width, height }) => ({ top, right, bottom, left, width, height }))
             initialPosition = propertySelection(clientRect)
         }
-        setVideoPlayback({contentId: content.id, initialPosition})
+        setVideoPlayback({ contentId: content.id, initialPosition })
     }
     _retryHostDiscovery = () => {
         const { content, client } = this.props
-        this.setState({loading: true, error: null})
+        this.setState({ loading: true, error: null })
         client.mutate({
             mutation: contentRetryHostDiscoveryMutation,
             variables: {
                 id: content.id
             }
-        }).then(({data, ...props}) => {
-            this.setState({loading: false})
+        }).then(({ data, ...props }) => {
+            this.setState({ loading: false })
         }).catch(error => {
             this._dispatchErrorNotificationAndStopLoading(error, 'Failed to retry host discovery', 'Error during contentRetryHostDiscoveryMutation')
         })
@@ -348,7 +348,7 @@ class ContentPurchaseActionComponent extends Component {
                 break;
             case 'PURCHASING':
                 break;
-            case 'PURCHASED':  
+            case 'PURCHASED':
                 // Content is purchased, waiting for decryption key
                 break;
             case 'DECRYPTION_KEY_RECEIVED':
@@ -359,7 +359,7 @@ class ContentPurchaseActionComponent extends Component {
                 break;
             case 'VERIFICATION_FAILED':
                 // TODO: action = ? remove content from node?
-                break;            
+                break;
             case 'ENCRYPTED':
                 // Video is encrypted, waiting for dat initialization
                 break;
@@ -378,7 +378,7 @@ class ContentPurchaseActionComponent extends Component {
             default:
                 break;
         }
-        return children({action, actionCopy, loading, error})
+        return children({ action, actionCopy, loading, error })
     }
 }
 
