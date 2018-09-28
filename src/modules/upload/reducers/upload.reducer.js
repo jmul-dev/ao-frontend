@@ -1,4 +1,6 @@
 import { waitForTransactionReceipt } from '../../../contracts/contracts.reducer'
+import { triggerMetamaskPopupWithinElectron } from '../../../utils/electron';
+import { updateWallet } from '../../wallet/reducers/wallet.reducer';
 
 // Constants
 export const UPDATE_CURRENT_UPLOAD_STEP = 'UPDATE_CURRENT_UPLOAD_STEP'
@@ -128,12 +130,9 @@ export const stakeContent = ({networkTokenAmount, primordialTokenAmount, fileDat
                 })
                 reject(err)
             }
-            const state = getState()
-            if ( state.electron.isElectron ) {
-                window.chrome.ipcRenderer.send('open-metamask-popup')
-            }
+            triggerMetamaskPopupWithinElectron(getState)
             dispatch({type: STAKE_TRANSACTION.INITIALIZED})
-            const { contracts, app } = state
+            const { contracts, app } = getState()
             // 1. Contract method
             // NOTE: for now token & primordial token amounts are in base denomination
             const profitPercentageWithDivisor = parseInt(profitPercentage, 10) * 10000;  // 10^4
@@ -166,9 +165,7 @@ export const stakeContent = ({networkTokenAmount, primordialTokenAmount, fileDat
                                     type: STAKE_TRANSACTION.RESULT,
                                     payload: result.args
                                 })
-                                // TODO: update all balances (eth, token, primordial, and staked)
-                                // dispatch(getEthBalanceForAccount(app.ethAddress))
-                                // dispatch(getTokenBalanceForAccount(app.ethAddress))
+                                dispatch(updateWallet())
                                 eventListener.stopWatching()
                             }
                         })

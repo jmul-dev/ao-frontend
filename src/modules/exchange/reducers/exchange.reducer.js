@@ -3,6 +3,7 @@ import { waitForTransactionReceipt } from '../../../contracts/contracts.reducer'
 import { denominations } from '../../../utils/denominations'
 import { getEthBalanceForAccount, getTokenBalanceForAccount } from '../../wallet/reducers/wallet.reducer'
 import { updateIcoState } from '../../ico/reducers/ico.reducer'
+import { triggerMetamaskPopupWithinElectron } from '../../../utils/electron';
 
 
 // Constants
@@ -28,7 +29,7 @@ export const purchaseTokens = ( baseAmount, exchangeRate ) => {
             })
         }
         const state = getState()
-        const { app, contracts, electron, wallet } = state
+        const { app, contracts, wallet } = state
         const ethCost = baseAmount.multipliedBy(exchangeRate)
         if ( !app.ethAddress ) {
             dispatchError(new Error('Unlock your ethereum account to purchase AO'))
@@ -36,9 +37,7 @@ export const purchaseTokens = ( baseAmount, exchangeRate ) => {
             dispatchError(new Error('Insufficient Eth balance'))
         } else {
             dispatch({type: EXCHANGE_TRANSACTION.INITIALIZED})
-            if ( electron.isElectron ) {
-                window.chrome.ipcRenderer.send('open-metamask-popup')
-            }                
+            triggerMetamaskPopupWithinElectron(getState)
             contracts.aoToken.networkExchangeEnded(function(err, ended) {
                 if ( err ) {
                     dispatchError(err)
