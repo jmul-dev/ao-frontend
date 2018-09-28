@@ -1,4 +1,5 @@
 import BigNumber from "bignumber.js";
+import { triggerMetamaskPopupWithinElectron } from "../../../utils/electron";
 
 // Constants
 export const SET_TEASER_LISTING_STATE = 'SET_TEASER_LISTING_STATE'
@@ -82,6 +83,7 @@ export const buyContent = (contentHostId, publicKey, publicAddress) => {
                     // 1. Get latest price
                     dispatch( getContentPrice(contentHostId) ).then(contentPrice => {
                         // 2. buyContent
+                        triggerMetamaskPopupWithinElectron(getState)
                         contracts.aoContent.buyContent(
                             contentHostId,
                             contentPrice.toNumber(), // networkIntegerAmount
@@ -110,6 +112,7 @@ export const becomeHost = ({contentId, purchaseId, signature, encChallenge, cont
             const state = getState()
             const { contracts, app } = state
             // 1. becomeHost
+            triggerMetamaskPopupWithinElectron(getState)
             contracts.aoContent.becomeHost(purchaseId, signature.v, signature.r, signature.s, encChallenge, contentDatKey, metadataDatKey, { from: app.ethAddress }, (error, transactionHash) => {
                 if ( error ) {
                     console.error(`becomeHost error: ${error.message}`)                        
