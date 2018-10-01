@@ -76,10 +76,38 @@ const PricingInputCard = withStyles(({palette, shadows, spacing, transitions}) =
 ))
 
 
-const CustomPricingCard = withTheme()(({expanded, stake, stakeTokenType, stakePrimordialPercentage, profitSplitPercentage, onSelected, onChange, theme, ...props}) => (
-    <ExpansionPanel className={expanded ? 'expanded' : ''} expanded={expanded} onChange={onSelected} style={{boxShadow: expanded ? `0px 5px 15px 0px ${theme.palette.secondary.light}` : undefined, transition: theme.transitions.create('box-shadow'), borderRadius: '4px'}} {...props}>
+const CustomPricingCard = withStyles(({palette, shape, shadows, spacing, transitions}) => ({
+    base: {
+        borderRadius: shape.borderRadius,
+        background: palette.background.default,
+        boxShadow: shadows[0],
+        transition: transitions.create('box-shadow'),
+        border: `1px solid ${palette.background.default}`,
+        '&.selected': {
+            boxShadow: shadows[8],
+            border: `1px solid ${palette.primary.main}`
+        }
+    },
+    divider: {
+        marginTop: spacing.unit * 3,
+        marginBottom: spacing.unit * 3,
+        borderBottom: `1px solid ${palette.divider}`,
+        marginLeft: spacing.unit * -3,
+        marginRight: spacing.unit * -3,
+    },
+    label: {
+        marginLeft: spacing.unit * -3,
+        marginRight: spacing.unit * -3,
+        marginBottom: spacing.unit * -3,
+        padding: `${spacing.unit * 2}px ${spacing.unit * 3}px`,
+        backgroundColor: palette.primary.main,
+        borderBottomLeftRadius: shape.borderRadius,
+        borderBottomRightRadius: shape.borderRadius,
+    },
+}))(({expanded, stake, stakeTokenType, stakePrimordialPercentage, profitSplitPercentage, onSelected, onChange, classes, ...props}) => (
+    <ExpansionPanel className={`${classes.base} ${expanded ? 'selected' : ''}`} expanded={expanded} onChange={onSelected} {...props}>
         <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-            <Typography variant="display3" className="headline" style={{color: expanded ? theme.palette.secondary.main : undefined}}>
+            <Typography variant="display3" className="headline">
                 {'custom settings'}
             </Typography>
         </ExpansionPanelSummary>
@@ -99,18 +127,18 @@ const CustomPricingCard = withTheme()(({expanded, stake, stakeTokenType, stakePr
                         />
                     </div>
                 </div>
-                <div className="section-divider"></div>
+                <div className={classes.divider}></div>
                 <Typography>{'2. Would you like to stake AO+, AO, or both?'}</Typography>
                 <div className="token-type-container indent">
                     <div>
                         <RadioGroup
                             name="tokenType"
-                            value={stakeTokenType}
+                            value={stakeTokenType}                            
                             onChange={(event) => onChange(undefined, undefined, event.target.value)}
                         >
-                            <FormControlLabel value="primordial" control={<Radio />} label="AO+ (recommended)" />
-                            <FormControlLabel value="network" control={<Radio />} label="AO" />
-                            <FormControlLabel value="both" control={<Radio />} label="Both" />
+                            <FormControlLabel value="primordial" control={<Radio color="primary" />} label="AO+ (recommended)" />
+                            <FormControlLabel value="network" control={<Radio color="primary" />} label="AO" />
+                            <FormControlLabel value="both" control={<Radio color="primary" />} label="Both" />
                         </RadioGroup>
                     </div>
                     <div style={{flex: 1, position: 'relative', marginLeft: 24, marginRight: 8, visibility: stakeTokenType === 'both' ? 'visible' : 'hidden'}}>
@@ -132,11 +160,11 @@ const CustomPricingCard = withTheme()(({expanded, stake, stakeTokenType, stakePr
                         </Typography>
                     </div>
                 </div>
-                <div className="section-divider"></div>
+                <div className={classes.divider}></div>
                 <Typography>{'3. What percentage of the earnings would you like to make?'}</Typography>
                 <div className="profit-input-container indent">
                     <div style={{display: 'flex', alignItems: 'flex-end', width: '100%'}}>
-                        <Typography variant="display3" className="profit-label">{`${profitSplitPercentage}%`}</Typography>
+                        <Typography variant="display3">{`${profitSplitPercentage}%`}</Typography>
                         <Typography style={{color: '#17BB59', marginLeft: 'auto'}}>{profitSplitPercentage < 25 ? 'great exposure' : (profitSplitPercentage < 50 ? 'good exposure' : (profitSplitPercentage < 75 ? 'average exposure' : 'less exposure'))}</Typography>
                     </div>
                     <Slider
@@ -148,7 +176,7 @@ const CustomPricingCard = withTheme()(({expanded, stake, stakeTokenType, stakePr
                     />                        
                 </div>                
                 {expanded ? (
-                    <div className="custom-pricing-tooltip">
+                    <div className={classes.label}>
                         <Typography variant="caption" style={{color: 'white'}}>
                             {'Please note the higher percentage you take, the less profits you may actually make as nodes are less likely to host your content and give you exposure.'}
                         </Typography>
