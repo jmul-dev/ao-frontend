@@ -13,7 +13,7 @@ const mapDispatchToProps = {
 }
 
 const mapStateToProps = (store) => {
-    const { primordialTotalSupply, primordialMaxSupply, primordialSaleActive } = store.ico
+    const { primordialTotalSupply, primordialMaxSupply } = store.ico
     const icoRemainingSupply = primordialMaxSupply.minus(primordialTotalSupply)
     return {
         ethAddress: store.app.ethAddress,

@@ -3,7 +3,6 @@ import Typography from '@material-ui/core/Typography';
 import React, { Component } from 'react';
 import ReactPlayer from 'react-player';
 import { CSSTransition } from 'react-transition-group';
-import { LogoIcon } from '../../../assets/Icons';
 import { PrimaryButton } from '../../../theme';
 import { TokenBalance } from '../../../utils/denominations';
 import DatStats from '../../content/components/DatStats';
@@ -130,7 +129,7 @@ class TeaserCard extends Component<Props> {
         const { video } = this.props
         if ( !video.lastSeenContentHost )
             return null
-        const lastSeenDate = moment.utc(parseInt(video.lastSeenContentHost.timestamp))
+        const lastSeenDate = moment.utc(parseInt(video.lastSeenContentHost.timestamp, 10))
         const likelyAvailableDate = moment().subtract(20, 'minutes')
         const potentiallyAvailableDate = moment().subtract(1, 'hour')
         let accentColor = 'inherit'
@@ -149,7 +148,7 @@ class TeaserCard extends Component<Props> {
     }
     render() {
         const { video, videoQuery, isActive, isFullscreen, isTeaserEntered, networkTokenBalance } = this.props
-        const { videoSrc, usingTeaserSrc, videoSrcReady } = this.state
+        const { videoSrc, usingTeaserSrc } = this.state
         const insufficientBalance = networkTokenBalance.lt(video.stake) ? networkTokenBalance.minus(video.stake).multipliedBy(-1).toNumber() : undefined
         return (
             <CSSTransition

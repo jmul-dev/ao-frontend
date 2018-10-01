@@ -3,7 +3,6 @@ import withRecentTransactions from '../containers/withRecentTransactions';
 import BigNumber from 'bignumber.js';
 import { TokenBalance } from '../../../utils/denominations';
 import { withStyles } from '@material-ui/core/styles';
-import { Typography } from '@material-ui/core';
 import PropTypes from 'prop-types';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';

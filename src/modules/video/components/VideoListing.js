@@ -52,9 +52,9 @@ class VideoListing extends Component<Props> {
         const { activeVideo, teaserListingActive, setActiveVideo, setTeaserListingState } = this.props
         if ( event.keyCode === 27 ) {  // esc
             if ( activeVideo )
-                this.props.setActiveVideo()
+                setActiveVideo()
             else if ( teaserListingActive )
-                this.props.setTeaserListingState({isActive: false})
+                setTeaserListingState({isActive: false})
         }
     }
     render() {
@@ -197,6 +197,7 @@ class VideoListingCellCard extends Component {
                 <div {...props}>
                     <img
                         src={`${window.AO_CORE_URL}/${video.featuredImageUrl}`}
+                        alt={video.title}
                         onLoad={() => this.setState({imageLoaded: true})}
                         onError={() => this.setState({imageLoaded: true})}
                         style={{position: 'absolute', visibility: 'hidden'}}

@@ -2,7 +2,6 @@ import React, { Component, Fragment } from 'react';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import ButtonBase from '@material-ui/core/ButtonBase';
-import Button from '@material-ui/core/Button';
 import withContentMetrics from '../containers/withContentMetrics';
 import moment from 'moment';
 import Collapse from '@material-ui/core/Collapse';

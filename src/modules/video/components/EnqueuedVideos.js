@@ -28,7 +28,7 @@ class EnqueuedVideos extends Component<Props> {
         this.props.hostedContentQuery.stopPolling()
     }
     render() {
-        const { loading, error, node } = this.props.hostedContentQuery
+        const { loading, node } = this.props.hostedContentQuery
         if (loading)
             return null;
         if (!node || (node && !node.hostedContent))
@@ -60,7 +60,7 @@ class EnqueuedVideos extends Component<Props> {
 class EnqueuedVideoListItemComponent extends Component {
     _watchNowRef;
     render() {
-        const { theme, content, ...props } = this.props
+        const { theme, content } = this.props
         const actionRequired = statesPendingUserAction.indexOf(content.state) > -1
         return (
             <div ref={ref => this._watchNowRef = ref} className="EnqueuedVideo" style={{ backgroundColor: actionRequired ? theme.palette.primary.main : theme.palette.background.default}}>

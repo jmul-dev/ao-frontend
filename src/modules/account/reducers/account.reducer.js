@@ -16,7 +16,7 @@ export const setAccountVideoListingOrdering = (ordering) => ({
 })
 export const getContentMetrics = (stakeId) => {
     return (dispatch, getState) => {
-        const { contracts, app } = getState()
+        const { contracts } = getState()
         contracts.aoLibrary.getContentMetrics(contracts.aoContent.address, contracts.aoEarning.address, stakeId, function(err, result) {
             if ( !err ) {
                 dispatch({
@@ -38,7 +38,7 @@ export const getContentMetrics = (stakeId) => {
 export const getPurchaseReceipt = (purchaseId) => {
     return (dispatch, getState) => {    
         return new Promise((resolve, reject) => {    
-            const { contracts, app } = getState()
+            const { contracts } = getState()
             if ( !purchaseId )
                 return reject(new Error(`getPurchaseReceipt called with no purchaseId`))
             contracts.aoContent.purchaseReceiptById(purchaseId, function(err, result) {

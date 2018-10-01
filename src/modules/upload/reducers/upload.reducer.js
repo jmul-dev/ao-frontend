@@ -111,6 +111,8 @@ export const updatePricingOption = (pricingOption, stake = undefined, profitSpli
                 networkTokensRequired = (100 - payload.stakePrimordialPercentage) / 100.0 * payload.stake;
                 primordialTokensRequired = payload.stakePrimordialPercentage / 100.0 * payload.stake;
                 break;
+            default:
+                break;
         }
         payload.networkTokensRequired = networkTokensRequired
         payload.primordialTokensRequired = primordialTokensRequired

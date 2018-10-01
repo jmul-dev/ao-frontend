@@ -22,7 +22,7 @@ class AccountVideoListing extends Component {
         const { ethAddress, filter } = this.props
         if ( !ethAddress )
             return this._renderPlaceholderAccountListing()
-        const { loading, error, node } = this.props.query
+        const { error, node } = this.props.query
         if ( !node )
             return null  // TODO: loading
         if ( error )
