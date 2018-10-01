@@ -28,7 +28,7 @@ export const configureStore = (initialState?) => {
 
   // Router Middleware
   const router = routerMiddleware(history);
-  middleware.push(router);
+  // middleware.push(router);
 
   // If Redux DevTools Extension is installed use it, otherwise use Redux compose
   /* eslint-disable no-underscore-dangle */

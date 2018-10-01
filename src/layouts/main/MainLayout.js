@@ -59,10 +59,7 @@ const MainLayout = () => (
             className="overlay-views-container"
         />
         {/* Main navigation */}
-        <Switch>
-            <Route path="/app/view" render={() => <MainNavigation light />} />
-            <Route render={() => <MainNavigation dark />} />
-        </Switch>
+        <MainNavigation />
         {/* Video Playback (always mounted for animation purposes) */}
         <VideoPlayback />
     </main>
