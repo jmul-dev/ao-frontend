@@ -11,7 +11,7 @@ import withUploadFormData from '../containers/withUploadFormData';
 import { Redirect } from 'react-router-dom';
 import { BackButton, PrimaryButton } from './UploadFormNavButtons';
 import OverviewAside from './OverviewAside';
-import { withTheme } from '@material-ui/core/styles';
+import { withTheme, withStyles } from '@material-ui/core/styles';
 import { compose } from 'react-apollo';
 import withUserWallet from '../../wallet/containers/withUserWallet';
 import { TokenBalance, DenominationInput } from '../../../utils/denominations';
@@ -20,12 +20,36 @@ import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Slider from '@material-ui/lab/Slider';
+import { darken } from '@material-ui/core/styles/colorManipulator';
 
 
-const PricingInputCard = withTheme()(({headline, label, iconClassName, stake, profitSplitPercentage, selected, onClick, theme}) => (
-    <ButtonBase focusRipple className={`pricing-card ${selected ? 'selected' : ''}`} onClick={onClick} style={{boxShadow: selected ? `0px 5px 15px 0px ${theme.palette.secondary.light}` : undefined, transition: theme.transitions.create('box-shadow')}}>
+const PricingInputCard = withStyles(({palette, shadows, spacing, transitions}) => ({
+    base: {
+        background: palette.background.default,
+        boxShadow: shadows[0],
+        transition: transitions.create('box-shadow'),
+        border: `1px solid ${palette.background.default}`,
+        '&.selected': {
+            boxShadow: shadows[8],
+            border: `1px solid ${palette.primary.main}`
+        }
+    },
+    label: {
+        background: darken(palette.background.default, 0.35),
+        position: 'absolute',
+        bottom: 0,
+        left: 0,
+        right: 0,
+        textAlign: 'center',
+        padding: spacing.unit,
+        '&.selected': {
+            background: palette.primary.main,
+        }
+    },
+}))(({headline, label, iconClassName, stake, profitSplitPercentage, selected, onClick, classes}) => (
+    <ButtonBase focusRipple className={`pricing-card ${classes.base} ${selected ? 'selected' : ''}`} onClick={onClick}>
         <div className={`pricing-icon ${iconClassName}`}></div>
-        <Typography variant="display3" className="headline" style={{color: selected ? theme.palette.secondary.main : undefined}}>{headline}</Typography>
+        <Typography variant="display3" className="headline">{headline}</Typography>
         <div className="pricing-table">
             <div>
                 <Typography variant="caption">{'you stake'}</Typography>
@@ -45,7 +69,7 @@ const PricingInputCard = withTheme()(({headline, label, iconClassName, stake, pr
                 <Typography variant="body2">{`${profitSplitPercentage}%`} <Typography variant="caption" style={{display: 'inline'}}>{'profits'}</Typography></Typography>
             </div>
         </div>
-        <div className="label" style={{background: selected ? theme.palette.secondary.main : undefined, transition: theme.transitions.create('background')}}>
+        <div className={`${classes.label} ${selected ? 'selected' : ''}`}>
             <Typography style={{color: 'white'}}>{label}</Typography>
         </div>
     </ButtonBase>
