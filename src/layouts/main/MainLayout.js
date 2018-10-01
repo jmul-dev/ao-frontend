@@ -15,20 +15,14 @@ import { lightTheme } from '../../theme';
 import './main-layout.css';
 
 const ViewRoutes = () => (
-    <MuiThemeProvider theme={lightTheme}>
-        <div className="overlay-view-container">
-            <Switch>
-                <Route path="/app/view/account" component={AccountView} />
-                <Route path="/app/view/ico" component={IcoView} />
-                <Route path="/app/view/settings" component={SettingsView} />
-                <Route path="/app/view/upload/:step?" component={UploadView} />
-            </Switch>
-        </div>
-    </MuiThemeProvider>
-)
-
-const ViewRoutesBackdrop = () => (
-    <Link to="/app" className="overlay-views-backdrop"></Link>
+    <div className="overlay-view-container">
+        <Switch>
+            <Route path="/app/view/account" component={AccountView} />
+            <Route path="/app/view/ico" component={IcoView} />
+            <Route path="/app/view/settings" component={SettingsView} />
+            <Route path="/app/view/upload/:step?" component={UploadView} />
+        </Switch>
+    </div>
 )
 
 const MainLayout = () => (
@@ -38,22 +32,11 @@ const MainLayout = () => (
         {/* Overlay views */}
         <AnimatedRoute
             path="/app/view"
-            component={ViewRoutesBackdrop}
+            component={ViewRoutes}
             atEnter={{opacity: 0}}
             atLeave={{opacity: 0}}
             atActive={{opacity: 1}}
             mapStyles={(styles) => ({
-                opacity: styles.opacity
-            })}
-        />
-        <AnimatedRoute
-            path="/app/view"
-            component={ViewRoutes}
-            atEnter={{offset: -25, opacity: 0}}
-            atLeave={{offset: -25, opacity: 0}}
-            atActive={{offset: 0, opacity: 1}}
-            mapStyles={(styles) => ({
-                transform: `translateX(${styles.offset}%)`,
                 opacity: styles.opacity
             })}
             className="overlay-views-container"

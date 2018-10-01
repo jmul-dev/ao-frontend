@@ -1,7 +1,7 @@
 // @flow
 import React, { Component } from 'react';
 import { Provider } from 'react-redux';
-import { ConnectedRouter } from 'connected-react-router';
+import { ConnectedRouter } from 'react-router-redux';
 import AppContainer from './AppContainer';
 import { ApolloProvider } from "react-apollo";
 import { MuiThemeProvider } from '@material-ui/core/styles';
@@ -17,7 +17,7 @@ type Props = {
 export default class Root extends Component<Props> {
     render() {
         return (
-            <ApolloProvider client={this.props.client}>            
+            <ApolloProvider client={this.props.client}>
                 <Provider store={this.props.store}>
                     <ConnectedRouter history={this.props.history}>
                         <MuiThemeProvider theme={darkTheme}>

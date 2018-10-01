@@ -17,7 +17,7 @@ const styles = {
         position: 'relative',
         overflow: 'hidden',
         width: '100%', 
-        border: '1px dashed #CCCCCC',
+        border: '1px dashed #333333',
         paddingBottom: '56.25%',
         cursor: 'pointer',
         borderRadius: 4,

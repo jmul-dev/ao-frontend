@@ -1,5 +1,6 @@
 // @flow
 import React, { Component } from 'react';
+import { Redirect } from 'react-router';
 import FileUpload from '../components/FileUpload';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
@@ -11,7 +12,6 @@ type Props = {
     asPlaceholder: boolean,
     updatePricingOption: Function,
     updateLastReachedStep: Function,
-    routerPush: Function,
 }
 
 class UploadForm extends Component<Props> {
@@ -30,14 +30,15 @@ class UploadForm extends Component<Props> {
             // Nav to next view
             this.props.updatePricingOption(1)
             this.props.updateLastReachedStep('pricing')
-            this.props.routerPush('/app/view/upload/pricing')
         }
     }
     render() {
-        const { asPlaceholder } = this.props
-        return (
+        const { asPlaceholder, form } = this.props        
+        return form.video ? (
+            <Redirect to="/app/view/upload/pricing" />
+        ) : (
             <div className={`UploadForm ${asPlaceholder ? 'placeholder' : ''}`}>
-                <Typography className="title" variant="title" style={{display: 'flex', alignItems: 'flex-end'}}>
+                <Typography className="title" variant="subheading" style={{display: 'flex', alignItems: 'flex-end'}}>
                     {`Video Upload`} {asPlaceholder ? (
                         <React.Fragment>
                             <UnlockIcon style={{marginRight: 8, marginLeft: 8}} />
@@ -53,7 +54,7 @@ class UploadForm extends Component<Props> {
                         <Typography variant="caption" gutterBottom align="center">
                             {'mp4 or mov files'}
                         </Typography>
-                        <Button disabled={asPlaceholder} variant="contained" style={{backgroundColor: 'white', marginTop: 24}}>
+                        <Button disabled={asPlaceholder} color="primary" style={{marginTop: 24}}>
                             {'or choose a file'}
                         </Button>
                     </div>

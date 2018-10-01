@@ -162,7 +162,7 @@ class UploadFormPricing extends Component {
         const fileSize = form.video.size
         return (
             <div>
-                <Typography className="title" variant="title">
+                <Typography className="title" variant="subheading">
                     {`Video Upload`}
                 </Typography>
                 <Grid container spacing={16}>            

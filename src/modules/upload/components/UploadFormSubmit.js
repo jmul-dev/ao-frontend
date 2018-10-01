@@ -115,7 +115,7 @@ class UploadFormSubmit extends Component<Props> {
         }
         return (
             <div className="UploadFormSubmit">
-                <Typography className="title" variant="title">
+                <Typography className="title" variant="subheading">
                     {`Video Upload`}
                 </Typography>            
                 <Grid container spacing={16}>

@@ -39,7 +39,7 @@ class UploadFormContent extends Component {
         }
         return (
             <div>
-                <Typography className="title" variant="title">
+                <Typography className="title" variant="subheading">
                     {`Video Upload`}
                 </Typography>            
                 <Grid container spacing={16}>

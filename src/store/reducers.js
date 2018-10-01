@@ -1,5 +1,6 @@
 // @flow
-import { combineReducers } from 'redux';
+import { combineReducers } from 'redux'
+import { routerReducer } from 'react-router-redux'
 import app from './app.reducer'
 import wallet from '../modules/wallet/reducers/wallet.reducer'
 import upload from '../modules/upload/reducers/upload.reducer'
@@ -12,6 +13,7 @@ import ico from '../modules/ico/reducers/ico.reducer'
 import account from '../modules/account/reducers/account.reducer'
 
 const rootReducer = combineReducers({
+    router: routerReducer,
     app,
     wallet,
     upload,
