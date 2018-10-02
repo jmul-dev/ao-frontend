@@ -9,6 +9,8 @@ import { getContentState, ContentPurchaseAction } from '../../video/components/C
 import { withStyles } from '@material-ui/core/styles';
 import { ButtonBase, IconButton } from '@material-ui/core';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
 
 
 class DownloadsListItem extends Component {
@@ -20,11 +22,23 @@ class DownloadsListItem extends Component {
     constructor() {
         super()
         this.state = {
-            hovered: false,
+            actionsMenuActive: false,
+            actionsMenuAnchor: null,
         }
     }
-    _setHoverState = (hovered, event) => {
-        this.setState({hovered})
+    _setActionsMenuState = (active, event) => {
+        if ( event ) {
+            event.preventDefault()
+            event.stopPropagation()
+        }
+        this.setState({
+            actionsMenuActive: active,
+            actionsMenuAnchor: event ? event.currentTarget : null,
+        })
+        return null;
+    }
+    _cancelContentPurchase = () => {
+
     }
     render() {
         const { content, classes } = this.props
@@ -37,8 +51,6 @@ class DownloadsListItem extends Component {
                     button={true} 
                     disabled={!action || loading} 
                     onClick={action}
-                    onMouseEnter={this._setHoverState.bind(this, true)}
-                    onMouseLeave={this._setHoverState.bind(this, false)}
                     >
                     <ListItemIcon className={classes.listItemIcon}>
                         <StateIcon />
@@ -52,29 +64,17 @@ class DownloadsListItem extends Component {
                         }}
                     />                    
                     <ListItemSecondaryAction className={`more-actions ${classes.secondaryAction}`}>
-                        <IconButton>
+                        <IconButton onClick={this._setActionsMenuState.bind(this, true)}>
                             <MoreVertIcon />
                         </IconButton>
                     </ListItemSecondaryAction>
-                    {/* <div style={{ overflow: 'hidden', marginRight: 16 }}>
-                        <Typography variant="subheading" gutterBottom noWrap>{content.title}</Typography>
-                        <Typography variant="body1" component="div" className="action-status">
-                            <ContentPurchaseState content={content} />
-                        </Typography>
-                    </div>
-                    <div style={{ marginLeft: 'auto' }}>
-                        <div className="featured-image" style={{ backgroundImage: `url(${window.AO_CORE_URL}/${content.featuredImageUrl})` }}>
-                            {actionRequired ? (
-                                <ContentPurchaseAction contentRef={this._watchNowRef} content={content}>{({ action, actionCopy, loading }) => (
-                                    <ButtonBase className="action-button" disabled={!action || loading} onClick={action}>
-                                        <div className="action-text">
-                                            <Typography variant="body1">{actionCopy}</Typography>
-                                        </div>
-                                    </ButtonBase>
-                                )}</ContentPurchaseAction>
-                            ) : null}
-                        </div>
-                    </div> */}
+                    <Menu
+                        anchorEl={this.state.actionsMenuAnchor}
+                        open={this.state.actionsMenuActive}
+                        onClose={this._setActionsMenuState.bind(this, false)}
+                        >
+                        <MenuItem onClick={this._cancelContentPurchase}>Cancel</MenuItem>
+                    </Menu>
                 </ListItem>
             )}</ContentPurchaseAction>
         )
@@ -86,6 +86,7 @@ const styles = ({palette, spacing}) => ({
         alignItems: 'flex-start',
         borderTop: `1px solid ${palette.divider}`,
         padding: `12px 16px`,
+        pointerEvents: 'auto !important',
     },
     listItemIcon: {
         marginRight: 0,

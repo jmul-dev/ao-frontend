@@ -42,7 +42,7 @@ class DownloadsList extends Component<Props> {
         })
         return (
             <div className="DownloadsList">
-                <List dense>
+                <List dense={true}>
                     {incompleteContent.map(content => (
                         <DownloadsListItem key={content.id} content={content} />
                     ))}
