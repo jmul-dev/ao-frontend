@@ -30,7 +30,12 @@ const MainLayout = () => (
         {/* Browse route always mounted */}
         <Route component={BrowseView} />
         {/* Overlay views */}
-        <AnimatedRoute
+        <Route
+            path="/app/view"
+            component={ViewRoutes}
+            className="overlay-views-container"
+        />
+        {/* <AnimatedRoute
             path="/app/view"
             component={ViewRoutes}
             atEnter={{opacity: 0}}
@@ -40,7 +45,7 @@ const MainLayout = () => (
                 opacity: styles.opacity
             })}
             className="overlay-views-container"
-        />
+        /> */}
         {/* Main navigation */}
         <MainNavigation />
         {/* Video Playback (always mounted for animation purposes) */}

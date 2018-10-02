@@ -5,6 +5,7 @@ import List from '@material-ui/core/List';
 import DownloadsListItem from './DownloadsListItem';
 import Divider from '@material-ui/core/Divider';
 import '../styles/downloads-list.css';
+import { Typography } from '@material-ui/core';
 
 
 class DownloadsList extends Component<Props> {
@@ -40,15 +41,17 @@ class DownloadsList extends Component<Props> {
                 return true;
             return false;
         })
-        return (
+        return incompleteContent.length > 0 ? (
             <div className="DownloadsList">
+                <Typography variant="caption" style={{padding: 16}}>{'Active Downloads'}</Typography>
+                <Divider />
                 <List dense={true}>
                     {incompleteContent.map(content => (
                         <DownloadsListItem key={content.id} content={content} />
                     ))}
                 </List>
             </div>
-        )
+        ) : null
     }
 }
 

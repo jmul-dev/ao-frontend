@@ -37,8 +37,10 @@ class DownloadsListItem extends Component {
         })
         return null;
     }
-    _cancelContentPurchase = () => {
-
+    _cancelContentPurchase = (event) => {
+        event.preventDefault()
+        event.stopPropagation()
+        // TODO
     }
     render() {
         const { content, classes } = this.props

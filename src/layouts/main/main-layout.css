@@ -14,6 +14,10 @@
     transition: all 250ms ease-out;
     opacity: 1;
 }
+.MainNavigation.offcanvas {
+    opacity: 0;
+    transform: translateX(calc(-1 * var(--sidebar-width)));
+}
 .MainNavigation > div {
     height: 100%;
     width: 100%;
