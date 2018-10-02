@@ -15,13 +15,15 @@ import navIconUploadSrc from '../../assets/nav-icon-upload-videos.svg';
 import navIconWalletSrc from '../../assets/nav-icon-my-wallet.svg';
 import navIconSettingsSrc from '../../assets/nav-icon-settings.svg';
 import navIconMetamaskSrc from '../../assets/nav-icon-metamask.svg';
+import DownloadsList from '../../modules/downloads/components/DownloadsList';
+import { APP_STATES } from '../../store/app.reducer';
 
 
 const openMetamask = () => {
     window.chrome.ipcRenderer.send('open-metamask-popup')
 }
 
-const MainNavigation = ({ isElectron, offcanvas, overlayViewsActive, classes }) => (
+const MainNavigation = ({ isElectron, offcanvas, showDownloads, overlayViewsActive, classes }) => (
     <nav className={classnames('MainNavigation', { offcanvas })}>
         <div style={{ display: 'flex' }}>
             <div className={classes.logoContainer}>
@@ -74,7 +76,12 @@ const MainNavigation = ({ isElectron, offcanvas, overlayViewsActive, classes }) 
                         </ButtonBase>
                     </li>
                 ) : null}
-            </ul>
+            </ul>            
+            {showDownloads ? (
+                <div className={classes.downloadsContainer}>
+                    <DownloadsList />
+                </div>
+            ) : null}                  
         </div>
     </nav>
 )
@@ -90,36 +97,40 @@ const styles = ({palette, spacing}) => ({
         margin: 0,
         padding: 0,
     },
-    navListItem: {
+        navListItem: {
 
-    },
-    navListItemLink: {
-        padding: `${12}px ${spacing.unit * 2}px`,
-        display: 'flex',
-        alignItems: 'center',
-        textDecoration: 'none',
-        borderLeft: `3px solid transparent`,
-        opacity: 0.75,
-        '&.active': {
-            borderLeft: `3px solid ${palette.primary.main}`,
-            backgroundColor: palette.divider, // '#151515'
-            color: palette.common.white,
-            opacity: 1,
         },
-    },
-    navLinkCopy: {
-        fontWeight: 'bold',
-    },
-    navLinkIcon: {
-        height: 20,
-        width: 'auto',
-        marginRight: spacing.unit,
+        navListItemLink: {
+            padding: `${12}px ${spacing.unit * 2}px`,
+            display: 'flex',
+            alignItems: 'center',
+            textDecoration: 'none',
+            borderLeft: `3px solid transparent`,
+            opacity: 0.75,
+            '&.active': {
+                borderLeft: `3px solid ${palette.primary.main}`,
+                backgroundColor: palette.divider, // '#151515'
+                color: palette.common.white,
+                opacity: 1,
+            },
+        },
+        navLinkCopy: {
+            fontWeight: 'bold',
+        },
+        navLinkIcon: {
+            height: 20,
+            width: 'auto',
+            marginRight: spacing.unit,
+        },
+    downloadsContainer: {
+        marginTop: 'auto'
     }
 })
 
 const mapStateToProps = (store) => {
-    return {
+    return {        
         offcanvas: store.video.teaserListingActive,
+        showDownloads: store.app.ethAddress && store.app.states[APP_STATES.CORE_READY],
         overlayViewsActive: store.router.location.pathname.indexOf('/app/view') > -1,
         isElectron: store.electron.isElectron,
     }

@@ -23,6 +23,7 @@ import Exchange from '../src/modules/exchange/components/Exchange';
 import BigNumber from 'bignumber.js';
 import { IcoStatsWithStyles } from '../src/modules/ico/components/IcoStats';
 import { RecentTransactionsWithStyles } from '../src/modules/ico/components/RecentTransactions';
+import { EnqueuedVideos } from '../src/modules/video/components/EnqueuedVideos';
 
 
 const onChange = action('onChange')

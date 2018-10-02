@@ -18,7 +18,6 @@ const mapDispatchToProps = {
 
 const mapStateToProps = (store) => {
     return {
-        hideOffcanvas: !!store.video.activeVideo,
         recentlyHostedContentIds: store.video.recentlyHostedContentIds,
     }
 }

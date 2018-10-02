@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 import View from '../View';
 import Clock from '../../modules/clock/components/Clock';
 import VideoListing from '../../modules/video/components/VideoListing';
-import EnqueuedVideos from '../../modules/video/components/EnqueuedVideos';
 import SearchBar from '../../modules/video/components/SearchBar';
 import withSearch from '../../modules/video/containers/withSearch';
 import className from 'classnames';
@@ -56,10 +55,7 @@ class BrowseView extends Component {
                     onClick={this._closeSearchBar}
                     style={{visibility: searchBarActive ? 'visible' : 'hidden'}}
                 />
-                <VideoListing />
-                {ethAddress ? (
-                    <EnqueuedVideos />
-                ) : null}                
+                <VideoListing />                          
             </View>
         );
     }

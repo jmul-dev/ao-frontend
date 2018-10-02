@@ -47,7 +47,92 @@ export const statesPendingUserAction = [
     'DISCOVERED',
 ]
 
-export const ContentPurchaseState = ({ content }) => {
+/**
+ * 
+ * @returns { isLoadingState, stateCopy, stateIcon, actionCopy, actionRequired, }
+ */
+export const getContentState = (content) => {
+    const isUploadedContent = content.nodeId && content.nodeId === content.creatorId  // NOTE: ideally we would compare app.ethAddress to content.creatorId
+    let returnData = {
+        isLoadingState: false,
+        stateCopy: null,
+        StateIcon: null,
+        actionRequired: statesPendingUserAction.indexOf(content.state) > -1,
+        actionCopy: null,        
+    }
+    switch (content.state) {
+        case 'HOST_DISCOVERY':
+            returnData.isLoadingState = true;
+            returnData.stateCopy = 'Finding host...';
+            break;
+        case 'HOST_DISCOVERY_FAILED':
+            returnData.isLoadingState = false;
+            returnData.stateCopy = 'Host not found, retry?';
+            returnData.StateIcon = ReplayIcon;
+            break;
+        case 'DOWNLOADING':
+            returnData.isLoadingState = true;
+            returnData.stateCopy = 'Downloading...';
+            break;
+        case 'DOWNLOADED':
+            // Content is download, indicate need to purchase
+            returnData.stateCopy = 'Pay for video';
+            returnData.StateIcon = AlertIcon;
+            break;
+        case 'PURCHASING':
+            returnData.isLoadingState = true;
+            returnData.stateCopy = 'Paying...';
+            break;
+        case 'PURCHASED':
+            // Content is purchased, waiting for decryption key
+            returnData.isLoadingState = true;
+            returnData.stateCopy = 'Waiting for decryption key...';
+            break;
+        case 'DECRYPTION_KEY_RECEIVED':
+            returnData.stateCopy = 'Verifying content...';
+            returnData.StateIcon = AlertIcon;
+            break;
+        case 'VERIFIED':
+            // Content verified, automatically proceeds to encrypting
+            returnData.isLoadingState = true;
+            returnData.stateCopy = 'Video verified';
+            break;
+        case 'VERIFICATION_FAILED':
+            returnData.stateCopy = 'Video failed verification';
+            returnData.StateIcon = AlertIcon;
+            break;
+        case 'ENCRYPTED':
+            // Video is encrypted, indicate need to becomeHost/stake
+            returnData.isLoadingState = true;
+            returnData.stateCopy = 'Initializing content...';
+            break;
+        case 'DAT_INITIALIZED':
+            returnData.stateCopy = isUploadedContent ? 'Stake content' : 'Submit verification and become host';
+            returnData.StateIcon = AlertIcon;
+            break;
+        case 'STAKING':
+            returnData.isLoadingState = true;
+            returnData.stateCopy = isUploadedContent ? 'Staking content...' : 'Submitting verification...';
+            break;
+        case 'STAKED':
+            returnData.isLoadingState = true;
+            returnData.stateCopy = 'Making discoverable...';
+            break;
+        case 'DISCOVERABLE':
+        case 'DISCOVERED':
+            returnData.stateCopy = 'Watch now';
+            returnData.StateIcon = PlayIcon;
+            break;
+        default:
+            break;
+    }
+    if ( returnData.isLoadingState ) {
+        returnData.StateIcon = CircularProgress //<CircularProgress size={20} style={{ marginRight: 8 }} />
+    }
+    return returnData
+}
+
+export const ContentPurchaseState = ({ content, iconOnly = false }) => {
     const isUploadedContent = content.nodeId && content.nodeId === content.creatorId  // NOTE: ideally we would compare app.ethAddress to content.creatorId
     let isLoadingState = false
     let Icon = null
@@ -126,7 +211,7 @@ export const ContentPurchaseState = ({ content }) => {
             {Icon ? (
                 <Icon style={{ marginRight: 4 }} />
             ) : null}
-            {copy}
+            {iconOnly ? null : copy}
         </div>
     )
 }
