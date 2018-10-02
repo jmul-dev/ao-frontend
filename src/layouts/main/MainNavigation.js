@@ -1,13 +1,20 @@
 import React from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import ButtonBase from '@material-ui/core/ButtonBase';
-import { LogoIcon, AccountIcon, UploadIcon, SettingsIcon, MetamaskIcon, NetworkExchangeIcon } from '../../assets/Icons';
+import { LogoIcon } from '../../assets/Icons';
 import { connect } from 'react-redux';
 import classnames from 'classnames';
 import { compose } from 'react-apollo';
 import { withRouter } from 'react-router';
 import { withStyles } from '@material-ui/core/styles';
 import { Typography } from '@material-ui/core';
+import navIconBrowseSrc from '../../assets/nav-icon-browse.svg';
+import navIconTokenExchangeSrc from '../../assets/nav-icon-token-exchange.svg';
+import navIconMyVideosSrc from '../../assets/nav-icon-my-videos.svg';
+import navIconUploadSrc from '../../assets/nav-icon-upload-videos.svg';
+import navIconWalletSrc from '../../assets/nav-icon-my-wallet.svg';
+import navIconSettingsSrc from '../../assets/nav-icon-settings.svg';
+import navIconMetamaskSrc from '../../assets/nav-icon-metamask.svg';
 
 
 const openMetamask = () => {
@@ -25,39 +32,45 @@ const MainNavigation = ({ isElectron, offcanvas, overlayViewsActive, classes }) 
             <ul className={classes.navList}>
                 <li className={classes.navListItem}>
                     <NavLink className={classes.navListItemLink} to="/app" exact>
-                        <LogoIcon className={classes.navLinkIcon} />
-                        <Typography variant="caption">{'Browse'}</Typography>
+                        <img src={navIconBrowseSrc} className={classes.navLinkIcon} alt="Browse" />
+                        <Typography variant="caption" className={classes.navLinkCopy}>{'Browse'}</Typography>
                     </NavLink>
                 </li>
                 <li className={classes.navListItem}>
                     <NavLink className={classes.navListItemLink} to="/app/view/ico" replace={overlayViewsActive}>
-                        <NetworkExchangeIcon color={'#FFFFFF'} className={classes.navLinkIcon} />
-                        <Typography variant="caption">{'Coin Exchange'}</Typography>
+                        <img src={navIconTokenExchangeSrc} className={classes.navLinkIcon} alt="Coin Exchange" />
+                        <Typography variant="caption" className={classes.navLinkCopy}>{'Coin Exchange'}</Typography>
                     </NavLink>
                 </li>
                 <li className={classes.navListItem}>
                     <NavLink className={classes.navListItemLink} to="/app/view/account" replace={overlayViewsActive}>
-                        <AccountIcon color={'#FFFFFF'} className={classes.navLinkIcon} />
-                        <Typography variant="caption">{'My Videos'}</Typography>
+                        <img src={navIconMyVideosSrc} className={classes.navLinkIcon} alt="My Videos" />
+                        <Typography variant="caption" className={classes.navLinkCopy}>{'My Videos'}</Typography>
                     </NavLink>
                 </li>
                 <li className={classes.navListItem}>
                     <NavLink className={classes.navListItemLink} to="/app/view/upload" replace={overlayViewsActive}>
-                        <UploadIcon color={'#FFFFFF'} className={classes.navLinkIcon} />
-                        <Typography variant="caption">{'Upload Videos'}</Typography>
+                        <img src={navIconUploadSrc} className={classes.navLinkIcon} alt="Upload Videos" />
+                        <Typography variant="caption" className={classes.navLinkCopy}>{'Upload Videos'}</Typography>
+                    </NavLink>
+                </li>
+                <li className={classes.navListItem}>
+                    <NavLink className={classes.navListItemLink} to="/app/view/wallet" replace={overlayViewsActive}>
+                        <img src={navIconWalletSrc} className={classes.navLinkIcon} alt="Wallet" />
+                        <Typography variant="caption" className={classes.navLinkCopy}>{'My Wallet'}</Typography>
                     </NavLink>
                 </li>
                 <li className={classes.navListItem}>
                     <NavLink className={classes.navListItemLink} to="/app/view/settings" replace={overlayViewsActive}>
-                        <SettingsIcon color={'#FFFFFF'} className={classes.navLinkIcon} />
-                        <Typography variant="caption">{'Settings'}</Typography>
+                        <img src={navIconSettingsSrc} className={classes.navLinkIcon} alt="Settings" />
+                        <Typography variant="caption" className={classes.navLinkCopy}>{'Settings'}</Typography>
                     </NavLink>
-                </li>                
+                </li>
                 {isElectron ? (
                     <li className={classes.navListItem}>
                         <ButtonBase className={classes.navListItemLink} onClick={openMetamask} disableRipple={true}>
-                            <MetamaskIcon />
-                            <Typography variant="caption">{'Metamask'}</Typography>
+                            <img src={navIconMetamaskSrc} className={classes.navLinkIcon} alt="Metamask" />
+                            <Typography variant="caption" className={classes.navLinkCopy}>{'Metamask'}</Typography>
                         </ButtonBase>
                     </li>
                 ) : null}
@@ -81,20 +94,25 @@ const styles = ({palette, spacing}) => ({
 
     },
     navListItemLink: {
-        padding: `${spacing.unit}px ${spacing.unit * 2}px`,
+        padding: `${12}px ${spacing.unit * 2}px`,
         display: 'flex',
         alignItems: 'center',
         textDecoration: 'none',
         borderLeft: `3px solid transparent`,
+        opacity: 0.75,
         '&.active': {
             borderLeft: `3px solid ${palette.primary.main}`,
             backgroundColor: palette.divider, // '#151515'
             color: palette.common.white,
-        }
+            opacity: 1,
+        },
+    },
+    navLinkCopy: {
+        fontWeight: 'bold',
     },
     navLinkIcon: {
-        width: 24,
-        height: 24,
+        height: 20,
+        width: 'auto',
         marginRight: spacing.unit,
     }
 })

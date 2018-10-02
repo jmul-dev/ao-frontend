@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20.71 20.71"><defs><style>.cls-1{fill:none;stroke:#fff;stroke-miterlimit:10;}</style></defs><title>token-exchange</title>
+    <g id="Layer_2" data-name="Layer 2">
+        <g id="Layer_1-2" data-name="Layer 1">
+            <g>
+                <path class="cls-1" d="M10.35.5a9.85,9.85,0,0,1,9.85,9.85"/>
+                <path class="cls-1" d="M10.35,20.21A9.85,9.85,0,0,1,.5,10.35"/>
+                <animateTransform attributeName="transform" type="rotate" from="360 10.355 10.355" to="0 10.355 10.355" dur="10s" repeatCount="indefinite"></animateTransform>
+            </g>
+            <circle class="cls-1" cx="10.35" cy="10.35" r="5.33"/>
+        </g>
+    </g>
+</svg>
