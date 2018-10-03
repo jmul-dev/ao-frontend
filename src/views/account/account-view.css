@@ -1,15 +1,4 @@
-.AccountView > header {
-    background-image: linear-gradient(-179deg, #525D7A 0%, #4A546D 100%);
-}
-.AccountView > header .eth-address-icon {
-    position: absolute;
-    margin-left: -35px;
-}
-
-.AccountView > header, .AccountView > section {
-    padding: 64px;
-}
 .AccountView > section {
-    padding-top: 24px;
+    padding-top: 32px;
     padding-bottom: 50vh;
 }

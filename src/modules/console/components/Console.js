@@ -19,12 +19,12 @@ type Props = {
 class Console extends PureComponent<Props> {
     props: Props;
     render() {
-        const { data, ...props } = this.props
+        const { data, style, ...props } = this.props
         const { logs } = this.props.data
         return (
             <div className="Console">
                 <Typography variant="body1" component="div">
-                    <ul {...props} style={{listStyle: 'none', padding: 0, margin: 0}}>{logs && logs.map((log, index) => (
+                    <ul {...props} style={{listStyle: 'none', padding: 0, margin: 0, ...style}}>{logs && logs.map((log, index) => (
                         <li key={index} style={{display: 'flex', marginBottom: 12}}>
                             <time style={{width: 60, flexShrink: 0, color: '#777777'}}>{moment(log.createdAt).format('H:mm')}</time>
                             <div>{log.message}</div>                            
