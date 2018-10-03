@@ -14,6 +14,8 @@ import BigNumber from "bignumber.js";
 import { withStyles } from '@material-ui/core/styles';
 import { compose } from 'react-apollo';
 import { Link } from 'react-router-dom';
+import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
+import { IconButton } from '@material-ui/core';
 
 
 class AccountVideoListItem extends Component {
@@ -136,6 +138,9 @@ class AccountVideoListItem extends Component {
                                 <DatStats renderUploadSpeed stats={[video.metadataDatStats, video.fileDatStats]} />
                             </Typography>
                         </div>
+                        <div style={{marginLeft: 'auto', marginRight: 0}}>
+                            <KeyboardArrowRightIcon style={{width: 32, height: 32, color: '#333333'}} />
+                        </div>
                     </div>
                     {/* <Typography variant="body1" gutterBottom color="textSecondary">
                         {`uploaded: ${moment(parseInt(video.createdAt, 10)).format('M/D/YYYY')}`}
@@ -175,6 +180,9 @@ class AccountVideoListItem extends Component {
                             </ButtonBase>
                         )}</ContentPurchaseAction>
                     </div>
+                    <ButtonBase component={Link} className={classes.incompleteNavLink} to={`/app/view/videos/${video.id}`}>
+                        <KeyboardArrowRightIcon style={{width: 32, height: 32, color: '#333333'}} />
+                    </ButtonBase>
                 </div>
             )
         }        
@@ -307,6 +315,14 @@ const styles = ({spacing}) => ({
                 height: `24px !important`,
                 color: 'white',
             },
+        incompleteNavLink: {
+            height: '100%',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'flex-end',
+            flex: 1,
+            marginLeft: 48,
+        },
 })
 
 export default compose(
