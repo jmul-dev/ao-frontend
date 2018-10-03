@@ -17,7 +17,7 @@ class WalletView extends PureComponent {
             <View className={`WalletView ${ethAddress ? 'connected' : 'not-connected'}`} padding="full">                
                 <header style={{marginBottom: 36}}>
                     <Typography variant="title" gutterBottom>
-                        {'My Account'}         
+                        {'My Wallet'}         
                     </Typography>
                     <div style={{display: 'flex', alignItems: 'center'}}>
                         <div style={{marginRight: 8}}>

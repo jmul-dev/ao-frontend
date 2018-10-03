@@ -123,7 +123,9 @@ const styles = ({palette, spacing}) => ({
             marginRight: spacing.unit,
         },
     downloadsContainer: {
-        marginTop: 'auto'
+        marginTop: 'auto',
+        overflowY: 'scroll',
+        overflowX: 'hidden',
     }
 })
 
