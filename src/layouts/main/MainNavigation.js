@@ -45,7 +45,7 @@ const MainNavigation = ({ isElectron, offcanvas, showDownloads, overlayViewsActi
                     </NavLink>
                 </li>
                 <li className={classes.navListItem}>
-                    <NavLink className={classes.navListItemLink} to="/app/view/account" replace={overlayViewsActive}>
+                    <NavLink className={classes.navListItemLink} to="/app/view/videos" replace={overlayViewsActive}>
                         <img src={navIconMyVideosSrc} className={classes.navLinkIcon} alt="My Videos" />
                         <Typography variant="caption" className={classes.navLinkCopy}>{'My Videos'}</Typography>
                     </NavLink>

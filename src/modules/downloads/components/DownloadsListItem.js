@@ -64,7 +64,7 @@ class DownloadsListItem extends Component {
                             primary: classes.listItemPrimaryText,
                             secondary: actionRequired ? classes.listItemSecondaryTextAction : classes.listItemSecondaryText,
                         }}
-                    />                    
+                    />
                     <ListItemSecondaryAction className={`more-actions ${classes.secondaryAction}`}>
                         <IconButton onClick={this._setActionsMenuState.bind(this, true)}>
                             <MoreVertIcon />
@@ -107,7 +107,7 @@ const styles = ({palette, spacing}) => ({
         color: palette.primary.main,
     },
     secondaryAction: {
-        right: spacing.unit * -3,
+        right: 0,
         opacity: 0.75,
     }
 })

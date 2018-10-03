@@ -19,7 +19,7 @@ import './main-layout.css';
 const ViewRoutes = () => (
     <div className="overlay-view-container">
         <Switch>
-            <Route path="/app/view/account" component={AccountView} />
+            <Route path="/app/view/videos" component={AccountView} />
             <Route path="/app/view/ico" component={IcoView} />
             <Route path="/app/view/settings" component={SettingsView} />
             <Route path="/app/view/wallet" component={WalletView} />

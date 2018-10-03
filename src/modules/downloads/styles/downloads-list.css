@@ -1,6 +1,7 @@
-.DownloadsListItem + .more-actions {
+.DownloadsListItem + .more-actions, .DownloadsListItem > .more-actions {
     display: none;
 }
-.DownloadsListItem:hover + .more-actions, .DownloadsListItem + .more-actions:hover {
+.DownloadsListItem:hover + .more-actions, .DownloadsListItem + .more-actions:hover,
+.DownloadsListItem:hover > .more-actions, .DownloadsListItem > .more-actions:hover {
     display: block;
 }

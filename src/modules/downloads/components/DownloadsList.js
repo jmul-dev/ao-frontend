@@ -45,7 +45,7 @@ class DownloadsList extends Component<Props> {
             <div className="DownloadsList">
                 <Typography variant="caption" style={{padding: 16}}>{'Active Downloads'}</Typography>
                 <Divider />
-                <List dense={true}>
+                <List dense={true} style={{paddingTop: 0}}>
                     {incompleteContent.map(content => (
                         <DownloadsListItem key={content.id} content={content} />
                     ))}
