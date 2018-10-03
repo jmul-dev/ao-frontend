@@ -38,11 +38,19 @@ export default compose(
     graphql(videoQuery, {
         name: 'videoQuery',
         // Pull video id from props
-        options: (props) => ({
-            variables: {
-                id: props.video ? props.video.id : props.id
-            },
-            fetchPolicy: 'cache-and-network',
-        })
+        options: (props) => {
+            let id = null
+            if ( props.match && props.match.params.videoId ) {
+                id = props.match.params.videoId
+            } else if ( props.video ) {
+                id = props.video.id
+            } else {
+                id = props.id
+            }
+            return {
+                variables: { id },
+                fetchPolicy: 'cache-and-network',
+            }
+        }
     }),
 );

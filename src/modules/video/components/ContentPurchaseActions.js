@@ -210,7 +210,7 @@ export const ContentPurchaseState = ({ content, iconOnly = false }) => {
                 <CircularProgress size={20} style={{ marginRight: 8 }} />
             ) : null}
             {Icon ? (
-                <Icon style={{ marginRight: 4 }} />
+                <Icon style={{ marginRight: 8 }} />
             ) : null}
             {iconOnly ? null : copy}
         </div>

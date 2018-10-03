@@ -16,6 +16,7 @@ export const PrimaryButton = withStyles(({palette}) => ({
     flatPrimary: {
         background: palette.primary.main,
         color: '#FFFFFF',
+        borderRadius: 0,
     },
     disabled: {
         background: palette.background.default,
