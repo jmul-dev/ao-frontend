@@ -60,7 +60,7 @@ export const getPurchaseReceipt = (purchaseId) => {
 
 // State
 const initialState = {
-    videoListingFilter: 'uploaded',  // uploaded || downloaded
+    videoListingFilter: 'downloaded',  // uploaded || downloaded
     videoListingOrdering: 'recent',  // recent || earned || staked
     contentMetrics: {},  // stakeId => { metrics }
 }

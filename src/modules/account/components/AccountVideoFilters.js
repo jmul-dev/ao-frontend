@@ -23,16 +23,16 @@ class AccountVideoFilters extends PureComponent {
         const { disabled, filter } = this.props
         return (
             <div className="AccountVideoFilters">
-                <Button onClick={this._setActiveFilter.bind(this, 'uploaded')} disabled={disabled || filter === 'uploaded'}>
-                    <Typography variant="title" style={{fontWeight: 'normal', color: filter === 'uploaded' ? '#222222' : '#BCBCBC'}}>
-                        {`My videos`}
-                    </Typography>
-                </Button>
                 <Button onClick={this._setActiveFilter.bind(this, 'downloaded')} disabled={disabled || filter === 'downloaded'}>
-                    <Typography variant="title" style={{fontWeight: 'normal', color: filter === 'downloaded' ? '#222222' : '#BCBCBC'}}>
+                    <Typography variant="title" style={{fontWeight: 'bold', color: filter === 'downloaded' ? '#FFFFFF' : '#444444'}}>
                         {`Downloaded`}
                     </Typography>
                 </Button>
+                <Button onClick={this._setActiveFilter.bind(this, 'uploaded')} disabled={disabled || filter === 'uploaded'}>
+                    <Typography variant="title" style={{fontWeight: 'bold', color: filter === 'uploaded' ? '#FFFFFF' : '#444444'}}>
+                        {`My videos`}
+                    </Typography>
+                </Button>                
             </div>
         )
     }

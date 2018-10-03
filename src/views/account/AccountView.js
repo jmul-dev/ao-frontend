@@ -15,7 +15,7 @@ class AccountView extends PureComponent {
         return (
             <View className={`AccountView ${ethAddress ? 'connected' : 'not-connected'}`} padding="full">                
                 <header>
-                    <Typography variant="title" gutterBottom>
+                    <Typography variant="subheading" gutterBottom>
                         {'My Videos'}
                     </Typography>
                 </header>
