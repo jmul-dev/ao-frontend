@@ -1,18 +1,5 @@
-.AccountVideoListing {
-    
-}
 
-.AccountVideoListing ul li {
-    padding-top: 16px;
-    padding-bottom: 16px;
-    border-bottom: 1px solid #E5E5E5;
-}
-
-.AccountVideoListItem {
-    position: relative;
-    margin-bottom: 24px;
-}
-.AccountVideoListItem .action-button {
+/* .AccountVideoListItem .action-button {
     display: block;
     width: 100%;
 }
@@ -58,4 +45,4 @@
 .AccountVideoListItem .expansion-container {
     padding-top: 24px;
     padding-bottom: 16px;
-}
+} */

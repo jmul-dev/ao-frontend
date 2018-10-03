@@ -6,6 +6,7 @@ import { compose } from 'react-apollo';
 import PropTypes from 'prop-types';
 import AccountVideoListItem, { AccountVideoListItemPlaceholder } from './AccountVideoListItem';
 import '../styles/account-video-listing.css';
+import { Divider } from '@material-ui/core';
 
 
 class AccountVideoListing extends Component {
@@ -35,10 +36,11 @@ class AccountVideoListing extends Component {
                 <ul style={{listStyle: 'none', padding: 0, margin: 0}}>
                     {videos.map((video, index) => (
                         <li key={video.id}>
+                            <Divider />
                             <AccountVideoListItem 
                                 video={video} 
                                 filter={filter}
-                            />
+                            />                            
                         </li>
                     ))}
                 </ul>                

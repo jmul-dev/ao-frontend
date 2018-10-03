@@ -49,12 +49,13 @@ export const statesPendingUserAction = [
 
 /**
  * 
- * @returns { isLoadingState, stateCopy, stateIcon, actionCopy, actionRequired, }
+ * @returns { isLoadingState, isCompleted, stateCopy, stateIcon, actionCopy, actionRequired, }
  */
 export const getContentState = (content) => {
     const isUploadedContent = content.nodeId && content.nodeId === content.creatorId  // NOTE: ideally we would compare app.ethAddress to content.creatorId
     let returnData = {
         isLoadingState: false,
+        isCompleted: content.state === 'DISCOVERABLE',
         stateCopy: null,
         StateIcon: null,
         actionRequired: statesPendingUserAction.indexOf(content.state) > -1,

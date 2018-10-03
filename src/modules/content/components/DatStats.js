@@ -10,8 +10,11 @@ import { FileSize } from '../../../utils/denominations';
  * Passing an array of stats will result in the sum of those stats.
  * 
  * @param {Array<DatStats> | DatStats} stats 
+ * @param {boolean} renderPeerCount
+ * @param {boolean} renderUploadSpeed
+ * @param {boolean} renderDownloadSpeed
  */
-const DatStats = ({stats}) => {
+const DatStats = ({stats, renderPeerCount, renderUploadSpeed, renderDownloadSpeed}) => {
     let peers = 0
     let downloadSpeed = 0
     let uploadSpeed = 0
@@ -25,15 +28,21 @@ const DatStats = ({stats}) => {
     })
     return (
         <Typography variant="body1" gutterBottom color="textSecondary" component="div" style={{display: 'flex', alignItems: 'center'}}>
-            <div style={{marginRight: 6, display: 'flex', alignItems: 'center'}}>
-                <PeersIcon style={{fontSize: 18, marginRight: 3}} color={peers > 0 ? 'primary' : 'inherit'} /> {peers}
-            </div>
-            <div style={{marginRight: 6, display: 'flex', alignItems: 'center'}}>
-                <UpIcon style={{fontSize: 18, marginRight: 3}} color={uploadSpeed > 0 ? 'primary' : 'inherit'} /> <FileSize sizeInBytes={uploadSpeed} />{`/s`}
-            </div>
-            <div style={{marginRight: 6, display: 'flex', alignItems: 'center'}}>
-                <DownIcon style={{fontSize: 18, marginRight: 3}} color={uploadSpeed > 0 ? 'primary' : 'inherit'} /> <FileSize sizeInBytes={downloadSpeed} />{`/s`}
-            </div>
+            {renderPeerCount ? (
+                <div style={{marginRight: 6, display: 'flex', alignItems: 'center'}}>
+                    <PeersIcon style={{fontSize: 18, marginRight: 3}} color={peers > 0 ? 'primary' : 'inherit'} /> {peers}
+                </div>
+            ) : null}
+            {renderUploadSpeed ? (
+                <div style={{marginRight: 6, display: 'flex', alignItems: 'center'}}>
+                    <UpIcon style={{fontSize: 18, marginRight: 3}} color={uploadSpeed > 0 ? 'primary' : 'inherit'} /> <FileSize sizeInBytes={uploadSpeed} />{`/s`}
+                </div>
+            ) : null}    
+            {renderDownloadSpeed ? (
+                <div style={{marginRight: 6, display: 'flex', alignItems: 'center'}}>
+                    <DownIcon style={{fontSize: 18, marginRight: 3}} color={downloadSpeed > 0 ? 'primary' : 'inherit'} /> <FileSize sizeInBytes={downloadSpeed} />{`/s`}
+                </div>
+            ) : null}                    
         </Typography>
     )
 }
