@@ -21,13 +21,27 @@ import Exchange from '../../modules/exchange/components/Exchange';
 
 
 export default class IcoView extends PureComponent {
+    constructor() {
+        super()
+        this.state = {
+            delayedRender: false,
+        }
+    }
+    componentDidMount() {
+        this._delayedRenderTimeout = setTimeout(() => {
+            this.setState({delayedRender: true})
+        }, 1500)
+    }
+    componentWillUnmount() {
+        clearTimeout(this._delayedRenderTimeout)
+    }
     _scrollToExchange = () => {
         this._exchangeRef.scrollIntoView({behavior: 'smooth'})
     }
     render() {
+        const { delayedRender } = this.state
         return (            
-            <View className={'IcoView'} padding="none">
-                
+            <View className={'IcoView'} padding="none">                
                 <header className="section-padding bg-black" style={{backgroundImage: `url(${bgShapesSrc})`}}>
                     <div className="heading-copy">
                         <Typography variant="display1" gutterBottom>
@@ -101,7 +115,9 @@ export default class IcoView extends PureComponent {
                             </div>
                         </div>
                         <div className="calculator-container">
-                            <EarningsCalculator />
+                            {delayedRender && (
+                                <EarningsCalculator />
+                            )}                            
                         </div>
                     </section>
                 </MuiThemeProvider>                
@@ -121,7 +137,9 @@ export default class IcoView extends PureComponent {
                                 <div className="copy-padding">
                                     <Typography variant="body1">{`RECENT TRANSACTIONS`}</Typography>
                                 </div>
-                                <RecentTransactions />
+                                {delayedRender && (
+                                    <RecentTransactions />
+                                )}                                
                             </div>
                         </Grid>
                     </Grid>  

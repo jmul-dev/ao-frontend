@@ -12,6 +12,7 @@ import '../styles/teaser-card.css';
 import { ContentPurchaseAction, ContentPurchaseState } from './ContentPurchaseActions';
 import moment from 'moment';
 import ClockIcon from '@material-ui/icons/Schedule';
+import BigNumber from 'bignumber.js';
 
 
 type Props = {
@@ -23,6 +24,7 @@ type Props = {
     networkTokenBalance: Object,  // bignumber
     // redux bound methods
     setActiveVideo: Function,
+    getContentMetrics: Function,
     // graphql props
     videoQuery: {
         video: Object,
@@ -39,6 +41,17 @@ class TeaserCard extends Component<Props> {
             usingTeaserSrc: true,
             videoSrcReady: false,
             exchangeModalOpen: false,
+            contentPrice: new BigNumber(props.video.stake),
+            contentPriceError: undefined,
+        }
+    }
+    componentDidMount() {
+        if ( this.props.video.lastSeenContentHost ) {
+            this.props.getContentPrice(this.props.video.lastSeenContentHost.contentHostId).then((contentPrice) => {
+                this.setState({contentPrice})
+            }).catch(error => {
+                this.setState({contentPriceError: `Error fetching latest content price: ${error.message}`})
+            })
         }
     }
     _onExchangeModalClose = () => {
@@ -46,6 +59,7 @@ class TeaserCard extends Component<Props> {
     }
     _playVideo = () => {
         const { setActiveVideo, networkTokenBalance, video, videoQuery } = this.props
+        const { contentPrice } = this.state
         if ( !videoQuery.video )
             return console.warn('attempted playing video before video state was fetched')        
         if ( videoQuery.video.state === 'STAKED' || videoQuery.video.state === 'DISCOVERABLE' ) {
@@ -53,12 +67,12 @@ class TeaserCard extends Component<Props> {
             setActiveVideo(this.props.video)
         } else if ( videoQuery.video.state === 'DISCOVERED' ) {
             // B: Content has not began the purchase process
-            if ( networkTokenBalance.lt(video.stake) ) {
+            if ( networkTokenBalance.lt(contentPrice) ) {
                 // B.1: Exchange modal if balance sucks
                 this.setState({exchangeModalOpen: true})
             } else {
-                // B.2: TODO: Begin download
-                
+                // B.2: Begin download (sorry the logic here is outdated, we should never hit this see _renderActionState)
+                return null
             }
         } else {
             // C: Content is going through the purchase process
@@ -85,7 +99,8 @@ class TeaserCard extends Component<Props> {
     _onExitingFullscreen = () => {}
     _renderActionState = () => {
         const { video, videoQuery, networkTokenBalance } = this.props
-        const insufficientBalance = networkTokenBalance.lt(video.stake) ? networkTokenBalance.minus(video.stake).multipliedBy(-1).toNumber() : undefined
+        const { contentPrice } = this.state
+        const insufficientBalance = networkTokenBalance.lt(contentPrice) ? networkTokenBalance.minus(contentPrice).multipliedBy(-1).toNumber() : undefined
         let contentState = 'DISCOVERED'
         let content = video
         const videoQueryLoading = videoQuery.loading
@@ -117,7 +132,6 @@ class TeaserCard extends Component<Props> {
         }
     }
     _handleActionAndUpdateVideoQuery = (action) => {
-        console.log(`Attempting to refetch videoQuery within TeaserModal`, this.props.videoQuery)
         action()
         this.props.videoQuery.refetch().then(data => {
             console.log(`refetched:`, data)
@@ -147,9 +161,9 @@ class TeaserCard extends Component<Props> {
         )
     }
     render() {
-        const { video, videoQuery, isActive, isFullscreen, isTeaserEntered, networkTokenBalance } = this.props
-        const { videoSrc, usingTeaserSrc } = this.state
-        const insufficientBalance = networkTokenBalance.lt(video.stake) ? networkTokenBalance.minus(video.stake).multipliedBy(-1).toNumber() : undefined
+        const { video, videoQuery, isActive, isFullscreen, isTeaserEntered, networkTokenBalance, contentMetrics } = this.props
+        const { videoSrc, usingTeaserSrc, contentPrice } = this.state
+        const insufficientBalance = networkTokenBalance.lt(contentPrice) ? networkTokenBalance.minus(contentPrice).multipliedBy(-1).toNumber() : undefined
         return (
             <CSSTransition
                 in={isFullscreen}
@@ -191,7 +205,7 @@ class TeaserCard extends Component<Props> {
                         </Typography>
                         <div className="action-pane hide-fullscreen">
                             <Typography variant="body1">
-                                <TokenBalance baseAmount={video.stake} /> {' / view'}
+                                <TokenBalance baseAmount={contentPrice} /> {' / view'}
                             </Typography>
                             <Typography variant="caption" gutterBottom>
                                 {`your balance: `}<TokenBalance baseAmount={networkTokenBalance} isPrimordial={false} />

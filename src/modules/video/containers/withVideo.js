@@ -1,5 +1,5 @@
 import { connect } from 'react-redux'
-import { setActiveVideo } from '../reducers/video.reducer'
+import { setActiveVideo, getContentPrice } from '../reducers/video.reducer'
 import { graphql, compose } from 'react-apollo'
 import gql from "graphql-tag"
 import VideoContentFragment from '../../../graphql/fragments/VideoContentFragment'
@@ -8,9 +8,10 @@ import DatStatsFragment from '../../../graphql/fragments/DatStatsFragment'
 // Redux
 const mapDispatchToProps = {
     setActiveVideo,
+    getContentPrice,
 }
 
-const mapStateToProps = (store) => {
+const mapStateToProps = (store, props) => {
     return {
         networkTokenBalance: store.wallet.networkTokenBalance,
     }

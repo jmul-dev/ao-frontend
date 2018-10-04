@@ -45,6 +45,7 @@ class DownloadsListItem extends Component {
     }
     render() {
         const { content, classes } = this.props
+        const { actionsMenuActive } = this.state
         const { isLoadingState, stateCopy, StateIcon, actionRequired, actionCopy } = getContentState(content)
         return (
             <ContentPurchaseAction contentRef={this._watchNowRef} content={content}>{({ action, loading }) => (
