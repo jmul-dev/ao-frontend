@@ -15,6 +15,8 @@ import Divider from '@material-ui/core/Divider';
 import { FileSize, TokenBalance } from '../../../utils/denominations';
 import EtherscanLink from '../../etherscan/EtherscanLink';
 import moment from 'moment';
+import { Link } from 'react-router-dom';
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 
 
 class AccountVideo extends PureComponent {
@@ -59,6 +61,12 @@ class AccountVideo extends PureComponent {
         const transactions = video.transactions || {}
         return (
             <Grid spacing={16} container>
+                <Grid item xs={12}>
+                    <ButtonBase varient="contained" component={Link} to={`/app/view/videos`} className={classes.backNav}>
+                        <ArrowBackIcon />
+                        <Typography variant="body1">{`back to browse`}</Typography>
+                    </ButtonBase>
+                </Grid>                
                 <ContentPurchaseAction contentRef={this._watchNowRef} content={video}>{({action, loading, error}) => (
                     <Fragment>
                         <Grid item sm={12}>
@@ -277,6 +285,12 @@ class AccountVideo extends PureComponent {
 }
 
 const styles = ({palette, spacing}) => ({
+    backNav: {
+        position: 'absolute',
+        color: 'white',
+        top: 45,
+        left: 45,
+    },
     previewImage: {
         position: 'relative',
         width: '100%',

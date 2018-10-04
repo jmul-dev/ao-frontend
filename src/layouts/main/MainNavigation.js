@@ -17,14 +17,13 @@ import navIconSettingsSrc from '../../assets/nav-icon-settings.svg';
 import navIconMetamaskSrc from '../../assets/nav-icon-metamask.svg';
 import DownloadsList from '../../modules/downloads/components/DownloadsList';
 import { APP_STATES } from '../../store/app.reducer';
-import BackArrow from '@material-ui/icons/KeyboardArrowLeft';
 
 
 const openMetamask = () => {
     window.chrome.ipcRenderer.send('open-metamask-popup')
 }
 
-const MainNavigation = ({ isElectron, offcanvas, showDownloads, overlayViewsActive, classes, isVideoItemPage }) => (
+const MainNavigation = ({ isElectron, offcanvas, showDownloads, overlayViewsActive, classes }) => (
     <nav className={classnames('MainNavigation', { offcanvas })}>
         <div style={{ display: 'flex' }}>
             <div className={classes.logoContainer}>
@@ -46,13 +45,9 @@ const MainNavigation = ({ isElectron, offcanvas, showDownloads, overlayViewsActi
                     </NavLink>
                 </li>
                 <li className={classes.navListItem}>
-                    <NavLink className={`${classes.navListItemLink} ${isVideoItemPage ? classes.navListItemLinkIndented : ''}`} to="/app/view/videos" replace={overlayViewsActive}>
-                        {isVideoItemPage ? (
-                            <BackArrow className={classes.navLinkIcon} />
-                        ) : (
-                            <img src={navIconMyVideosSrc} className={classes.navLinkIcon} alt="My Videos" />
-                        )}
-                        <Typography variant="caption" className={classes.navLinkCopy}>{isVideoItemPage ? 'Back to Videos' : 'My Videos'}</Typography>
+                    <NavLink className={classes.navListItemLink} to="/app/view/videos" replace={overlayViewsActive}>
+                        <img src={navIconMyVideosSrc} className={classes.navLinkIcon} alt="My Videos" />
+                        <Typography variant="caption" className={classes.navLinkCopy}>{'My Videos'}</Typography>
                     </NavLink>
                 </li>
                 <li className={classes.navListItem}>
@@ -107,7 +102,6 @@ const styles = ({palette, spacing}) => ({
         },
         navListItemLink: {
             padding: `${12}px ${spacing.unit * 2}px`,
-            transition: `transform 250ms ease-out`,
             display: 'flex',
             alignItems: 'center',
             textDecoration: 'none',
@@ -119,9 +113,6 @@ const styles = ({palette, spacing}) => ({
                 color: palette.common.white,
                 opacity: 1,
             },
-        },
-        navListItemLinkIndented: {
-            transform: `translateX(${spacing.unit * 5}px)`
         },
         navLinkCopy: {
             fontWeight: 'bold',
@@ -144,7 +135,6 @@ const mapStateToProps = (store) => {
         showDownloads: store.app.ethAddress && store.app.states[APP_STATES.CORE_READY],
         overlayViewsActive: store.router.location.pathname.indexOf('/app/view') > -1,
         isElectron: store.electron.isElectron,
-        isVideoItemPage: store.router.location.pathname.indexOf('/app/view/videos/') > -1,
     }
 }
 

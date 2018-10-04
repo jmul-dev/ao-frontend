@@ -135,7 +135,7 @@ const styles = ({ spacing }) => ({
         position: 'relative',
         width: '100%',
         paddingBottom: '56.2%',
-        background: '#E5E5E5',
+        background: '#151515',
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
