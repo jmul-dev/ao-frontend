@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import Typography from '@material-ui/core/Typography';
 import withAccountVideos from '../containers/withAccountVideos';
 import withEthAddress from '../containers/withEthAddress';
@@ -7,6 +7,10 @@ import PropTypes from 'prop-types';
 import AccountVideoListItem, { AccountVideoListItemPlaceholder } from './AccountVideoListItem';
 import '../styles/account-video-listing.css';
 import { Divider } from '@material-ui/core';
+import { Link } from 'react-router-dom';
+import Button from '@material-ui/core/Button';
+import { PrimaryButton } from '../../../theme';
+import ExchangeModal from '../../exchange/components/ExchangeModal';
 
 
 class AccountVideoListing extends Component {
@@ -14,6 +18,12 @@ class AccountVideoListing extends Component {
         ethAddress: PropTypes.string,
         filter: PropTypes.oneOf(['downloaded', 'uploaded']),
         ordering: PropTypes.string,
+    }
+    constructor() {
+        super()
+        this.state = {
+            exchangeModalOpen: false,
+        }
     }
     componentDidMount() {
         if ( this.props.query.refetch )
@@ -48,36 +58,49 @@ class AccountVideoListing extends Component {
         );
     }
     _renderErrorState() {
+        const errorMessage = `An error occured while trying to fetch your videos :/`
         return (
-            <div className="AccountVideoListing">
-                <Typography variant="body1" style={{marginTop: 16, marginBottom: 24, color: '#AAAAAA'}}>
-                    {`An error occured while trying to fetch your videos :/`}
-                </Typography>
-            </div>
+            <Fragment>
+                <Divider />    
+                <div className="AccountVideoListing placeholder">
+                    <Typography variant="title" className="placeholder-title">{errorMessage}</Typography>
+                </div>
+            </Fragment>
         )
     }
     _renderNoAccountVideos() {
         const { filter } = this.props
-        let errorMessage = 'You have not uploaded any videos with this account to the AO network'
-        if ( filter === 'downloaded' ) 
-            errorMessage = 'You have not purchased/downloaded any content yet'
+        let errorMessage = `Looks like you haven\'t ${filter} any videos.`        
         return (
-            <div className="AccountVideoListing placeholder">
-                <Typography variant="body1" style={{marginTop: 16, marginBottom: 24, color: '#AAAAAA'}}>
-                    {errorMessage}
-                </Typography>
-            </div>
+            <Fragment>
+                <Divider />            
+                <div className="AccountVideoListing placeholder">
+                    <Typography variant="title" className="placeholder-title">{errorMessage}</Typography>
+                    <div className="placeholder-actions">
+                        {filter === 'uploaded' ? (
+                            <PrimaryButton component={Link} to={`/app/view/upload`}>{`Upload a video`}</PrimaryButton>
+                        ) : (
+                            <PrimaryButton component={Link} to={`/app`}>{`Browse videos`}</PrimaryButton>
+                        )}
+                        <PrimaryButton color="default" onClick={() => {this.setState({exchangeModalOpen: true})}}>{`Exchange tokens`}</PrimaryButton>
+                    </div>
+                </div>
+                <ExchangeModal 
+                    open={this.state.exchangeModalOpen}
+                    onClose={() => {this.setState({exchangeModalOpen: false})}}
+                />
+            </Fragment>
         )
     }
     _renderPlaceholderAccountListing() {
+        const { filter } = this.props
         return (
-            <div className="AccountVideoListing placeholder">
-                <ul style={{listStyle: 'none', padding: 0, margin: 0}}>
-                    <AccountVideoListItemPlaceholder/>
-                    <AccountVideoListItemPlaceholder/>
-                    <AccountVideoListItemPlaceholder/>
-                </ul>
-            </div>
+            <Fragment>
+                <Divider />    
+                <div className="AccountVideoListing placeholder">
+                    <Typography variant="title" className="placeholder-title">{`Unlock your account to view your ${filter} videos.`}</Typography>
+                </div>
+            </Fragment>
         )
     }
 }

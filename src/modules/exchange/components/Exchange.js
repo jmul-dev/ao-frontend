@@ -1,5 +1,5 @@
 // @flow
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import withExchangeContainer from '../containers/withExchangeContainer';
 import Typography from '@material-ui/core/Typography';
 import '../styles/exchange.css';
@@ -115,7 +115,10 @@ class Exchange extends Component<Props> {
                 ) : null}
                 <div className="input-pane">
                     {!hideInputTitle ? (
-                        <Typography variant="subheading" align="center" style={{marginBottom: 24}}>{`How much AO+ would you like to purchase?`}</Typography>
+                        <Fragment>
+                            <Typography variant="subheading" align="center">{`How much AO+ would you like to purchase?`}</Typography>
+                            <Typography variant="caption" align="center" style={{marginBottom: 24}}>{`(as a bonus, an equal amount of AO will be rewarded upon purchase of AO+)`}</Typography>
+                        </Fragment>
                     ) : null}                    
                     <div className="input-container">
                         <DenominationInput 

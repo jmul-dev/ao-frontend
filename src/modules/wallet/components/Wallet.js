@@ -101,7 +101,7 @@ class Wallet extends PureComponent {
                     onClose={this._onExchangeModalClose}
                     exchangeProps={{
                         title: 'Purchase AO',
-                        subtitle: 'AO+ Primordial tokens have additional staking and purchasing benefits.'
+                        subtitle: 'AO+ Primordial tokens have additional staking benefits.'
                     }}
                 />             
             </div>

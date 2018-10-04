@@ -13,6 +13,10 @@ const primaryButton = ({...props}) => (
     <Button color="primary" {...props} />
 )
 export const PrimaryButton = withStyles(({palette}) => ({
+    flat: {
+        background: palette.background.default,
+        borderRadius: 0,
+    },
     flatPrimary: {
         background: palette.primary.main,
         color: '#FFFFFF',
