@@ -64,9 +64,9 @@ class AccountVideo extends PureComponent {
                 <Grid item xs={12}>
                     <ButtonBase varient="contained" component={Link} to={`/app/view/videos`} className={classes.backNav}>
                         <ArrowBackIcon />
-                        <Typography variant="body1">{`back to browse`}</Typography>
+                        <Typography variant="body1">{`back to my videos`}</Typography>
                     </ButtonBase>
-                </Grid>                
+                </Grid>
                 <ContentPurchaseAction contentRef={this._watchNowRef} content={video}>{({action, loading, error}) => (
                     <Fragment>
                         <Grid item sm={12}>
@@ -93,7 +93,7 @@ class AccountVideo extends PureComponent {
                     </Fragment>
                 )}</ContentPurchaseAction>
                 <Grid item xs={12} sm={7} md={7} lg={6}>
-                    <AccountVideoStats video={video} metrics={metrics} align="right" />
+                    <AccountVideoStats video={video} metrics={metrics} align="right" includeDownloadSpeed={transactions.purchaseTx !== undefined} />
                 </Grid>
                 <Grid item xs={12} className={classes.contentContainer}>
                     <Tabs className={classes.tabs} value={activeTabIndex} onChange={this._setTabIndex} indicatorColor="primary" TabIndicatorProps={{className: classes.tabIndicator}}>

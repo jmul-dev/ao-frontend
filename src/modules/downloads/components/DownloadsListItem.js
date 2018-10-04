@@ -11,6 +11,7 @@ import { ButtonBase, IconButton } from '@material-ui/core';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
+import { Link } from 'react-router-dom';
 
 
 class DownloadsListItem extends Component {
@@ -75,7 +76,8 @@ class DownloadsListItem extends Component {
                         open={this.state.actionsMenuActive}
                         onClose={this._setActionsMenuState.bind(this, false)}
                         >
-                        <MenuItem onClick={this._cancelContentPurchase}>Cancel</MenuItem>
+                        <MenuItem component={Link} to={`/app/view/videos/${content.id}`} onMouseUp={this._setActionsMenuState.bind(this, false)}>More info</MenuItem>
+                        {/* <MenuItem onClick={this._cancelContentPurchase} onMouseUp={this._setActionsMenuState.bind(this, false)}>Cancel</MenuItem> */}
                     </Menu>
                 </ListItem>
             )}</ContentPurchaseAction>

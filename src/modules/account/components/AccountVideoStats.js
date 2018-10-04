@@ -27,12 +27,13 @@ class AccountVideoStats extends PureComponent {
             totalHostEarning: PropTypes.instanceOf(BigNumber),
             totalFoundationEarning: PropTypes.instanceOf(BigNumber),
         }),
+        includeDownloadSpeed: PropTypes.bool,
         align: PropTypes.oneOf(['left', 'right']),
         // withStyles
         classes: PropTypes.object.isRequired,
     }
     render() {
-        const { classes, video, metrics, align } = this.props
+        const { classes, video, metrics, align, includeDownloadSpeed } = this.props
         return (
             <div className={classes.root} style={{justifyContent: align === 'right' ? 'flex-end' : 'flex-start'}}>
                 <div>
@@ -71,7 +72,15 @@ class AccountVideoStats extends PureComponent {
                     <Typography variant="body2" color="textSecondary" component="div">
                         <DatStats renderUploadSpeed stats={[video.metadataDatStats, video.fileDatStats]} />
                     </Typography>
-                </div>                
+                </div>
+                {includeDownloadSpeed ? (
+                    <div>
+                        <Typography variant="body1" gutterBottom color="textSecondary" component="div">{'download speed'}</Typography>
+                        <Typography variant="body2" color="textSecondary" component="div">
+                            <DatStats renderDownloadSpeed stats={[video.metadataDatStats, video.fileDatStats]} />
+                        </Typography>
+                    </div>
+                ) : null}                
             </div>
         )
     }
