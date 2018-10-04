@@ -21,7 +21,7 @@ const ViewRoutes = () => (
         <Switch>
             <Route path="/app/view/videos" component={AccountView} />
             <Route path="/app/view/ico" component={IcoView} />
-            <Route path="/app/view/settings" component={SettingsView} />
+            {/* <Route path="/app/view/settings" component={SettingsView} /> */}
             <Route path="/app/view/wallet" component={WalletView} />
             <Route path="/app/view/upload/:step?" component={UploadView} />
         </Switch>
