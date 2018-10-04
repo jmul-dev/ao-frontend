@@ -1,5 +1,6 @@
 import { connect } from 'react-redux'
 import { updateUploadFormField, updatePricingOption, resetUploadForm, updateLastReachedStep } from '../reducers/upload.reducer'
+import { addNotification } from '../../notifications/reducers/notifications.reducer';
 
 // Redux
 const mapDispatchToProps = {
@@ -7,6 +8,7 @@ const mapDispatchToProps = {
     updatePricingOption,
     updateLastReachedStep,
     resetUploadForm,
+    addNotification,
 }
 const mapStateToProps = (store, props) => {
     return {

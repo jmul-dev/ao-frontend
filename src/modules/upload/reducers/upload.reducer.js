@@ -202,8 +202,8 @@ const initialState = {
         title: '',
         description: '',
         pricingOption: 1,  // 0 = custom, 1-3 predefined inputs
-        stake: undefined,
-        profitSplitPercentage: undefined,
+        stake: 0,
+        profitSplitPercentage: 10,
         stakeTokenType: 'primordial',
         stakePrimordialPercentage: 100,
     },

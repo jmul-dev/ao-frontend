@@ -5,7 +5,7 @@ import { withStyles } from '@material-ui/core/styles';
 
 const styles = {
     root: {
-        background: 'white',
+        background: '#222222',
         paddingTop: 8,
         paddingLeft: 12,
         paddingRight: 12,

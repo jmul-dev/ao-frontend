@@ -96,7 +96,6 @@ class UploadFormSubmit extends Component<Props> {
     _cancel = () => {
         if ( this.props.contentSubmittionResult ) {
             if ( window.confirm('Are you sure? Your content will be saved, allowing you to stake at a later date.') ) {
-                // TODO: should we go to account page?
                 this._continue()
             }
         } else {
@@ -104,8 +103,11 @@ class UploadFormSubmit extends Component<Props> {
         }
     }
     _continue = () => {
-        // TODO: where do we go after, account?
-        this.props.history.push('/app/view/account')
+        const { submittedContentQuery } = this.props
+        if ( submittedContentQuery.video )
+            this.props.history.push(`/app/view/videos/${submittedContentQuery.video.id}`)
+        else
+            this.props.history.push(`/app/view/videos`)
         this.props.resetUploadForm()
     }
     render() {

@@ -6,10 +6,14 @@ import TextInput from './TextInput';
 import { AddIcon } from '../../../assets/Icons';
 import withUploadFormData from '../containers/withUploadFormData';
 import { Redirect } from 'react-router-dom';
-import { BackButton, PrimaryButton } from './UploadFormNavButtons';
+import { BackButton } from './UploadFormNavButtons';
 import OverviewAside from './OverviewAside';
 import FileUpload from './FileUpload';
+import { FileSize } from '../../../utils/denominations';
+import { PrimaryButton } from '../../../theme';
 
+
+const MAX_TEASER_FILE_SIZE_PERCENTAGE = 0.15
 
 class UploadFormContent extends Component {
     static contextTypes = {
@@ -19,15 +23,20 @@ class UploadFormContent extends Component {
         this.props.updateLastReachedStep('content')
     }
     _navBack = () => {
-        // this.context.router.history.goBack()
         this.context.router.history.replace('/app/view/upload/pricing')
     }
     _submit = () => {
-        // TODO: validation
         this.context.router.history.push('/app/view/upload/submit')
     }
     _onTeaserInputChange = (inputFile) => {
-        // TODO: check file size
+        const maxTeaserFileSize = this.props.form.video.size * MAX_TEASER_FILE_SIZE_PERCENTAGE
+        if ( inputFile.size > maxTeaserFileSize ) {
+            this.props.updateUploadFormField('videoTeaser', undefined)
+            this.props.addNotification({
+                message: `Your teaser video is too large. Currently, the network limits teaser video file sizes to <= ${MAX_TEASER_FILE_SIZE_PERCENTAGE * 100}% of the original content upload.`,
+                variant: 'warning',
+            })
+        }
     }
     _handleTextInput = inputName => event => {
         this.props.updateUploadFormField(inputName, event.target.value)
@@ -37,6 +46,7 @@ class UploadFormContent extends Component {
         if ( !form.video ) {
             return <Redirect to={'/app/view/upload/start'} />
         }
+        const formIsSubmittable = form.featuredImage && form.videoTeaser && form.title && form.description
         return (
             <div>
                 <Typography className="title" variant="subheading">
@@ -58,7 +68,7 @@ class UploadFormContent extends Component {
                             </Grid>
                             <Grid item xs={6}>
                                 <Typography variant="body1" gutterBottom>
-                                    {`teaser (mp4, mov)`}
+                                    {`teaser (mp4, mov) max size = `}<FileSize sizeInBytes={form.video.size * MAX_TEASER_FILE_SIZE_PERCENTAGE} />
                                 </Typography>
                                 <FileUpload inputName="videoTeaser" accept="video/*" onInputChange={this._onTeaserInputChange}>
                                     <AddIcon />
@@ -80,7 +90,7 @@ class UploadFormContent extends Component {
                         </div>
                         <nav className="upload-form-nav gutter-bottom">
                             <BackButton onClick={this._navBack}>{'back'}</BackButton>
-                            <PrimaryButton onClick={this._submit}>{'finish & upload'}</PrimaryButton>
+                            <PrimaryButton onClick={this._submit} disabled={!formIsSubmittable}>{'finish & upload'}</PrimaryButton>
                         </nav>
                     </Grid>
                 </Grid>
