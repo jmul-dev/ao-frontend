@@ -7,6 +7,7 @@ import AccountVideoFilters from '../../modules/account/components/AccountVideoFi
 import Grid from '@material-ui/core/Grid';
 import withEthAddress from '../../modules/account/containers/withEthAddress';
 import AccountVideoView from './AccountVideoView';
+import Export from '../../modules/account/components/Export';
 import './account-view.css';
 
 
@@ -16,10 +17,11 @@ class AccountView extends PureComponent {
         return (
             <React.Fragment>
                 <View className={`AccountView ${ethAddress ? 'connected' : 'not-connected'}`} padding="full">
-                    <header>
+                    <header style={{display: 'flex'}}>
                         <Typography variant="subheading" gutterBottom>
                             {'My Videos'}
                         </Typography>
+                        <Export />
                     </header>
                     <section>
                         <Grid container spacing={16}> 

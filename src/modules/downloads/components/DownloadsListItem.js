@@ -102,6 +102,7 @@ const styles = ({palette, spacing}) => ({
         whiteSpace: 'nowrap',
         textOverflow: 'ellipsis',
         fontWeight: '400',
+        overflow: 'hidden',
     },
     listItemSecondaryText: {
         
