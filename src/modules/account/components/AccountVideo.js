@@ -33,6 +33,7 @@ class AccountVideo extends PureComponent {
             totalHostEarning: PropTypes.instanceOf(BigNumber),
             totalFoundationEarning: PropTypes.instanceOf(BigNumber),
         }),
+        getContentMetrics: PropTypes.func.isRequired,
     }
     _watchNowRef;
     constructor() {
@@ -43,6 +44,9 @@ class AccountVideo extends PureComponent {
         }
     }
     componentDidMount() {
+        if (this.props.video.stakeId) {
+            this.props.getContentMetrics(this.props.video.stakeId)
+        }
         if (this.props.video.purchaseId) {
             this.props.getPurchaseReceipt(this.props.video.purchaseId).then(result => {
                 this.setState({ purchaseReceipt: result })
