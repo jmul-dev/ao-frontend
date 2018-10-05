@@ -17,11 +17,13 @@ export const listenOnIpcChannel = () => {
             window.onerror = function(error, url, line) {
                 window.chrome.ipcRenderer.send('mainWindowError', error);
             }
+            // enable the metamask extension
+            window.chrome.ipcRenderer.send('extensions/metamask/load')
         }        
     }
 }
 
-export const checkElectron = () => {
+export const checkElectron = () => {    
     return {
         type: SET_IS_ELECTRON,
         payload: !!(window.chrome && window.chrome.ipcRenderer)
