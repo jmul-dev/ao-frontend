@@ -21,6 +21,9 @@ type Props = {
         },
         networkStatus: number,
     },
+    // redux connected state
+    app: Object,
+    isElectron: boolean,
     // redux connected actions
     updateAppState: Function,
     connectToWeb3: Function,
@@ -30,6 +33,19 @@ type Props = {
 
 export default class App extends Component<Props> {
     props: Props;
+    constructor() {
+        super()
+        this.state = {
+            didCatch: false,
+            didCatchError: undefined,
+        }
+    }
+    componentDidCatch(error, info) {
+        this.setState({didCatch: true, didCatchError: error})
+        if ( this.props.isElectron ) {
+            window.chrome.ipcRenderer.send('ERRORS_REACT', {error, info});
+        }
+    }
     componentDidMount() {
         const { app, connectToWeb3, listenOnIpcChannel, checkElectron } = this.props
         checkElectron()
@@ -38,7 +54,7 @@ export default class App extends Component<Props> {
             window.web3.version.getNetwork((error, networkId) => {
                 connectToWeb3(networkId)
             })
-        }
+        }        
     }
     componentWillReceiveProps( nextProps: Props ) {
         const { query, updateAppState } = this.props
