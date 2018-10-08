@@ -17,8 +17,6 @@ export const listenOnIpcChannel = () => {
             window.onerror = function(error, url, line) {
                 window.chrome.ipcRenderer.send('ERRORS_MAINWINDOW', error);
             }
-            // enable the metamask extension
-            window.chrome.ipcRenderer.send('EXTENSIONS_LOAD_METAMASK')
             // Listen for external links (have to load via electron)
             document.addEventListener('click', function (event) {                        
                 if (event.target.tagName === 'A' && event.target.target === '_blank') {

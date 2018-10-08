@@ -89,7 +89,7 @@ const initialState = {
         [APP_STATES.APP_INITIALIZING]: true,
         [APP_STATES.CORE_CONNECTED]: false,
         [APP_STATES.CORE_READY]: false,
-        [APP_STATES.WEB3_AVAILABLE]: typeof window.web3 !== 'undefined',
+        [APP_STATES.WEB3_AVAILABLE]: false,
         [APP_STATES.WEB3_CONNECTED]: false,
         [APP_STATES.CONTRACTS_INITIALIZED]: false,
         [APP_STATES.APP_READY]: false,
