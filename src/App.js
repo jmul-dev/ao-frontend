@@ -6,6 +6,7 @@ import DevelopmentBarContainer from './modules/devbar/containers/DevelopmentBarC
 import RegisterContainer from './modules/registration/containers/RegisterContainer';
 import { APP_STATES } from './store/app.reducer';
 import Notifications from './modules/notifications/components/Notifications';
+import Web3 from 'web3';
 import './app-variables.css';
 import './app.css';
 
@@ -21,6 +22,9 @@ type Props = {
         },
         networkStatus: number,
     },
+    // redux connected state
+    app: Object,
+    isElectron: boolean,
     // redux connected actions
     updateAppState: Function,
     connectToWeb3: Function,
@@ -30,14 +34,33 @@ type Props = {
 
 export default class App extends Component<Props> {
     props: Props;
+    constructor() {
+        super()
+        this.state = {
+            didCatch: false,
+            didCatchError: undefined,
+        }
+    }
+    componentDidCatch(error, info) {
+        this.setState({didCatch: true, didCatchError: error})
+        if ( this.props.isElectron ) {
+            window.chrome.ipcRenderer.send('ERRORS_REACT', {error, info});
+        }
+    }
     componentDidMount() {
-        const { app, connectToWeb3, listenOnIpcChannel, checkElectron } = this.props
+        const { app, connectToWeb3, listenOnIpcChannel, checkElectron, updateAppState } = this.props
         checkElectron()
         listenOnIpcChannel()
-        if ( app.states[APP_STATES.WEB3_AVAILABLE] ) {
-            window.web3.version.getNetwork((error, networkId) => {
-                connectToWeb3(networkId)
-            })
+        if ( typeof window.web3 !== 'undefined' ) {
+            window.web3 = new Web3(window.web3.currentProvider)
+            updateAppState(APP_STATES.WEB3_AVAILABLE, true)
+            if ( window.web3.isConnected() ) {
+                window.web3.version.getNetwork((error, networkId) => {
+                    connectToWeb3(networkId)
+                })
+            } else {
+                console.warn(`web3 was injected, but checking web3.isConnected() returned false`)
+            }
         }
     }
     componentWillReceiveProps( nextProps: Props ) {
@@ -60,7 +83,7 @@ export default class App extends Component<Props> {
         }
     }
     render() {
-        const { query, app } = this.props
+        const { query, app, isElectron } = this.props
         const includeDevBar = false // process.env.NODE_ENV !== 'production'
         return (
             <div className={`App ${includeDevBar ? 'development-bar-spacing' : ''}`}>                

@@ -4,8 +4,9 @@ import AOContent from 'ao-contracts/build/contracts/AOContent.json';
 import AOEarning from 'ao-contracts/build/contracts/AOEarning.json';
 import AOLibrary from 'ao-contracts/build/contracts/AOLibrary.json';
 import debounce from 'debounce';
-import { APP_STATES, updateAppState } from '../store/app.reducer';
+import { APP_STATES, updateAppState, getNetworkName } from '../store/app.reducer';
 import { updateIcoState } from '../modules/ico/reducers/ico.reducer';
+import { addNotification } from '../modules/notifications/reducers/notifications.reducer'
 
 
 // Constants
@@ -44,26 +45,36 @@ export const waitForTransactionReceipt = (transactionHash) => {
 export const initializeContracts = (networkId) => {
     return (dispatch, getState) => {
         try {
-            if ( !AOToken.networks[networkId] || !AOTreasury.networks[networkId] || !AOContent.networks[networkId]) {
-                // TODO: some sort of notification
-                alert('Smart contracts have not been deployed on this network['+networkId+']')
-                networkId = "1533066469022"  // TODO: remove (local testing)
+            if ( 
+                !AOToken.networks[networkId] ||
+                !AOTreasury.networks[networkId] ||
+                !AOContent.networks[networkId] ||
+                !AOEarning.networks[networkId] ||
+                !AOLibrary.networks[networkId]
+            ) {
+                console.warn('Smart contracts have not been deployed on this network['+networkId+']')
+                dispatch(updateAppState(APP_STATES.CONTRACTS_INITIALIZED, false))
+                const networkIds = Object.keys(AOToken.networks).map(networkId => getNetworkName(networkId)).join(', ')
+                dispatch(addNotification({
+                    message: `The Ethereum network you selected is not supported. Avialable networks: ${networkIds}`
+                }))
+            } else {
+                console.log('Network id: ', networkId)
+                const contracts = {
+                    aoToken: window.web3.eth.contract(AOToken.abi).at(AOToken.networks[networkId].address),
+                    aoTreasury: window.web3.eth.contract(AOTreasury.abi).at(AOTreasury.networks[networkId].address),
+                    aoContent: window.web3.eth.contract(AOContent.abi).at(AOContent.networks[networkId].address),
+                    aoEarning: window.web3.eth.contract(AOEarning.abi).at(AOEarning.networks[networkId].address),
+                    aoLibrary: window.web3.eth.contract(AOLibrary.abi).at(AOLibrary.networks[networkId].address),
+                }
+                dispatch({
+                    type: CONTRACTS_INITIALIZED,
+                    payload: contracts
+                })
+                dispatch(updateAppState(APP_STATES.CONTRACTS_INITIALIZED, true))
+                dispatch(watchBlockNumber())
+                dispatch(updateIcoState())
             }
-            console.log('Network id: ', networkId)
-            const contracts = {
-                aoToken: window.web3.eth.contract(AOToken.abi).at(AOToken.networks[networkId].address),
-                aoTreasury: window.web3.eth.contract(AOTreasury.abi).at(AOTreasury.networks[networkId].address),
-                aoContent: window.web3.eth.contract(AOContent.abi).at(AOContent.networks[networkId].address),
-                aoEarning: window.web3.eth.contract(AOEarning.abi).at(AOEarning.networks[networkId].address),
-                aoLibrary: window.web3.eth.contract(AOLibrary.abi).at(AOLibrary.networks[networkId].address),
-            }
-            dispatch({
-                type: CONTRACTS_INITIALIZED,
-                payload: contracts
-            })
-            dispatch(updateAppState(APP_STATES.CONTRACTS_INITIALIZED, true))
-            dispatch(watchBlockNumber())
-            dispatch(updateIcoState())
         } catch ( error ) {
             console.error('Error initializing contracts', error)
         }

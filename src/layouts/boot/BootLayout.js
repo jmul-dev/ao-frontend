@@ -32,7 +32,7 @@ class BootLayout extends Component {
                 message: `Unable to connect to ao-core, make sure it is running at: ${window.AO_CORE_URL}`,
                 variant: 'warning',
             })
-        }, 3000)
+        }, 8000)
     }
     componentWillUnmount() {
         clearTimeout(this._connectionTimeout)

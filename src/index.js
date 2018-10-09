@@ -6,13 +6,9 @@ import { configureStore, history } from './store/configureStore';
 import { ApolloClient } from 'apollo-client';
 import { InMemoryCache, defaultDataIdFromObject } from 'apollo-cache-inmemory';
 import { createUploadLink } from 'apollo-upload-client/lib/main';
-import Web3 from 'web3';
+
 
 window.AO_CORE_URL = 'http://localhost:3003' // TODO: pull this from env or config
-
-if ( typeof window.web3 !== 'undefined' ) {
-    window.web3 = new Web3(window.web3.currentProvider)
-}
 
 const store = configureStore();
 

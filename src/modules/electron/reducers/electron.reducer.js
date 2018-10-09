@@ -15,13 +15,23 @@ export const listenOnIpcChannel = () => {
                 })
             })
             window.onerror = function(error, url, line) {
-                window.chrome.ipcRenderer.send('mainWindowError', error);
+                window.chrome.ipcRenderer.send('ERRORS_MAINWINDOW', error);
             }
+            // Listen for external links (have to load via electron)
+            document.addEventListener('click', function (event) {                        
+                if (event.target.tagName === 'A' && event.target.target === '_blank') {
+                    event.preventDefault()
+                    window.chrome.ipcRenderer.send('OPEN_EXTERNAL_LINK', event.target.href)
+                } else if ( event.target.parentElement && event.target.parentElement.tagName === 'A' && event.target.parentElement.target === '_blank') {
+                    event.preventDefault()
+                    window.chrome.ipcRenderer.send('OPEN_EXTERNAL_LINK', event.target.parentElement.href)
+                }
+            })
         }        
     }
 }
 
-export const checkElectron = () => {
+export const checkElectron = () => {    
     return {
         type: SET_IS_ELECTRON,
         payload: !!(window.chrome && window.chrome.ipcRenderer)

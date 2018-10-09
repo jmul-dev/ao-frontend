@@ -8,7 +8,8 @@ import { listenOnIpcChannel, checkElectron } from './modules/electron/reducers/e
 // Redux
 const mapStateToProps = (store) => {
     return {
-        app: store.app
+        app: store.app,
+        isElectron: store.electron.isElectron,
     }
 }
 const mapDispatchToProps = {
