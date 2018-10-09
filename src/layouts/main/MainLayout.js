@@ -8,6 +8,7 @@ import BrowseView from '../../views/browse/BrowseView';
 import UploadView from '../../views/upload/UploadView';
 import IcoView from '../../views/ico/IcoView';
 import WalletView from '../../views/wallet/WalletView';
+import DevelopersView from '../../views/developers/DevelopersView';
 import VideoPlayback from '../../modules/video/components/VideoPlayback';
 import MainNavigation from './MainNavigation';
 import { AnimatedRoute } from 'react-router-transition';
@@ -24,6 +25,7 @@ const ViewRoutes = () => (
             {/* <Route path="/app/view/settings" component={SettingsView} /> */}
             <Route path="/app/view/wallet" component={WalletView} />
             <Route path="/app/view/upload/:step?" component={UploadView} />
+            <Route path="/app/view/developers" component={DevelopersView} />
         </Switch>
     </div>
 )

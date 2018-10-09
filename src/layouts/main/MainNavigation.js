@@ -81,7 +81,15 @@ const MainNavigation = ({ isElectron, offcanvas, showDownloads, overlayViewsActi
                 <div className={classes.downloadsContainer}>
                     <DownloadsList />
                 </div>
-            ) : null}                  
+            ) : null}   
+            <ul className={classes.navList} style={{marginTop: showDownloads ? 0 : 'auto'}}>
+                <li className={classes.navListItem}>
+                    <NavLink className={classes.navListItemLink} to="/app/view/developers">
+                        <img src={navIconBrowseSrc} className={classes.navLinkIcon} alt="Developers" />
+                        <Typography variant="caption" className={classes.navLinkCopy}>{'Developers'}</Typography>
+                    </NavLink>
+                </li>
+            </ul>               
         </div>
     </nav>
 )
