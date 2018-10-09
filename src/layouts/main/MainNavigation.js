@@ -40,8 +40,8 @@ const MainNavigation = ({ isElectron, offcanvas, showDownloads, overlayViewsActi
                 </li>
                 <li className={classes.navListItem}>
                     <NavLink className={classes.navListItemLink} to="/app/view/ico" replace={overlayViewsActive}>
-                        <img src={navIconTokenExchangeSrc} className={classes.navLinkIcon} alt="Coin Exchange" />
-                        <Typography variant="caption" className={classes.navLinkCopy}>{'Coin Exchange'}</Typography>
+                        <img src={navIconTokenExchangeSrc} className={classes.navLinkIcon} alt="Exchange" />
+                        <Typography variant="caption" className={classes.navLinkCopy}>{'Exchange'}</Typography>
                     </NavLink>
                 </li>
                 <li className={classes.navListItem}>
