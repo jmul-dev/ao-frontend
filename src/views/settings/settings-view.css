@@ -14,22 +14,5 @@
     margin-top: 12px;
 }
 .SettingsView form label + div {
-    background: white;
-}
-.SettingsView .section-console {
-    height: 100%;
-    max-height: calc(100vh - 240px);
-    background: white;
-    padding: 16px;
-    padding-bottom: 0;
-    display: flex;
-    flex-direction: column;
-}
-.SettingsView .Console {
-    flex: 1;
-    overflow: auto;
-}
-.SettingsView .console-heading {
-    margin-top: 8px;
-    margin-bottom: 18px;
+    background:#2d2d2d;
 }

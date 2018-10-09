@@ -1,7 +1,5 @@
-// @flow
 import React, { PureComponent } from 'react';
 import View from '../View';
-import ConsoleContainer from '../../modules/console/containers/ConsoleContainer';
 import SettingsInput from '../../modules/settings';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
@@ -13,12 +11,12 @@ export default class SettingsView extends PureComponent {
         return (
             <View className={'SettingsView'} padding="full">
                 <header>
-                    <Typography variant="display3" gutterBottom>
+                    <Typography variant="subheading" gutterBottom>
                         {'Settings'}
                     </Typography>
                 </header>
                 <Grid container spacing={16}>                
-                    <Grid item xs={4}>
+                    <Grid item xs={12} sm={10} md={6}>
                         <section>
                             <Typography variant="subheading" gutterBottom>
                                 {'General'}
@@ -46,14 +44,6 @@ export default class SettingsView extends PureComponent {
                                 {'P2P'}
                             </Typography>
                             <SettingsInput disabled inputName="maxPeerConnections" />
-                        </section>
-                    </Grid>
-                    <Grid item xs={6} style={{marginLeft: 'auto'}}>     
-                        <section className="section-console">
-                            <Typography variant="subheading" gutterBottom className="console-heading">
-                                {'Activity Log'}
-                            </Typography>
-                            <ConsoleContainer />
                         </section>
                     </Grid>
                 </Grid>                

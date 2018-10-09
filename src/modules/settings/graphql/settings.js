@@ -8,7 +8,6 @@ export type SettingsType = {
     runInBackground: boolean,
     runOnStartup: boolean,
     checkForUpdates: boolean,
-    diskSpaceAvailable: number,
 }
 
 export const SettingsFieldsFragment = `
@@ -20,7 +19,6 @@ export const SettingsFieldsFragment = `
         runInBackground,
         runOnStartup,
         checkForUpdates,
-        diskSpaceAvailable
     }
 `
 

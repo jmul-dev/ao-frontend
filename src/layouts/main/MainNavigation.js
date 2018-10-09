@@ -62,12 +62,18 @@ const MainNavigation = ({ isElectron, offcanvas, showDownloads, overlayViewsActi
                         <Typography variant="caption" className={classes.navLinkCopy}>{'My Wallet'}</Typography>
                     </NavLink>
                 </li>
-                {/* <li className={classes.navListItem}>
+                <li className={classes.navListItem}>
                     <NavLink className={classes.navListItemLink} to="/app/view/settings" replace={overlayViewsActive}>
                         <img src={navIconSettingsSrc} className={classes.navLinkIcon} alt="Settings" />
                         <Typography variant="caption" className={classes.navLinkCopy}>{'Settings'}</Typography>
                     </NavLink>
-                </li> */}
+                </li>
+                <li className={classes.navListItem}>
+                    <NavLink className={classes.navListItemLink} to="/app/view/ingress" replace={overlayViewsActive}>
+                        <img src={navIconWalletSrc} className={classes.navLinkIcon} alt="Ingress" />
+                        <Typography variant="caption" className={classes.navLinkCopy}>{'Ingress'}</Typography>
+                    </NavLink>
+                </li>
                 {isElectron ? (
                     <li className={classes.navListItem}>
                         <ButtonBase className={classes.navListItemLink} onClick={openMetamask} disableRipple={true}>
