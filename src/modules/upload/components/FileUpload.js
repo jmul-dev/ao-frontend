@@ -52,7 +52,7 @@ class FileUpload extends Component<Props> {
         if ( onInputChange ) onInputChange(acceptedFiles[0])
     }
     render() {
-        const { inputValue, disabled, accept } = this.props
+        const { inputValue, disabled, accept, style } = this.props
         let innerStyles = styles.inner
         let videoPreview = null
         if ( inputValue ) {
@@ -65,9 +65,10 @@ class FileUpload extends Component<Props> {
                 // We simply image preview as background of inner container
                 innerStyles = Object.assign({}, styles.inner, {backgroundImage: `url(${inputValue.preview})`})
             }
-        }        
+        }       
+        const combinedStyles = Object.assign({}, styles.container, style) 
         return (
-            <Dropzone disabled={disabled} onDrop={this._onDrop} style={styles.container} accept={accept}>
+            <Dropzone disabled={disabled} onDrop={this._onDrop} style={combinedStyles} accept={accept}>
                 {videoPreview}
                 <div style={innerStyles}>
                     {!inputValue ? this.props.children : null}

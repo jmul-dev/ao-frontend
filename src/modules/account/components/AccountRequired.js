@@ -13,7 +13,7 @@ import metamaskIconSrc from '../../../assets/nav-icon-metamask.svg';
  *     render disabled account required button
  */
 const AccountRequired = connect((state) => ({
-    isElectron: state.electron.isElectron || true,
+    isElectron: state.electron.isElectron,
     ethAddress: state.app.ethAddress,
 }))(({isElectron, ethAddress, children, ...props}) => {
     return ethAddress ? children : (

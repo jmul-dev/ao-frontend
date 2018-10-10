@@ -1,4 +1,3 @@
-// @flow
 import React, { Component } from 'react';
 import { Redirect } from 'react-router';
 import FileUpload from '../components/FileUpload';
@@ -6,7 +5,17 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import { PrimaryButton } from '../../../theme';
 import withUploadFormData from '../containers/withUploadFormData';
-import UnlockIcon from '@material-ui/icons/LockOpen';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
+import ListItemText from '@material-ui/core/ListItemText';
+import videoIconSrc from '../../../assets/nav-icon-my-videos.svg';
+import { withStyles } from '@material-ui/core/styles';
+import { compose } from 'react-apollo';
+import CloseIcon from '@material-ui/icons/Remove';
+import OpenIcon from '@material-ui/icons/Add';
+import AccountRequired from '../../account/components/AccountRequired';
 
 
 type Props = {
@@ -34,35 +43,165 @@ class UploadForm extends Component<Props> {
         }
     }
     render() {
-        const { asPlaceholder, form } = this.props        
+        const { asPlaceholder, form, classes } = this.props        
         return form.video ? (
             <Redirect to="/app/view/upload/pricing" />
         ) : (
             <div className={`UploadForm ${asPlaceholder ? 'placeholder' : ''}`}>
                 <Typography className="title" variant="subheading" style={{display: 'flex', alignItems: 'flex-end'}}>
-                    {`Video Upload`} {asPlaceholder ? (
-                        <React.Fragment>
-                            <UnlockIcon style={{marginRight: 8, marginLeft: 8}} />
-                            <Typography variant="caption" component="span" style={{display: 'inline'}}>{'Unlock your account to proceed'}</Typography>                            
-                        </React.Fragment>                        
-                    ) : null}
+                    {`Upload Content`}
                 </Typography>
-                <FileUpload disabled={asPlaceholder} inputName="video" onInputChange={this._onFileInputChange}>
-                    <div className="video-input" style={{opacity: asPlaceholder ? 0.5 : 1}}>
-                        <Typography variant="display2" gutterBottom align="center">
-                            {'drag and drop to upload'}
-                        </Typography>
-                        <Typography variant="caption" gutterBottom align="center">
-                            {'mp4 or mov files'}
-                        </Typography>
-                        <PrimaryButton disabled={asPlaceholder} style={{marginTop: 24}}>
-                            {'or choose a file'}
-                        </PrimaryButton>
-                    </div>
-                </FileUpload>
+                <List>
+                    <ListItem className={`${classes.li} ${classes.liActive} ${classes.liActiveTop}`}>
+                        <ListItemIcon>
+                            <img src={videoIconSrc} alt="Video content" className={classes.icon} />
+                        </ListItemIcon>
+                        <ListItemText 
+                            primary={`Video`}
+                            primaryTypographyProps={{
+                                className: classes.liText
+                            }}
+                        />
+                        <ListItemIcon>
+                            <CloseIcon className={classes.icon} style={{opacity: 0.5}} />
+                        </ListItemIcon>
+                    </ListItem>
+                    <li className={`${classes.li} ${classes.liActive} ${classes.liActiveBottom}`}>
+                        <FileUpload 
+                            disabled={asPlaceholder} 
+                            inputName="video" 
+                            onInputChange={this._onFileInputChange}
+                            style={{paddingBottom: '50%'}}
+                            >
+                            <div className="video-input">
+                                <Typography variant="display2" gutterBottom align="center">
+                                    {'drag and drop to upload'}
+                                </Typography>
+                                <Typography variant="caption" align="center" style={{marginBottom: 24}}>
+                                    {'mp4 or mov files'}
+                                </Typography>
+                                <AccountRequired>
+                                    <PrimaryButton disabled={asPlaceholder}>
+                                        {'or choose a file'}
+                                    </PrimaryButton>
+                                </AccountRequired>
+                            </div>
+                        </FileUpload>
+                    </li>
+                    <ListItem className={`${classes.li} ${classes.liInactive}`} disabled={true}>
+                        <ListItemIcon>
+                            <img src={videoIconSrc} alt="Video content" className={classes.icon} />
+                        </ListItemIcon>
+                        <ListItemText 
+                            primary={`Music`}
+                            primaryTypographyProps={{
+                                className: classes.liText
+                            }}
+                        />
+                        <ListItemText 
+                            secondary={`coming soon`}
+                            className={classes.textAlignRight}
+                        />
+                    </ListItem>
+                    <ListItem className={`${classes.li} ${classes.liInactive}`} disabled={true}>
+                        <ListItemIcon>
+                            <img src={videoIconSrc} alt="Video content" className={classes.icon} />
+                        </ListItemIcon>
+                        <ListItemText 
+                            primary={`Image`}
+                            primaryTypographyProps={{
+                                className: classes.liText
+                            }}
+                        />
+                        <ListItemText 
+                            secondary={`coming soon`}
+                            className={classes.textAlignRight}
+                        />
+                    </ListItem>
+                    <ListItem className={`${classes.li} ${classes.liInactive}`} disabled={true}>
+                        <ListItemIcon>
+                            <img src={videoIconSrc} alt="Video content" className={classes.icon} />
+                        </ListItemIcon>
+                        <ListItemText 
+                            primary={`Document`}
+                            primaryTypographyProps={{
+                                className: classes.liText
+                            }}
+                        />
+                        <ListItemText 
+                            secondary={`coming soon`}
+                            className={classes.textAlignRight}
+                        />
+                    </ListItem>
+                    <ListItem className={`${classes.li} ${classes.liInactive}`} disabled={true}>
+                        <ListItemIcon>
+                            <img src={videoIconSrc} alt="Video content" className={classes.icon} />
+                        </ListItemIcon>
+                        <ListItemText 
+                            primary={`Digital Asset`}
+                            primaryTypographyProps={{
+                                className: classes.liText
+                            }}
+                        />
+                        <ListItemText 
+                            secondary={`coming soon`}
+                            className={classes.textAlignRight}
+                        />
+                    </ListItem>
+                    <ListItem className={`${classes.li} ${classes.liInactive}`} disabled={true}>
+                        <ListItemIcon>
+                            <img src={videoIconSrc} alt="Video content" className={classes.icon} />
+                        </ListItemIcon>
+                        <ListItemText 
+                            primary={`Application`}
+                            primaryTypographyProps={{
+                                className: classes.liText
+                            }}
+                        />
+                        <ListItemText 
+                            secondary={`coming soon`}
+                            className={classes.textAlignRight}
+                        />
+                    </ListItem>
+                </List>
             </div>
         );
     }
 }
 
-export default withUploadFormData(UploadForm);
+const styles = ({palette, spacing}) => ({
+    icon: {
+        height: 30,
+        width: 'auto'
+    },
+    li: {
+        paddingTop: spacing.unit * 3,
+        paddingBottom: spacing.unit * 3,
+    },
+    liActive: {
+        backgroundColor: `#151515`,
+        border: `1px solid #222222`,
+    },
+        liActiveTop: {
+            borderBottom: 0,
+        },
+        liActiveBottom: {
+            borderTop: 0,
+            padding: spacing.unit * 4
+        },
+    liInactive: {
+        border: `1px solid #222222`,
+        marginTop: -1,
+    },
+    textAlignRight: {
+        textAlign: 'right',
+    },
+    liText: {
+        fontWeight: 'normal'
+    }
+})
+
+export default compose(
+    withStyles(styles),
+    withUploadFormData,
+)(UploadForm);
