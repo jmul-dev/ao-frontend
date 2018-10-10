@@ -45,10 +45,12 @@ export default class IcoView extends PureComponent {
                 <header className="section-padding bg-black" style={{backgroundImage: `url(${bgShapesSrc})`}}>
                     <div className="heading-copy">
                         <Typography variant="display1" gutterBottom>
-                            {`Own a part of the AO network`}
+                            {`Become a part of The AO`}<sup>*</sup>
                         </Typography>
                         <Typography variant="display2" className="subtitle">
-                            {`an information-currency, data marketplace, and platform for distributed apps`}
+                            {`because humanity should think more like a human.`}
+                            <br/><br/>
+                            {`The AO is Abstract Order organizing information into an information-currency that powers the Autonomous Organization governing a decentralized socio-economic ecosystem and distributed application platform.`}
                         </Typography>
                     </div>
                     <div className="progress-banner">
@@ -69,7 +71,7 @@ export default class IcoView extends PureComponent {
                 </header>
                 <section className="section-padding vertical-padding-large bg-black">
                     <Typography variant="display1" gutterBottom style={{fontSize: '2.8125rem'}} className="heading-copy">
-                        {`The AO network uses blockchain technology in order to turn content into commerce.`}
+                        {`The AO Protocol mimics the mind and enables commerce on its content.`}
                     </Typography>
                     <img src={infographSrc} alt="AO Network Overview" className="infograph" />
                 </section>
@@ -84,7 +86,7 @@ export default class IcoView extends PureComponent {
                     <section className="section-padding padding-top-0" style={{backgroundColor: lightTheme.palette.background.default, overflow: 'hidden'}}>
                         <ComparisonTable />
                     </section>
-                </MuiThemeProvider>                
+                </MuiThemeProvider>
                 <section className="section-padding section-denominations" style={{backgroundImage: `url(${bgDenominationsSrc})`}}>
                     <div className="section-heading">
                         <Typography variant="display1" className="section-number">{`1.`}</Typography>
