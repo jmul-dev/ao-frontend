@@ -43,7 +43,7 @@ export const darkTheme = createMuiTheme({
         },
         display1: {
             fontSize: '4rem',
-            fontWeight: 'bold',
+            // fontWeight: 'bold',
             color: '#FFFFFF'
         },
         display2: {

@@ -67,11 +67,11 @@ class Wallet extends PureComponent {
                     </header>
                     <div className="balances">
                         <div>
-                            <Typography variant="display1">{networkTokenBalanceFormatted.value}</Typography>
+                            <Typography variant="display1" style={{fontWeight: 'normal', lineHeight: '1em'}}>{networkTokenBalanceFormatted.value}</Typography>
                             <Typography variant="body1">{networkTokenBalanceFormatted.label}</Typography>
                         </div>
                         <div>
-                            <Typography variant="display1">{icoTokenBalanceFormatted.value}</Typography>
+                            <Typography variant="display1" style={{fontWeight: 'normal', lineHeight: '1em'}}>{icoTokenBalanceFormatted.value}</Typography>
                             <Typography variant="body1">{icoTokenBalanceFormatted.label}</Typography>
                         </div>
                     </div>

@@ -76,7 +76,7 @@ export default class IcoView extends PureComponent {
                 <MuiThemeProvider theme={lightTheme}>
                     <section className="section-padding vertical-padding-large" style={{backgroundColor: lightTheme.palette.background.default}}>
                         <div className="centered-content">
-                            <Typography variant="display3" style={{fontWeight: 'bold', lineHeight: '1.85rem'}}>
+                            <Typography variant="display3" style={{lineHeight: '1.85rem'}}>
                                 {`Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam efficitur augue sapien, id ullamcorper velit rutrum id. Suspendisse risus nibh, blandit quis volutpat eget, tempor quis dui. Integer vitae ligula faucibus, fringilla dui sed, auctor ipsum.`}
                             </Typography>
                         </div>                    
@@ -123,7 +123,7 @@ export default class IcoView extends PureComponent {
                 </MuiThemeProvider>                
                 <section className="section-split">
                     <Grid container spacing={16}>
-                        <Grid item xs={12} sm={6} style={{backgroundColor: '#000000'}}>
+                        <Grid item xs={12} sm={6} style={{backgroundColor: '#111111'}}>
                             <div className="multiplier-overview">
                                 <div className="copy-padding">
                                     <Typography variant="body1" gutterBottom>{`WHY BUY NOW?`}</Typography>

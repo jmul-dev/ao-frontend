@@ -1,4 +1,3 @@
-// @flow
 import React, { Component } from 'react';
 import View from '../View';
 import Clock from '../../modules/clock/components/Clock';
@@ -36,7 +35,7 @@ class BrowseView extends Component {
             <View className={containerClasses} padding="none">
                 <Fade in={!searchBarActive && !searchActive}>
                     <header>
-                        <Clock />
+                        {/* <Clock /> */}
                         <div style={{marginLeft: 'auto'}}>
                             <IconButton style={{marginRight: '-14px'}} onClick={this._openSearchBar}>
                                 <SearchIcon />

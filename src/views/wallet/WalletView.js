@@ -14,7 +14,7 @@ class WalletView extends PureComponent {
     render() {
         const { ethAddress } = this.props
         return (
-            <View className={`WalletView ${ethAddress ? 'connected' : 'not-connected'}`} padding="full">                
+            <View className={`WalletView ${ethAddress ? 'connected' : 'not-connected'}`} padding="full">
                 <header style={{marginBottom: 36}}>
                     <Typography variant="subheading" gutterBottom>
                         {'My Wallet'}         
@@ -38,9 +38,9 @@ class WalletView extends PureComponent {
                         <Grid item xs={12} sm={6}>
                             <Wallet />
                         </Grid>
-                        <Grid item xs={12} sm={5} style={{marginLeft: 'auto'}}>
+                        <Grid item xs={12} sm={5} style={{marginLeft: 'auto', border: '1px solid #222222', padding: '16px', paddingBottom: 0}}>
                             <section className="section-console">
-                                <Typography variant="subheading" gutterBottom className="console-heading">
+                                <Typography variant="display3" className="console-heading" style={{marginTop: 24, marginBottom: 24}}>
                                     {'Activity Log'}
                                 </Typography>
                                 <ConsoleContainer style={{maxHeight: `calc(100vh - 340px)`, overflow: 'auto'}}/>

@@ -62,7 +62,7 @@ class AccountVideoListItem extends Component {
         if (isCompleted) {
             return (
                 <ButtonBase component={Link} to={`/app/view/videos/${video.id}`} className={classes.completedCardStateContainer}>
-                    <Typography variant="display3" className={classes.completedCardStateContainerTitle}>
+                    <Typography variant="subheading" className={classes.completedCardStateContainerTitle}>
                         {video.title}
                     </Typography>
                     <div className={classes.statsContainer}>
@@ -80,7 +80,7 @@ class AccountVideoListItem extends Component {
                         <StateIcon className={classes.stateIcon} />
                     </div>
                     <div>
-                        <Typography variant="body1" gutterBottom color="textSecondary" component="div">{video.title}</Typography>
+                        <Typography variant="subheading" component="div">{video.title}</Typography>
                         <ContentPurchaseAction contentRef={this._watchNowRef} content={video}>{({ action, actionCopy, loading }) => (
                             <ButtonBase onClick={action} disabled={!action || loading}>
                                 <Typography variant="body1" gutterBottom color={!action || loading ? "textSecondary" : "primary"}>{stateCopy || actionCopy}</Typography>
@@ -157,6 +157,7 @@ const styles = ({ spacing }) => ({
         flexDirection: 'column',
         alignItems: 'flex-start',
         height: '100%',
+        paddingLeft: spacing.unit * 5
     },
     completedCardStateContainerTitle: {
         marginBottom: spacing.unit * 2
@@ -164,7 +165,7 @@ const styles = ({ spacing }) => ({
     statsContainer: {
         width: '100%',
         display: 'flex',
-        paddingLeft: 40,
+        // paddingLeft: 40,
     },
     incompleteCardStateContainer: {
         display: 'flex',
@@ -202,7 +203,7 @@ export const AccountVideoListItemPlaceholder = () => (
                 <div className="featured-image placeholder-bg"></div>
             </Grid>
             <Grid item sm={8} className="card-container">
-                <Typography className="placeholder-text" variant="display3" gutterBottom>
+                <Typography className="placeholder-text" variant="subheading" gutterBottom>
                     {'Lorem ipsum dolor'}
                 </Typography>
                 <Typography className="placeholder-text" variant="body1" gutterBottom color="textSecondary">

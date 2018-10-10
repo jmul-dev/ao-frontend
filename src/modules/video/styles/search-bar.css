@@ -1,7 +1,7 @@
 .SearchBar .close-container {
     justify-content: flex-end;
     display: flex;
-    margin-bottom: 24px;
+    margin-bottom: 8px;
 }
 
 .SearchBar .input-container {

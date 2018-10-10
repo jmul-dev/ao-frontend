@@ -24,12 +24,12 @@ class AccountVideoFilters extends PureComponent {
         return (
             <div className="AccountVideoFilters">
                 <Button onClick={this._setActiveFilter.bind(this, 'downloaded')} disabled={disabled || filter === 'downloaded'}>
-                    <Typography variant="title" style={{fontWeight: 'bold', color: filter === 'downloaded' ? '#FFFFFF' : '#444444'}}>
+                    <Typography variant="display3" component="span" style={{color: filter === 'downloaded' ? '#FFFFFF' : '#777777'}}>
                         {`Downloaded`}
                     </Typography>
                 </Button>
                 <Button onClick={this._setActiveFilter.bind(this, 'uploaded')} disabled={disabled || filter === 'uploaded'}>
-                    <Typography variant="title" style={{fontWeight: 'bold', color: filter === 'uploaded' ? '#FFFFFF' : '#444444'}}>
+                    <Typography variant="display3" component="span" style={{color: filter === 'uploaded' ? '#FFFFFF' : '#777777'}}>
                         {`My videos`}
                     </Typography>
                 </Button>                

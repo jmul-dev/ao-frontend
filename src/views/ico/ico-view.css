@@ -30,7 +30,7 @@
     padding: 24px 60px;
 }
 .IcoView .bg-black {
-    background-color: #000000;
+    background-color: #111111;
 }
 .IcoView .infograph {
     width: 100%;
@@ -103,7 +103,7 @@
 }
 .IcoView .multiplier-overview img.multiplier-graph {
     width: 100%;
-    margin-top: 80px;
+    margin-top: 150px;
     margin-bottom: -12px;
 }
 .IcoView .section-exchange .centered-content {

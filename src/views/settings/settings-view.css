@@ -1,3 +1,6 @@
+.SettingsView > * {
+    opacity: 0.3;
+}
 .SettingsView header {
     margin-bottom: 24px;
 }
