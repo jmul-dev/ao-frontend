@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import withUserWallet from '../containers/withUserWallet';
 import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
+import { PrimaryButton } from '../../../theme';
 import ArrowIcon from '@material-ui/icons/ArrowUpward';
 import ExchangeModal from '../../exchange/components/ExchangeModal';
 import { formattedTokenAmount } from '../../../utils/denominations';
@@ -86,16 +86,15 @@ class Wallet extends PureComponent {
                         <Typography variant="body1"><b>{tokenEarnedFormatted.value}</b> {tokenEarnedFormatted.label}</Typography>
                     </div>
                 </div>
-                <Button 
+                <PrimaryButton 
                     size="small" 
-                    variant="flat" 
                     color={ethAddress ? "primary" : "default"} 
                     style={{borderRadius: 0, fontSize: '1rem', padding: '8px 16px'}} 
                     disabled={!ethAddress}
                     onClick={() => this.setState({exchangeModalOpen: true})}
                     >
                     {'exchange tokens'} <ArrowIcon style={{transform: 'rotate(45deg)', fontSize: '1rem', marginLeft: 12}}/>
-                </Button>
+                </PrimaryButton>
                 <ExchangeModal 
                     open={this.state.exchangeModalOpen}
                     onClose={this._onExchangeModalClose}

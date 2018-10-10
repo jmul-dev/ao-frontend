@@ -4,6 +4,7 @@ import { Redirect } from 'react-router';
 import FileUpload from '../components/FileUpload';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
+import { PrimaryButton } from '../../../theme';
 import withUploadFormData from '../containers/withUploadFormData';
 import UnlockIcon from '@material-ui/icons/LockOpen';
 
@@ -54,9 +55,9 @@ class UploadForm extends Component<Props> {
                         <Typography variant="caption" gutterBottom align="center">
                             {'mp4 or mov files'}
                         </Typography>
-                        <Button disabled={asPlaceholder} color="primary" style={{marginTop: 24}}>
+                        <PrimaryButton disabled={asPlaceholder} style={{marginTop: 24}}>
                             {'or choose a file'}
-                        </Button>
+                        </PrimaryButton>
                     </div>
                 </FileUpload>
             </div>

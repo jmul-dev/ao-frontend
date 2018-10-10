@@ -12,7 +12,7 @@ import {
 import ReduxProvider from './ReduxProvider';
 // Themes
 import {muiTheme} from 'storybook-addon-material-ui';
-import { darkTheme, lightTheme } from '../src/theme';
+import { darkTheme, lightTheme, PrimaryButton } from '../src/theme';
 import { MuiThemeProvider } from '@material-ui/core/styles';
 // Components
 import ComparisonTable from '../src/modules/ico/components/ComparisonTable';
@@ -23,7 +23,6 @@ import Exchange from '../src/modules/exchange/components/Exchange';
 import BigNumber from 'bignumber.js';
 import { IcoStatsWithStyles } from '../src/modules/ico/components/IcoStats';
 import { RecentTransactionsWithStyles } from '../src/modules/ico/components/RecentTransactions';
-import { EnqueuedVideos } from '../src/modules/video/components/EnqueuedVideos';
 
 
 const onChange = action('onChange')
@@ -43,6 +42,14 @@ const ThemeWrapper = ({theme = darkTheme, background, children}) => (
         </div>
     </MuiThemeProvider>
 )
+
+storiesOf('Theme')
+    .addDecorator(muiTheme([darkTheme]))
+    .add('PrimaryButton', () => (
+        <ThemeWrapper theme={darkTheme} background={darkTheme.palette.secondary.main}>
+            <PrimaryButton>{'Click me'}</PrimaryButton>
+        </ThemeWrapper>
+    ))
 
 storiesOf('Network Exchange')
     .addDecorator(muiTheme([lightTheme, darkTheme]))

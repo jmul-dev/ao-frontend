@@ -6,6 +6,7 @@
  */
 import React from 'react';
 import { createMuiTheme, withStyles } from '@material-ui/core/styles';
+import { darken } from '@material-ui/core/styles/colorManipulator';
 import Button from '@material-ui/core/Button';
 
 
@@ -25,6 +26,11 @@ export const PrimaryButton = withStyles(({palette}) => ({
     disabled: {
         background: palette.background.default,
     },
+    textPrimary: {
+        '&:hover': {
+            backgroundColor: palette.primary.dark // darken(palette.primary.main)
+        }
+    },
 }))(primaryButton)
 
 
@@ -43,7 +49,6 @@ export const darkTheme = createMuiTheme({
         },
         display1: {
             fontSize: '4rem',
-            // fontWeight: 'bold',
             color: '#FFFFFF'
         },
         display2: {
@@ -59,7 +64,7 @@ export const darkTheme = createMuiTheme({
         primary: {
             light: 'rgba(0, 204, 71, 0.5)',
             main: 'rgba(0, 204, 71, 1)',
-            dark: '#2445FC',
+            dark: darken('rgba(0, 204, 71, 1)', 0.25),
         },
         secondary: {
             main: '#4A546D',
@@ -121,7 +126,7 @@ export const lightTheme = createMuiTheme({
         primary: {
             light: 'rgba(0, 204, 71, 0.5)',
             main: 'rgba(0, 204, 71, 1)',
-            dark: '#2445FC',
+            dark: darken('rgba(0, 204, 71, 1)', 0.25),
             contrastText: "#FFFFFF",
         },
         secondary: {
