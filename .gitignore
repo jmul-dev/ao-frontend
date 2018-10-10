@@ -8,6 +8,7 @@
 
 # production
 /build
+/build-ico
 
 # misc
 .DS_Store
