@@ -13,6 +13,7 @@ import { ContentPurchaseAction, ContentPurchaseState } from './ContentPurchaseAc
 import moment from 'moment';
 import ClockIcon from '@material-ui/icons/Schedule';
 import BigNumber from 'bignumber.js';
+import AccountRequired from '../../account/components/AccountRequired';
 
 
 type Props = {
@@ -211,7 +212,7 @@ class TeaserCard extends Component<Props> {
                                 {`your balance: `}<TokenBalance baseAmount={networkTokenBalance} isPrimordial={false} />
                             </Typography>
                             {this._renderLastSeen()}
-                            {this._renderActionState()}
+                            <AccountRequired>{this._renderActionState()}</AccountRequired>
                             {videoQuery.video ? (
                                 <div style={{marginTop: 8}}>
                                     <DatStats stats={[videoQuery.video.metadataDatStats, videoQuery.video.fileDatStats]} />
