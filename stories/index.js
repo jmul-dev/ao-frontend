@@ -53,14 +53,16 @@ storiesOf('Theme')
     ))
 
 storiesOf('Exchange')
-    .addDecorator(muiTheme([lightTheme]))
+    .addDecorator(muiTheme([lightTheme, darkTheme]))
     .addDecorator(withKnobs)
     .add('TokenInput', () => (
         <TokenInput 
-            baseInputValue={new BigNumber(number('Input value', 0))}
-            isPrimordial={boolean('isPrimordial', false)} 
-            onChange={() => {}}           
-            disabled={false}
+            label={'Send'}
+            value={number('Input value', 10)}
+            denominationName={'tera'}
+            isPrimordial={boolean('isPrimordial', true)} 
+            onChange={(inputs) => {console.log(inputs)}}           
+            disabled={boolean('disabled', false)}
             supplementalText={`multiplier = 3.5`}
         />
     ))
