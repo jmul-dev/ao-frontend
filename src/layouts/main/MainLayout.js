@@ -27,7 +27,7 @@ const ViewRoutes = () => (
             <Route path="/app/view/wallet" component={WalletView} />
             <Route path="/app/view/upload/:step?" component={UploadView} />
             <Route path="/app/view/developers" component={DevelopersView} />
-            <Route path="/app/view/ingress" component={IngressView} />
+            <Route path="/app/view/updates" component={IngressView} />
         </Switch>
     </div>
 )

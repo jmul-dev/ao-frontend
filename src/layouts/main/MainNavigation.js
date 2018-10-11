@@ -46,14 +46,14 @@ const MainNavigation = ({ isElectron, offcanvas, showDownloads, overlayViewsActi
                 </li>
                 <li className={classes.navListItem}>
                     <NavLink className={classes.navListItemLink} to="/app/view/videos" replace={overlayViewsActive}>
-                        <img src={navIconMyVideosSrc} className={classes.navLinkIcon} alt="My Videos" />
-                        <Typography variant="caption" className={classes.navLinkCopy}>{'My Videos'}</Typography>
+                        <img src={navIconMyVideosSrc} className={classes.navLinkIcon} alt="My Content" />
+                        <Typography variant="caption" className={classes.navLinkCopy}>{'My Content'}</Typography>
                     </NavLink>
                 </li>
                 <li className={classes.navListItem}>
                     <NavLink className={classes.navListItemLink} to="/app/view/upload" replace={overlayViewsActive}>
-                        <img src={navIconUploadSrc} className={classes.navLinkIcon} alt="Upload Videos" />
-                        <Typography variant="caption" className={classes.navLinkCopy}>{'Upload Videos'}</Typography>
+                        <img src={navIconUploadSrc} className={classes.navLinkIcon} alt="Upload Content" />
+                        <Typography variant="caption" className={classes.navLinkCopy}>{'Upload Content'}</Typography>
                     </NavLink>
                 </li>
                 <li className={classes.navListItem}>
@@ -69,9 +69,9 @@ const MainNavigation = ({ isElectron, offcanvas, showDownloads, overlayViewsActi
                     </NavLink>
                 </li>
                 <li className={classes.navListItem}>
-                    <NavLink className={classes.navListItemLink} to="/app/view/ingress" replace={overlayViewsActive}>
-                        <img src={navIconWalletSrc} className={classes.navLinkIcon} alt="Ingress" />
-                        <Typography variant="caption" className={classes.navLinkCopy}>{'Ingress'}</Typography>
+                    <NavLink className={classes.navListItemLink} to="/app/view/updates" replace={overlayViewsActive}>
+                        <img src={navIconWalletSrc} className={classes.navLinkIcon} alt="Updates" />
+                        <Typography variant="caption" className={classes.navLinkCopy}>{'Updates'}</Typography>
                     </NavLink>
                 </li>
                 {isElectron ? (
