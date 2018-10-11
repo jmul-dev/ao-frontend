@@ -14,9 +14,7 @@ export default class View extends Component<Props> {
             viewPadding = {padding: 0}
         else if ( padding === 'full' )
             viewPadding = {padding: 100}
-        const viewStyles = Object.assign({}, style, viewPadding, {
-            transition: 'all 300ms ease-out'
-        })
+        const viewStyles = Object.assign({}, viewPadding, style)
         return (
             <div className={["View", className].join(' ')} style={viewStyles} {...props}>
                 {children}

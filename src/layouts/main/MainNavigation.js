@@ -15,6 +15,9 @@ import navIconUploadSrc from '../../assets/nav-icon-upload-videos.svg';
 import navIconWalletSrc from '../../assets/nav-icon-my-wallet.svg';
 import navIconSettingsSrc from '../../assets/nav-icon-settings.svg';
 import navIconMetamaskSrc from '../../assets/nav-icon-metamask.svg';
+import navIconIngressSrc from '../../assets/nav-icon-ingress.svg';
+import navIconDaoSrc from '../../assets/nav-icon-dao.svg';
+import navIconDevelopersSrc from '../../assets/nav-icon-developers.svg';
 import DownloadsList from '../../modules/downloads/components/DownloadsList';
 import { APP_STATES } from '../../store/app.reducer';
 
@@ -70,7 +73,7 @@ const MainNavigation = ({ isElectron, offcanvas, showDownloads, overlayViewsActi
                 </li>
                 <li className={classes.navListItem}>
                     <NavLink className={classes.navListItemLink} to="/app/view/updates" replace={overlayViewsActive}>
-                        <img src={navIconWalletSrc} className={classes.navLinkIcon} alt="Updates" />
+                        <img src={navIconIngressSrc} className={classes.navLinkIcon} alt="Updates" />
                         <Typography variant="caption" className={classes.navLinkCopy}>{'Updates'}</Typography>
                     </NavLink>
                 </li>
@@ -83,8 +86,14 @@ const MainNavigation = ({ isElectron, offcanvas, showDownloads, overlayViewsActi
                     </li>
                 ) : null}
                 <li className={classes.navListItem}>
+                    <NavLink className={classes.navListItemLink} to="/app/view/dao">
+                        <img src={navIconDaoSrc} className={classes.navLinkIcon} alt="The dAO" />
+                        <Typography variant="caption" className={classes.navLinkCopy}>{'The dAO'}</Typography>
+                    </NavLink>
+                </li>
+                <li className={classes.navListItem}>
                     <NavLink className={classes.navListItemLink} to="/app/view/developers">
-                        <img src={navIconBrowseSrc} className={classes.navLinkIcon} alt="Developers" />
+                        <img src={navIconDevelopersSrc} className={classes.navLinkIcon} alt="Developers" />
                         <Typography variant="caption" className={classes.navLinkCopy}>{'Developers'}</Typography>
                     </NavLink>
                 </li>
@@ -131,7 +140,7 @@ const styles = ({palette, spacing}) => ({
         },
         navLinkIcon: {
             height: 20,
-            width: 'auto',
+            width: 20,
             marginRight: spacing.unit,
         },
     downloadsContainer: {

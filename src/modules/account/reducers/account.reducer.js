@@ -4,8 +4,14 @@ import BigNumber from "bignumber.js";
 export const ACCOUNT_VIDEO_LISTING_FILTER = 'ACCOUNT_VIDEO_LISTING_FILTER'
 export const ACCOUNT_VIDEO_LISTING_ORDERING = 'ACCOUNT_VIDEO_LISTING_ORDERING'
 export const UPDATE_CONTENT_METRICS_BY_STAKE_ID = 'UPDATE_CONTENT_METRICS_BY_STAKE_ID'
+export const ACCOUNT_CONTENT_TYPE_FILTER = 'ACCOUNT_CONTENT_TYPE_FILTER'
+export const MEDIA_TYPES = ['all', 'video', 'image', 'music', 'document', 'digital_asset', 'application']
 
 // Actions
+export const setAccountContentTypeFilter = (filter) => ({
+    type: ACCOUNT_CONTENT_TYPE_FILTER,
+    payload: filter
+})
 export const setAccountVideoListingFilter = (filter) => ({
     type: ACCOUNT_VIDEO_LISTING_FILTER,
     payload: filter
@@ -62,12 +68,18 @@ export const getPurchaseReceipt = (purchaseId) => {
 const initialState = {
     videoListingFilter: 'downloaded',  // uploaded || downloaded
     videoListingOrdering: 'recent',  // recent || earned || staked
+    contentTypeFilter: MEDIA_TYPES[0],  // MEDIA_TYPES
     contentMetrics: {},  // stakeId => { metrics }
 }
 
 // Reducer
 export default function accountReducer(state = initialState, action) {
     switch (action.type) {
+        case ACCOUNT_CONTENT_TYPE_FILTER:
+            return {
+                ...state,
+                contentTypeFilter: action.payload,
+            }
         case ACCOUNT_VIDEO_LISTING_FILTER:
             return {
                 ...state,

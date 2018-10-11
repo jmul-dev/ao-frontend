@@ -16,17 +16,13 @@ class AccountView extends PureComponent {
         const { ethAddress } = this.props
         return (
             <React.Fragment>
-                <View className={`AccountView ${ethAddress ? 'connected' : 'not-connected'}`} padding="full">
-                    <header style={{display: 'flex'}}>
-                        <Typography variant="subheading" gutterBottom>
-                            {'My Videos'}
-                        </Typography>
-                        <Export />
-                    </header>
+                <View className={`AccountView ${ethAddress ? 'connected' : 'not-connected'}`} padding="full" style={{paddingTop: 70}}>
                     <section>
                         <Grid container spacing={16}> 
                             <Grid item xs={12}>
-                                <AccountVideoFilters disabled={!ethAddress} />
+                                <div style={{marginBottom: 16}}>
+                                    <AccountVideoFilters disabled={!ethAddress} />
+                                </div>
                                 <AccountVideoListing />
                             </Grid>
                         </Grid>

@@ -10,12 +10,18 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
-import videoIconSrc from '../../../assets/nav-icon-my-videos.svg';
 import { withStyles } from '@material-ui/core/styles';
 import { compose } from 'react-apollo';
 import CloseIcon from '@material-ui/icons/Remove';
 import OpenIcon from '@material-ui/icons/Add';
 import AccountRequired from '../../account/components/AccountRequired';
+
+import videoIconSrc from '../../../assets/media-type-video.svg';
+import musicIconSrc from '../../../assets/media-type-music.svg';
+import imageIconSrc from '../../../assets/media-type-image.svg';
+import documentIconSrc from '../../../assets/media-type-document.svg';
+import applicationIconSrc from '../../../assets/media-type-application.svg';
+import assetIconSrc from '../../../assets/media-type-digital-asset.svg';
 
 
 type Props = {
@@ -90,7 +96,7 @@ class UploadForm extends Component<Props> {
                     </li>
                     <ListItem className={`${classes.li} ${classes.liInactive}`} disabled={true}>
                         <ListItemIcon>
-                            <img src={videoIconSrc} alt="Video content" className={classes.icon} />
+                            <img src={musicIconSrc} alt="Music content" className={classes.icon} />
                         </ListItemIcon>
                         <ListItemText 
                             primary={`Music`}
@@ -105,7 +111,7 @@ class UploadForm extends Component<Props> {
                     </ListItem>
                     <ListItem className={`${classes.li} ${classes.liInactive}`} disabled={true}>
                         <ListItemIcon>
-                            <img src={videoIconSrc} alt="Video content" className={classes.icon} />
+                            <img src={imageIconSrc} alt="Image content" className={classes.icon} />
                         </ListItemIcon>
                         <ListItemText 
                             primary={`Image`}
@@ -120,7 +126,7 @@ class UploadForm extends Component<Props> {
                     </ListItem>
                     <ListItem className={`${classes.li} ${classes.liInactive}`} disabled={true}>
                         <ListItemIcon>
-                            <img src={videoIconSrc} alt="Video content" className={classes.icon} />
+                            <img src={documentIconSrc} alt="Document content" className={classes.icon} />
                         </ListItemIcon>
                         <ListItemText 
                             primary={`Document`}
@@ -135,7 +141,7 @@ class UploadForm extends Component<Props> {
                     </ListItem>
                     <ListItem className={`${classes.li} ${classes.liInactive}`} disabled={true}>
                         <ListItemIcon>
-                            <img src={videoIconSrc} alt="Video content" className={classes.icon} />
+                            <img src={assetIconSrc} alt="Digital asset content" className={classes.icon} />
                         </ListItemIcon>
                         <ListItemText 
                             primary={`Digital Asset`}
@@ -150,7 +156,7 @@ class UploadForm extends Component<Props> {
                     </ListItem>
                     <ListItem className={`${classes.li} ${classes.liInactive}`} disabled={true}>
                         <ListItemIcon>
-                            <img src={videoIconSrc} alt="Video content" className={classes.icon} />
+                            <img src={applicationIconSrc} alt="Application content" className={classes.icon} />
                         </ListItemIcon>
                         <ListItemText 
                             primary={`Application`}
@@ -171,8 +177,8 @@ class UploadForm extends Component<Props> {
 
 const styles = ({palette, spacing}) => ({
     icon: {
-        height: 30,
-        width: 'auto'
+        height: 24,
+        width: 24,
     },
     li: {
         paddingTop: spacing.unit * 3,
