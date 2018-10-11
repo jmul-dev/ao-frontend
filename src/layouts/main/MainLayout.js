@@ -1,6 +1,6 @@
 // @flow
 import React from 'react';
-import { Switch, Route } from 'react-router';
+import { Switch, Route, Redirect } from 'react-router';
 import { Link } from 'react-router-dom';
 import SettingsView from '../../views/settings/SettingsView';
 import AccountView from '../../views/account/AccountView';
@@ -33,9 +33,10 @@ const ViewRoutes = () => (
 )
 
 const MainLayout = () => (
-    <main className="MainLayout">
+    <main className="MainLayout">        
         {/* Browse route always mounted */}
         <Route component={BrowseView} />
+        <Route exact path="/" render={() => (<Redirect to="/app" exact />)} />
         {/* Overlay views */}
         <Route
             path="/app/view"
