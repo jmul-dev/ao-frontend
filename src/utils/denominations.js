@@ -156,12 +156,16 @@ export const FileSize = ({sizeInBytes, decimals = 1}) => {
  */
 const denominationSelectStyles = ({palette}) => ({
     root: {
-        width: 100,
+        width: `100%`,
         color: palette.getContrastText(palette.background.paper)
     },
     select: {
-        width: `calc(100% - 24px)`,
-        paddingRight: 24,
+        width: `calc(100% - 36px)`,
+        padding: `8px 24px 8px 12px`,
+        fontSize: '18px',
+    },
+    icon: {
+        right: 4,
     },
 })
 const DenominationSelectPreWrap = ({isPrimordial, onChange, classes, ...props}) => (

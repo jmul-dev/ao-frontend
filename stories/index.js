@@ -23,6 +23,7 @@ import Exchange from '../src/modules/exchange/components/Exchange';
 import BigNumber from 'bignumber.js';
 import { IcoStatsWithStyles } from '../src/modules/ico/components/IcoStats';
 import { RecentTransactionsWithStyles } from '../src/modules/ico/components/RecentTransactions';
+import { TokenInput } from '../src/common/Inputs';
 
 
 const onChange = action('onChange')
@@ -49,6 +50,19 @@ storiesOf('Theme')
         <ThemeWrapper theme={darkTheme} background={darkTheme.palette.secondary.main}>
             <PrimaryButton>{'Click me'}</PrimaryButton>
         </ThemeWrapper>
+    ))
+
+storiesOf('Exchange')
+    .addDecorator(muiTheme([lightTheme]))
+    .addDecorator(withKnobs)
+    .add('TokenInput', () => (
+        <TokenInput 
+            baseInputValue={new BigNumber(number('Input value', 0))}
+            isPrimordial={boolean('isPrimordial', false)} 
+            onChange={() => {}}           
+            disabled={false}
+            supplementalText={`multiplier = 3.5`}
+        />
     ))
 
 storiesOf('Network Exchange')
