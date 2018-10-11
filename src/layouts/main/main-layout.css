@@ -18,12 +18,6 @@
     opacity: 0;
     transform: translateX(calc(-1 * var(--sidebar-width)));
 }
-.MainNavigation > div {
-    height: 100%;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-}
 
 .overlay-views-container {
     position: relative;
