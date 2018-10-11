@@ -5,9 +5,10 @@
     "build"
   ],
   "scripts": {
-    "start": "react-scripts start",
-    "build": "cross-env PUBLIC_URL='./' react-scripts build",
-    "build-ico": "cross-env PUBLIC_URL='./' node scripts/build-ico.js",
+    "start": "cp src/index-app.js src/index.js && react-scripts start",
+    "build": "cp src/index-app.js src/index.js && cross-env PUBLIC_URL='./' react-scripts build",
+    "start-ico": "cp src/index-ico.js src/index.js && react-scripts start",
+    "build-ico": "cp src/index-ico.js src/index.js && cross-env PUBLIC_URL='./' react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "storybook": "start-storybook -p 9009 -s public",
@@ -31,6 +32,7 @@
     "graphql": "^0.13.2",
     "graphql-tag": "^2.9.2",
     "history": "^4.7.2",
+    "inline-source": "^6.1.8",
     "jazzicon": "^1.5.0",
     "moment": "^2.22.2",
     "react": "^16.4.1",

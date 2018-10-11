@@ -31,17 +31,3 @@ export default class Root extends Component<Props> {
         );
     }
 }
-
-export class IcoRoot extends Component {
-    render() {
-        return (
-            <Provider store={this.props.store}>
-                <MuiThemeProvider theme={darkTheme}>
-                    <CssBaseline>
-                        {'todo'}
-                    </CssBaseline>
-                </MuiThemeProvider>
-            </Provider>
-        )
-    }
-}

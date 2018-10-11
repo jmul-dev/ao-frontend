@@ -13,10 +13,12 @@ type Props = {
     classes: Object,
     // redux bound state
     ico: {
+        primordialSaleEnded: boolean,
         primordialSaleActive: boolean,
         primordialTotalSupply: BigNumber,
         primordialMaxSupply: BigNumber,
     },
+    web3Connected: boolean,
     // redux bound actions
     updateIcoState: Function,
 }
@@ -27,21 +29,25 @@ class IcoStats extends Component<Props> {
         this.props.updateIcoState()
     }
     render() {
-        const { classes } = this.props
-        const { primordialTotalSupply, primordialMaxSupply, primordialSaleActive } = this.props.ico
+        const { classes, web3Connected } = this.props
+        const { primordialTotalSupply, primordialMaxSupply, primordialSaleActive, primordialSaleEnded } = this.props.ico
         const icoPercentageComplete = primordialMaxSupply.lte(0) ? 0 : primordialTotalSupply.div(primordialMaxSupply).times(100).toNumber()
         const icoRemainingSupply = primordialMaxSupply.minus(primordialTotalSupply)
         return (
             <div className={classes.root}>
                 <div className={classes.typeContainer}>
-                    <Typography variant="body1" style={{marginBottom: 4}}>{`Network Exchange Progress: ${icoPercentageComplete.toFixed(0)}%`}</Typography>                    
-                    {primordialSaleActive ? (
+                    <Typography variant="body1" style={{marginBottom: 4}}>{`Network Exchange Progress: ${web3Connected ? `${icoPercentageComplete.toFixed(0)}%` : `NA`}`}</Typography>
+                    {!web3Connected && (
+                        <Typography variant="caption" className={classes.saleEndedCopy}><AlertIcon className={classes.saleEndedAlertIcon} />{`Connect to web3 to view exchange progress.`}</Typography>
+                    )}
+                    {primordialSaleEnded && (
+                        <Typography variant="caption" className={classes.saleEndedCopy}><AlertIcon className={classes.saleEndedAlertIcon} />{`Event has ended.`}</Typography>
+                    )}
+                    {primordialSaleActive && !primordialSaleEnded && (
                         <React.Fragment>
                             <Typography variant="caption" style={{marginBottom: 2}}>{`Total exchanged: `}<TokenBalance baseAmount={primordialTotalSupply} decimals={0} isPrimordial={true} /></Typography>
                             <Typography variant="caption">{`Remaining: `}<TokenBalance baseAmount={icoRemainingSupply} decimals={0} isPrimordial={true} /></Typography>
                         </React.Fragment>
-                    ) : (
-                        <Typography variant="caption" className={classes.saleEndedCopy}><AlertIcon className={classes.saleEndedAlertIcon} />{`Event has ended.`}</Typography>
                     )}
                 </div>
                 <div className={classes.progressContainer}>
