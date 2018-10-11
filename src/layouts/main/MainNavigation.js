@@ -21,6 +21,7 @@ import navIconDevelopersSrc from '../../assets/nav-icon-developers.svg';
 import DownloadsList from '../../modules/downloads/components/DownloadsList';
 import { APP_STATES } from '../../store/app.reducer';
 import Account from '../../modules/account/components/Account';
+import WalletBalances from '../../modules/wallet/components/WalletBalances';
 
 
 const openMetamask = () => {
@@ -42,8 +43,12 @@ const MainNavigation = ({ isElectron, offcanvas, ethAddress, showDownloads, over
                             <Typography variant="caption" className={classes.navLinkCopy}>{'My Wallet'}</Typography>
                         </div>
                         <div className={classes.navListItemWalletBalances}>
-                            <Typography variant="caption" className={classes.walletBalanceCopy}>{'0 kilo AO+'}</Typography>
-                            <Typography variant="caption" className={classes.walletBalanceCopy}>{'0 kilo AO'}</Typography>
+                            <WalletBalances>{({primordialTokenBalanceFormatted, networkTokenBalanceFormatted}) => (
+                                <React.Fragment>
+                                    <Typography variant="caption" className={classes.walletBalanceCopy} style={{marginBottom: 4}}>{primordialTokenBalanceFormatted}</Typography>
+                                    <Typography variant="caption" className={classes.walletBalanceCopy}>{networkTokenBalanceFormatted}</Typography>
+                                </React.Fragment>
+                            )}</WalletBalances>                            
                         </div>                        
                     </NavLink>
                 </li>

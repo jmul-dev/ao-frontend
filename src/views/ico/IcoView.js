@@ -125,7 +125,7 @@ export default class IcoView extends PureComponent {
                 </MuiThemeProvider>                
                 <section className="section-split">
                     <Grid container spacing={16}>
-                        <Grid item xs={12} sm={6} style={{backgroundColor: '#111111'}}>
+                        <Grid item xs={12} sm={6} style={{backgroundColor: '#070707'}}>
                             <div className="multiplier-overview">
                                 <div className="copy-padding">
                                     <Typography variant="body1" gutterBottom>{`WHY BUY NOW?`}</Typography>
