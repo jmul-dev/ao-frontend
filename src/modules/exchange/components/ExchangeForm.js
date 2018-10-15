@@ -159,6 +159,7 @@ class ExchangeForm extends Component {
                                 onChange={this._onTokenInputChange}
                                 disabled={formDisabled}
                                 isPrimordial={isNetworkExchange}
+                                supplementalText={isNetworkExchange && primordialExchangeBonuses ? `multiplier = ${primordialExchangeBonuses.multiplier}` : undefined}
                             />
                         </div>
                     </div>

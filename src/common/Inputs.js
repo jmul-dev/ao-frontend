@@ -40,6 +40,8 @@ const commonInputStyles = ({palette, shape, typography}) => ({
             top: '50%',
             transform: 'translateY(-50%)',
             color: '#777777',
+            maxWidth: 80,
+            textAlign: 'right',
         },
     secondaryContainer: {        
         backgroundColor: palette.type === 'light' ? '#DEE0E3' : '#333333',
