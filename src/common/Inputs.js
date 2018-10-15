@@ -32,6 +32,7 @@ const commonInputStyles = ({palette, shape, typography}) => ({
             padding: `16px 18px`,
             ...typography.headline,
             color: '#222222',
+            width: '100%',
         },
         supplementalText: {
             position: 'absolute',

@@ -14,6 +14,11 @@ const primaryButton = ({...props}) => (
     <Button color="primary" {...props} />
 )
 export const PrimaryButton = withStyles(({palette}) => ({
+    root: {
+        '&[disabled]': {
+            color: '#FFFFFF',
+        }
+    },
     flat: {
         background: palette.background.default,
         borderRadius: 0,
@@ -24,7 +29,8 @@ export const PrimaryButton = withStyles(({palette}) => ({
         borderRadius: 0,
     },
     disabled: {
-        background: palette.background.default,
+        color: '#FFFFFF',
+        background: palette.primary.light,
     },
     textPrimary: {
         '&:hover': {

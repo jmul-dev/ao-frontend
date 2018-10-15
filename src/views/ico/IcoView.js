@@ -149,7 +149,7 @@ export default class IcoView extends PureComponent {
                 <MuiThemeProvider theme={lightTheme}>
                     <section ref={ref => {this._exchangeRef = ref}} className="section-padding section-exchange" style={{backgroundImage: `url(${bgShapesWhiteSrc})`, backgroundColor: lightTheme.palette.background.default}}>
                         <div className="centered-content">
-                            <Typography variant="display2" gutterBottom>{`Interest piqued? Exchange now.`}</Typography>
+                            <Typography variant="display2" style={{marginBottom: 48}}>{`Interest piqued? Exchange now.`}</Typography>
                             <PrimordialExchangeForm />
                         </div>
                     </section>   

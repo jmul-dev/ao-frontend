@@ -6,7 +6,7 @@ import ExchangeForm from './ExchangeForm';
 
 class PrimordialExchangeForm extends Component {
     _onSubmit = ({ethInput, tokenInput}) => {
-        this.props.exchangeEthForPrimordialTokens( parseFloat(ethInput) )
+        this.props.exchangeEthForPrimordialTokens( ethInput )
     }
     render() {
         return (
