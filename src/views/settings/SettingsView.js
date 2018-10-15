@@ -4,18 +4,20 @@ import SettingsInput from '../../modules/settings';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import './settings-view.css';
+import Export from '../../modules/account/components/Export';
 
 
 export default class SettingsView extends PureComponent {
     render() {
         return (
             <View className={'SettingsView'} padding="full">
-                <header>
+                <header style={{display: 'flex'}}>
                     <Typography variant="subheading" gutterBottom>
                         {'Settings'}
                     </Typography>
+                    <Export />
                 </header>
-                <Grid container spacing={16}>                
+                <Grid container spacing={16} style={{opacity: 0.3}}>                
                     <Grid item xs={12} sm={10} md={6}>
                         <section>
                             <Typography variant="subheading" gutterBottom>
