@@ -5,6 +5,7 @@ import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 import { DenominationSelect, fromBaseToDenominationValue, fromDenominationValueToBase } from '../../../utils/denominations';
+import BigNumber from 'bignumber.js';
 
 
 const styles = (theme) => ({
@@ -50,7 +51,7 @@ class EarningsInput extends Component {
         super(props)
         const characterLength = props.value ? (`${props.value}`.length || 1) : 1
         this.state = {
-            inputValue: props.value,
+            inputValue: new BigNumber( props.value ),
             denominationValue: props.denominationValue,
             percentageSpacing: 16 + 12 * characterLength,
         }
@@ -59,7 +60,7 @@ class EarningsInput extends Component {
         const { integerOnly, includeDenomination } = this.props
         const characterLength = event.target.value.length || 1
         let parseFn = integerOnly ? parseInt : parseFloat
-        let inputValue = parseFn(event.target.value) || 1
+        let inputValue = new BigNumber(parseFn(event.target.value) || 1)
         // Need to convert back to baseDenom value
         if ( includeDenomination ) {
             inputValue = fromDenominationValueToBase(inputValue, this.state.denominationValue)
@@ -68,7 +69,7 @@ class EarningsInput extends Component {
             inputValue,
             percentageSpacing: 16 + 12 * characterLength
         })
-        this.props.onChange(inputValue)
+        this.props.onChange(inputValue.toNumber())
     }
     _onDenominationChange = (nextDenom) => {
         // this.state.inputValue === baseValue, converting from baseValue to the new denom baseValue
@@ -78,7 +79,7 @@ class EarningsInput extends Component {
             denominationValue: nextDenom.name,
             inputValue,
         })
-        this.props.onChange(inputValue)
+        this.props.onChange(inputValue.toNumber())
     }
     render() {
         const { 
@@ -102,7 +103,7 @@ class EarningsInput extends Component {
                 <Input
                     type="number"
                     step={1}
-                    value={inputValue}
+                    value={inputValue.toNumber()}
                     onChange={this._onInputChange}
                     className={`${classes.input} ${includeDenomination ? classes.inputDenominationSpacing : null}`}
                     disableUnderline={true}
@@ -129,7 +130,7 @@ class EarningsInput extends Component {
 EarningsInput.propTypes = {
     classes: PropTypes.object.isRequired,
     onChange: PropTypes.func.isRequired,
-    value: PropTypes.number.isRequired,
+    value: PropTypes.instanceOf(BigNumber).isRequired,
     label: PropTypes.string.isRequired,
     includeDenomination: PropTypes.bool,
     denominationValue: PropTypes.string,
@@ -139,7 +140,7 @@ EarningsInput.propTypes = {
 };
 
 EarningsInput.defaultProps = {
-    value: 1,
+    value: new BigNumber(1),
     includeDenomination: false,
     isPercentage: false,
     integerOnly: false,

@@ -91,22 +91,34 @@ export const denominationsByName = {
     'zona': denominations[9],
 }
 
+/**
+ * @param {BigNumber} baseAmount 
+ * @param {string} denominationName 
+ * @returns {BigNumber}
+ */
 export const fromBaseToDenominationValue = (baseAmount, denominationName) => {
     for (let i = 0; i < denominations.length; i++) {
         if ( denominations[i].name === denominationName ) {
-            return baseAmount / Math.pow(10, denominations[i].powerOfTen )
+            const expValue = new BigNumber(10).pow( denominations[i].powerOfTen )
+            return baseAmount.dividedBy(expValue)
         }
     }
     return baseAmount
 }
-
+/**
+ * 
+ * @param {BigNumber} amount 
+ * @param {string} denominationName 
+ * @returns {BigNumber}
+ */
 export const fromDenominationValueToBase = (amount, denominationName) => {
     for (let i = 0; i < denominations.length; i++) {
         if ( denominations[i].name === denominationName ) {
-            return amount * Math.pow(10, denominations[i].powerOfTen )
+            const expValue = new BigNumber(10).pow( denominations[i].powerOfTen )
+            return expValue.multipliedBy(amount)
         }
     }
-    return amount
+    return new BigNumber(amount)
 }
 
 export const fromBaseToHighestDenomination = (baseAmount) => {

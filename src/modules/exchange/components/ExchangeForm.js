@@ -29,6 +29,7 @@ class ExchangeForm extends Component {
         ico: PropTypes.object,
         icoRemainingSupply: PropTypes.instanceOf(BigNumber),
         isElectron: PropTypes.bool,
+        calculatePrimoridialExchangeMultiplierAndBonus: PropTypes.func.isRequired,
     }
     static defaultProps = {
         initialTokenInput: Math.pow(10, 12) * 10,  // 10 tera ao
@@ -42,6 +43,7 @@ class ExchangeForm extends Component {
             tokenInput: `${amount}`,
             tokenInputDenomination: denomination.name,
             ethUsdExchangeRate: undefined,
+            primordialExchangeBonuses: undefined,
         }
     }
     componentDidMount() {
@@ -64,29 +66,46 @@ class ExchangeForm extends Component {
     _onEthInputChange = ({value}) => {
         const { exchangeRate } = this.props
         // Eth input changed, we need to convert to AO amount in the current denomination
-        let tokenAmountInBaseAo = value / exchangeRate
+        let tokenAmountInBaseAo = new BigNumber(value).dividedBy(exchangeRate)
         let tokenAmountInCurrentDenom = fromBaseToDenominationValue(tokenAmountInBaseAo, this.state.tokenInputDenomination)
+        this._recalculateExchangeBonuses(tokenAmountInBaseAo)
         this.setState({
             ethInput: value,
             tokenInput: tokenAmountInCurrentDenom,
-        })        
+        })
     }
     _onTokenInputChange = ({value, denominationName}) => {
         const { exchangeRate } = this.props
         // Token input changed (value or denomination!)
-        let tokenAmountInBaseAo = fromDenominationValueToBase(value, denominationName)        
+        let tokenAmountInBaseAo = fromDenominationValueToBase(new BigNumber(value), denominationName)
+        this._recalculateExchangeBonuses(tokenAmountInBaseAo)
         this.setState({
             tokenInput: value,
             tokenInputDenomination: denominationName,
             ethInput: tokenAmountInBaseAo * exchangeRate
         })
     }
+    _recalculateExchangeBonuses = (baseTokenAmount) => {
+        if ( this.props.isNetworkExchange ) {
+            this.props.calculatePrimoridialExchangeMultiplierAndBonus(baseTokenAmount).then(bonuses => {
+                this.setState({
+                    primordialExchangeBonuses: {
+                        ...bonuses,
+                        // convert bonus amount into current denomination
+                        networkTokenBonusAmount: fromBaseToDenominationValue(new BigNumber(bonuses.networkTokenBonusAmount), this.state.tokenInputDenomination),
+                    }
+                })
+            }).catch(error => {
+                console.error(`Error fetching primordial exchange bonuses: ${error.message}`)
+            })
+        }
+    }
     _submit = (event) => {
         event.preventDefault();
         // TODO: check eth balance sufficient
         this.props.onSubmit({
             ethInput: parseFloat(this.state.ethInput),
-            tokenInputInBaseDenomination: fromDenominationValueToBase(this.state.tokenInput, this.state.tokenInputDenomination),
+            tokenInputInBaseDenomination: fromDenominationValueToBase(new BigNumber(this.state.tokenInput), this.state.tokenInputDenomination),
         })
     }
     _reset = () => {
@@ -95,6 +114,7 @@ class ExchangeForm extends Component {
     render() {
         const { ethAddress, isNetworkExchange, exchange, classes } = this.props
         const { exchangeTransaction } = this.props.exchange
+        const { primordialExchangeBonuses } = this.state
         const currentDenomination = denominationsByName[this.state.tokenInputDenomination]
         const exchangeInProgress = exchangeTransaction.initialized && !exchangeTransaction.error && !exchangeTransaction.result
         const formDisabled = !ethAddress || exchangeInProgress || (isNetworkExchange && !this.props.ico.primordialSaleActive)
@@ -154,17 +174,17 @@ class ExchangeForm extends Component {
                             {`${this.state.ethInput} ETH`}
                         </Typography>
                     </div>
-                    {isNetworkExchange ? (
+                    {isNetworkExchange && primordialExchangeBonuses && (
                         <div className={classes.summaryItem}>
                             <Typography color="primary">
-                                {`${this.state.tokenInput} ${currentDenomination.prefix} AO (100% Bonus)`}
+                                {`${primordialExchangeBonuses.networkTokenBonusAmount} ${currentDenomination.prefix} AO (${primordialExchangeBonuses.bonusPercentage}% Bonus)`}
                             </Typography>
                             <div className={classes.spacer}></div>
                             <Typography>
                                 {`0 ETH`}
                             </Typography>
                         </div>
-                    ) : null}
+                    )}
                     <div className={classes.summaryItem}>
                         <Typography>
                             {'Total'}
