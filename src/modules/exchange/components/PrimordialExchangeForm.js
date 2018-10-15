@@ -13,6 +13,7 @@ class PrimordialExchangeForm extends Component {
             <ExchangeForm 
                 onSubmit={this._onSubmit}
                 isNetworkExchange={true}
+                exchangeRate={this.props.exchange.primordialExchangeRate}
                 initialTokenInput={Math.pow(10, 12) * 10}
             />
         )

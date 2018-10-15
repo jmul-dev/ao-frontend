@@ -20,6 +20,7 @@ class ExchangeForm extends Component {
         initialTokenInput: PropTypes.number.isRequired,
         isNetworkExchange: PropTypes.bool,
         onSubmit: PropTypes.func.isRequired, // ({ethInput, tokenInputInBaseDenomination})
+        exchangeRate: PropTypes.instanceOf(BigNumber),
         // withExchangeContainer
         contractsInitialized: PropTypes.bool,
         ethAddress: PropTypes.string,
@@ -52,7 +53,7 @@ class ExchangeForm extends Component {
         }
     }
     componentDidUpdate(prevProps) {
-        if ( this.props.exchange.exchangeRate !== prevProps.exchange.exchangeRate ) {
+        if ( this.props.exchangeRate !== prevProps.exchangeRate ) {
             // Force recalculation of ETH cost
             this._onTokenInputChange({
                 value: this.state.tokenInput,
@@ -61,7 +62,7 @@ class ExchangeForm extends Component {
         }
     }
     _onEthInputChange = ({value}) => {
-        const { exchangeRate } = this.props.exchange
+        const { exchangeRate } = this.props
         // Eth input changed, we need to convert to AO amount in the current denomination
         let tokenAmountInBaseAo = value / exchangeRate
         let tokenAmountInCurrentDenom = fromBaseToDenominationValue(tokenAmountInBaseAo, this.state.tokenInputDenomination)
@@ -71,7 +72,7 @@ class ExchangeForm extends Component {
         })        
     }
     _onTokenInputChange = ({value, denominationName}) => {
-        const { exchangeRate } = this.props.exchange
+        const { exchangeRate } = this.props
         // Token input changed (value or denomination!)
         let tokenAmountInBaseAo = fromDenominationValueToBase(value, denominationName)        
         this.setState({

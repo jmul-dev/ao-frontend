@@ -25,6 +25,7 @@ export const updateIcoState = () => {
                 })
             }
         })
+        // primordialTotalBought
         contracts.aoToken.primordialTotalSupply(function(err, supply) {
             if ( supply ) {
                 dispatch({
@@ -35,7 +36,7 @@ export const updateIcoState = () => {
                 })
             }
         })
-        contracts.aoToken.MAX_PRIMORDIAL_SUPPLY(function(err, supply) {
+        contracts.aoToken.TOTAL_PRIMORDIAL_FOR_SALE(function(err, supply) {
             if ( supply ) {
                 dispatch({
                     type: UPDATE_PRIMORDIAL_STATE,
@@ -55,7 +56,7 @@ export const updateIcoState = () => {
                 })
             }
         })
-        contracts.aoToken.WEIGHTED_INDEX_DIVISOR(function(err, indexDivisor) {
+        contracts.aoToken.MULTIPLIER_DIVISOR(function(err, indexDivisor) {
             if ( indexDivisor ) {
                 dispatch({
                     type: UPDATE_PRIMORDIAL_STATE,
@@ -92,9 +93,9 @@ export const startListeningForRecentTransactions = () => {
                         blockNumber: result.blockNumber,
                         transactionHash: result.transactionHash,
                         ...result.args,
-                        index: new BigNumber(result.args.index).toNumber(),
-                        multiplier: new BigNumber(result.args.index).dividedBy(ico.weightedIndexDivisor).toNumber(),
-                        tokenAmount: new BigNumber(result.args.tokenAmount),
+                        multiplier: new BigNumber(result.args.multiplier).toNumber(),
+                        primordialTokenAmount: new BigNumber(result.args.primordialTokenAmount),
+                        networkTokenBonusAmount: new BigNumber(result.args.networkTokenBonusAmount),
                     }
                 })
             }

@@ -21,9 +21,9 @@ class RecentTransactions extends Component<Props> {
             transactionHash: PropTypes.string,
             lotOwner: PropTypes.string,
             lotId: PropTypes.string,
-            index: PropTypes.string,
             multiplier: PropTypes.number,
-            tokenAmount: PropTypes.instanceOf(BigNumber),
+            primordialTokenAmount: PropTypes.instanceOf(BigNumber),
+            networkTokenBonusAmount: PropTypes.instanceOf(BigNumber),
         })),
         // redux bound actions
         startListeningForRecentTransactions: PropTypes.func.isRequired,
@@ -54,7 +54,7 @@ class RecentTransactions extends Component<Props> {
                             <TableRow key={row.lotId}>
                                 {/* <TableCell className={classes.cell}>{row.lotOwner}</TableCell> */}
                                 <TableCell className={`${classes.cell} ${classes.tokenCell}`}>
-                                    <TokenBalance baseAmount={row.tokenAmount} isPrimordial={true} includeAO={true} />
+                                    <TokenBalance baseAmount={row.primordialTokenAmount} isPrimordial={true} includeAO={true} />
                                 </TableCell>
                                 <TableCell className={classes.cell}>{row.multiplier.toFixed(2)}</TableCell>
                                 <TableCell className={classes.cell}>{row.blockNumber}</TableCell>

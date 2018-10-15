@@ -13,6 +13,7 @@ class NetworkExchangeForm extends Component {
             <ExchangeForm 
                 onSubmit={this._onSubmit}
                 isNetworkExchange={false}
+                exchangeRate={this.props.exchange.networkExchangeRate}
                 initialTokenInput={/* TODO */}
             />
         )
