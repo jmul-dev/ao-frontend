@@ -17,7 +17,7 @@ import tokenStructureSrc from '../../assets/token-structure.png';
 import multiplierGraphSrc from '../../assets/multiplier-graph.png';
 import { MuiThemeProvider } from '@material-ui/core';
 import { darkTheme, lightTheme, PrimaryButton } from '../../theme';
-import Exchange from '../../modules/exchange/components/Exchange';
+import PrimordialExchangeForm from '../../modules/exchange/components/PrimordialExchangeForm';
 
 
 export default class IcoView extends PureComponent {
@@ -150,9 +150,7 @@ export default class IcoView extends PureComponent {
                     <section ref={ref => {this._exchangeRef = ref}} className="section-padding section-exchange" style={{backgroundImage: `url(${bgShapesWhiteSrc})`, backgroundColor: lightTheme.palette.background.default}}>
                         <div className="centered-content">
                             <Typography variant="display2" gutterBottom>{`Interest piqued? Exchange now.`}</Typography>
-                            <Typography variant="body1">{`For a limited time, exchange ETH for double the value.`}</Typography>
-                            <Typography variant="body1">{`Exchange for AO+ and receive an equal amount of AO.`}</Typography>
-                            <Exchange hideInputTitle={true} />
+                            <PrimordialExchangeForm />
                         </div>
                     </section>   
                 </MuiThemeProvider>             

@@ -1,6 +1,6 @@
 /**
  * Functional component useful for accessing/rendering wallet balance:
- * Ex: <WalletBalances>{({primordialTokenBalance, networkTokenBalance}) => ()}</WalletBalances>
+ * Ex: <WalletBalances>{({primordialTokenBalance, networkTokenBalance, ethBalance}) => ()}</WalletBalances>
  */
 import React, { PureComponent } from 'react';
 import withUserWallet from '../containers/withUserWallet';
@@ -28,7 +28,7 @@ class WalletBalances extends PureComponent {
         updateWallet()
     }
     render() {
-        const { primordialTokenBalance, networkTokenBalance } = this.props.wallet
+        const { primordialTokenBalance, networkTokenBalance, ethBalance } = this.props.wallet
         const networkTokenBalanceFormatted = <TokenBalance baseAmount={networkTokenBalance} includeAO={true} isPrimordial={false} />
         const primordialTokenBalanceFormatted = <TokenBalance baseAmount={primordialTokenBalance} includeAO={true} isPrimordial={true} />
         return this.props.children({
@@ -36,6 +36,7 @@ class WalletBalances extends PureComponent {
             primordialTokenBalanceFormatted,
             networkTokenBalance,
             networkTokenBalanceFormatted,
+            ethBalance,
         })
     }
 }

@@ -20,7 +20,7 @@ export const UPDATE_EXCHANGE_DENOMINATION = 'UPDATE_EXCHANGE_DENOMINATION'
 
 
 // Actions
-export const purchaseTokens = ( baseAmount, exchangeRate ) => {
+export const exchangeEthForPrimordialTokens = (ethCost) => {
     return (dispatch, getState) => {
         const dispatchError = (err) => {
             dispatch({
@@ -30,7 +30,6 @@ export const purchaseTokens = ( baseAmount, exchangeRate ) => {
         }
         const state = getState()
         const { app, contracts, wallet } = state
-        const ethCost = baseAmount.multipliedBy(exchangeRate)
         if ( !app.ethAddress ) {
             dispatchError(new Error('Unlock your ethereum account to purchase AO'))
         } else if ( wallet.ethBalance.lt( ethCost ) ) {

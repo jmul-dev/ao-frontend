@@ -78,6 +78,18 @@ export const denominations = [
         fileSizeSuffix: "XB",
     },
 ]
+export const denominationsByName = {
+    'ao': denominations[0],
+    'kilo': denominations[1],
+    'mega': denominations[2],
+    'giga': denominations[3],
+    'tera': denominations[4],
+    'peta': denominations[5],
+    'exa': denominations[6],
+    'zetta': denominations[7],
+    'yotta': denominations[8],
+    'zona': denominations[9],
+}
 
 export const fromBaseToDenominationValue = (baseAmount, denominationName) => {
     for (let i = 0; i < denominations.length; i++) {

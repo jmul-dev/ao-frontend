@@ -23,7 +23,9 @@ import Exchange from '../src/modules/exchange/components/Exchange';
 import BigNumber from 'bignumber.js';
 import { IcoStatsWithStyles } from '../src/modules/ico/components/IcoStats';
 import { RecentTransactionsWithStyles } from '../src/modules/ico/components/RecentTransactions';
-import { TokenInput } from '../src/common/Inputs';
+import { TokenInput, EthereumInput } from '../src/common/Inputs';
+import { ExchangeFormWithStyles } from '../src/modules/exchange/components/ExchangeForm';
+import PrimordialExchangeForm from '../src/modules/exchange/components/PrimordialExchangeForm';
 
 
 const onChange = action('onChange')
@@ -57,7 +59,7 @@ storiesOf('Exchange')
     .addDecorator(withKnobs)
     .add('TokenInput', () => (
         <TokenInput 
-            label={'Send'}
+            label={'Receive'}
             value={number('Input value', 10)}
             denominationName={'tera'}
             isPrimordial={boolean('isPrimordial', true)} 
@@ -65,6 +67,25 @@ storiesOf('Exchange')
             disabled={boolean('disabled', false)}
             supplementalText={`multiplier = 3.5`}
         />
+    ))
+    .add('EthereumInput', () => (
+        <EthereumInput 
+            label={'Send'}
+            value={number('Input value', 1)}
+            onChange={(inputs) => {console.log(inputs)}}           
+            disabled={boolean('disabled', false)}
+            supplementalText={`(230 usd)`}
+        />
+    ))
+    .add('ExchangeForm', () => (
+        <ExchangeFormWithStyles 
+            isNetworkExchange={boolean('isNetworkExchange', true)}
+            onSubmit={() => {}}            
+        />
+    ))
+    .addDecorator(story => <ReduxProvider story={story()}/>)
+    .add('PrimordialExchangeForm', () => (
+        <PrimordialExchangeForm />
     ))
 
 storiesOf('Network Exchange')
