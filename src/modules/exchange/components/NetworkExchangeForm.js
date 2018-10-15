@@ -4,20 +4,20 @@ import PropTypes from 'prop-types';
 import ExchangeForm from './ExchangeForm';
 
 
-class PrimordialExchangeForm extends Component {
+class NetworkExchangeForm extends Component {
     _onSubmit = ({ethInput, tokenInput}) => {
-        this.props.exchangeEthForPrimordialTokens( ethInput )
+        this.props.exchangeEthForNetworkTokens( ethInput )
     }
     render() {
         return (
             <ExchangeForm 
                 onSubmit={this._onSubmit}
-                isNetworkExchange={true}
-                initialTokenInput={Math.pow(10, 12) * 10}
+                isNetworkExchange={false}
+                initialTokenInput={/* TODO */}
             />
         )
     }
 }
 
 
-export default withExchangeContainer(PrimordialExchangeForm)
+export default withExchangeContainer(NetworkExchangeForm)

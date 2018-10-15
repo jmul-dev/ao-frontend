@@ -1,12 +1,12 @@
 import { connect } from 'react-redux'
-import { getExchangeRate, exchangeEthForPrimordialTokens, updateTokenExchangeAmount, resetExchange } from '../reducers/exchange.reducer';
+import { getExchangeRate, exchangeEthForPrimordialTokens, exchangeEthForNetworkTokens, resetExchange } from '../reducers/exchange.reducer';
 import { APP_STATES } from '../../../store/app.reducer';
 
 // Redux
 const mapDispatchToProps = {
     getExchangeRate,
     exchangeEthForPrimordialTokens,
-    updateTokenExchangeAmount,
+    exchangeEthForNetworkTokens,
     resetExchange,
 }
 
