@@ -12,7 +12,7 @@ import { withStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import WalletBalances from '../../wallet/components/WalletBalances';
 import exchangeIconSrc from '../../../assets/exchange-icon.svg';
-import { fromBaseToDenominationValue, fromDenominationValueToBase, fromBaseToHighestDenomination, denominationsByName } from '../../../utils/denominations';
+import { fromBaseToDenominationValue, fromDenominationValueToBase, fromBaseToHighestDenomination, denominationsByName, TokenBalance } from '../../../utils/denominations';
 
 
 class ExchangeForm extends Component {
@@ -89,11 +89,7 @@ class ExchangeForm extends Component {
         if ( this.props.isNetworkExchange ) {
             this.props.calculatePrimoridialExchangeMultiplierAndBonus(baseTokenAmount).then(bonuses => {
                 this.setState({
-                    primordialExchangeBonuses: {
-                        ...bonuses,
-                        // convert bonus amount into current denomination
-                        networkTokenBonusAmount: fromBaseToDenominationValue(new BigNumber(bonuses.networkTokenBonusAmount), this.state.tokenInputDenomination),
-                    }
+                    primordialExchangeBonuses: bonuses
                 })
             }).catch(error => {
                 console.error(`Error fetching primordial exchange bonuses: ${error.message}`)
@@ -178,7 +174,7 @@ class ExchangeForm extends Component {
                     {isNetworkExchange && primordialExchangeBonuses && (
                         <div className={classes.summaryItem}>
                             <Typography color="primary">
-                                {`${primordialExchangeBonuses.networkTokenBonusAmount} ${currentDenomination.prefix} AO (${primordialExchangeBonuses.bonusPercentage}% Bonus)`}
+                                <TokenBalance baseAmount={primordialExchangeBonuses.networkTokenBonusAmount} includeAO={true} isPrimordial={false} />{` (${primordialExchangeBonuses.bonusPercentage}% Bonus)`}
                             </Typography>
                             <div className={classes.spacer}></div>
                             <Typography>

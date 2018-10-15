@@ -139,7 +139,7 @@ export const calculatePrimoridialExchangeMultiplierAndBonus = (tokenAmount) => {
                     resolve({
                         multiplier: new BigNumber(results[0]).dividedBy(ico.weightedIndexDivisor).toNumber(),
                         bonusPercentage: new BigNumber(results[1]).dividedBy(ico.percentageDivisor).multipliedBy(100).toNumber(),
-                        networkTokenBonusAmount: new BigNumber(results[2]).toNumber(),
+                        networkTokenBonusAmount: new BigNumber(results[2]),
                     })
                 }
             })
