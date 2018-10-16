@@ -11,6 +11,7 @@ class PrimordialExchangeForm extends Component {
     }
     render() {
         const { ico } = this.props
+        const maxTokenExchangeAmount = ico.primordialMaxSupply.minus(ico.primordialTotalSupply)
         return ico.primordialSaleEnded ? (
             <div>
                 <Typography variant="body1">
@@ -23,6 +24,7 @@ class PrimordialExchangeForm extends Component {
                 isNetworkExchange={true}
                 exchangeRate={this.props.exchange.primordialExchangeRate}
                 initialTokenInput={Math.pow(10, 12) * 10}
+                maxTokenExchangeAmount={maxTokenExchangeAmount}
             />
         )
     }

@@ -21,6 +21,7 @@ class ExchangeForm extends Component {
         isNetworkExchange: PropTypes.bool,
         onSubmit: PropTypes.func.isRequired, // ({ethInput, tokenInputInBaseDenomination})
         exchangeRate: PropTypes.instanceOf(BigNumber),
+        maxTokenExchangeAmount: PropTypes.instanceOf(BigNumber),
         // withExchangeContainer
         contractsInitialized: PropTypes.bool,
         ethAddress: PropTypes.string,
@@ -42,6 +43,7 @@ class ExchangeForm extends Component {
             ethInput: '0.1',
             tokenInput: `${amount}`,
             tokenInputDenomination: denomination.name,
+            tokenInputBaseAo: props.initialTokenInput,
             ethUsdExchangeRate: undefined,
             primordialExchangeBonuses: undefined,
         }
@@ -89,7 +91,7 @@ class ExchangeForm extends Component {
         if ( this.props.isNetworkExchange ) {
             this.props.calculatePrimoridialExchangeMultiplierAndBonus(baseTokenAmount).then(bonuses => {
                 this.setState({
-                    primordialExchangeBonuses: bonuses
+                    primordialExchangeBonuses: bonuses,                    
                 })
             }).catch(error => {
                 console.error(`Error fetching primordial exchange bonuses: ${error.message}`)
@@ -158,6 +160,11 @@ class ExchangeForm extends Component {
                                 supplementalText={isNetworkExchange && primordialExchangeBonuses ? `multiplier = ${primordialExchangeBonuses.multiplier}` : undefined}
                             />
                         </div>
+                        {this.state.tokenInputBaseAo > this.props.maxTokenExchangeAmount && (
+                            <Typography color="error" variant="caption" className={classes.maxExchangeAmountExceeded}>
+                                {isNetworkExchange ? 'Remaining supply: ' : `Maximum exchange amount: `}<TokenBalance baseAmount={this.props.maxTokenExchangeAmount} includeAO={true} isPrimordial={isNetworkExchange} />
+                            </Typography>
+                        )}
                     </div>
                 </section>
                 <section className={classes.section}>
@@ -257,6 +264,7 @@ const styles = ({ palette, shape, spacing }) => ({
     inputsContainer: {
         display: 'flex',
         alignItems: 'center',
+        position: 'relative',
     },
     inputContainer: {
         flex: 1,
@@ -288,6 +296,11 @@ const styles = ({ palette, shape, spacing }) => ({
         textOverflow: 'ellipsis',
         overflow: 'hidden',
         whiteSpace: 'nowrap',
+    },
+    maxExchangeAmountExceeded: {
+        position: 'absolute',
+        top: `calc(100% + 4px)`,
+        right: 0,
     },
 })
 

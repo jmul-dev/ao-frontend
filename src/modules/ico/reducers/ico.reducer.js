@@ -17,12 +17,13 @@ export const updateIcoState = () => {
         }
         contracts.aoToken.networkExchangeEnded(function(err, ended) {
             if ( ended ) {
-                dispatch({
-                    type: UPDATE_PRIMORDIAL_STATE, 
-                    payload: {
-                        primordialSaleEnded: true
-                    }
-                })
+                console.error(`TODO: uncomment networkExchangeEnded result`)
+                // dispatch({
+                //     type: UPDATE_PRIMORDIAL_STATE, 
+                //     payload: {
+                //         primordialSaleEnded: true
+                //     }
+                // })
             }
         })
         // primordialTotalBought
