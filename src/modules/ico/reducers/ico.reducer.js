@@ -134,7 +134,6 @@ export const calculatePrimoridialExchangeMultiplierAndBonus = (tokenAmount) => {
                 console.warn('Calling contract methods before contracts initialized')
                 return reject();
             }
-            console.log(tokenAmount)
             contracts.aoToken.calculateMultiplierAndBonus(tokenAmount.toString(), function(err, results) {
                 if ( results ) {
                     resolve({
