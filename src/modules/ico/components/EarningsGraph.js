@@ -37,7 +37,7 @@ class EarningsGraph extends PureComponent {
             <ul style={{listStyle: 'none', padding: 0, margin: 0}}>
                 {payload.map((entry, index) => (
                     <li key={index}>
-                        <Typography style={{color: entry.color}}>{entry.dataKey === 11 ? `Earnings w/ AO+ Staked` : `Earnings w/o AO+ Staked`}</Typography>                    
+                        <Typography style={{color: entry.color}}>{entry.dataKey === 11 ? `Earnings w/ AO+ staked multiplier` : `Earnings w/o AO+ staked multiplier`}</Typography>                    
                     </li>
                 ))}
             </ul>
