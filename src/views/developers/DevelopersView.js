@@ -36,6 +36,7 @@ export default class DevelopersView extends PureComponent {
                         left: '50%',
                         fontSize: '32px',
                         transform: 'translate(-50%, -50%) rotate(-10deg)',
+                        fontStyle: 'italic',
                     }}>
                         {'Coming soon...'}
                     </Typography>

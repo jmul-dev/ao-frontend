@@ -1,4 +1,4 @@
-import { waitForTransactionReceipt } from '../../../contracts/contracts.reducer'
+import { waitForTransactionReceipt } from '../../../store/contracts.reducer'
 import { triggerMetamaskPopupWithinElectron } from '../../../utils/electron';
 import { updateWallet } from '../../wallet/reducers/wallet.reducer';
 

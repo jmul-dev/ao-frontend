@@ -83,9 +83,9 @@ const MainNavigation = ({ isElectron, offcanvas, ethAddress, showDownloads, over
                     </NavLink>
                 </li>
                 <li className={classes.navListItem}>
-                    <NavLink className={classes.navListItemLink} to="/app/view/updates" replace={overlayViewsActive}>
-                        <img src={navIconIngressSrc} className={classes.navLinkIcon} alt="Updates" />
-                        <Typography variant="caption" className={classes.navLinkCopy}>{'Updates'}</Typography>
+                    <NavLink className={classes.navListItemLink} to="/app/view/ingress" replace={overlayViewsActive}>
+                        <img src={navIconIngressSrc} className={classes.navLinkIcon} alt="Ingress" />
+                        <Typography variant="caption" className={classes.navLinkCopy}>{'Ingress'}</Typography>
                     </NavLink>
                 </li>
                 {isElectron ? (
@@ -98,8 +98,8 @@ const MainNavigation = ({ isElectron, offcanvas, ethAddress, showDownloads, over
                 ) : null}
                 <li className={classes.navListItem}>
                     <NavLink className={classes.navListItemLink} to="/app/view/dao">
-                        <img src={navIconDaoSrc} className={classes.navLinkIcon} alt="The dAO" />
-                        <Typography variant="caption" className={classes.navLinkCopy}>{'The dAO'}</Typography>
+                        <img src={navIconDaoSrc} className={classes.navLinkIcon} alt="The AO" />
+                        <Typography variant="caption" className={classes.navLinkCopy}>{'The AO'}</Typography>
                     </NavLink>
                 </li>
                 <li className={classes.navListItem}>

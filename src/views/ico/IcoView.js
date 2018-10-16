@@ -1,4 +1,3 @@
-// @flow
 import React, { PureComponent } from 'react';
 import View from '../View';
 import Typography from '@material-ui/core/Typography';
@@ -19,9 +18,14 @@ import { MuiThemeProvider } from '@material-ui/core';
 import { darkTheme, lightTheme, PrimaryButton } from '../../theme';
 import PrimordialExchangeForm from '../../modules/exchange/components/PrimordialExchangeForm';
 import Divider from '@material-ui/core/Divider';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
 
-export default class IcoView extends PureComponent {
+class IcoView extends PureComponent {
+    static propTypes = {
+        whitepaperUrl: PropTypes.string,
+    }
     constructor() {
         super()
         this.state = {
@@ -51,6 +55,18 @@ export default class IcoView extends PureComponent {
                         <Typography variant="display2" className="subtitle">
                             {`The AO is Abstract Order organizing information into an information-currency that powers the Autonomous Organization governing a decentralized socio-economic ecosystem and distributed application platform.`}
                         </Typography>
+                        {this.props.whitepaperUrl && (
+                            <Typography 
+                                variant="body1" 
+                                component="a" 
+                                href={this.props.whitepaperUrl} 
+                                target="_blank"
+                                className="whitepaper-link"
+                                style={{marginTop: 24}}
+                                >
+                                {`whitepaper`}
+                            </Typography>
+                        )}
                     </div>
                     <div className="progress-banner">
                         <Grid container spacing={16} alignItems="center">
@@ -67,6 +83,7 @@ export default class IcoView extends PureComponent {
                             </Grid>
                         </Grid>
                     </div>
+                    
                 </header>
                 <section className="section-padding vertical-padding-large bg-black">
                     <Typography variant="display1" gutterBottom style={{fontSize: '2.8125rem'}} className="heading-copy">
@@ -153,9 +170,25 @@ export default class IcoView extends PureComponent {
                             <Typography variant="display2" style={{marginBottom: 48}}>{`Exchange ETH for AO+`}</Typography>
                             <PrimordialExchangeForm />
                         </div>
+                        {this.props.whitepaperUrl && (
+                            <Typography 
+                                variant="body1" 
+                                component="a" 
+                                href={this.props.whitepaperUrl} 
+                                target="_blank"
+                                className="whitepaper-link"
+                                >
+                                {`whitepaper`}
+                            </Typography>
+                        )}
                     </section>   
                 </MuiThemeProvider>             
             </View>
         );
     }
 }
+
+const mapStateToProps = (store) => ({
+    whitepaperUrl: store.contracts.settings.whitepaperUrl
+})
+export default connect(mapStateToProps)(IcoView)

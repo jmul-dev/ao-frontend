@@ -4,7 +4,7 @@ import AOContent from 'ao-contracts/build/contracts/AOContent.json';
 import AOEarning from 'ao-contracts/build/contracts/AOEarning.json';
 import AOLibrary from 'ao-contracts/build/contracts/AOLibrary.json';
 import debounce from 'debounce';
-import { APP_STATES, updateAppState, getNetworkName } from '../store/app.reducer';
+import { APP_STATES, updateAppState, getNetworkName } from './app.reducer';
 import { updateIcoState } from '../modules/ico/reducers/ico.reducer';
 import { addNotification } from '../modules/notifications/reducers/notifications.reducer'
 
@@ -104,7 +104,11 @@ const watchBlockNumber = () => {
 
 // State
 const initialState = {
-    latestBlockNumber: 0,    
+    latestBlockNumber: 0,
+    settings: {
+        whitepaperUrl: undefined,
+        ingressUrl: undefined,
+    }    
 }
 
 // Reducer

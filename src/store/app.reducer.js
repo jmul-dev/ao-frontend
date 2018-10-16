@@ -2,7 +2,7 @@
  * This reducer is for global app state
  */
 import { getEthBalanceForAccount, getTokenBalanceForAccount } from '../modules/wallet/reducers/wallet.reducer'
-import { initializeContracts } from '../contracts/contracts.reducer'
+import { initializeContracts } from './contracts.reducer'
 
 
 // Constants
@@ -96,7 +96,7 @@ const initialState = {
     },
     ethNetworkId: undefined,
     ethNetworkLink: 'https://etherscan.io',
-    ethAddress: undefined,
+    ethAddress: undefined,    
 }
 export type AppReducerType = {
     state: {

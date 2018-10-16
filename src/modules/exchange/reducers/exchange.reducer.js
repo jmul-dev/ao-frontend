@@ -1,5 +1,5 @@
 import BigNumber from 'bignumber.js'
-import { waitForTransactionReceipt } from '../../../contracts/contracts.reducer'
+import { waitForTransactionReceipt } from '../../../store/contracts.reducer'
 import { denominations } from '../../../utils/denominations'
 import { getEthBalanceForAccount, getTokenBalanceForAccount } from '../../wallet/reducers/wallet.reducer'
 import { updateIcoState } from '../../ico/reducers/ico.reducer'

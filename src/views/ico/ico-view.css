@@ -120,3 +120,11 @@
 .IcoView .section-exchange .centered-content {
     max-width: 520px;
 }
+.IcoView .section-exchange {
+    position: relative;
+}
+.IcoView .section-exchange .whitepaper-link {
+    position: absolute;
+    bottom: 8px;
+    right: 12px;
+}
