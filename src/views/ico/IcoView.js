@@ -79,7 +79,9 @@ export default class IcoView extends PureComponent {
                     <section className="section-padding vertical-padding-large" style={{backgroundColor: lightTheme.palette.background.default}}>
                         <div className="centered-content">
                             <Typography variant="display3" style={{lineHeight: '1.85rem'}}>
-                                {`Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam efficitur augue sapien, id ullamcorper velit rutrum id. Suspendisse risus nibh, blandit quis volutpat eget, tempor quis dui. Integer vitae ligula faucibus, fringilla dui sed, auctor ipsum.`}
+                                {`If a currency is created from nothing, secured by nothing, and needs to be paid for to use... how valuable is it? If a currency is created through debt that needs to be paid back with more than what was created... how sustainable is it? If a currency has a fixed supply that can't keep up with demand... how can stable can it ever really be?`}
+                                <br/>
+                                {`AO is created with information, is secured by information's value, and creates more of its currency when its used... not loaned--or stored.`}
                             </Typography>
                         </div>                    
                     </section>
@@ -92,7 +94,7 @@ export default class IcoView extends PureComponent {
                         <Typography variant="display1" className="section-number">{`1.`}</Typography>
                         <div>
                             <Typography variant="body1" className="section-label">{`OVERVIEW`}</Typography>
-                            <Typography variant="display2" style={{color: 'white'}}>{`AO is directly correlated with the video content you are staking to:`}</Typography>
+                            <Typography variant="display2" style={{color: 'white'}}>{`The AO currency is denominated in the size of its information. An AO is a byte, and represents the capability to store or receive a byte of information on The AO Network.`}</Typography>
                         </div>
                     </div>
                     <img src={denominationsGraphicSrc} alt="AO Token Denominations" className="denominations" />
@@ -103,7 +105,7 @@ export default class IcoView extends PureComponent {
                             <Typography variant="display1" className="section-number">{`2.`}</Typography>
                             <div>
                                 <Typography variant="body1" className="section-label">{`TOKENS`}</Typography>
-                                <Typography variant="display2">{`AO tokens come in two forms:`}</Typography>
+                                <Typography variant="display2">{`AO's currency has two forms:`}</Typography>
                             </div>
                         </div>
                         <img src={tokenStructureSrc} alt="AO Token Structure" className="token-structure" />
@@ -112,8 +114,8 @@ export default class IcoView extends PureComponent {
                         <div className="section-heading">
                             <Typography variant="display1" className="section-number">{`3.`}</Typography>
                             <div>
-                                <Typography variant="body1" className="section-label">{`POTENTIAL EARNINGS`}</Typography>
-                                <Typography variant="display2">{`If you exchange for the limited supply of AO+ token, it will payoff in the long run:`}</Typography>
+                                <Typography variant="body1" className="section-label">{`PROJECTED OUTCOME`}</Typography>
+                                <Typography variant="display2">{`Staking content with AO+ can have a dramatic effect on AO earned from it over time. To help illustrate, here's a model with assumptions to play with:`}</Typography>
                             </div>
                         </div>
                         <div className="calculator-container">
@@ -128,8 +130,8 @@ export default class IcoView extends PureComponent {
                         <Grid item xs={12} sm={6} style={{backgroundColor: '#070707'}}>
                             <div className="multiplier-overview">
                                 <div className="copy-padding">
-                                    <Typography variant="body1" gutterBottom>{`WHY BUY NOW?`}</Typography>
-                                    <Typography variant="body1" style={{color: `rgba(255,255,255, 0.75)`}}>{`Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum turpis enim, sagittis vitae convallis eu, sagittis vitae tortor.`}</Typography>
+                                    <Typography variant="body1" gutterBottom>{`Multipliers on AO+ go down with each AO+ created`}</Typography>
+                                    <Typography variant="body1" style={{color: `rgba(255,255,255, 0.75)`}}>{`AO+ has a finite supply. Once reached, only AO will be created by the network. To reward those that risk supporting AO earlier, the multiplier that grants additional AO on AO+ staked content starts at its highest and gradually decreases until all AO+ has been created.`}</Typography>
                                 </div>
                                 <img src={multiplierGraphSrc} alt="AO Multiplier Incentive" className="multiplier-graph" />                                    
                             </div>
@@ -149,7 +151,7 @@ export default class IcoView extends PureComponent {
                 <MuiThemeProvider theme={lightTheme}>
                     <section ref={ref => {this._exchangeRef = ref}} className="section-padding section-exchange" style={{backgroundImage: `url(${bgShapesWhiteSrc})`, backgroundColor: lightTheme.palette.background.default}}>
                         <div className="centered-content">
-                            <Typography variant="display2" style={{marginBottom: 48}}>{`Interest piqued? Exchange now.`}</Typography>
+                            <Typography variant="display2" style={{marginBottom: 48}}>{`Exchange ETH for AO+`}</Typography>
                             <PrimordialExchangeForm />
                         </div>
                     </section>   
