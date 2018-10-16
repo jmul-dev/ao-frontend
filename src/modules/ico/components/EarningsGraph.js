@@ -15,14 +15,18 @@ const styles = theme => ({
 });
 
 class EarningsGraph extends PureComponent {
-    _renderTooltip = (props) => {
-        const { payload, label } = props
+    _renderTooltip = (args) => {
+        const { denomination } = this.props
+        const { payload, label } = args
+        console.log(args)
         return (
             <ul style={{listStyle: 'none', padding: 0, margin: 0}}>
                 <li><Typography>{`Days: ${label}`}</Typography></li>
                 {payload.map((entry, index) => (
-                    <li key={index}>
-                        <Typography style={{color: entry.color}}>{entry.value.toFixed(2)}</Typography>                    
+                    <li key={index}>                        
+                        <Typography style={{color: entry.color}}>
+                            {`${entry.value.toFixed(2)} ${denomination.prefix} AO${entry.dataKey === 11 ? '+' : ''}`}
+                        </Typography>
                     </li>
                 ))}
             </ul>
@@ -34,14 +38,14 @@ class EarningsGraph extends PureComponent {
             <ul style={{listStyle: 'none', padding: 0, margin: 0}}>
                 {payload.map((entry, index) => (
                     <li key={index}>
-                        <Typography style={{color: entry.color}}>{entry.dataKey === 9 ? `Earnings w/ AO+ Staked` : `Earnings w/o AO+ Staked`}</Typography>                    
+                        <Typography style={{color: entry.color}}>{entry.dataKey === 11 ? `Earnings w/ AO+ Staked` : `Earnings w/o AO+ Staked`}</Typography>                    
                     </li>
                 ))}
             </ul>
         )
     }
     render() {
-        const { classes, dataset, theme } = this.props;
+        const { classes, dataset, theme, denomination } = this.props;
         console.log(`EarningsGraph::render`)
         return (
             <div className="EarningsGraph">
@@ -62,7 +66,7 @@ class EarningsGraph extends PureComponent {
                                 type="monotone"
                                 xAxisId="days"
                                 yAxisId="ao"
-                                dataKey={9}
+                                dataKey={11}
                                 stroke={theme.palette.primary.main}
                                 dot={false}
                                 animationEasing="ease-out"
@@ -71,7 +75,7 @@ class EarningsGraph extends PureComponent {
                                 type="monotone"
                                 xAxisId="days"
                                 yAxisId="ao"
-                                dataKey={11}
+                                dataKey={9}
                                 stroke={theme.palette.secondary.main}
                                 dot={false}
                                 animationEasing="ease-out"
