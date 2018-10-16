@@ -20,7 +20,13 @@
     justify-content: center;
 }
 .IcoView .heading-copy {
-    max-width: 750px;
+    max-width: 768px;
+}
+.IcoView .heading-copy .subtitle {
+    font-size: 24px;
+    color: #777777;
+    letter-spacing: 0;
+    line-height: 32px;
 }
 .IcoView .progress-banner {
     position: absolute;
@@ -48,7 +54,7 @@
 }
 .IcoView .section-heading {
     display: flex;
-    width: 60%;
+    width: 70%;
 }
 .IcoView .section-heading .section-number {
     margin-right: 40px;

@@ -34,9 +34,8 @@ class IcoStats extends Component<Props> {
         const icoPercentageComplete = primordialMaxSupply.lte(0) ? 0 : primordialTotalSupply.div(primordialMaxSupply).times(100).toNumber()
         const icoRemainingSupply = primordialMaxSupply.minus(primordialTotalSupply)
         return (
-            <div className={classes.root}>
-                <div className={classes.typeContainer}>
-                    <Typography variant="body1" style={{marginBottom: 4}}>{`Network Exchange Progress: ${web3Connected ? `${icoPercentageComplete.toFixed(0)}%` : `NA`}`}</Typography>
+            <div className={classes.root}>                
+                <div className={classes.typeContainer}>                    
                     {!web3Connected && (
                         <Typography variant="caption" className={classes.saleEndedCopy}><AlertIcon className={classes.saleEndedAlertIcon} />{`Connect to web3 to view exchange progress.`}</Typography>
                     )}
@@ -49,7 +48,7 @@ class IcoStats extends Component<Props> {
                             <Typography variant="caption">{`Remaining: `}<TokenBalance baseAmount={icoRemainingSupply} decimals={0} isPrimordial={true} /></Typography>
                         </React.Fragment>
                     )}
-                </div>
+                </div>  
                 <div className={classes.progressContainer}>
                     <LinearProgress 
                         variant="determinate" 
@@ -58,7 +57,10 @@ class IcoStats extends Component<Props> {
                             root: classes.linearProgressRoot
                         }}
                     />
-                </div>
+                </div>   
+                {web3Connected && (
+                    <Typography variant="body1" className={classes.percentage}>{`${web3Connected ? `${icoPercentageComplete.toFixed(0)}%` : `NA`}`}</Typography>
+                )}                
             </div>
         )
     }
@@ -70,10 +72,11 @@ const styles = (theme) => ({
         alignItems: 'center',
     },
     typeContainer: {
-        marginRight: 48
+        marginRight: 24,
+        textAlign: 'right',
     },
     progressContainer: {
-        flex: 1
+        flex: 1,
     },
     linearProgressRoot: {
         backgroundColor: `rgba(255,255,255,0.2)`,
@@ -87,6 +90,10 @@ const styles = (theme) => ({
     saleEndedAlertIcon: {
         marginRight: 4,
         fontSize: 18,
+    },
+    percentage: {
+        position: 'absolute',
+        right: 30,
     }
 });
 

@@ -64,7 +64,7 @@ export default class App extends Component<Props> {
         }
     }
     componentWillReceiveProps( nextProps: Props ) {
-        const { query, updateAppState } = this.props
+        const { app, query, updateAppState } = this.props
         if ( !query.state && nextProps.query.state !== undefined ) {
             // no core state -> core state, means our core connection has been established
             updateAppState(APP_STATES.CORE_CONNECTED, true)
@@ -75,6 +75,9 @@ export default class App extends Component<Props> {
         } else if ( query.networkStatus < 8 && nextProps.query.networkStatus === 8 ) {
             // network error just occured, ie couldnt connect to core
             updateAppState(APP_STATES.CORE_CONNECTED, false)
+            if ( app.states[APP_STATES.CORE_CONNECTED] ) {
+                // TODO: dispatch notification no longer connected to core
+            }
         }
         if ( query.state !== 'READY' && nextProps.query.state === 'READY' ) {  // TODO: pull READY from ao-core constants
             setTimeout(() => {

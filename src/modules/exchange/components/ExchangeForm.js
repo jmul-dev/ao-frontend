@@ -178,7 +178,7 @@ class ExchangeForm extends Component {
                             </Typography>
                             <div className={classes.spacer}></div>
                             <Typography>
-                                {`0 ETH`}
+                                {`FREE`}
                             </Typography>
                         </div>
                     )}

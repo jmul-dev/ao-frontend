@@ -45,18 +45,16 @@ export default class IcoView extends PureComponent {
             <View className={'IcoView'} padding="none">                
                 <header className="section-padding bg-black" style={{backgroundImage: `url(${bgShapesSrc})`}}>
                     <div className="heading-copy">
-                        <Typography variant="display1" gutterBottom>
-                            {`Become a part of The AO`}<sup>*</sup>
+                        <Typography variant="display1" gutterBottom style={{fontWeight: 'bold'}}>
+                            {`Become a part of the AO`}
                         </Typography>
                         <Typography variant="display2" className="subtitle">
-                            {`because humanity should think more like a human.`}
-                            <br/><br/>
                             {`The AO is Abstract Order organizing information into an information-currency that powers the Autonomous Organization governing a decentralized socio-economic ecosystem and distributed application platform.`}
                         </Typography>
                     </div>
                     <div className="progress-banner">
                         <Grid container spacing={16} alignItems="center">
-                            <Grid item xs={6}>
+                            <Grid item xs={12} sm={4} md={3}>
                                 <PrimaryButton 
                                     onClick={this._scrollToExchange}
                                     style={{width: 200}}
@@ -64,7 +62,7 @@ export default class IcoView extends PureComponent {
                                     {`Exchange tokens`}
                                 </PrimaryButton>
                             </Grid>
-                            <Grid item xs={6}>
+                            <Grid item xs={12} sm={8} md={9}>
                                 <IcoStats />
                             </Grid>
                         </Grid>
