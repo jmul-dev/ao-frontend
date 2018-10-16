@@ -4,6 +4,7 @@ import { graphql, compose } from 'react-apollo'
 import gql from "graphql-tag"
 import { connectToWeb3, updateAppState } from './store/app.reducer'
 import { listenOnIpcChannel, checkElectron } from './modules/electron/reducers/electron.reducer'
+import { addNotification, dismissNotification } from './modules/notifications/reducers/notifications.reducer'
 
 // Redux
 const mapStateToProps = (store) => {
@@ -17,6 +18,8 @@ const mapDispatchToProps = {
     updateAppState,
     listenOnIpcChannel,
     checkElectron,
+    addNotification,
+    dismissNotification,
 }
 
 // Graphql

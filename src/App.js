@@ -30,10 +30,13 @@ type Props = {
     connectToWeb3: Function,
     listenOnIpcChannel: Function,
     checkElectron: Function,
+    addNotification: Function,
+    dismissNotification: Function,
 };
 
 export default class App extends Component<Props> {
     props: Props;
+    _networkDisconnectedErrorNotificationId = null;
     constructor() {
         super()
         this.state = {
@@ -46,6 +49,8 @@ export default class App extends Component<Props> {
         if ( this.props.isElectron ) {
             window.chrome.ipcRenderer.send('ERRORS_REACT', {error, info});
         }
+        // dispatch react error
+
     }
     componentDidMount() {
         const { app, connectToWeb3, listenOnIpcChannel, checkElectron, updateAppState } = this.props
@@ -72,11 +77,17 @@ export default class App extends Component<Props> {
         if ( query.networkStatus === 8 && nextProps.query.networkStatus < 8 ) {
             // couldnt connect to core -> now connected to core
             updateAppState(APP_STATES.CORE_CONNECTED, true)
+            if ( this._networkDisconnectedErrorNotificationId ) {
+                this.props.dismissNotification(this._networkDisconnectedErrorNotificationId)
+            }
         } else if ( query.networkStatus < 8 && nextProps.query.networkStatus === 8 ) {
             // network error just occured, ie couldnt connect to core
             updateAppState(APP_STATES.CORE_CONNECTED, false)
             if ( app.states[APP_STATES.CORE_CONNECTED] ) {
-                // TODO: dispatch notification no longer connected to core
+                this._networkDisconnectedErrorNotificationId = this.props.addNotification({
+                    message: `Disconnected from ao-core. You may need to restart the application.`,
+                    variant: 'error',
+                })
             }
         }
         if ( query.state !== 'READY' && nextProps.query.state === 'READY' ) {  // TODO: pull READY from ao-core constants
