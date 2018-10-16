@@ -18,7 +18,6 @@ class EarningsGraph extends PureComponent {
     _renderTooltip = (args) => {
         const { denomination } = this.props
         const { payload, label } = args
-        console.log(args)
         return (
             <ul style={{listStyle: 'none', padding: 0, margin: 0}}>
                 <li><Typography>{`Days: ${label}`}</Typography></li>

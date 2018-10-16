@@ -18,6 +18,7 @@ import multiplierGraphSrc from '../../assets/multiplier-graph.png';
 import { MuiThemeProvider } from '@material-ui/core';
 import { darkTheme, lightTheme, PrimaryButton } from '../../theme';
 import PrimordialExchangeForm from '../../modules/exchange/components/PrimordialExchangeForm';
+import Divider from '@material-ui/core/Divider';
 
 
 export default class IcoView extends PureComponent {
@@ -79,8 +80,8 @@ export default class IcoView extends PureComponent {
                     <section className="section-padding vertical-padding-large" style={{backgroundColor: lightTheme.palette.background.default}}>
                         <div className="centered-content">
                             <Typography variant="display3" style={{lineHeight: '1.85rem'}}>
-                                {`If a currency is created from nothing, secured by nothing, and needs to be paid for to use... how valuable is it? If a currency is created through debt that needs to be paid back with more than what was created... how sustainable is it? If a currency has a fixed supply that can't keep up with demand... how can stable can it ever really be?`}
-                                <br/>
+                                {`If a currency is created from nothing, secured by nothing, and needs to be paid for to use... how valuable is it? If a currency is created through debt that needs to be paid back with more than what was created... how sustainable is it? If a currency has a fixed supply that can't keep up with demand... how stable can it ever really be?`}
+                                <Divider style={{marginTop: 16, marginBottom: 16}} />
                                 {`AO is created with information, is secured by information's value, and creates more of its currency when its used... not loaned--or stored.`}
                             </Typography>
                         </div>                    
@@ -130,7 +131,7 @@ export default class IcoView extends PureComponent {
                         <Grid item xs={12} sm={6} style={{backgroundColor: '#070707'}}>
                             <div className="multiplier-overview">
                                 <div className="copy-padding">
-                                    <Typography variant="body1" gutterBottom>{`Multipliers on AO+ go down with each AO+ created`}</Typography>
+                                    <Typography variant="body1" style={{marginBottom: 16, textTransform: 'uppercase'}}>{`Multipliers on AO+ go down with each AO+ created`}</Typography>
                                     <Typography variant="body1" style={{color: `rgba(255,255,255, 0.75)`}}>{`AO+ has a finite supply. Once reached, only AO will be created by the network. To reward those that risk supporting AO earlier, the multiplier that grants additional AO on AO+ staked content starts at its highest and gradually decreases until all AO+ has been created.`}</Typography>
                                 </div>
                                 <img src={multiplierGraphSrc} alt="AO Multiplier Incentive" className="multiplier-graph" />                                    

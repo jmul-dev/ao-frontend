@@ -16,8 +16,8 @@ export default class DaoView extends PureComponent {
                 </header>
                 <section style={{marginTop: 48, opacity: 0.5}}>
                     <Typography variant="body1">
-                        {`Abstract Order (“AO”) is governed by The Autonomous Organization (“The dAO”). The User Interface for The dAO is coming soon. However, the contracts and governance structure for the dAO already exists and is fully operational.`}
-                        {`View the dAO contracts here: `}<EtherscanLink type="address" value={`TODO`} />
+                        {`Abstract Order (“AO”) is governed by The Autonomous Organization (“The dAO”). The User Interface for The dAO is coming soon. However, the contracts and governance structure for the dAO already exists and is fully operational. View the dAO contracts here: `}
+                        <EtherscanLink type="address" value={`TODO`} />
                     </Typography>
                     <Typography variant="caption" style={{
                         position: 'absolute',

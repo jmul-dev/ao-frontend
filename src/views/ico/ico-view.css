@@ -48,7 +48,7 @@
 }
 .IcoView .section-heading {
     display: flex;
-    width: 50%;
+    width: 60%;
 }
 .IcoView .section-heading .section-number {
     margin-right: 40px;
@@ -78,6 +78,12 @@
     margin-top: 80px;
     width: 100%;
     margin-left: 30px;
+}
+.IcoView .section-split {
+    position: relative;
+    overflow: hidden;
+    padding-bottom: 8px;
+    padding-top: 8px;
 }
 .IcoView .section-split .copy-padding {
     padding: 30px;
