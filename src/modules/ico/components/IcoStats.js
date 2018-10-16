@@ -31,7 +31,9 @@ class IcoStats extends Component<Props> {
     render() {
         const { classes, web3Connected } = this.props
         const { primordialTotalSupply, primordialMaxSupply, primordialSaleActive, primordialSaleEnded } = this.props.ico
-        const icoPercentageComplete = primordialMaxSupply.lte(0) ? 0 : primordialTotalSupply.div(primordialMaxSupply).times(100).toNumber()
+        let icoPercentageComplete = primordialMaxSupply.lte(0) ? 0 : primordialTotalSupply.div(primordialMaxSupply).times(100).toNumber()
+        if ( icoPercentageComplete > 100 )
+            icoPercentageComplete = 100
         const icoRemainingSupply = primordialMaxSupply.minus(primordialTotalSupply)
         return (
             <div className={classes.root}>                
@@ -70,6 +72,7 @@ const styles = (theme) => ({
     root: {
         display: 'flex',
         alignItems: 'center',
+        paddingRight: 24,
     },
     typeContainer: {
         marginRight: 24,
@@ -93,7 +96,7 @@ const styles = (theme) => ({
     },
     percentage: {
         position: 'absolute',
-        right: 30,
+        right: 40,
     }
 });
 

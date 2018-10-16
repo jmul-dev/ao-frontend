@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import withExchangeContainer from '../containers/withExchangeContainer';
 import PropTypes from 'prop-types';
 import ExchangeForm from './ExchangeForm';
+import Typography from '@material-ui/core/Typography';
 
 
 class PrimordialExchangeForm extends Component {
@@ -9,7 +10,14 @@ class PrimordialExchangeForm extends Component {
         this.props.exchangeEthForPrimordialTokens( ethInput )
     }
     render() {
-        return (
+        const { ico } = this.props
+        return ico.primordialSaleEnded ? (
+            <div>
+                <Typography variant="body1">
+                    {`Thank you for participating in the AO Network Exchange event. This event has now ended.`}
+                </Typography>
+            </div>
+        ) : (
             <ExchangeForm 
                 onSubmit={this._onSubmit}
                 isNetworkExchange={true}

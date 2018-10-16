@@ -35,3 +35,13 @@
     overflow: auto;
     background-color: #111111;
 }
+.MainNavigation a.ended:after {
+    content: 'complete';
+    display: block;
+    position: absolute;
+    right: 10px;
+    font-size: 12px;
+    letter-spacing: 1px;
+    opacity: 0.25;
+    transform: rotate(-10deg);
+}

@@ -28,7 +28,7 @@ const openMetamask = () => {
     window.chrome.ipcRenderer.send('open-metamask-popup')
 }
 
-const MainNavigation = ({ isElectron, offcanvas, ethAddress, showDownloads, overlayViewsActive, classes }) => (
+const MainNavigation = ({ isElectron, offcanvas, ethAddress, showDownloads, overlayViewsActive, primordialSaleEnded, classes }) => (
     <nav className={classnames('MainNavigation', { offcanvas })}>
         <div className={classes.container}>
             <ul className={classes.navList}>
@@ -59,7 +59,7 @@ const MainNavigation = ({ isElectron, offcanvas, ethAddress, showDownloads, over
                     </NavLink>
                 </li>
                 <li className={classes.navListItem}>
-                    <NavLink className={classes.navListItemLink} to="/app/view/ico" replace={overlayViewsActive}>
+                    <NavLink className={`${classes.navListItemLink} ${primordialSaleEnded ? 'ended' : ''}`} to="/app/view/ico" replace={overlayViewsActive}>
                         <img src={navIconTokenExchangeSrc} className={classes.navLinkIcon} alt="Exchange" />
                         <Typography variant="caption" className={classes.navLinkCopy}>{'Exchange'}</Typography>
                     </NavLink>
@@ -148,7 +148,7 @@ const styles = ({palette, spacing}) => ({
                 backgroundColor: palette.divider, // '#151515'
                 color: palette.common.white,
                 opacity: 1,
-            },
+            },            
         },
             navListItemWallet: {
                 flexDirection: 'column',
@@ -189,6 +189,7 @@ const mapStateToProps = (store) => {
         overlayViewsActive: store.router.location.pathname.indexOf('/app/view') > -1,
         isElectron: store.electron.isElectron,
         ethAddress: store.app.ethAddress,
+        primordialSaleEnded: store.ico.primordialSaleEnded,
     }
 }
 
