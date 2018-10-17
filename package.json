@@ -7,8 +7,10 @@
   "scripts": {
     "start": "cp src/index-app.js src/index.js && react-scripts start",
     "build": "cp src/index-app.js src/index.js && cross-env PUBLIC_URL='./' react-scripts build",
-    "start-ico": "cp src/index-ico.js src/index.js && react-scripts start",
-    "build-ico": "cp src/index-ico.js src/index.js && cross-env PUBLIC_URL='./' react-scripts build",
+    "start:ico": "cp src/index-ico.js src/index.js && react-scripts start",
+    "build:ico": "cp src/index-ico.js src/index.js && cross-env PUBLIC_URL='./' react-scripts build",
+    "build:ico:bundle": "webpack --config webpack.config.js",
+    "build:ico:inline": "node scripts/inline-src.js",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "storybook": "start-storybook -p 9009 -s public",
@@ -67,6 +69,7 @@
     "babel-runtime": "^6.26.0",
     "cross-env": "^5.2.0",
     "flow-bin": "^0.75.0",
-    "storybook-addon-material-ui": "^0.9.0-alpha.16"
+    "storybook-addon-material-ui": "^0.9.0-alpha.16",
+    "url-loader": "^1.1.2"
   }
 }
