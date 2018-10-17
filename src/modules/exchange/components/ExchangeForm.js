@@ -11,7 +11,6 @@ import { compose } from 'react-apollo';
 import { withStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import WalletBalances from '../../wallet/components/WalletBalances';
-import exchangeIconSrc from '../../../assets/exchange-icon.svg';
 import { fromBaseToDenominationValue, fromDenominationValueToBase, fromBaseToHighestDenomination, denominationsByName, TokenBalance } from '../../../utils/denominations';
 
 
@@ -147,7 +146,7 @@ class ExchangeForm extends Component {
                             />
                         </div>
                         <div className={classes.exchangeIconContainer}>
-                            <img src={exchangeIconSrc} alt="exchange icon" />
+                            <img alt="exchange icon" src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz48c3ZnIHdpZHRoPSIyNnB4IiBoZWlnaHQ9IjE3cHgiIHZpZXdCb3g9IjAgMCAyNiAxNyIgdmVyc2lvbj0iMS4xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIj4gICAgICAgIDx0aXRsZT5leGNoYW5nZS1pY29uPC90aXRsZT4gICAgPGRlc2M+Q3JlYXRlZCB3aXRoIFNrZXRjaC48L2Rlc2M+ICAgIDxnIGlkPSJleGNoYW5nZS1pY29uIiBzdHJva2U9Im5vbmUiIHN0cm9rZS13aWR0aD0iMSIgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIj4gICAgICAgIDxnIGlkPSJHcm91cC0xNyIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMS4wMDAwMDAsIDEuMDAwMDAwKSIgc3Ryb2tlPSIjNzc3Nzc3Ij4gICAgICAgICAgICA8cG9seWxpbmUgaWQ9IlBhdGgiIHBvaW50cz0iMCA1IDI0IDUgMTguNzg5Nzg2MSAwIj48L3BvbHlsaW5lPiAgICAgICAgICAgIDxwb2x5bGluZSBpZD0iUGF0aCIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMTIuMDAwMDAwLCAxMi41MDAwMDApIHJvdGF0ZSgtMTgwLjAwMDAwMCkgdHJhbnNsYXRlKC0xMi4wMDAwMDAsIC0xMi41MDAwMDApICIgcG9pbnRzPSIwIDE1IDI0IDE1IDE4Ljc4OTc4NjEgMTAiPjwvcG9seWxpbmU+ICAgICAgICA8L2c+ICAgIDwvZz48L3N2Zz4=" />
                         </div>
                         <div className={classes.inputContainer}>
                             <TokenInput
