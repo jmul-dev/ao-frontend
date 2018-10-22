@@ -354,8 +354,8 @@ class ContentPurchaseActionComponent extends Component {
         const { stakeContent, content, client } = this.props
         this.setState({ loading: true, error: null })
         stakeContent({
-            networkTokenAmount: content.stake * (1 - (content.stakePrimordialPercentage / 100.0)),
-            primordialTokenAmount: content.stake * (content.stakePrimordialPercentage / 100.0),
+            networkTokenAmount: Math.floor(content.stake * (1 - (content.stakePrimordialPercentage / 100.0))),
+            primordialTokenAmount: Math.ceil(content.stake * (content.stakePrimordialPercentage / 100.0)),
             fileDatKey: content.fileDatKey,
             metadataDatKey: content.metadataDatKey,
             fileSizeInBytes: content.fileSize,

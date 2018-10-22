@@ -61,14 +61,14 @@ class UploadFormSubmit extends Component<Props> {
             networkTokenAmount = form.stake
             primordialTokenAmount = 0
         } else if ( form.stakeTokenType === 'both' ) {
-            networkTokenAmount = form.stake * (1 - form.stakePrimordialPercentage / 100)
-            primordialTokenAmount = form.stake * (form.stakePrimordialPercentage / 100)
+            // Account for rounding/decimals. Both networkTokenAmount and primordialTokenAmount should be integers.
+            networkTokenAmount = Math.floor(form.stake * (1 - form.stakePrimordialPercentage / 100))
+            primordialTokenAmount = Math.ceil(form.stake * (form.stakePrimordialPercentage / 100))            
         }
-
         // 1. Trigger stake tx via metamask
         stakeContent({
             networkTokenAmount,
-            primordialTokenAmount, // TODO
+            primordialTokenAmount,
             fileDatKey: contentSubmittionResult.fileDatKey,
             metadataDatKey: contentSubmittionResult.metadataDatKey,
             fileSizeInBytes: contentSubmittionResult.fileSize,
