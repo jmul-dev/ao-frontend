@@ -1,5 +1,10 @@
 import { connect } from 'react-redux'
-import { getExchangeRate, exchangeEthForPrimordialTokens, exchangeEthForNetworkTokens, resetExchange } from '../reducers/exchange.reducer';
+import {
+    getExchangeRate,
+    exchangeEthForPrimordialTokens,
+    exchangeEthForNetworkTokens,
+    resetExchange,
+} from '../reducers/exchange.reducer';
 import { calculatePrimoridialExchangeMultiplierAndBonus } from '../../ico/reducers/ico.reducer';
 import { APP_STATES } from '../../../store/app.reducer';
 

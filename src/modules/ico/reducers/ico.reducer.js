@@ -84,7 +84,7 @@ export const startListeningForRecentTransactions = () => {
         const { contracts, app, ico } = state
         if ( !app.states[APP_STATES.CONTRACTS_INITIALIZED] )
             return console.warn(`Attempting to call contract method before contracts initialized`)
-        let lotCreationEvent = contracts.lotCreationEvent
+        let lotCreationEvent = ico.lotCreationEvent
         if ( !lotCreationEvent ) {
             let fromBlock = contracts.latestBlockNumber - (15 * 4 * 60 * 24 * 30)  // ~30 days worth of txs
             if ( fromBlock < 0 )
@@ -115,9 +115,9 @@ export const startListeningForRecentTransactions = () => {
 export const stopListeningForRecentTransactions = () => {
     return (dispatch, getState) => {
         const state = getState()
-        const { contracts } = state
-        if ( contracts.lotCreationEvent ) {
-            contracts.lotCreationEvent.stopWatching()
+        const { ico } = state
+        if ( ico.lotCreationEvent ) {
+            ico.lotCreationEvent.stopWatching()
         }
     }
 }

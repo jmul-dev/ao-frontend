@@ -3,6 +3,7 @@ import AOTreasury from 'ao-contracts/build/contracts/AOTreasury.json';
 import AOContent from 'ao-contracts/build/contracts/AOContent.json';
 import AOEarning from 'ao-contracts/build/contracts/AOEarning.json';
 import AOLibrary from 'ao-contracts/build/contracts/AOLibrary.json';
+import AOPool from 'ao-contracts/build/contracts/AOPool.json';
 import debounce from 'debounce';
 import { APP_STATES, updateAppState, getNetworkName } from './app.reducer';
 import { updateIcoState } from '../modules/ico/reducers/ico.reducer';
@@ -50,7 +51,8 @@ export const initializeContracts = (networkId) => {
                 !AOTreasury.networks[networkId] ||
                 !AOContent.networks[networkId] ||
                 !AOEarning.networks[networkId] ||
-                !AOLibrary.networks[networkId]
+                !AOLibrary.networks[networkId] ||
+                !AOPool.networks[networkId]
             ) {
                 console.warn('Smart contracts have not been deployed on this network['+networkId+']')
                 dispatch(updateAppState(APP_STATES.CONTRACTS_INITIALIZED, false))
@@ -59,13 +61,13 @@ export const initializeContracts = (networkId) => {
                     message: `The Ethereum network you selected is not supported. Avialable networks: ${networkIds}`
                 }))
             } else {
-                console.log('Network id: ', networkId)
                 const contracts = {
                     aoToken: window.web3.eth.contract(AOToken.abi).at(AOToken.networks[networkId].address),
                     aoTreasury: window.web3.eth.contract(AOTreasury.abi).at(AOTreasury.networks[networkId].address),
                     aoContent: window.web3.eth.contract(AOContent.abi).at(AOContent.networks[networkId].address),
                     aoEarning: window.web3.eth.contract(AOEarning.abi).at(AOEarning.networks[networkId].address),
                     aoLibrary: window.web3.eth.contract(AOLibrary.abi).at(AOLibrary.networks[networkId].address),
+                    aoPool: window.web3.eth.contract(AOPool.abi).at(AOPool.networks[networkId].address),
                 }
                 dispatch({
                     type: CONTRACTS_INITIALIZED,
