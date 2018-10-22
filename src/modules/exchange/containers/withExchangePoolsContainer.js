@@ -1,5 +1,7 @@
 import { connect } from 'react-redux'
 import { listenForAvailableExchangePools, stopListeningForAvailableExchangePools } from '../reducers/exchange.reducer';
+import BigNumber from 'bignumber.js'
+
 
 // Redux
 const mapDispatchToProps = {
@@ -15,13 +17,15 @@ const mapStateToProps = (store, props) => {
         const pool = exchangePools[poolId]
         if ( !targetExchangePool )
             targetExchangePool = pool
+        else if ( targetExchangePool.totalQuantityAvailable < requiredTokenAmount && pool.totalQuantityAvailable > requiredTokenAmount )
+            targetExchangePool = pool
         else if ( pool.totalQuantityAvailable > requiredTokenAmount && pool.price < targetExchangePool.price )
             targetExchangePool = pool
     })
     return {
         exchangePools,
         targetExchangePool,
-        targetExchangeRate: targetExchangePool ? targetExchangePool.price : new BigNumber(0),
+        targetExchangeRate: targetExchangePool ? window.web3.fromWei(targetExchangePool.price) : new BigNumber(0),
     }
 }
 

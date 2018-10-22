@@ -251,7 +251,7 @@ const styles = ({ palette, shape, spacing }) => ({
         marginBottom: spacing.unit,
     },
     walletContainer: {
-        backgroundColor: '#DEE0E3',
+        backgroundColor: palette.type === 'light' ? '#DEE0E3' : '#333333',
         borderRadius: shape.borderRadius,
         padding: `${spacing.unit}px ${spacing.unit * 2}px`,
         display: 'flex',

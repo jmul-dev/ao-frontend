@@ -98,11 +98,8 @@ class Wallet extends PureComponent {
                 <ExchangeModal 
                     open={this.state.exchangeModalOpen}
                     onClose={this._onExchangeModalClose}
-                    exchangeProps={{
-                        title: 'Purchase AO',
-                        subtitle: 'AO+ Primordial tokens have additional staking benefits.'
-                    }}
-                />             
+                    exchangeType="network"
+                />
             </div>
         );
     }

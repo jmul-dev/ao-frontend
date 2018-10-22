@@ -65,6 +65,8 @@
     margin-right: auto;
     margin-bottom: 16px;
 }
-.ExchangeModal .Exchange {
-    background-color: #222222;
+.ExchangeModal .modal-content-container form {
+    background-color: #151515;
+    padding: 40px;
+    border-radius: 4px;
 }

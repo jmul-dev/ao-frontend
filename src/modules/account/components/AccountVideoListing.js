@@ -88,6 +88,7 @@ class AccountVideoListing extends Component {
                 <ExchangeModal 
                     open={this.state.exchangeModalOpen}
                     onClose={() => {this.setState({exchangeModalOpen: false})}}
+                    exchangeType="primordial"
                 />
             </Fragment>
         )

@@ -87,7 +87,7 @@ export const exchangeEthForPrimordialTokens = (ethCost) => {
         }
     }
 }
-export const exchangeEthForNetworkTokens = ({ethCost, poolId, poolPricePerToken, tokenAmount}) => {
+export const exchangeEthForNetworkTokens = ({ethCost, poolId, poolPrice, tokenAmount}) => {
     return (dispatch, getState) => {
         const dispatchError = (err) => {
             dispatch({
@@ -105,7 +105,9 @@ export const exchangeEthForNetworkTokens = ({ethCost, poolId, poolPricePerToken,
             dispatch({type: EXCHANGE_TRANSACTION.INITIALIZED})
             triggerMetamaskPopupWithinElectron(getState)
             const ethCostInWei = new BigNumber(window.web3.toWei(ethCost, 'ether'));
-            contracts.aoPool.buyWithEth(poolId, tokenAmount.toNumber(), poolPricePerToken, {
+            console.log(state.exchange.exchangePools[poolId])
+            console.log(`tokenAmount[${tokenAmount.toString()}] x poolPrice[${poolPrice.toString()}] = [${tokenAmount.multipliedBy(poolPrice).toString()}], ethCostInWei[${ethCostInWei.toString()}]`)
+            contracts.aoPool.buyWithEth(poolId, tokenAmount.toString(), poolPrice.toString(), {
                 from: app.ethAddress,
                 value: ethCostInWei.toNumber(),
             }, (err, transactionHash) => {
@@ -153,10 +155,13 @@ export const listenForAvailableExchangePools = () => {
             if ( poolEvent ) {
                 // CreatePool event does not have the live state of that pool,
                 // so we are making an additional query for that info
-                contracts.aoPool.poolTotalQuantity(poolEvent.args.poolId, (error, poolTotalQuantity) => {
+                const poolId = new BigNumber(poolEvent.args.poolId).toString()
+                contracts.aoPool.poolTotalQuantity(poolId, (error, poolTotalQuantity) => {
+                    if ( error )
+                        console.error(error)
                     if ( poolTotalQuantity ) {
                         let pool = {
-                            poolId: poolEvent.args.poolId,
+                            poolId,
                             price: new BigNumber(poolEvent.args.price),   // eth/AO?
                             totalQuantityAvailable: new BigNumber(poolTotalQuantity),
                         }
@@ -176,6 +181,10 @@ export const stopListeningForAvailableExchangePools = () => {
         const { exchange } = state
         if ( exchange.createPoolEvent ) {
             exchange.createPoolEvent.stopWatching()
+            dispatch({
+                type: SET_CREATE_POOL_EVENT,
+                payload: undefined,
+            })
         }
     }
 }

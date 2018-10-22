@@ -233,10 +233,11 @@ class TeaserCard extends Component<Props> {
                         <ExchangeModal 
                             open={this.state.exchangeModalOpen}
                             onClose={this._onExchangeModalClose}
+                            exchangeType="network"                            
                             exchangeProps={{
                                 title: 'You have insufficient funds',
                                 subtitle: 'Purchase more ao to continue streaming.',
-                                requiredNetworkTokenAmount: insufficientBalance,
+                                requiredTokenAmount: insufficientBalance,
                                 requiredTokenCopy: 'Video cost:',
                             }}
                         />

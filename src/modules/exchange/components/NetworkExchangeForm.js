@@ -8,7 +8,7 @@ import withExchangePoolsContainer from '../containers/withExchangePoolsContainer
 
 class NetworkExchangeForm extends Component {
     static defaultProps = {
-        requiredTokenAmount: 0,
+        requiredTokenAmount: Math.pow(10, 9),
     }
     componentDidMount() {
         this.props.listenForAvailableExchangePools()
@@ -16,13 +16,13 @@ class NetworkExchangeForm extends Component {
     componentWillUnmount() {
         this.props.stopListeningForAvailableExchangePools()
     }
-    _onSubmit = ({ethInput, tokenInput}) => {
+    _onSubmit = ({ethInput, tokenInputInBaseDenomination}) => {
         const { targetExchangePool, targetExchangeRate } = this.props
         this.props.exchangeEthForNetworkTokens({
             poolId: targetExchangePool.poolId,
-            poolPricePerToken: targetExchangeRate,
+            poolPrice: targetExchangePool.price,
             ethCost: ethInput,
-            tokenAmount: tokenInput,
+            tokenAmount: tokenInputInBaseDenomination,
         })
     }
     render() {
