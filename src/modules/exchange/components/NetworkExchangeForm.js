@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import ExchangeForm from './ExchangeForm';
 import { compose } from 'react-apollo';
 import withExchangePoolsContainer from '../containers/withExchangePoolsContainer';
+import BigNumber from 'bignumber.js';
 
 
 class NetworkExchangeForm extends Component {
@@ -26,13 +27,14 @@ class NetworkExchangeForm extends Component {
         })
     }
     render() {
-        const { targetExchangeRate, requiredTokenAmount } = this.props
+        const { targetExchangePool, targetExchangeRate, requiredTokenAmount } = this.props
         return (
             <ExchangeForm 
                 onSubmit={this._onSubmit}
-                isNetworkExchange={false}
+                isPrimordialExchange={false}
                 exchangeRate={targetExchangeRate}
                 initialTokenInput={requiredTokenAmount}
+                maxTokenExchangeAmount={targetExchangePool ? targetExchangePool.totalQuantityAvailable : new BigNumber(0)}
             />
         )
     }

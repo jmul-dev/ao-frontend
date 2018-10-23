@@ -17,7 +17,7 @@ import { fromBaseToDenominationValue, fromDenominationValueToBase, fromBaseToHig
 class ExchangeForm extends Component {
     static propTypes = {
         initialTokenInput: PropTypes.number.isRequired,
-        isNetworkExchange: PropTypes.bool,
+        isPrimordialExchange: PropTypes.bool,
         onSubmit: PropTypes.func.isRequired, // ({ethInput, tokenInputInBaseDenomination})
         exchangeRate: PropTypes.instanceOf(BigNumber),
         maxTokenExchangeAmount: PropTypes.instanceOf(BigNumber),
@@ -33,7 +33,7 @@ class ExchangeForm extends Component {
     }
     static defaultProps = {
         initialTokenInput: Math.pow(10, 12) * 10,  // 10 tera ao
-        isNetworkExchange: false,
+        isPrimordialExchange: false,
     }
     constructor(props) {
         super(props)
@@ -42,21 +42,16 @@ class ExchangeForm extends Component {
             ethInput: '0.1',
             tokenInput: `${amount}`,
             tokenInputDenomination: denomination.name,
-            tokenInputBaseAo: props.initialTokenInput,
+            tokenInputBaseAo: new BigNumber(props.initialTokenInput),
             ethUsdExchangeRate: undefined,
             primordialExchangeBonuses: undefined,
         }
     }
     componentDidMount() {
-        this.props.getExchangeRate()
-    }
-    componentWillReceiveProps(nextProps) {
-        if ( !this.props.contractsInitialized && nextProps.contractsInitialized ) {
-            this.props.getExchangeRate()
-        }
+        this.props.updateCurrentExchangeAmountInBaseAo(this.state.tokenInputBaseAo)
     }
     componentDidUpdate(prevProps) {
-        if ( this.props.exchangeRate !== prevProps.exchangeRate ) {
+        if ( !this.props.exchangeRate.isEqualTo(prevProps.exchangeRate) ) {
             // Force recalculation of ETH cost
             this._onTokenInputChange({
                 value: this.state.tokenInput,
@@ -69,25 +64,28 @@ class ExchangeForm extends Component {
         // Eth input changed, we need to convert to AO amount in the current denomination
         let tokenAmountInBaseAo = new BigNumber(value).dividedBy(exchangeRate)
         let tokenAmountInCurrentDenom = fromBaseToDenominationValue(tokenAmountInBaseAo, this.state.tokenInputDenomination)
-        this._recalculateExchangeBonuses(tokenAmountInBaseAo)
+        this._inputChangeRecalculations(tokenAmountInBaseAo)
         this.setState({
             ethInput: value,
             tokenInput: tokenAmountInCurrentDenom,
+            tokenInputBaseAo: tokenAmountInBaseAo,
         })
     }
     _onTokenInputChange = ({value, denominationName}) => {
         const { exchangeRate } = this.props
         // Token input changed (value or denomination!)
         let tokenAmountInBaseAo = fromDenominationValueToBase(new BigNumber(value), denominationName)
-        this._recalculateExchangeBonuses(tokenAmountInBaseAo)
+        this._inputChangeRecalculations(tokenAmountInBaseAo)
         this.setState({
             tokenInput: value,
+            tokenInputBaseAo: tokenAmountInBaseAo,
             tokenInputDenomination: denominationName,
             ethInput: tokenAmountInBaseAo * exchangeRate
         })
     }
-    _recalculateExchangeBonuses = (baseTokenAmount) => {
-        if ( this.props.isNetworkExchange ) {
+    _inputChangeRecalculations = (baseTokenAmount) => {
+        if ( this.props.isPrimordialExchange ) {
+            // Primordial exchange -> recalculate the exchange multiplier/bonus
             this.props.calculatePrimoridialExchangeMultiplierAndBonus(baseTokenAmount).then(bonuses => {
                 this.setState({
                     primordialExchangeBonuses: bonuses,                    
@@ -95,6 +93,9 @@ class ExchangeForm extends Component {
             }).catch(error => {
                 console.error(`Error fetching primordial exchange bonuses: ${error.message}`)
             })
+        } else {
+            // Network exchange -> update exchange amount in reducer so we can recaulculate the best exchange pool
+            this.props.updateCurrentExchangeAmountInBaseAo(baseTokenAmount)
         }
     }
     _submit = (event) => {
@@ -109,12 +110,12 @@ class ExchangeForm extends Component {
         this.props.resetExchange()
     }
     render() {
-        const { ethAddress, isNetworkExchange, exchange, classes } = this.props
+        const { ethAddress, isPrimordialExchange, exchange, exchangeRate, classes } = this.props
         const { exchangeTransaction } = this.props.exchange
         const { primordialExchangeBonuses } = this.state
         const currentDenomination = denominationsByName[this.state.tokenInputDenomination]
         const exchangeInProgress = exchangeTransaction.initialized && !exchangeTransaction.error && !exchangeTransaction.result
-        const formDisabled = !ethAddress || exchangeInProgress || (isNetworkExchange && !this.props.ico.primordialSaleActive)
+        const formDisabled = !ethAddress || exchangeInProgress || (isPrimordialExchange && !this.props.ico.primordialSaleActive) || exchangeRate.lte(0)
         const showExchangeTransactionMessage = exchangeTransaction.error || exchangeTransaction.initialized || exchangeTransaction.transactionHash || exchangeTransaction.result
         return (
             <form onSubmit={this._submit} disabled={formDisabled} className={classes.form}>
@@ -155,13 +156,13 @@ class ExchangeForm extends Component {
                                 denominationName={this.state.tokenInputDenomination}
                                 onChange={this._onTokenInputChange}
                                 disabled={formDisabled}
-                                isPrimordial={isNetworkExchange}
-                                supplementalText={isNetworkExchange && primordialExchangeBonuses ? `multiplier = ${primordialExchangeBonuses.multiplier}` : undefined}
+                                isPrimordial={isPrimordialExchange}
+                                supplementalText={isPrimordialExchange && primordialExchangeBonuses ? `multiplier = ${primordialExchangeBonuses.multiplier}` : undefined}
                             />
                         </div>
-                        {this.state.tokenInputBaseAo > this.props.maxTokenExchangeAmount && (
+                        {this.state.tokenInputBaseAo.gt(this.props.maxTokenExchangeAmount) && (
                             <Typography color="error" variant="caption" className={classes.maxExchangeAmountExceeded}>
-                                {isNetworkExchange ? 'Remaining supply: ' : `Maximum exchange amount: `}<TokenBalance baseAmount={this.props.maxTokenExchangeAmount} includeAO={true} isPrimordial={isNetworkExchange} />
+                                {isPrimordialExchange ? 'Remaining supply: ' : `Maximum exchange amount: `}<TokenBalance baseAmount={this.props.maxTokenExchangeAmount} includeAO={true} isPrimordial={isPrimordialExchange} />
                             </Typography>
                         )}
                     </div>
@@ -170,14 +171,14 @@ class ExchangeForm extends Component {
                     <Typography variant="body2" className={classes.sectionTitle}>{`Summary`}</Typography>
                     <div className={classes.summaryItem}>
                         <Typography>
-                            {`${this.state.tokenInput} ${currentDenomination.prefix} AO${isNetworkExchange ? '+' : ''}`}
+                            {`${this.state.tokenInput} ${currentDenomination.prefix} AO${isPrimordialExchange ? '+' : ''}`}
                         </Typography>
                         <div className={classes.spacer}></div>
                         <Typography>
                             {`${this.state.ethInput} ETH`}
                         </Typography>
                     </div>
-                    {isNetworkExchange && primordialExchangeBonuses && (
+                    {isPrimordialExchange && primordialExchangeBonuses && (
                         <div className={classes.summaryItem}>
                             <Typography color="primary">
                                 <TokenBalance baseAmount={primordialExchangeBonuses.networkTokenBonusAmount} includeAO={true} isPrimordial={false} />{` (${primordialExchangeBonuses.bonusPercentage}% Bonus)`}

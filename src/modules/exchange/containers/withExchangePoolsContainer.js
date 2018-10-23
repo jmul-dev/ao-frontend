@@ -10,20 +10,26 @@ const mapDispatchToProps = {
 }
 
 const mapStateToProps = (store, props) => {
-    const { requiredTokenAmount } = props
-    const { exchangePools } = store.exchange    
+    const { exchangePools, exchangeAmountInBaseAo } = store.exchange
     let targetExchangePool = undefined
     Object.keys(exchangePools).forEach(poolId => {
         const pool = exchangePools[poolId]
-        if ( !targetExchangePool )
+        if ( !targetExchangePool ) {
             targetExchangePool = pool
-        else if ( targetExchangePool.totalQuantityAvailable < requiredTokenAmount && pool.totalQuantityAvailable > requiredTokenAmount )
+        } else if ( targetExchangePool.totalQuantityAvailable.lt(exchangeAmountInBaseAo) && pool.totalQuantityAvailable.gte(exchangeAmountInBaseAo) ) {
+            // target does not satisfy qty, but this pool does
             targetExchangePool = pool
-        else if ( pool.totalQuantityAvailable > requiredTokenAmount && pool.price < targetExchangePool.price )
+        } else if ( pool.totalQuantityAvailable.gte(exchangeAmountInBaseAo) && pool.price.lt(targetExchangePool.price) ) {
+            // this pool meets qty requirement & price is less than target
             targetExchangePool = pool
+        } else if ( targetExchangePool.totalQuantityAvailable.lt(exchangeAmountInBaseAo) && pool.totalQuantityAvailable.lt(exchangeAmountInBaseAo) ) {
+            // both pools do not meet the qty requirement, so just pick the one with highest qty
+            if ( targetExchangePool.totalQuantityAvailable.lt(pool.totalQuantityAvailable) ) {
+                targetExchangePool = pool
+            }
+        }
     })
     return {
-        exchangePools,
         targetExchangePool,
         targetExchangeRate: targetExchangePool ? window.web3.fromWei(targetExchangePool.price) : new BigNumber(0),
     }

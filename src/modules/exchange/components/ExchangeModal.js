@@ -26,12 +26,14 @@ export default class ExchangeModal extends Component<Props> {
                 >
                 <div className="modal-content-container">
                     <LogoIcon />
-                    {this.props.exchangeType === 'network' && (
-                        <NetworkExchangeForm {...this.props.exchangeProps} />
-                    )}
-                    {this.props.exchangeType === 'primordial' && (
-                        <PrimordialExchangeForm {...this.props.exchangeProps} />
-                    )}
+                    <div className="modal-form-container">
+                        {this.props.exchangeType === 'network' && (
+                            <NetworkExchangeForm {...this.props.exchangeProps} />
+                        )}
+                        {this.props.exchangeType === 'primordial' && (
+                            <PrimordialExchangeForm {...this.props.exchangeProps} />
+                        )}
+                    </div>
                 </div>
             </Modal>
         );

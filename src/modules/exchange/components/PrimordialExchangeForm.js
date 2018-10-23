@@ -6,6 +6,14 @@ import Typography from '@material-ui/core/Typography';
 
 
 class PrimordialExchangeForm extends Component {
+    componentDidMount() {
+        this.props.getPrimordialExchangeRate()
+    }
+    componentWillReceiveProps(nextProps) {
+        if ( !this.props.contractsInitialized && nextProps.contractsInitialized ) {
+            this.props.getPrimordialExchangeRate()
+        }
+    }
     _onSubmit = ({ethInput, tokenInput}) => {
         this.props.exchangeEthForPrimordialTokens( ethInput )
     }
@@ -21,7 +29,7 @@ class PrimordialExchangeForm extends Component {
         ) : (
             <ExchangeForm 
                 onSubmit={this._onSubmit}
-                isNetworkExchange={true}
+                isPrimordialExchange={true}
                 exchangeRate={this.props.exchange.primordialExchangeRate}
                 initialTokenInput={Math.pow(10, 12) * 10}
                 maxTokenExchangeAmount={maxTokenExchangeAmount}

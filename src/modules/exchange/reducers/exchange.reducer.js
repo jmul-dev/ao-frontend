@@ -24,7 +24,7 @@ export const UPDATE_EXCHANGE_DENOMINATION = 'UPDATE_EXCHANGE_DENOMINATION'
 export const SET_CREATE_POOL_EVENT = 'SET_CREATE_POOL_EVENT'
 export const CREATE_POOL_EVENT_RECEIVED = 'CREATE_POOL_EVENT_RECEIVED'
 export const ADD_EXCHANGE_POOL = 'ADD_EXCHANGE_POOL'
-
+export const UPDATE_TOKEN_EXCHANGE_AMOUNT = 'UPDATE_TOKEN_EXCHANGE_AMOUNT'
 
 // Actions
 export const exchangeEthForPrimordialTokens = (ethCost) => {
@@ -211,12 +211,14 @@ const updateExchangePool = (poolId) => {
         })
     }
 }
-
+export const updateCurrentExchangeAmountInBaseAo = (tokenAmount) => ({
+    type: UPDATE_TOKEN_EXCHANGE_AMOUNT,
+    payload: tokenAmount
+})
 export const resetExchange = () => ({
     type: EXCHANGE_TRANSACTION.RESET
 })
-
-export const getExchangeRate = () => {
+export const getPrimordialExchangeRate = () => {
     return (dispatch, getState) => {
         const state = getState()
         const { contracts } = state
@@ -246,6 +248,7 @@ const initialState = {
         result: undefined,
         error: undefined,
     },
+    exchangeAmountInBaseAo: new BigNumber(0),
     // AOPool exchange functionality 
     exchangePools: { /* poolId => Pool(poolId, price, totalQuantityAvailable) */},
     createPoolEvent: undefined, // web3.contract.Event
@@ -254,6 +257,11 @@ const initialState = {
 // Reducer
 export default function walletReducer(state = initialState, action) {
     switch (action.type) {
+        case UPDATE_TOKEN_EXCHANGE_AMOUNT:
+            return {
+                ...state,
+                exchangeAmountInBaseAo: action.payload,
+            }
         case SET_CREATE_POOL_EVENT:
             return {
                 ...state,
