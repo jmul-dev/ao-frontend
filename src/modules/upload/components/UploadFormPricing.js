@@ -1,26 +1,27 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import Typography from '@material-ui/core/Typography';
 import ButtonBase from '@material-ui/core/ButtonBase';
-import Grid from '@material-ui/core/Grid';
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
-import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import withUploadFormData from '../containers/withUploadFormData';
-import { Redirect } from 'react-router-dom';
-import { BackButton, PrimaryButton } from './UploadFormNavButtons';
-import OverviewAside from './OverviewAside';
-import { withTheme, withStyles } from '@material-ui/core/styles';
-import { compose } from 'react-apollo';
-import withUserWallet from '../../wallet/containers/withUserWallet';
-import { TokenBalance, DenominationInput } from '../../../utils/denominations';
-import BigNumber from 'bignumber.js';
+import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Grid from '@material-ui/core/Grid';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Slider from '@material-ui/lab/Slider';
+import { withStyles } from '@material-ui/core/styles';
 import { darken } from '@material-ui/core/styles/colorManipulator';
+import Typography from '@material-ui/core/Typography';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import Slider from '@material-ui/lab/Slider';
+import BigNumber from 'bignumber.js';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
+import { compose } from 'react-apollo';
+import { Redirect } from 'react-router-dom';
+import { TokenBalance, fromBaseToHighestDenomination, fromDenominationValueToBase } from '../../../utils/denominations';
+import withUserWallet from '../../wallet/containers/withUserWallet';
+import withUploadFormData from '../containers/withUploadFormData';
+import OverviewAside from './OverviewAside';
+import { BackButton, PrimaryButton } from './UploadFormNavButtons';
+import { TokenInput } from '../../../common/Inputs';
 
 
 const PricingInputCard = withStyles(({palette, shadows, spacing, transitions}) => ({
@@ -104,7 +105,7 @@ const CustomPricingCard = withStyles(({palette, shape, shadows, spacing, transit
         borderBottomLeftRadius: shape.borderRadius,
         borderBottomRightRadius: shape.borderRadius,
     },
-}))(({expanded, stake, stakeTokenType, stakePrimordialPercentage, profitSplitPercentage, onSelected, onChange, classes, ...props}) => (
+}))(({expanded, stake, stakeTokenType, stakePrimordialPercentage, profitSplitPercentage, onSelected, onChange, tokenInputs, onTokenInputChange, classes, ...props}) => (
     <ExpansionPanel className={`${classes.base} ${expanded ? 'selected' : ''}`} expanded={expanded} onChange={onSelected} {...props}>
         <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
             <Typography variant="display3" className="headline">
@@ -116,14 +117,11 @@ const CustomPricingCard = withStyles(({palette, shape, shadows, spacing, transit
                 <Typography>{'1. How much would you like to charge (AO/view)?'}</Typography>
                 <div className="stake-input-container indent">
                     <div style={{maxWidth: 300}}>
-                        <DenominationInput 
-                            baseInputValue={new BigNumber(stake)}
-                            isPrimordial={stakeTokenType === 'primordial'}
-                            onChange={({baseInputValue}) => {
-                                // Make sure to not update if we are not expanded (slight hack)
-                                if ( expanded )
-                                    onChange(baseInputValue)
-                            }}
+                        <TokenInput 
+                            value={tokenInputs.value}
+                            denominationName={tokenInputs.denominationName}
+                            onChange={onTokenInputChange}
+                            isPrimordial={stakeTokenType === 'primordial'}                            
                         />
                     </div>
                 </div>
@@ -190,6 +188,41 @@ const CustomPricingCard = withStyles(({palette, shape, shadows, spacing, transit
 class UploadFormPricing extends Component {
     static contextTypes = {
         router: PropTypes.object.isRequired
+    }
+    constructor(props) {
+        super(props)
+        let customStake = fromBaseToHighestDenomination(props.form.stake)
+        this.state = {
+            customStakeInput: {
+                value: customStake.amount.toString(),
+                baseValue: new BigNumber(props.form.stake),
+                denominationName: customStake.denomination.name,
+            }
+        }
+    }
+    _onCustomStakeInputChange = ({value, denominationName}) => {
+        const tokenAmountInBaseAo = fromDenominationValueToBase(value, denominationName)
+        if ( tokenAmountInBaseAo.gte(this.props.form.video.size) ) {            
+            this.setState({
+                customStakeInput: {
+                    value,
+                    baseValue: tokenAmountInBaseAo,
+                    denominationName,
+                }
+            })        
+            this.props.updatePricingOption(0, tokenAmountInBaseAo.toNumber())
+        } else {
+            // invalid input amount, reset back to minimum stake amount
+            let customStake = fromBaseToHighestDenomination(this.props.form.stake)
+            this.setState({
+                customStakeInput: {
+                    value: customStake.amount.toString(),
+                    baseValue: new BigNumber(this.props.form.stake),
+                    denominationName: customStake.denomination.name,
+                }
+            })        
+            this.props.updatePricingOption(0, this.props.form.stake)
+        }
     }
     _selectPricingOption = (pricingOptionIndex, stake, profitSplitPercentage, stakeTokenType, stakePrimordialPercentage) => {
         this.props.updatePricingOption(pricingOptionIndex, stake, profitSplitPercentage, stakeTokenType, stakePrimordialPercentage)
@@ -269,8 +302,10 @@ class UploadFormPricing extends Component {
                                 profitSplitPercentage={form.profitSplitPercentage}
                                 stakeTokenType={form.stakeTokenType}
                                 stakePrimordialPercentage={form.stakePrimordialPercentage}
-                                onSelected={(_, expanded) => expanded ? this._selectPricingOption(0) : this._selectPricingOption(1)}
+                                onSelected={(_, expanded) => expanded ? this._selectPricingOption(0, this.state.customStakeInput.baseValue.toNumber()) : this._selectPricingOption(1)}
                                 onChange={this._selectPricingOption.bind(this, 0)}
+                                tokenInputs={this.state.customStakeInput}
+                                onTokenInputChange={this._onCustomStakeInputChange}
                             />
                         </div>
                         <nav className="upload-form-nav gutter-bottom">

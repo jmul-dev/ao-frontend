@@ -8,6 +8,9 @@ import { compose } from 'react-apollo';
 import withUserWallet from '../../wallet/containers/withUserWallet';
 import PrimordialExchangeForm from '../../exchange/components/PrimordialExchangeForm';
 import NetworkExchangeForm from '../../exchange/components/NetworkExchangeForm';
+import Typography from '@material-ui/core/Typography';
+import { TokenBalance } from '../../../utils/denominations';
+import BigNumber from 'bignumber.js';
 
 
 class UploadFormReload extends Component {
@@ -33,11 +36,27 @@ class UploadFormReload extends Component {
             return <Redirect to={'/app/view/upload/start'} />
         }
         const needsPrimordialTokens = wallet.primordialTokenBalance.lt(form.primordialTokensRequired)
+        const insufficientPrimordialAmount = needsPrimordialTokens ? new BigNumber(form.primordialTokensRequired).minus(wallet.primordialTokenBalance) : new BigNumber(0)
+        const needsNetworkTokens = wallet.networkTokenBalance.lt(form.networkTokensRequired)
+        const insufficientNetworkAmount = needsNetworkTokens ? new BigNumber(form.networkTokensRequired).minus(wallet.networkTokenBalance) : new BigNumber(0)
         return (
             <div>      
                 <Grid container spacing={16}>
                     <Grid item xs={8} style={{marginLeft: 'auto', marginRight: 'auto'}}> 
-                        <div style={{border: '1px solid #ddd', borderRadius: 4, marginBottom: 16, overflow: 'hidden'}}>
+                        <Typography variant="headline">{`Insufficient balance`}</Typography>
+                        <Typography variant="body1">
+                            {`The amount you are trying to stake exceeds the balance of your wallet.`}
+                            <br />
+                            {insufficientPrimordialAmount.gt(0) && (
+                                <TokenBalance baseAmount={insufficientPrimordialAmount} isPrimordial={true} />
+                            )}
+                            {insufficientPrimordialAmount.gt(0) && insufficientNetworkAmount.gt(0) && ' & '}
+                            {insufficientNetworkAmount.gt(0) && (
+                                <TokenBalance baseAmount={insufficientNetworkAmount} isPrimordial={false} />
+                            )}
+                            {' required.'}
+                        </Typography>
+                        <div style={{marginTop: 48, marginBottom: 16, overflow: 'hidden'}}>
                             {needsPrimordialTokens ? (
                                 <PrimordialExchangeForm />
                             ) : (

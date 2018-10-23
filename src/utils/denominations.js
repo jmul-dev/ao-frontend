@@ -120,7 +120,11 @@ export const fromDenominationValueToBase = (amount, denominationName) => {
     }
     return new BigNumber(amount)
 }
-
+/**
+ * 
+ * @param {BigNumber | number} baseAmount 
+ * @returns {{amount: BigNumber, denomination: Object}}
+ */
 export const fromBaseToHighestDenomination = (baseAmount) => {
     let highestDenomination = denominations[0];
     let highestDenominationAmount = new BigNumber(0);
@@ -209,99 +213,3 @@ const DenominationSelectPreWrap = ({isPrimordial, onChange, classes, ...props}) 
     </Select>
 )
 export const DenominationSelect = withStyles(denominationSelectStyles)(DenominationSelectPreWrap)
-
-
-
-const denominationInputStyles = ({palette, shape}) => ({
-    root: {
-        display: 'flex',
-        alignItems: 'flex-end',
-        backgroundColor: palette.background.paper,
-        color: palette.getContrastText(palette.background.paper),
-        padding: 4,
-        border: `1px solid ${palette.divider}`,
-        borderRadius: shape.borderRadius,
-    },
-    textFieldInput: {
-        padding: '0 8px',
-        fontSize: '50px',
-        letterSpacing: 0,
-        textAlign: 'right',
-    },
-})
-class DenominationInputPreWrap extends Component {
-    static propTypes = {
-        baseInputValue: PropTypes.instanceOf(BigNumber),
-        isPrimordial: PropTypes.bool.isRequired,
-        onChange: PropTypes.func.isRequired,  // ({baseInputValue, denominationInputValue, denomination})
-        disabled: PropTypes.bool,
-    }
-    constructor(props) {
-        super(props)
-        const { denomination } = fromBaseToHighestDenomination(props.baseInputValue || Math.pow(10, 9))
-        this.state = {
-            denomination: denomination,
-        }
-    }
-    componentDidMount() {
-        this.props.onChange({
-            baseInputValue: this.props.baseInputValue.toNumber(),
-            denomination: this.state.denomination
-        })
-    }
-    _onDenominationInputValueChange = (event) => {
-        let denominationInputValue = event.target.value
-        // TODO: check input value above
-        const { denomination } = this.state
-        let baseInputValue = new BigNumber(parseFloat(denominationInputValue) * Math.pow(10, denomination.powerOfTen))
-        this.props.onChange({
-            baseInputValue: baseInputValue.toNumber(),
-            denomination,
-            denominationInputValue: parseFloat(denominationInputValue),
-        })
-    }
-    _onDenominationInputChange = (nextDenom) => {
-        if ( nextDenom ) {
-            const baseInputValue = parseInt(this.props.baseInputValue, 10) || Math.pow(10, 9)
-            const amountInDenomination = new BigNumber(baseInputValue / Math.pow(10, nextDenom.powerOfTen))
-            this.setState({
-                denomination: nextDenom,
-            })
-            this.props.onChange({
-                baseInputValue: this.props.baseInputValue,
-                denomination: nextDenom,
-                denominationInputValue: amountInDenomination.toNumber(),
-            })
-        }
-    }
-    render() {
-        const { baseInputValue, isPrimordial, classes } = this.props
-        const { denomination } = this.state      
-        const denominationInputValue = new BigNumber(baseInputValue / Math.pow(10, denomination.powerOfTen))
-        return (
-            <div className={classes.root}>
-                <TextField 
-                    fullWidth 
-                    className={classes.textField}
-                    InputProps={{
-                        disableUnderline: true,
-                        type: "number",                        
-                    }}
-                    // eslint-disable-next-line
-                    inputProps={{
-                        className: classes.textFieldInput
-                    }}
-                    value={denominationInputValue.toNumber()}
-                    onChange={this._onDenominationInputValueChange}
-                    disabled={this.props.disabled}                    
-                />
-                <DenominationSelect
-                    value={denomination.name}
-                    onChange={this._onDenominationInputChange}
-                    isPrimordial={isPrimordial}
-                />
-            </div>
-        )
-    }
-}
-export const DenominationInput = withStyles(denominationInputStyles)(DenominationInputPreWrap)
