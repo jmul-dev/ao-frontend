@@ -98,7 +98,7 @@ class Wallet extends PureComponent {
                 <ExchangeModal 
                     open={this.state.exchangeModalOpen}
                     onClose={this._onExchangeModalClose}
-                    exchangeType="network"
+                    exchangeType="primordialIfActive"
                 />
             </div>
         );
