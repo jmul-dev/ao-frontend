@@ -141,9 +141,11 @@ class TeaserCard extends Component<Props> {
         })
     }
     _renderLastSeen() {
-        const { video } = this.props
+        const { video, videoQuery } = this.props
         if ( !video.lastSeenContentHost )
             return null
+        if ( videoQuery.video && videoQuery.video.state === 'DISCOVERABLE' )
+            return null // user already owns this content
         const lastSeenDate = moment.utc(parseInt(video.lastSeenContentHost.timestamp, 10))
         const likelyAvailableDate = moment().subtract(20, 'minutes')
         const potentiallyAvailableDate = moment().subtract(1, 'hour')
