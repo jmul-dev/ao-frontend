@@ -49,6 +49,7 @@ class ExchangeForm extends Component {
     }
     componentDidMount() {
         this.props.updateCurrentExchangeAmountInBaseAo(this.state.tokenInputBaseAo)
+        this._inputChangeRecalculations(this.state.tokenInputBaseAo)
     }
     componentDidUpdate(prevProps) {
         if ( !this.props.exchangeRate.isEqualTo(prevProps.exchangeRate) ) {
