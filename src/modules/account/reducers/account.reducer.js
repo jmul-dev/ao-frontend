@@ -42,7 +42,7 @@ export const getContentMetrics = (stakeId) => {
         })
     }
 }
-export const getHostEarnings = (contentHostId) => {
+export const getContentHostEarnings = (contentHostId) => {
     return (dispatch, getState) => {
         const { contracts } = getState()
         contracts.aoEarning.totalHostContentEarningById(contentHostId, function(err, hostEarnings) {

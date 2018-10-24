@@ -33,7 +33,10 @@ class AccountVideo extends PureComponent {
             totalHostEarning: PropTypes.instanceOf(BigNumber),
             totalFoundationEarning: PropTypes.instanceOf(BigNumber),
         }),
+        contentHostEarnings: PropTypes.instanceOf(BigNumber),
         getContentMetrics: PropTypes.func.isRequired,
+        getContentHostEarnings: PropTypes.func.isRequired,
+        getPurchaseReceipt: PropTypes.func.isRequired,
     }
     _watchNowRef;
     constructor() {
@@ -46,6 +49,9 @@ class AccountVideo extends PureComponent {
     componentDidMount() {
         if (this.props.video.stakeId) {
             this.props.getContentMetrics(this.props.video.stakeId)
+        }
+        if (this.props.video.contentHostId) {
+            this.props.getContentHostEarnings(this.props.video.contentHostId)
         }
         if (this.props.video.purchaseId) {
             this.props.getPurchaseReceipt(this.props.video.purchaseId).then(result => {
@@ -60,7 +66,7 @@ class AccountVideo extends PureComponent {
     }
     render() {
         const { activeTabIndex } = this.state
-        const { classes, video, metrics } = this.props
+        const { classes, video, metrics, contentHostEarnings } = this.props
         const isCompletedState = video.state === 'DISCOVERABLE'
         const transactions = video.transactions || {}
         return (
@@ -97,7 +103,13 @@ class AccountVideo extends PureComponent {
                     </Fragment>
                 )}</ContentPurchaseAction>
                 <Grid item xs={12} sm={7} md={7} lg={6}>
-                    <AccountVideoStats video={video} metrics={metrics} align="right" peerConnectionSpeed={transactions.purchaseTx && !transactions.hostTx ? 'download' : 'upload'} />
+                    <AccountVideoStats 
+                        video={video} 
+                        metrics={metrics}
+                        contentHostEarnings={contentHostEarnings}
+                        align="right" 
+                        peerConnectionSpeed={transactions.purchaseTx && !transactions.hostTx ? 'download' : 'upload'} 
+                    />
                 </Grid>
                 <Grid item xs={12} className={classes.contentContainer}>
                     <Tabs className={classes.tabs} value={activeTabIndex} onChange={this._setTabIndex} indicatorColor="primary" TabIndicatorProps={{className: classes.tabIndicator}}>
@@ -237,6 +249,8 @@ class AccountVideo extends PureComponent {
                                     </Typography>
                                     <Typography className={classes.content} variant="body2">
                                         <TokenBalance baseAmount={metrics.totalStakeEarning} includeAO={true} />
+                                        <br/>
+                                        {`Staking profits earned by original content owner.`}
                                     </Typography>
                                 </div>
                                 <Divider />
@@ -246,6 +260,8 @@ class AccountVideo extends PureComponent {
                                     </Typography>
                                     <Typography className={classes.content} variant="body2">
                                         <TokenBalance baseAmount={metrics.totalHostEarning} includeAO={true} />
+                                        <br/>
+                                        {`Profits earned by all content hosts.`}
                                     </Typography>
                                 </div>
                                 <Divider />
@@ -255,6 +271,8 @@ class AccountVideo extends PureComponent {
                                     </Typography>
                                     <Typography className={classes.content} variant="body2">
                                         <TokenBalance baseAmount={metrics.totalFoundationEarning} includeAO={true} />
+                                        <br/>
+                                        {`Contributed towards The AO foundation, used for further development of the platform.`}
                                     </Typography>
                                 </div>
                             </div>
@@ -329,6 +347,7 @@ const styles = ({palette, spacing}) => ({
         contentLabel: {
             width: 200,
             paddingRight: spacing.unit * 3,
+            paddingTop: 5,
             flexShrink: 0,
             fontWeight: 'bold',
         },
