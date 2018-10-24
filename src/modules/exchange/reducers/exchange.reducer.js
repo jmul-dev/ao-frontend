@@ -156,20 +156,23 @@ export const listenForAvailableExchangePools = () => {
                 // CreatePool event does not have the live state of that pool,
                 // so we are making an additional query for that info
                 const poolId = new BigNumber(poolEvent.args.poolId).toString()
-                contracts.aoPool.poolTotalQuantity(poolId, (error, poolTotalQuantity) => {
-                    if ( error )
-                        console.error(error)
-                    if ( poolTotalQuantity ) {
-                        let pool = {
-                            poolId,
-                            price: new BigNumber(poolEvent.args.price),   // eth/AO?
-                            totalQuantityAvailable: new BigNumber(poolTotalQuantity),
-                        }
-                        dispatch({
-                            type: ADD_EXCHANGE_POOL,
-                            payload: pool,
+                // 1. Fetch pool status, need to ensure it is active
+                contracts.aoPool.pools(poolId, (error, pool) => {
+                    if ( !error && pool[1] == true ) { // pool[1] = pool status
+                        // 2. Fetch total AO available in this pool
+                        contracts.aoPool.poolTotalQuantity(poolId, (error, poolTotalQuantity) => {
+                            if ( !error ) {
+                                dispatch({
+                                    type: ADD_EXCHANGE_POOL,
+                                    payload: {
+                                        poolId,
+                                        price: new BigNumber(poolEvent.args.price),   // eth/AO?
+                                        totalQuantityAvailable: new BigNumber(poolTotalQuantity),
+                                    },
+                                })
+                            }
                         })
-                    }
+                    } 
                 })
             }
         })
