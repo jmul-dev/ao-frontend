@@ -5,6 +5,7 @@ export const ACCOUNT_VIDEO_LISTING_FILTER = 'ACCOUNT_VIDEO_LISTING_FILTER'
 export const ACCOUNT_VIDEO_LISTING_ORDERING = 'ACCOUNT_VIDEO_LISTING_ORDERING'
 export const UPDATE_CONTENT_METRICS_BY_STAKE_ID = 'UPDATE_CONTENT_METRICS_BY_STAKE_ID'
 export const ACCOUNT_CONTENT_TYPE_FILTER = 'ACCOUNT_CONTENT_TYPE_FILTER'
+export const UPDATE_CONTENT_HOST_EARNINGS = 'UPDATE_CONTENT_HOST_EARNINGS'
 export const MEDIA_TYPES = ['all', 'video', 'image', 'music', 'document', 'digital_asset', 'application']
 
 // Actions
@@ -41,6 +42,22 @@ export const getContentMetrics = (stakeId) => {
         })
     }
 }
+export const getHostEarnings = (contentHostId) => {
+    return (dispatch, getState) => {
+        const { contracts } = getState()
+        contracts.aoEarning.totalHostContentEarningById(contentHostId, function(err, hostEarnings) {
+            if ( !err ) {
+                dispatch({
+                    type: UPDATE_CONTENT_HOST_EARNINGS,
+                    payload: {
+                        contentHostId,
+                        earnings: new BigNumber(hostEarnings),
+                    }
+                })
+            }
+        })
+    }
+}
 export const getPurchaseReceipt = (purchaseId) => {
     return (dispatch, getState) => {    
         return new Promise((resolve, reject) => {    
@@ -70,6 +87,7 @@ const initialState = {
     videoListingOrdering: 'recent',  // recent || earned || staked
     contentTypeFilter: MEDIA_TYPES[0],  // MEDIA_TYPES
     contentMetrics: {},  // stakeId => { metrics }
+    contentHostEarnings: {},  // contentHostId => BigNumber
 }
 
 // Reducer
@@ -96,6 +114,14 @@ export default function accountReducer(state = initialState, action) {
                 contentMetrics: {
                     ...state.contentMetrics,
                     [action.payload.stakeId]: action.payload
+                }
+            }
+        case UPDATE_CONTENT_HOST_EARNINGS:
+            return {
+                ...state,
+                contentHostEarnings: {
+                    ...state.contentHostEarnings,
+                    [action.payload.contentHostId]: action.payload.earnings
                 }
             }
         default:
