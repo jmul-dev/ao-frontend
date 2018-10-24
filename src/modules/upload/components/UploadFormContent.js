@@ -62,7 +62,7 @@ class UploadFormContent extends Component {
                                 <Typography variant="body1" gutterBottom>
                                     {`featured image (png, jpg)`}
                                 </Typography>
-                                <FileUpload inputName="featuredImage" accept="image/*">
+                                <FileUpload inputName="featuredImage" accept=".png, .jpg, .jpeg">
                                     <AddIcon />
                                 </FileUpload>
                             </Grid>
