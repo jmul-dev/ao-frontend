@@ -97,7 +97,7 @@ class AccountVideo extends PureComponent {
                     </Fragment>
                 )}</ContentPurchaseAction>
                 <Grid item xs={12} sm={7} md={7} lg={6}>
-                    <AccountVideoStats video={video} metrics={metrics} align="right" includeDownloadSpeed={!!transactions.purchaseTx} />
+                    <AccountVideoStats video={video} metrics={metrics} align="right" peerConnectionSpeed={transactions.purchaseTx && !transactions.hostTx ? 'download' : 'upload'} />
                 </Grid>
                 <Grid item xs={12} className={classes.contentContainer}>
                     <Tabs className={classes.tabs} value={activeTabIndex} onChange={this._setTabIndex} indicatorColor="primary" TabIndicatorProps={{className: classes.tabIndicator}}>

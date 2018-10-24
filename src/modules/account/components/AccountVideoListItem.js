@@ -59,6 +59,7 @@ class AccountVideoListItem extends Component {
     _renderCardState() {
         const { video, metrics, classes } = this.props
         const { isLoadingState, isCompleted, stateCopy, StateIcon, actionRequired, actionCopy } = getContentState(video)
+        const transactions = video.transactions || {}
         if (isCompleted) {
             return (
                 <ButtonBase component={Link} to={`/app/view/videos/${video.id}`} className={classes.completedCardStateContainer}>
@@ -66,7 +67,7 @@ class AccountVideoListItem extends Component {
                         {video.title}
                     </Typography>
                     <div className={classes.statsContainer}>
-                        <AccountVideoStats video={video} metrics={metrics} />
+                        <AccountVideoStats video={video} metrics={metrics} peerConnectionSpeed={transactions.purchaseTx && !transactions.hostTx ? 'download' : 'upload'} />
                         <div style={{marginLeft: 'auto', marginRight: 0}}>
                             <KeyboardArrowRightIcon style={{width: 32, height: 32, color: '#333333'}} />
                         </div>

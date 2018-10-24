@@ -27,10 +27,11 @@ const DatStats = ({stats, renderPeerCount, renderUploadSpeed, renderDownloadSpee
         }
     })
     return (
-        <Typography variant="body1" gutterBottom color="textSecondary" component="div" style={{display: 'flex', alignItems: 'center'}}>
+        <div style={{display: 'flex', alignItems: 'center'}}>
             {renderPeerCount ? (
                 <div style={{marginRight: 6, display: 'flex', alignItems: 'center'}}>
-                    <PeersIcon style={{fontSize: 18, marginRight: 3}} color={peers > 0 ? 'primary' : 'inherit'} /> {peers}
+                    {/* <PeersIcon style={{fontSize: 18, marginRight: 3}} color={peers > 0 ? 'primary' : 'inherit'} /> {peers} */}
+                    {peers}
                 </div>
             ) : null}
             {renderUploadSpeed ? (
@@ -43,7 +44,7 @@ const DatStats = ({stats, renderPeerCount, renderUploadSpeed, renderDownloadSpee
                     <DownIcon style={{fontSize: 18, marginRight: 3}} color={downloadSpeed > 0 ? 'primary' : 'inherit'} /> <FileSize sizeInBytes={downloadSpeed} />{`/s`}
                 </div>
             ) : null}                    
-        </Typography>
+        </div>
     )
 }
 export default DatStats

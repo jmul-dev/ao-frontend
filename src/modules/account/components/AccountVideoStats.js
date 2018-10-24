@@ -14,6 +14,15 @@ const styles = ({}) => ({
             marginLeft: 40,
         }
     },
+    statLabel: {
+        letterSpacing: '0.5px',
+        fontSize: `0.8125rem`,
+    },
+    stat: {
+        color: `#777777`,
+        fontSize: `0.8125rem`,
+        fontFamily: 'courier',
+    },
 })
 
 class AccountVideoStats extends PureComponent {
@@ -27,60 +36,62 @@ class AccountVideoStats extends PureComponent {
             totalHostEarning: PropTypes.instanceOf(BigNumber),
             totalFoundationEarning: PropTypes.instanceOf(BigNumber),
         }),
-        includeDownloadSpeed: PropTypes.bool,
+        peerConnectionSpeed: PropTypes.oneOf(['upload', 'download']).isRequired,
         align: PropTypes.oneOf(['left', 'right']),
         // withStyles
         classes: PropTypes.object.isRequired,
     }
     render() {
-        const { classes, video, metrics, align, includeDownloadSpeed } = this.props
+        const { classes, video, metrics, align, peerConnectionSpeed } = this.props
         return (
             <div className={classes.root} style={{justifyContent: align === 'right' ? 'flex-end' : 'flex-start'}}>
                 <div>
-                    <Typography variant="body1" gutterBottom color="textSecondary" component="div">{'peers'}</Typography>
-                    <Typography variant="body2" color="textSecondary" component="div">
+                    <Typography className={classes.statLabel} variant="body1" gutterBottom color="textSecondary" component="div">{'peers'}</Typography>
+                    <Typography className={classes.stat} variant="body2" color="textSecondary" component="div">
                         <DatStats renderPeerCount stats={[video.metadataDatStats, video.fileDatStats]} />
                     </Typography>
                 </div>
                 {video.stakeId && metrics ? (
                     <div>
-                        <Typography variant="body1" gutterBottom color="textSecondary" component="div">{'earnings'}</Typography>
-                        <Typography variant="body2" color="textSecondary" component="div">
+                        <Typography className={classes.statLabel} variant="body1" gutterBottom color="textSecondary" component="div">{'earnings'}</Typography>
+                        <Typography className={classes.stat} variant="body2" color="textSecondary" component="div">
                             <TokenBalance baseAmount={metrics.totalStakeEarning.plus(metrics.totalHostEarning)} includeAO={true} />
                         </Typography>
                     </div>
                 ) : null}
                 {metrics ? (
                     <div>
-                        <Typography variant="body1" gutterBottom color="textSecondary" component="div">{'stake'}</Typography>
-                        <Typography variant="body2" color="textSecondary" component="div">
-                            {metrics.primordialTokenStaked.gt(0) ? (
-                                <div>
-                                    <TokenBalance baseAmount={metrics.primordialTokenStaked} includeAO={true} />
-                                </div>
-                            ) : null}
+                        <Typography className={classes.statLabel} variant="body1" gutterBottom color="textSecondary" component="div">{'stake'}</Typography>
+                        <Typography className={classes.stat} variant="body2" color="textSecondary" component="div">
                             {metrics.networkTokenStaked.gt(0) ? (
                                 <div>
-                                    <TokenBalance baseAmount={metrics.networkTokenStaked} includeAO={false} />
+                                    <TokenBalance baseAmount={metrics.networkTokenStaked} includeAO={true} isPrimordial={false} />
+                                </div>
+                            ) : null}
+                            {metrics.primordialTokenStaked.gt(0) ? (
+                                <div>
+                                    <TokenBalance baseAmount={metrics.primordialTokenStaked} includeAO={true} isPrimordial={true} />
                                 </div>
                             ) : null}
                         </Typography>
                     </div>
                 ) : null}
-                <div>
-                    <Typography variant="body1" gutterBottom color="textSecondary" component="div">{'upload speed'}</Typography>
-                    <Typography variant="body2" color="textSecondary" component="div">
-                        <DatStats renderUploadSpeed stats={[video.metadataDatStats, video.fileDatStats]} />
-                    </Typography>
-                </div>
-                {includeDownloadSpeed ? (
+                {peerConnectionSpeed === 'download' && (
                     <div>
-                        <Typography variant="body1" gutterBottom color="textSecondary" component="div">{'download speed'}</Typography>
-                        <Typography variant="body2" color="textSecondary" component="div">
+                        <Typography className={classes.statLabel} variant="body1" gutterBottom color="textSecondary" component="div">{'download speed'}</Typography>
+                        <Typography className={classes.stat} variant="body2" color="textSecondary" component="div">
                             <DatStats renderDownloadSpeed stats={[video.metadataDatStats, video.fileDatStats]} />
                         </Typography>
                     </div>
-                ) : null}                
+                )}
+                {peerConnectionSpeed === 'upload' && (
+                    <div>
+                        <Typography className={classes.statLabel} variant="body1" gutterBottom color="textSecondary" component="div">{'upload speed'}</Typography>
+                        <Typography className={classes.stat} variant="body2" color="textSecondary" component="div">
+                            <DatStats renderUploadSpeed stats={[video.metadataDatStats, video.fileDatStats]} />
+                        </Typography>
+                    </div>
+                )}             
             </div>
         )
     }
