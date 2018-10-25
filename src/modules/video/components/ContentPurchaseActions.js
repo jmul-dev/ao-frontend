@@ -47,12 +47,18 @@ export const statesPendingUserAction = [
     'DISCOVERED',
 ]
 
+const determineIfContentWasUploadedByCurrentUser = (content, currentUserEthAddress) => {
+    let creatorId = content && typeof content.creatorId === 'string' ? content.creatorId.toLowerCase() : undefined
+    let currentUser = currentUserEthAddress && typeof currentUserEthAddress === 'string' ? currentUserEthAddress.toLowerCase() : null
+    return creatorId === currentUser
+}
+
 /**
  * 
  * @returns { isLoadingState, isCompleted, stateCopy, stateIcon, actionCopy, actionRequired, }
  */
-export const getContentState = (content, currentUserEthAddress = '') => {
-    const isUploadedContent = content.creatorId.toLowerCase() === currentUserEthAddress.toLowerCase()
+export const getContentState = (content, currentUserEthAddress) => {
+    const isUploadedContent = determineIfContentWasUploadedByCurrentUser(content, currentUserEthAddress)
     let returnData = {
         isLoadingState: false,
         isCompleted: content.state === 'DISCOVERABLE',
@@ -133,8 +139,8 @@ export const getContentState = (content, currentUserEthAddress = '') => {
     return returnData
 }
 
-export const ContentPurchaseState = ({ content, iconOnly = false, currentUserEthAddress = '' }) => {
-    const isUploadedContent = content.creatorId.toLowerCase() === currentUserEthAddress.toLowerCase()
+export const ContentPurchaseState = ({ content, iconOnly = false, currentUserEthAddress }) => {
+    const isUploadedContent = determineIfContentWasUploadedByCurrentUser(content, currentUserEthAddress)
     let isLoadingState = false
     let Icon = null
     let copy = null
@@ -411,7 +417,7 @@ class ContentPurchaseActionComponent extends Component {
     render() {
         const { content, currentUserEthAddress, children } = this.props
         const { loading, error } = this.state
-        const isUploadedContent = content.creatorId.toLowerCase() === currentUserEthAddress.toLowerCase()
+        const isUploadedContent = determineIfContentWasUploadedByCurrentUser(content, currentUserEthAddress)
         let action = null
         let actionCopy = ''
         switch (content.state) {
