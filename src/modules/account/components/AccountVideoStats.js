@@ -7,7 +7,7 @@ import { TokenBalance } from '../../../utils/denominations';
 import DatStats from '../../content/components/DatStats';
 
 
-const styles = ({}) => ({
+const styles = ({palette}) => ({
     root: {
         display: 'flex',
         '& > div + div': {
@@ -23,6 +23,10 @@ const styles = ({}) => ({
         fontSize: `0.8125rem`,
         fontFamily: 'courier',
     },
+    multiplier: {
+        color: palette.primary.main,
+        marginLeft: 4, 
+    }
 })
 
 class AccountVideoStats extends PureComponent {
@@ -80,8 +84,9 @@ class AccountVideoStats extends PureComponent {
                                 </div>
                             ) : null}
                             {metrics.primordialTokenStaked.gt(0) ? (
-                                <div>
+                                <div style={{lineHeight: `0.8125rem`}}>
                                     <TokenBalance baseAmount={metrics.primordialTokenStaked} includeAO={true} isPrimordial={true} />
+                                    <sup className={classes.multiplier}>x{metrics.primordialTokenStakedWeight.gte(10) ? metrics.primordialTokenStakedWeight.toFixed(1) : metrics.primordialTokenStakedWeight.toFixed(2)}</sup>
                                 </div>
                             ) : null}
                         </Typography>

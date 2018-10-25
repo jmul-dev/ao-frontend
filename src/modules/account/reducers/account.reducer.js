@@ -23,7 +23,7 @@ export const setAccountVideoListingOrdering = (ordering) => ({
 })
 export const getContentMetrics = (stakeId) => {
     return (dispatch, getState) => {
-        const { contracts } = getState()
+        const { contracts, ico } = getState()
         contracts.aoLibrary.getContentMetrics(contracts.aoContent.address, contracts.aoEarning.address, stakeId, function(err, result) {
             if ( !err ) {
                 dispatch({
@@ -32,7 +32,7 @@ export const getContentMetrics = (stakeId) => {
                         stakeId,
                         networkTokenStaked: new BigNumber(result[0]),
                         primordialTokenStaked: new BigNumber(result[1]),
-                        primordialTokenStakedWeight: new BigNumber(result[2]),
+                        primordialTokenStakedWeight: new BigNumber(result[2]).dividedBy(ico.weightedIndexDivisor),
                         totalStakeEarning: new BigNumber(result[3]),
                         totalHostEarning: new BigNumber(result[4]),
                         totalFoundationEarning: new BigNumber(result[5]),
