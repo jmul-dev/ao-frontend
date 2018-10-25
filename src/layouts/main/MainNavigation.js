@@ -166,6 +166,7 @@ const styles = ({palette, spacing}) => ({
             },
             walletBalanceCopy: {
                 color: '#777777',
+                fontWeight: 'bold',
             },
         navLinkCopy: {
             fontWeight: 'bold',
