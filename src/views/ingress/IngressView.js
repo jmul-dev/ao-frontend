@@ -4,13 +4,29 @@ import Typography from '@material-ui/core/Typography';
 
 
 export default class IngressView extends PureComponent {
+    constructor() {
+        super()
+        this.state = {
+            isElectron: !!(window.chrome && window.chrome.ipcRenderer)
+        }
+        this.webviewRef = React.createRef();
+    }
+    componentDidMount() {
+        if ( this.state.isElectron && this.webviewRef ) {
+            this.webviewRef.current.addEventListener('dom-ready', () => {
+                // Leaving the event listener for now, may need some logic to occur here
+            })
+        }
+    }
     render() {
-        const isElectron = !!(window.chrome && window.chrome.ipcRenderer)
+        const { isElectron } = this.state
         return (
             <View className={'IngressView'} padding="none">
                 <section style={{height: '100%', width: '100%'}}>
                     {isElectron ? (
                         <webview 
+                            ref={this.webviewRef}
+                            plugins
                             src="http://ingress.one" 
                             style={{height: '100%', width: '100%', border: 0}} 
                         />
