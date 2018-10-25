@@ -51,7 +51,7 @@ export const statesPendingUserAction = [
  * 
  * @returns { isLoadingState, isCompleted, stateCopy, stateIcon, actionCopy, actionRequired, }
  */
-export const getContentState = (content, currentUserEthAddress) => {
+export const getContentState = (content, currentUserEthAddress = '') => {
     const isUploadedContent = content.creatorId.toLowerCase() === currentUserEthAddress.toLowerCase()
     let returnData = {
         isLoadingState: false,
@@ -133,7 +133,7 @@ export const getContentState = (content, currentUserEthAddress) => {
     return returnData
 }
 
-export const ContentPurchaseState = ({ content, iconOnly = false, currentUserEthAddress }) => {
+export const ContentPurchaseState = ({ content, iconOnly = false, currentUserEthAddress = '' }) => {
     const isUploadedContent = content.creatorId.toLowerCase() === currentUserEthAddress.toLowerCase()
     let isLoadingState = false
     let Icon = null
@@ -249,6 +249,9 @@ const withContentPurchaseActions = compose(
  * @param {children} Function Accepting parameters {action}
  */
 class ContentPurchaseActionComponent extends Component {
+    static defaultProps = {
+        currentUserEthAddress: ''
+    }
     constructor() {
         super()
         this.state = {

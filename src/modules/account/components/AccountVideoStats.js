@@ -22,6 +22,7 @@ const styles = ({palette}) => ({
         color: `#777777`,
         fontSize: `0.8125rem`,
         fontFamily: 'courier',
+        lineHeight: `0.8125rem`,
     },
     multiplier: {
         color: palette.primary.main,
@@ -84,7 +85,7 @@ class AccountVideoStats extends PureComponent {
                                 </div>
                             ) : null}
                             {metrics.primordialTokenStaked.gt(0) ? (
-                                <div style={{lineHeight: `0.8125rem`}}>
+                                <div>
                                     <TokenBalance baseAmount={metrics.primordialTokenStaked} includeAO={true} isPrimordial={true} />
                                     <sup className={classes.multiplier}>x{metrics.primordialTokenStakedWeight.gte(10) ? metrics.primordialTokenStakedWeight.toFixed(1) : metrics.primordialTokenStakedWeight.toFixed(2)}</sup>
                                 </div>
