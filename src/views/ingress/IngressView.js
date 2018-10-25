@@ -7,7 +7,7 @@ export default class IngressView extends PureComponent {
     render() {
         const isElectron = !!(window.chrome && window.chrome.ipcRenderer)
         return (
-            <View className={'IngressView'} padding="full">
+            <View className={'IngressView'} padding="none">
                 <section style={{height: '100%', width: '100%'}}>
                     {isElectron ? (
                         <webview 

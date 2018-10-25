@@ -6,6 +6,8 @@ import DownloadsListItem from './DownloadsListItem';
 import Divider from '@material-ui/core/Divider';
 import '../styles/downloads-list.css';
 import { Typography } from '@material-ui/core';
+import { compose } from 'react-apollo';
+import withEthAddress from '../../account/containers/withEthAddress';
 
 
 class DownloadsList extends Component<Props> {
@@ -47,7 +49,11 @@ class DownloadsList extends Component<Props> {
                 <Divider />
                 <List dense={true} style={{paddingTop: 0}}>
                     {incompleteContent.map(content => (
-                        <DownloadsListItem key={content.id} content={content} />
+                        <DownloadsListItem 
+                            key={content.id} 
+                            content={content} 
+                            currentUserEthAddress={this.props.ethAddress}
+                        />
                     ))}
                 </List>
             </div>
@@ -55,4 +61,7 @@ class DownloadsList extends Component<Props> {
     }
 }
 
-export default withHostedContent(DownloadsList)
+export default compose(
+    withHostedContent,
+    withEthAddress,
+)(DownloadsList)

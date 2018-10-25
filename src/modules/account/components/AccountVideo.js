@@ -17,6 +17,7 @@ import EtherscanLink from '../../etherscan/EtherscanLink';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+import withEthAddress from '../containers/withEthAddress';
 
 
 class AccountVideo extends PureComponent {
@@ -37,6 +38,8 @@ class AccountVideo extends PureComponent {
         getContentMetrics: PropTypes.func.isRequired,
         getContentHostEarnings: PropTypes.func.isRequired,
         getPurchaseReceipt: PropTypes.func.isRequired,
+        // withEthAddress
+        ethAddress: PropTypes.string.isRequired,
     }
     _watchNowRef;
     constructor() {
@@ -66,7 +69,7 @@ class AccountVideo extends PureComponent {
     }
     render() {
         const { activeTabIndex } = this.state
-        const { classes, video, metrics, contentHostEarnings } = this.props
+        const { classes, video, metrics, contentHostEarnings, ethAddress } = this.props
         const isCompletedState = video.state === 'DISCOVERABLE'
         const transactions = video.transactions || {}
         return (
@@ -77,7 +80,7 @@ class AccountVideo extends PureComponent {
                         <Typography variant="body1">{`back to my videos`}</Typography>
                     </ButtonBase>
                 </Grid>
-                <ContentPurchaseAction contentRef={this._watchNowRef} content={video}>{({action, loading, error}) => (
+                <ContentPurchaseAction currentUserEthAddress={ethAddress} contentRef={this._watchNowRef} content={video}>{({action, loading, error}) => (
                     <Fragment>
                         <Grid item sm={12}>
                             <ButtonBase
@@ -97,7 +100,7 @@ class AccountVideo extends PureComponent {
                                 {video.title}
                             </Typography>
                             <PrimaryButton disabled={!action || loading} onClick={action}>
-                                <ContentPurchaseState content={video} />
+                                <ContentPurchaseState content={video} currentUserEthAddress={ethAddress} />
                             </PrimaryButton>                        
                         </Grid>
                     </Fragment>
@@ -386,4 +389,5 @@ const styles = ({palette, spacing}) => ({
 export default compose(
     withStyles(styles),
     withContentMetrics,
+    withEthAddress,
 )(AccountVideo)

@@ -51,15 +51,15 @@ export const statesPendingUserAction = [
  * 
  * @returns { isLoadingState, isCompleted, stateCopy, stateIcon, actionCopy, actionRequired, }
  */
-export const getContentState = (content) => {
-    const isUploadedContent = content.nodeId && content.nodeId === content.creatorId  // NOTE: ideally we would compare app.ethAddress to content.creatorId
+export const getContentState = (content, currentUserEthAddress) => {
+    const isUploadedContent = content.creatorId.toLowerCase() === currentUserEthAddress.toLowerCase()
     let returnData = {
         isLoadingState: false,
         isCompleted: content.state === 'DISCOVERABLE',
         stateCopy: null,
         StateIcon: null,
         actionRequired: statesPendingUserAction.indexOf(content.state) > -1,
-        actionCopy: null,        
+        actionCopy: null,
     }
     switch (content.state) {
         case 'HOST_DISCOVERY':
@@ -127,14 +127,14 @@ export const getContentState = (content) => {
         default:
             break;
     }
-    if ( returnData.isLoadingState ) {
+    if (returnData.isLoadingState) {
         returnData.StateIcon = CircularProgress //<CircularProgress size={20} style={{ marginRight: 8 }} />
     }
     return returnData
 }
 
-export const ContentPurchaseState = ({ content, iconOnly = false }) => {
-    const isUploadedContent = content.nodeId && content.nodeId === content.creatorId  // NOTE: ideally we would compare app.ethAddress to content.creatorId
+export const ContentPurchaseState = ({ content, iconOnly = false, currentUserEthAddress }) => {
+    const isUploadedContent = content.creatorId.toLowerCase() === currentUserEthAddress.toLowerCase()
     let isLoadingState = false
     let Icon = null
     let copy = null
@@ -406,9 +406,9 @@ class ContentPurchaseActionComponent extends Component {
         })
     }
     render() {
-        const { content, children } = this.props
+        const { content, currentUserEthAddress, children } = this.props
         const { loading, error } = this.state
-        const isUploadedContent = content.nodeId === content.creatorId  // NOTE: ideally we would compare app.ethAddress to content.creatorId
+        const isUploadedContent = content.creatorId.toLowerCase() === currentUserEthAddress.toLowerCase()
         let action = null
         let actionCopy = ''
         switch (content.state) {

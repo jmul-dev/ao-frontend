@@ -23,6 +23,7 @@ type Props = {
     isTeaserEntered: boolean,
     // redux bound state
     networkTokenBalance: Object,  // bignumber
+    ethAddress: string,
     // redux bound methods
     setActiveVideo: Function,
     getContentMetrics: Function,
@@ -99,7 +100,7 @@ class TeaserCard extends Component<Props> {
     }
     _onExitingFullscreen = () => {}
     _renderActionState = () => {
-        const { video, videoQuery, networkTokenBalance } = this.props
+        const { video, videoQuery, networkTokenBalance, ethAddress } = this.props
         const { contentPrice } = this.state
         const insufficientBalance = networkTokenBalance.lt(contentPrice) ? networkTokenBalance.minus(contentPrice).multipliedBy(-1).toNumber() : undefined
         let contentState = 'DISCOVERED'
@@ -112,21 +113,21 @@ class TeaserCard extends Component<Props> {
         if ( insufficientBalance ) {
             return (
                 <PrimaryButton onClick={this._openExchangeModal}>
-                    <ContentPurchaseState content={content} />
+                    <ContentPurchaseState content={content} currentUserEthAddress={ethAddress} />
                 </PrimaryButton>
             )
         } else if ( contentState === 'DISCOVERABLE' ) {
             // User has completed the purchase/host/discovery process, they can now play the video
             return (
                 <PrimaryButton onClick={this._playVideo} className="play-button">
-                    <ContentPurchaseState content={content} />
+                    <ContentPurchaseState content={content} currentUserEthAddress={ethAddress} />
                 </PrimaryButton>
             )
         } else {
             return (
-                <ContentPurchaseAction contentRef={this.refs.videoContainer} content={content}>{({action, loading, error}) => (
+                <ContentPurchaseAction currentUserEthAddress={ethAddress} contentRef={this.refs.videoContainer} content={content}>{({action, loading, error}) => (
                     <PrimaryButton disabled={!action || loading || videoQueryLoading} onClick={() => {this._handleActionAndUpdateVideoQuery(action)}}>
-                        <ContentPurchaseState content={content} />
+                        <ContentPurchaseState content={content} currentUserEthAddress={ethAddress} />
                     </PrimaryButton>
                 )}</ContentPurchaseAction>
             )

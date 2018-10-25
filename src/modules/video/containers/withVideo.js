@@ -14,6 +14,7 @@ const mapDispatchToProps = {
 const mapStateToProps = (store, props) => {
     return {
         networkTokenBalance: store.wallet.networkTokenBalance,
+        ethAddress: store.app.ethAddress,
     }
 }
 

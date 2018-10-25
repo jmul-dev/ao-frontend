@@ -12,10 +12,12 @@ import { TokenBalance } from '../../../utils/denominations';
 import { ContentPurchaseAction, ContentPurchaseState, getContentState } from '../../video/components/ContentPurchaseActions';
 import withContentMetrics from '../containers/withContentMetrics';
 import AccountVideoStats from './AccountVideoStats';
+import withEthAddress from '../containers/withEthAddress';
 
 
 class AccountVideoListItem extends Component {
     static propTypes = {
+        currentUserEthAddress: PropTypes.string.isRequired,
         video: PropTypes.object.isRequired,
         filter: PropTypes.oneOf(['downloaded', 'uploaded']),
         metrics: PropTypes.shape({
@@ -29,6 +31,8 @@ class AccountVideoListItem extends Component {
         getContentMetrics: PropTypes.func.isRequired,
         // withStyles
         classes: PropTypes.object.isRequired,
+        // withEthAddress
+        ethAddress: PropTypes.string.isRequired,
     }
     _watchNowRef;
     componentDidMount() {
@@ -57,8 +61,8 @@ class AccountVideoListItem extends Component {
         )
     }
     _renderCardState() {
-        const { video, metrics, classes } = this.props
-        const { isLoadingState, isCompleted, stateCopy, StateIcon, actionRequired, actionCopy } = getContentState(video)
+        const { video, metrics, classes, ethAddress } = this.props
+        const { isLoadingState, isCompleted, stateCopy, StateIcon, actionRequired, actionCopy } = getContentState(video, this.props.currentUserEthAddress)
         const transactions = video.transactions || {}
         if (isCompleted) {
             return (
@@ -82,7 +86,7 @@ class AccountVideoListItem extends Component {
                     </div>
                     <div>
                         <Typography variant="subheading" component="div">{video.title}</Typography>
-                        <ContentPurchaseAction contentRef={this._watchNowRef} content={video}>{({ action, actionCopy, loading }) => (
+                        <ContentPurchaseAction currentUserEthAddress={ethAddress} contentRef={this._watchNowRef} content={video}>{({ action, actionCopy, loading }) => (
                             <ButtonBase onClick={action} disabled={!action || loading}>
                                 <Typography variant="body1" gutterBottom color={!action || loading ? "textSecondary" : "primary"}>{stateCopy || actionCopy}</Typography>
                             </ButtonBase>
@@ -96,19 +100,19 @@ class AccountVideoListItem extends Component {
         }
     }
     render() {
-        const { video, filter, classes } = this.props
+        const { video, filter, classes, ethAddress } = this.props
         const transactions = video.transactions || {}
         const isCompletedState = video.state === 'DISCOVERABLE'
         return (
             <Grid className={classes.root} container spacing={16}>
                 <Grid item sm={4}>
-                    <ContentPurchaseAction contentRef={this._watchNowRef} content={video}>{({ action, actionCopy, loading }) => {
+                    <ContentPurchaseAction currentUserEthAddress={ethAddress} contentRef={this._watchNowRef} content={video}>{({ action, actionCopy, loading }) => {
                         // NOTE: only rendering the "play" action on previewImage
                         return (
                             <ButtonBase className={classes.previewImageButton} disabled={!isCompletedState} onClick={action}>
                                 <div ref={ref => this._watchNowRef = ref} className={classes.previewImage} style={{ backgroundImage: `url(${window.AO_CORE_URL}/${video.featuredImageUrl})`, opacity: isCompletedState ? 1 : 0.15 }}>
                                     {isCompletedState ? (
-                                        <ContentPurchaseState content={video} />
+                                        <ContentPurchaseState content={video} currentUserEthAddress={ethAddress} />
                                     ) : null}
                                 </div>
                             </ButtonBase>
@@ -195,6 +199,7 @@ const styles = ({ spacing }) => ({
 export default compose(
     withContentMetrics,
     withStyles(styles),
+    withEthAddress,
 )(AccountVideoListItem)
 
 export const AccountVideoListItemPlaceholder = () => (

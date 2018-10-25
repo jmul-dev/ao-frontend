@@ -16,6 +16,7 @@ import { Link } from 'react-router-dom';
 
 class DownloadsListItem extends Component {
     static propTypes = {
+        currentUserEthAddress: PropTypes.string.isRequired,
         classes: PropTypes.object.isRequired,
         content: PropTypes.object.isRequired,
     }
@@ -44,11 +45,11 @@ class DownloadsListItem extends Component {
         // TODO
     }
     render() {
-        const { content, classes } = this.props
+        const { content, classes, currentUserEthAddress } = this.props
         const { actionsMenuActive } = this.state
-        const { isLoadingState, stateCopy, StateIcon, actionRequired, actionCopy } = getContentState(content)
+        const { isLoadingState, stateCopy, StateIcon, actionRequired, actionCopy } = getContentState(content, currentUserEthAddress)
         return (
-            <ContentPurchaseAction contentRef={this._watchNowRef} content={content}>{({ action, loading }) => (
+            <ContentPurchaseAction currentUserEthAddress={currentUserEthAddress} contentRef={this._watchNowRef} content={content}>{({ action, loading }) => (
                 <ListItem 
                     ref={ref => this._watchNowRef = ref} 
                     className={`DownloadsListItem ${classes.root}`} 

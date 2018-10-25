@@ -1,16 +1,15 @@
-import React, { Component, Fragment } from 'react';
-import Typography from '@material-ui/core/Typography';
-import withAccountVideos from '../containers/withAccountVideos';
-import withEthAddress from '../containers/withEthAddress';
-import { compose } from 'react-apollo';
-import PropTypes from 'prop-types';
-import AccountVideoListItem, { AccountVideoListItemPlaceholder } from './AccountVideoListItem';
-import '../styles/account-video-listing.css';
 import { Divider } from '@material-ui/core';
+import Typography from '@material-ui/core/Typography';
+import PropTypes from 'prop-types';
+import React, { Component, Fragment } from 'react';
+import { compose } from 'react-apollo';
 import { Link } from 'react-router-dom';
-import Button from '@material-ui/core/Button';
 import { PrimaryButton } from '../../../theme';
 import ExchangeModal from '../../exchange/components/ExchangeModal';
+import withAccountVideos from '../containers/withAccountVideos';
+import withEthAddress from '../containers/withEthAddress';
+import '../styles/account-video-listing.css';
+import AccountVideoListItem from './AccountVideoListItem';
 
 
 class AccountVideoListing extends Component {
@@ -50,6 +49,7 @@ class AccountVideoListing extends Component {
                             <AccountVideoListItem 
                                 video={video} 
                                 filter={filter}
+                                currentUserEthAddress={ethAddress}
                             />                            
                         </li>
                     ))}
