@@ -57,11 +57,22 @@ class VideoListing extends Component<Props> {
                 setTeaserListingState({isActive: false})
         }
     }
+    // Used when there are no videos
+    _renderPlaceholderView() {
+        return (
+            <div className="VideoListing placeholder">
+                <Typography className="placeholder-title" variant="display1">{`Welcome to AO`}</Typography>
+                <Typography className="placeholder-description" variant="body1">{`Content will begin to show up here as it is discovered within the AO network`}</Typography>
+            </div>
+        )
+    }
     render() {
-        const { videos, videosLoading, teaserListingActive, activeVideo, setActiveVideo, setTeaserListingState } = this.props
+        const { videos, videosResult, videosLoading, teaserListingActive, activeVideo, setActiveVideo, setTeaserListingState } = this.props
         const rowCount = videos.videos ? Math.ceil(videos.videos.length / 3) : 0
-        if (videosLoading)
+        if (videosLoading && !videosResult)
             return null
+        if (videos && videos.length === 0)
+            return this._renderPlaceholderView()
         return (
             <div className="VideoListing">
                 <AutoSizer disableHeight>
