@@ -14,7 +14,7 @@ export default class IngressView extends PureComponent {
     componentDidMount() {
         if ( this.state.isElectron && this.webviewRef ) {
             this.webviewRef.current.addEventListener('dom-ready', () => {
-                this.webviewRef.current.openDevTools()
+                // Leaving the event listener for now, may need some logic to occur here
             })
         }
     }
