@@ -8,7 +8,7 @@ import { InMemoryCache, defaultDataIdFromObject } from 'apollo-cache-inmemory';
 import { createUploadLink } from 'apollo-upload-client/lib/main';
 
 
-window.AO_CORE_URL = 'http://localhost:3003' // TODO: pull this from env or config
+window.AO_CORE_URL = process.env.NODE_ENV === 'production' ? 'http://localhost:6579' : 'http://localhost:3003'
 
 const store = configureStore();
 
