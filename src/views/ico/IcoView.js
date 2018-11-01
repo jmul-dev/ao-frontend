@@ -89,9 +89,7 @@ class IcoView extends PureComponent {
                     <section className="section-padding vertical-padding-large" style={{ backgroundColor: lightTheme.palette.background.default }}>
                         <div className="centered-content">
                             <Typography variant="display3" style={{ lineHeight: '1.85rem' }}>
-                                {`If a currency is created from nothing, secured by nothing, and needs to be paid for to use... how valuable is it? If a currency is created through debt that needs to be paid back with more than what was created... how sustainable is it? If a currency has a fixed supply that can't keep up with demand... how stable can it ever really be?`}
-                                <Divider style={{ marginTop: 16, marginBottom: 16 }} />
-                                {`AO is created with information, is secured by information's value, and creates more of its currency when its used... not loaned--or stored.`}
+                                {`AO is created with information, is secured by information's value, and creates more of its currency when it is used for those who use it.`}
                             </Typography>
                         </div>
                     </section>

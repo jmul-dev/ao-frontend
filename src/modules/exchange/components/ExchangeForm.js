@@ -92,7 +92,7 @@ class ExchangeForm extends Component {
                     primordialExchangeBonuses: bonuses,                    
                 })
             }).catch(error => {
-                console.error(`Error fetching primordial exchange bonuses: ${error.message}`)
+                console.error(`Error fetching primordial exchange bonuses:`, error)
             })
         } else {
             // Network exchange -> update exchange amount in reducer so we can recaulculate the best exchange pool
