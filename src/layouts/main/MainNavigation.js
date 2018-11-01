@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import ButtonBase from '@material-ui/core/ButtonBase';
-import { LogoIcon } from '../../assets/Icons';
 import { connect } from 'react-redux';
 import classnames from 'classnames';
 import { compose } from 'react-apollo';
@@ -16,8 +15,8 @@ import navIconWalletSrc from '../../assets/nav-icon-my-wallet.svg';
 import navIconSettingsSrc from '../../assets/nav-icon-settings.svg';
 import navIconMetamaskSrc from '../../assets/nav-icon-metamask.svg';
 import navIconIngressSrc from '../../assets/nav-icon-ingress.svg';
-import navIconDaoSrc from '../../assets/nav-icon-dao.svg';
 import navIconDevelopersSrc from '../../assets/nav-icon-developers.svg';
+import navIconDaoSrc from '../../assets/icon-logo.svg';
 import DownloadsList from '../../modules/downloads/components/DownloadsList';
 import { APP_STATES } from '../../store/app.reducer';
 import Account from '../../modules/account/components/Account';
