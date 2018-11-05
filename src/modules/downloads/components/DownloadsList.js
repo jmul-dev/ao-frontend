@@ -21,7 +21,7 @@ class DownloadsList extends Component<Props> {
             })
         })
     }
-    componentDidUpdate() {
+    componentDidMount() {
         this.props.hostedContentQuery.startPolling(1500)
     }
     componentWillUnmount() {
