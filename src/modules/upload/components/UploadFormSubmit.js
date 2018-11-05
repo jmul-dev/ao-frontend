@@ -195,6 +195,8 @@ class UploadFormSubmit extends Component<Props> {
             wordWrap: 'break-word',
             maxWidth: '100%',
             textAlign: 'center',
+            maxHeight: '220px',
+            overflow: 'auto',
         };        
         // logic in reverse order of event occurances
         if ( submittedContent && submittedContent.state === 'STAKED' ) {
