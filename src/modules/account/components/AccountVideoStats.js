@@ -49,6 +49,7 @@ class AccountVideoStats extends PureComponent {
     }
     render() {
         const { classes, video, metrics, contentHostEarnings, align, peerConnectionSpeed } = this.props
+        const transactions = video.transactions || {}
         return (
             <div className={classes.root} style={{justifyContent: align === 'right' ? 'flex-end' : 'flex-start'}}>
                 <div>
@@ -58,7 +59,7 @@ class AccountVideoStats extends PureComponent {
                     </Typography>
                 </div>
                 {/* A: This is current user's staked/uploaded content, earnings come from both stake profits and hosting */}
-                {video.transactions.stakeTx && (
+                {transactions.stakeTx && (
                     <div>
                         <Typography className={classes.statLabel} variant="body1" gutterBottom color="textSecondary" component="div">{'earnings'}</Typography>
                         <Typography className={classes.stat} variant="body2" color="textSecondary" component="div">
@@ -67,7 +68,7 @@ class AccountVideoStats extends PureComponent {
                     </div>
                 )}
                 {/* B: This is hosted/download content, earnings come only from hosting */}
-                {video.transactions.hostTx && (
+                {transactions.hostTx && (
                     <div>
                         <Typography className={classes.statLabel} variant="body1" gutterBottom color="textSecondary" component="div">{'earnings'}</Typography>
                         <Typography className={classes.stat} variant="body2" color="textSecondary" component="div">
