@@ -29,6 +29,7 @@ const snackbarStyles = ({palette, spacing}) => ({
         maxWidth: '100%',
         borderRadius: 0,
         justifyContent: 'center',
+        flexWrap: 'no-wrap',
     },
     action: {
         marginLeft: 'initial',
@@ -37,7 +38,9 @@ const snackbarStyles = ({palette, spacing}) => ({
         marginLeft: 'auto',
         marginRight: 'auto',
         paddingLeft: spacing.unit * (6 + 3),  // 6 for left icon, 3 for text spacing
-        paddingRight: spacing.unit * 3  // 3 for text spacing
+        paddingRight: spacing.unit * 3,  // 3 for text spacing
+        maxHeight: 40,
+        overflow: 'auto',
     },
     variantIcon: {
         position: 'absolute',
