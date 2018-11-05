@@ -23,7 +23,6 @@ type Props = {
     videos: Function,
     videosLoading: boolean,
     videosError?: Error,
-    videosResult: any,
 };
 
 class VideoListing extends Component<Props> {
@@ -67,11 +66,11 @@ class VideoListing extends Component<Props> {
         )
     }
     render() {
-        const { videos, videosResult, videosLoading, teaserListingActive, activeVideo, setActiveVideo, setTeaserListingState } = this.props
+        const { videos, videosLoading, teaserListingActive, activeVideo, setActiveVideo, setTeaserListingState } = this.props
         const rowCount = videos.videos ? Math.ceil(videos.videos.length / 3) : 0
-        if (videosLoading && !videosResult)
+        if (videosLoading && !videos.videos)
             return null
-        if (videos && videos.length === 0)
+        if (videos.videos && videos.videos.length === 0)
             return this._renderPlaceholderView()
         return (
             <div className="VideoListing">
