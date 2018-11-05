@@ -31,7 +31,7 @@ const mapStateToProps = (store, props) => {
     })
     return {
         targetExchangePool,
-        targetExchangeRate: targetExchangePool ? window.web3.fromWei(targetExchangePool.price) : new BigNumber(0),
+        targetExchangeRate: targetExchangePool ? new BigNumber(window.web3.fromWei(targetExchangePool.price)) : new BigNumber(0),
     }
 }
 
