@@ -11,6 +11,7 @@ import TeaserListing from './TeaserListing';
 import { CSSTransition } from 'react-transition-group';
 import withVideos from '../containers/withVideos';
 import Fade from '@material-ui/core/Fade';
+import OfflineIcon from '@material-ui/icons/CloudOff'
 
 
 const propertySelection = (({ top, right, bottom, left, width, height }) => ({ top, right, bottom, left, width, height }))
@@ -215,10 +216,13 @@ class VideoListingCellCard extends Component {
                     <ButtonBase
                         className="cover-image"
                         style={{ backgroundImage: `url(${window.AO_CORE_URL}/${video.featuredImageUrl})` }}
-                    ></ButtonBase>                
+                    ></ButtonBase>
                     <Typography variant="subheading">
                         {video.title}
                     </Typography>
+                    {video.recentlySeenHostsCount < 1 && (
+                        <OfflineIcon style={{position: 'absolute', top: 5, right: 24}} />
+                    )}
                 </div>
             </Fade>
         )
