@@ -33,6 +33,8 @@ const videosQuery = gql(`
             teaserUrl, 
             stake,
             isNetworkContent,
+            totalHosts,
+            recentlySeenHostsCount,
             lastSeenContentHost {
                 contentHostId,
                 contentDatKey,

@@ -204,7 +204,7 @@ class VideoListingCellCard extends Component {
         const { video, ...props } = this.props
         return (
             <Fade in={this.state.imageLoaded}>
-                <div {...props}>
+                <div {...props} style={{opacity: video.recentlySeenHostsCount > 0 ? 1 : 0.25}}>
                     <img
                         src={`${window.AO_CORE_URL}/${video.featuredImageUrl}`}
                         alt={video.title}

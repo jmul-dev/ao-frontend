@@ -12,6 +12,7 @@ import '../styles/teaser-card.css';
 import { ContentPurchaseAction, ContentPurchaseState } from './ContentPurchaseActions';
 import moment from 'moment';
 import ClockIcon from '@material-ui/icons/Schedule';
+import PeerIcon from '@material-ui/icons/People';
 import BigNumber from 'bignumber.js';
 import AccountRequired from '../../account/components/AccountRequired';
 
@@ -142,14 +143,21 @@ class TeaserCard extends Component<Props> {
         })
     }
     _renderLastSeen() {
-        const { video, videoQuery } = this.props
-        if ( !video.lastSeenContentHost )
-            return null
+        const { video, videoQuery } = this.props        
         if ( videoQuery.video && videoQuery.video.state === 'DISCOVERABLE' )
             return null // user already owns this content
+        if ( !video.lastSeenContentHost )
+            return null
+        if ( video.recentlySeenHostsCount > 0 ) {
+            return (
+                <Typography color="primary" variant="body1" style={{display: 'flex', alignItems: 'center'}}>
+                    <PeerIcon style={{marginRight: 4}} /> {`${video.recentlySeenHostsCount} recently seen hosts`}
+                </Typography>
+            )
+        }
         const lastSeenDate = moment.utc(parseInt(video.lastSeenContentHost.timestamp, 10))
-        const likelyAvailableDate = moment().subtract(20, 'minutes')
-        const potentiallyAvailableDate = moment().subtract(1, 'hour')
+        const likelyAvailableDate = moment().subtract(10, 'minutes')
+        const potentiallyAvailableDate = moment().subtract(20, 'minutes')
         let accentColor = 'inherit'
         if ( lastSeenDate.isAfter( likelyAvailableDate ) ) {
             accentColor = 'primary'

@@ -44,6 +44,13 @@ const VideoContentFragment = `
             stakeTx,
             purchaseTx,
             hostTx,
+        },
+        totalHosts,
+        recentlySeenHostsCount,
+        lastSeenContentHost {
+            contentHostId,
+            contentDatKey,
+            timestamp
         }
     }
 `

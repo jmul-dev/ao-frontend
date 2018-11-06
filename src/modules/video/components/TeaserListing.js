@@ -68,7 +68,7 @@ export default class TeaserListing extends Component<Props> {
                         const slideIsActive = index === 2
                         return (
                             <div 
-                                className={`slide ${index !== 2 ? 'clickable' : 'active'} ${slideIsFullscreen ? 'fullscreen' : ''}`} key={video.id} 
+                                className={`slide ${index !== 2 ? 'clickable' : 'active'} ${slideIsFullscreen ? 'fullscreen' : ''} ${video.recentlySeenHostsCount === 0 && 'no-recent-hosts'}`} key={video.id} 
                                 style={index === 2 ? this.props.activeTeaserVideoCellPosition : undefined}
                                 onClick={index !== 2 ? () => updateActiveVideoIndex(activeTeaserVideoIndex + index - 2) : undefined}
                                 >
