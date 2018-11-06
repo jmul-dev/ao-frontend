@@ -9,10 +9,12 @@ class Stats extends Component {
         if ( loading || error )
             return null
         return (
-            <div className="Stats">
-                <Typography variant="body1" component="div">
-                    <div>{`Content hosts: ${statistics.p2pRecentlySeenHostsCount}`}</div>
-                    <div>{`Peers connected: ${statistics.p2pPeersConnected}`}</div>
+            <div className="Stats" style={{display: 'flex'}}>
+                <Typography variant="caption" component="div" style={{marginLeft: 24}}>
+                    {`Content hosts online: ${statistics.p2pRecentlySeenHostsCount}`}
+                </Typography>
+                <Typography variant="caption" component="div" style={{marginLeft: 24}}>
+                    {`Peers connected: ${statistics.p2pPeersConnected}`}
                 </Typography>
             </div>
         )

@@ -35,3 +35,10 @@
     z-index: 1 !important;
     background-color: rgba(0, 0, 0, 0.8);
 }
+.BrowseView > footer {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    pointer-events: none;
+    padding: 4px 16px;
+}

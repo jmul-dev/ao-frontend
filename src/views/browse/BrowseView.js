@@ -11,6 +11,7 @@ import Backdrop from '@material-ui/core/Backdrop';
 import Slide from '@material-ui/core/Slide';
 import Fade from '@material-ui/core/Fade';
 import './browse-view.css';
+import Stats from '../../modules/stats/components/Stats';
 
 
 class BrowseView extends Component {
@@ -54,7 +55,10 @@ class BrowseView extends Component {
                     onClick={this._closeSearchBar}
                     style={{visibility: searchBarActive ? 'visible' : 'hidden'}}
                 />
-                <VideoListing />                          
+                <VideoListing />
+                <footer>
+                    <Stats />
+                </footer>
             </View>
         );
     }
