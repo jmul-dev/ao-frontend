@@ -7,6 +7,7 @@ const statsQuery = gql(`
     query {
         statistics {
             status,
+            coreVersion,
             p2pStatus,
             p2pPeersConnected,
             p2pRecentlySeenHostsCount,

@@ -22,6 +22,9 @@ class Stats extends Component {
                     <Typography variant="caption" component="div" style={{marginLeft: 24}}>
                         {`Peers connected: ${statistics.p2pPeersConnected}`}
                     </Typography>
+                    <Typography variant="caption" component="div" style={{marginLeft: 24}}>
+                        {`AO Core v${statistics.coreVersion}`}
+                    </Typography>
                 </div>
             </Fade>
         )
