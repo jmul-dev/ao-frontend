@@ -6,7 +6,12 @@ import gql from "graphql-tag"
 const statsQuery = gql(`
     query {
         statistics {
-            peersConnected, videosAvailable
+            status,
+            p2pStatus,
+            p2pPeersConnected,
+            p2pRecentlySeenHostsCount,
+            ethNetworkStatus,
+            ethNetworkId,
         }
     }
 `)

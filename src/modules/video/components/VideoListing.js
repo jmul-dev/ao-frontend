@@ -212,7 +212,7 @@ class VideoListingCellCard extends Component {
                         onLoad={() => this.setState({imageLoaded: true})}
                         onError={() => this.setState({imageLoaded: true})}
                         style={{position: 'absolute', visibility: 'hidden'}}
-                    />                
+                    />
                     <ButtonBase
                         className="cover-image"
                         style={{ backgroundImage: `url(${window.AO_CORE_URL}/${video.featuredImageUrl})` }}

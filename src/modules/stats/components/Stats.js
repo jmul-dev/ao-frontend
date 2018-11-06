@@ -11,8 +11,8 @@ class Stats extends Component {
         return (
             <div className="Stats">
                 <Typography variant="body1" component="div">
-                    <div>{`Videos available: ${statistics.videosAvailable}`}</div>
-                    <div>{`Peers connected: ${statistics.peersConnected}`}</div>
+                    <div>{`Content hosts: ${statistics.p2pRecentlySeenHostsCount}`}</div>
+                    <div>{`Peers connected: ${statistics.p2pPeersConnected}`}</div>
                 </Typography>
             </div>
         )

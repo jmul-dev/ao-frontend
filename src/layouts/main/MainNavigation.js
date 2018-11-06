@@ -123,6 +123,7 @@ const styles = ({palette, spacing}) => ({
         width: '100%',
         display: 'flex',
         flexDirection: 'column',
+        overflow: 'auto',
     },
     navList: {
         listStyle: 'none',
@@ -177,8 +178,7 @@ const styles = ({palette, spacing}) => ({
         },
     downloadsContainer: {
         marginTop: 'auto',
-        overflowY: 'scroll',
-        overflowX: 'hidden',
+        minHeight: 'min-content',
     }
 })
 
