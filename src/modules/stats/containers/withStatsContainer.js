@@ -12,6 +12,7 @@ const statsQuery = gql(`
             p2pRecentlySeenHostsCount,
             ethNetworkStatus,
             ethNetworkId,
+            totalContentHosts,
         }
     }
 `)
