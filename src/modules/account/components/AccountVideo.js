@@ -86,7 +86,7 @@ class AccountVideo extends PureComponent {
                             <ButtonBase
                                 buttonRef={ref => {this._watchNowRef = ref}} 
                                 className={classes.previewImage} 
-                                style={{ backgroundImage: `url(${window.AO_CORE_URL}/${video.featuredImageUrl})`, opacity: isCompletedState ? 1 : 0.15 }}
+                                style={{ backgroundImage: `url(${process.env.REACT_APP_AO_CORE_URL}/${video.featuredImageUrl})`, opacity: isCompletedState ? 1 : 0.15 }}
                                 disabled={!isCompletedState}
                                 onClick={action}
                                 >

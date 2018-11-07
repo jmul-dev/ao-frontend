@@ -1,6 +1,7 @@
-import { graphql } from 'react-apollo'
+import { graphql, compose } from 'react-apollo'
 import gql from "graphql-tag"
-
+import { connect } from 'react-redux'
+import { getNetworkName } from '../../../store/app.reducer'
 
 // GraphQL
 const statsQuery = gql(`
@@ -18,9 +19,21 @@ const statsQuery = gql(`
     }
 `)
 
-export default graphql(statsQuery, {
-    name: 'query',
-    options: {
-        pollInterval: 5000
+// Redux state
+const mapStateToProps = (store) => {
+    return {
+        ethNetworkId: store.app.ethNetworkId,
+        ethNetworkName: getNetworkName(store.app.ethNetworkId, false),
+        desktopVersion: store.electron.desktopVersion,
     }
-});
+}
+
+export default compose(
+    graphql(statsQuery, {
+        name: 'query',
+        options: {
+            pollInterval: 5000
+        }
+    }),
+    connect(mapStateToProps),
+)

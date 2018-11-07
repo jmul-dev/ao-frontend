@@ -29,7 +29,7 @@ class BootLayout extends Component {
         }, 500)  // slight delay to avoid flashing of animation (see App.js setTimeout)
         this._connectionTimeout = setTimeout(() => {
             this._networkErrorNotId = this.props.addNotification({
-                message: `Unable to connect to ao-core, make sure it is running at: ${window.AO_CORE_URL}`,
+                message: `Unable to connect to ao-core, make sure it is running at: ${process.env.REACT_APP_AO_CORE_URL}`,
                 variant: 'warning',
             })
         }, 8000)

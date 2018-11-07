@@ -207,7 +207,7 @@ class VideoListingCellCard extends Component {
             <Fade in={this.state.imageLoaded}>
                 <div {...props} style={{opacity: video.recentlySeenHostsCount > 0 ? 1 : 0.25}}>
                     <img
-                        src={`${window.AO_CORE_URL}/${video.featuredImageUrl}`}
+                        src={`${process.env.REACT_APP_AO_CORE_URL}/${video.featuredImageUrl}`}
                         alt={video.title}
                         onLoad={() => this.setState({imageLoaded: true})}
                         onError={() => this.setState({imageLoaded: true})}
@@ -215,7 +215,7 @@ class VideoListingCellCard extends Component {
                     />
                     <ButtonBase
                         className="cover-image"
-                        style={{ backgroundImage: `url(${window.AO_CORE_URL}/${video.featuredImageUrl})` }}
+                        style={{ backgroundImage: `url(${process.env.REACT_APP_AO_CORE_URL}/${video.featuredImageUrl})` }}
                     ></ButtonBase>
                     <Typography variant="subheading">
                         {video.title}

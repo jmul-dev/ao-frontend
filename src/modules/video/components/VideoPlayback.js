@@ -91,11 +91,11 @@ class VideoPlayback extends Component {
                     </div>
                 ) : (
                         <ReactPlayer
-                            url={`${window.AO_CORE_URL}/${video.fileUrl}`}
+                            url={`${process.env.REACT_APP_AO_CORE_URL}/${video.fileUrl}`}
                             config={{
                                 file: {
                                     attributes: {
-                                        poster: `${window.AO_CORE_URL}/${video.featuredImageUrl}`,
+                                        poster: `${process.env.REACT_APP_AO_CORE_URL}/${video.featuredImageUrl}`,
                                         controlsList: 'nodownload'
                                     }
                                 }

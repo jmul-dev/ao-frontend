@@ -8,13 +8,11 @@ import { InMemoryCache, defaultDataIdFromObject } from 'apollo-cache-inmemory';
 import { createUploadLink } from 'apollo-upload-client/lib/main';
 
 
-window.AO_CORE_URL = process.env.NODE_ENV === 'production' ? 'http://localhost:6579' : 'http://localhost:3003'
-
 const store = configureStore();
 
 const client = new ApolloClient({
     link: createUploadLink({
-        uri: `${window.AO_CORE_URL}/graphql`
+        uri: `${process.env.REACT_APP_AO_CORE_URL}/graphql`
     }),
     cache: new InMemoryCache({
         dataIdFromObject: (object) => {

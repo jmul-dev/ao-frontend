@@ -5,10 +5,13 @@ import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import './settings-view.css';
 import Export from '../../modules/account/components/Export';
+import withStatsContainer from '../../modules/stats/containers/withStatsContainer';
 
 
-export default class SettingsView extends PureComponent {
+class SettingsView extends PureComponent {
     render() {
+        const { ethNetworkName, desktopVersion } = this.props
+        const { statistics } = this.props.query
         return (
             <View className={'SettingsView'} padding="full">
                 <header style={{display: 'flex'}}>
@@ -17,6 +20,25 @@ export default class SettingsView extends PureComponent {
                     </Typography>
                     <Export />
                 </header>
+                <section>
+                    {desktopVersion && (
+                        <Typography variant="caption" gutterBottom>
+                            {`AO Desktop v${desktopVersion}`}
+                        </Typography>
+                    )}
+                    {statistics && statistics.coreVersion && (
+                        <Typography variant="caption" gutterBottom>
+                            {`AO Core v${statistics.coreVersion}`}
+                        </Typography>
+                    )}
+                    <Typography variant="caption" gutterBottom>
+                        {`AO Frontend v${process.env.REACT_APP_VERSION}`}
+                    </Typography>                    
+                    <Typography variant="caption" gutterBottom>
+                        {`Ethereum network: ${ethNetworkName}`}
+                    </Typography>
+                    
+                </section>
                 <Grid container spacing={16} style={{opacity: 0.3}}>                
                     <Grid item xs={12} sm={10} md={6}>
                         <section>
@@ -53,3 +75,5 @@ export default class SettingsView extends PureComponent {
         );
     }
 }
+
+export default withStatsContainer(SettingsView)

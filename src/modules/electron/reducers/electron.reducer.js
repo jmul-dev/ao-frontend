@@ -1,16 +1,22 @@
 // Constants
 export const ELECTRON_EVENT_LOG = 'ELECTRON_EVENT_LOG'
 export const SET_IS_ELECTRON = 'SET_IS_ELECTRON'
+export const SET_DESKTOP_VERSION = 'SET_DESKTOP_VERSION'
 
 // Actions
 export const listenOnIpcChannel = () => {
     return (dispatch, getState) => {
         const isElectron = getState().electron.isElectron
         if ( isElectron ) {
-            // TODO: pull EVENT_LOG from ao-core constants
             window.chrome.ipcRenderer.on('EVENT_LOG', function(event, data) {
                 dispatch({
                     type: ELECTRON_EVENT_LOG,
+                    payload: data
+                })
+            })
+            window.chrome.ipcRenderer.on('AO_DESKTOP_VERSION', function(event, data) {
+                dispatch({
+                    type: SET_DESKTOP_VERSION,
                     payload: data
                 })
             })
@@ -41,7 +47,8 @@ export const checkElectron = () => {
 // State
 const initialState = {
     eventLogs: [],
-    isElectron: !!(window.chrome && window.chrome.ipcRenderer)
+    isElectron: !!(window.chrome && window.chrome.ipcRenderer),
+    desktopVersion: undefined,
 }
 
 // Reducer
@@ -56,6 +63,11 @@ export default function bootReducer(state = initialState, action) {
             return {
                 ...state,
                 isElectron: action.payload
+            }
+        case SET_DESKTOP_VERSION:
+            return {
+                ...state,
+                desktopVersion: action.payload
             }
         default:
             return state

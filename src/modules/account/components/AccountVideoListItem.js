@@ -110,7 +110,7 @@ class AccountVideoListItem extends Component {
                         // NOTE: only rendering the "play" action on previewImage
                         return (
                             <ButtonBase className={classes.previewImageButton} disabled={!isCompletedState} onClick={action}>
-                                <div ref={ref => this._watchNowRef = ref} className={classes.previewImage} style={{ backgroundImage: `url(${window.AO_CORE_URL}/${video.featuredImageUrl})`, opacity: isCompletedState ? 1 : 0.15 }}>
+                                <div ref={ref => this._watchNowRef = ref} className={classes.previewImage} style={{ backgroundImage: `url(${process.env.REACT_APP_AO_CORE_URL}/${video.featuredImageUrl})`, opacity: isCompletedState ? 1 : 0.15 }}>
                                     {isCompletedState ? (
                                         <ContentPurchaseState content={video} currentUserEthAddress={ethAddress} />
                                     ) : null}
