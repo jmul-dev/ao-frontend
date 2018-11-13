@@ -6,7 +6,7 @@
   ],
   "scripts": {
     "start": "cp src/index-app.js src/index.js && react-scripts start",
-    "build": "cp src/index-app.js src/index.js && cross-env PUBLIC_URL='./' react-scripts build",
+    "build": "cp src/index-app.js src/index.js && cross-env PUBLIC_URL='./' GENERATE_SOURCEMAP=false react-scripts build",
     "start:ico": "cp src/index-ico.js src/index.js && react-scripts start",
     "build:ico": "cp src/index-ico.js src/index.js && cross-env PUBLIC_URL='./' react-scripts build && npm run build:ico:inline",
     "build:ico:inline": "node scripts/inline-src.js",
