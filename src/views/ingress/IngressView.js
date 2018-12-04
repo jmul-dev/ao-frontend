@@ -9,13 +9,16 @@ export default class IngressView extends PureComponent {
         this.state = {
             isElectron: !!(window.chrome && window.chrome.ipcRenderer)
         }
-        this.webviewRef = React.createRef();
     }
     componentDidMount() {
-        if ( this.state.isElectron && this.webviewRef ) {
-            this.webviewRef.current.addEventListener('dom-ready', () => {
-                // Leaving the event listener for now, may need some logic to occur here
-            })
+        if ( this.state.isElectron ) {
+            window.chrome.ipcRenderer.send('open-metamask-notification')
+            window.chrome.ipcRenderer.send('OPEN_DAPP_WINDOW', "https://www.ingress.one")
+        }
+    }
+    componentWillUnmount() {
+        if ( this.state.isElectron ) {
+            window.chrome.ipcRenderer.send('CLOSE_DAPP_WINDOW')
         }
     }
     render() {
@@ -23,19 +26,13 @@ export default class IngressView extends PureComponent {
         return (
             <View className={'IngressView'} padding="none">
                 <section style={{height: '100%', width: '100%'}}>
-                    {isElectron ? (
-                        <webview 
-                            ref={this.webviewRef}
-                            plugins
-                            src="http://ingress.one" 
-                            style={{height: '100%', width: '100%', border: 0}} 
-                        />
-                    ) : (
+                    {!isElectron && (
                         <iframe 
-                            src="http://ingress.one" 
+                            src="https://www.ingress.one" 
                             style={{height: '100%', width: '100%', border: 0}} 
                         />
-                    )}                    
+                    )}        
+                    {/*  */}
                 </section>
             </View>
         );
