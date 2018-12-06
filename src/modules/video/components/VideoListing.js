@@ -11,7 +11,8 @@ import TeaserListing from './TeaserListing';
 import { CSSTransition } from 'react-transition-group';
 import withVideos from '../containers/withVideos';
 import Fade from '@material-ui/core/Fade';
-import OfflineIcon from '@material-ui/icons/CloudOff'
+import OfflineIcon from '@material-ui/icons/CloudOff';
+import Tooltip from '@material-ui/core/Tooltip';
 
 
 const propertySelection = (({ top, right, bottom, left, width, height }) => ({ top, right, bottom, left, width, height }))
@@ -217,12 +218,14 @@ class VideoListingCellCard extends Component {
                         className="cover-image"
                         style={{ backgroundImage: `url(${process.env.REACT_APP_AO_CORE_URL}/${video.featuredImageUrl})` }}
                     ></ButtonBase>
-                    <Typography variant="subheading">
+                    <Typography variant="subheading" style={{display: 'flex'}}>
                         {video.title}
-                    </Typography>
-                    {video.recentlySeenHostsCount < 1 && (
-                        <OfflineIcon style={{position: 'absolute', top: 5, right: 24}} />
-                    )}
+                        {video.recentlySeenHostsCount < 1 && (
+                            <Tooltip title="Unable to find a host for this piece of content">
+                                <OfflineIcon style={{marginLeft: 'auto'}}/>
+                            </Tooltip>
+                        )}
+                    </Typography>                    
                 </div>
             </Fade>
         )
