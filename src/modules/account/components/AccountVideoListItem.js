@@ -29,6 +29,7 @@ class AccountVideoListItem extends Component {
             totalFoundationEarning: PropTypes.instanceOf(BigNumber),
         }),
         getContentMetrics: PropTypes.func.isRequired,
+        getContentHostEarnings: PropTypes.func.isRequired,
         // withStyles
         classes: PropTypes.object.isRequired,
         // withEthAddress
@@ -38,6 +39,9 @@ class AccountVideoListItem extends Component {
     componentDidMount() {
         if (this.props.video.stakeId) {
             this.props.getContentMetrics(this.props.video.stakeId)
+        }
+        if (this.props.video.contentHostId) {
+            this.props.getContentHostEarnings(this.props.video.contentHostId)
         }
     }
     _renderContentMetrics = () => {
@@ -61,7 +65,7 @@ class AccountVideoListItem extends Component {
         )
     }
     _renderCardState() {
-        const { video, metrics, classes, ethAddress } = this.props
+        const { video, metrics, contentHostEarnings, classes, ethAddress } = this.props
         const { isLoadingState, isCompleted, stateCopy, StateIcon, actionRequired, actionCopy } = getContentState(video, this.props.currentUserEthAddress)
         const transactions = video.transactions || {}
         if (isCompleted) {
@@ -71,7 +75,12 @@ class AccountVideoListItem extends Component {
                         {video.title}
                     </Typography>
                     <div className={classes.statsContainer}>
-                        <AccountVideoStats video={video} metrics={metrics} peerConnectionSpeed={transactions.purchaseTx && !transactions.hostTx ? 'download' : 'upload'} />
+                        <AccountVideoStats 
+                            video={video} 
+                            metrics={metrics} 
+                            peerConnectionSpeed={transactions.purchaseTx && !transactions.hostTx ? 'download' : 'upload'} 
+                            contentHostEarnings={contentHostEarnings}
+                        />
                         <div style={{marginLeft: 'auto', marginRight: 0}}>
                             <KeyboardArrowRightIcon style={{width: 32, height: 32, color: '#333333'}} />
                         </div>
