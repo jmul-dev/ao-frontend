@@ -48,10 +48,11 @@ class DownloadsListItem extends Component {
         const { content, classes, currentUserEthAddress } = this.props
         const { actionsMenuActive } = this.state
         const { isLoadingState, stateCopy, StateIcon, actionRequired, actionCopy } = getContentState(content, currentUserEthAddress)
+        console.log(`Watch now ref:`, this._watchNowRef)
         return (
             <ContentPurchaseAction currentUserEthAddress={currentUserEthAddress} contentRef={this._watchNowRef} content={content}>{({ action, loading }) => (
                 <ListItem 
-                    ref={ref => this._watchNowRef = ref} 
+                    buttonRef={ref => {this._watchNowRef = ref}} 
                     className={`DownloadsListItem ${classes.root}`} 
                     button={true} 
                     disabled={!action || loading} 
