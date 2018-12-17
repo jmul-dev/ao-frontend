@@ -56,7 +56,7 @@ export const updateIcoState = () => {
                 })
             }
         })
-        contracts.aoToken.MULTIPLIER_DIVISOR(function(err, indexDivisor) {
+        contracts.aoLibrary.MULTIPLIER_DIVISOR(function(err, indexDivisor) {
             if ( indexDivisor ) {
                 dispatch({
                     type: UPDATE_PRIMORDIAL_STATE,
@@ -66,7 +66,7 @@ export const updateIcoState = () => {
                 })
             }
         })
-        contracts.aoToken.PERCENTAGE_DIVISOR(function(err, percentageDivisor) {
+        contracts.aoLibrary.PERCENTAGE_DIVISOR(function(err, percentageDivisor) {
             if ( percentageDivisor ) {
                 dispatch({
                     type: UPDATE_PRIMORDIAL_STATE,

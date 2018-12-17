@@ -122,9 +122,20 @@ export const updatePricingOption = (pricingOption, stake = undefined, profitSpli
         })
     }
 }
-export const stakeContent = ({networkTokenAmount, primordialTokenAmount, fileDatKey, metadataDatKey, fileSizeInBytes, profitPercentage, baseChallenge, encChallenge}) => {
+export const stakeContent = ({
+    contentLicense,
+    networkTokenAmount, 
+    primordialTokenAmount, 
+    fileDatKey, 
+    metadataDatKey, 
+    fileSizeInBytes, 
+    profitPercentage, 
+    baseChallenge, 
+    encChallenge,
+    taoId,  // id contentLicense === 'TAO'
+}) => {
     return (dispatch, getState) => {
-        return new Promise((resolve, reject) => {  
+        return new Promise((resolve, reject) => {
             const rejectAndDispatchError = (err) => {
                 dispatch({
                     type: STAKE_TRANSACTION.ERROR,
@@ -135,58 +146,184 @@ export const stakeContent = ({networkTokenAmount, primordialTokenAmount, fileDat
             triggerMetamaskPopupWithinElectron(getState)
             dispatch({type: STAKE_TRANSACTION.INITIALIZED})
             const { contracts, app } = getState()
-            // 1. Contract method
-            // NOTE: for now token & primordial token amounts are in base denomination
-            const profitPercentageWithDivisor = parseInt(profitPercentage, 10) * 10000;  // 10^4
-            contracts.aoContent.stakeContent(
-                parseInt(networkTokenAmount, 10),  // networkTokenIntegerAmount
-                0,  // networkTokenFractionalAmount
-                'ao',  // denomination                
-                parseInt(primordialTokenAmount, 10),  // primordialTokenAmount
-                baseChallenge,  // baseChallenge public key
-                encChallenge,  // encryted baseChallenge unique to host
-                fileDatKey,
-                metadataDatKey,
-                fileSizeInBytes,
-                profitPercentageWithDivisor,
-                '',  // extra data
-                { from: app.ethAddress },
-                function(err, transactionHash) {
-                    if ( err ) {
-                        rejectAndDispatchError(err)
-                    } else {
-                        resolve(transactionHash)
-                        /**
-                         * NOTE: we are actually listening for the tx success on the backend (core)
-                         * as well. This is really only helpful for error messages.
-                         */
-                        // 2. 
-                        let eventListener = contracts.aoContent.StakeContent({stakeOwner: app.ethAddress}, function(error, result) {
-                            if ( result && result.transactionHash === transactionHash ) {
-                                dispatch({
-                                    type: STAKE_TRANSACTION.RESULT,
-                                    payload: result.args
-                                })
-                                dispatch(updateWallet())
-                                eventListener.stopWatching()
-                            }
-                        })
+
+            // NOTE: for now token & primordial token amounts are in base denomination            
+            const networkTokenAmountInBaseDenom = parseInt(networkTokenAmount, 10)  // networkTokenIntegerAmount
+            const primordialTokenAmountInBaseDenom = parseInt(primordialTokenAmount, 10)  // primordialTokenAmount
+
+            let stakeContentPromise = null
+            switch(contentLicense) {
+                case 'AO':
+                    const profitPercentageWithDivisor = parseInt(profitPercentage, 10) * 10000;  // 10^4
+                    stakeContentPromise = stakeAOContent(contracts, app.ethAddress, {
+                        networkTokenAmountInBaseDenom, 
+                        primordialTokenAmountInBaseDenom, 
+                        fileDatKey, 
+                        metadataDatKey, 
+                        fileSizeInBytes, 
+                        baseChallenge, 
+                        encChallenge,
+                        profitPercentageWithDivisor,
+                    })
+                    break;
+                case 'TAO':
+                    stakeContentPromise = stakeTAOContent(contracts, app.ethAddress, {
+                        networkTokenAmountInBaseDenom,
+                        primordialTokenAmountInBaseDenom,
+                        fileDatKey,
+                        metadataDatKey,
+                        fileSizeInBytes,
+                        baseChallenge,
+                        encChallenge,
+                        taoId,
+                    })
+                    break;
+                case 'CC':
+                    stakeContentPromise = stakeCreativeCommonsContent(contracts, app.ethAddress, {
+                        networkTokenAmountInBaseDenom,
+                        primordialTokenAmountInBaseDenom,
+                        fileDatKey,
+                        metadataDatKey,
+                        fileSizeInBytes,
+                        baseChallenge,
+                        encChallenge,
+                    })
+                    break;
+            }
+            if ( stakeContentPromise === null ) {
+                rejectAndDispatchError(new Error("Invalid content license"))
+            }
+            stakeContentPromise.then(transactionHash => {
+                resolve(transactionHash)
+                /**
+                 * NOTE: we are actually listening for the tx success on the backend (core)
+                 * as well. This is really only helpful for error messages.
+                 */
+                // 2. 
+                let eventListener = contracts.aoContent.StakeContent({stakeOwner: app.ethAddress}, function(error, result) {
+                    if ( result && result.transactionHash === transactionHash ) {
                         dispatch({
-                            type: STAKE_TRANSACTION.SUBMITTED,
-                            payload: transactionHash
+                            type: STAKE_TRANSACTION.RESULT,
+                            payload: result.args
                         })
-                        waitForTransactionReceipt(transactionHash).then(() => {
-                            eventListener.stopWatching()
-                        }).catch(err => {
-                            eventListener.stopWatching()
-                            rejectAndDispatchError(err)
-                        })                        
+                        dispatch(updateWallet())
+                        eventListener.stopWatching()
                     }
-                }
-            )
+                })
+                dispatch({
+                    type: STAKE_TRANSACTION.SUBMITTED,
+                    payload: transactionHash
+                })
+                waitForTransactionReceipt(transactionHash).then(() => {
+                    eventListener.stopWatching()
+                }).catch(err => {
+                    eventListener.stopWatching()
+                    rejectAndDispatchError(err)
+                })      
+            }).catch(error => {
+                rejectAndDispatchError(error)
+            })
         })        
     }
 }
+const stakeAOContent = (contracts, ethAddress, {
+    networkTokenAmountInBaseDenom, 
+    primordialTokenAmountInBaseDenom, 
+    fileDatKey, 
+    metadataDatKey, 
+    fileSizeInBytes, 
+    baseChallenge, 
+    encChallenge,
+    profitPercentageWithDivisor,
+}) => {
+    return new Promise((resolve, reject) => {
+        contracts.aoContent.stakeAOContent(
+            networkTokenAmountInBaseDenom,  // networkTokenIntegerAmount
+            0,  // networkTokenFractionalAmount
+            'ao',  // denomination
+            primordialTokenAmountInBaseDenom,
+            baseChallenge,
+            encChallenge,
+            fileDatKey,
+            metadataDatKey,
+            fileSizeInBytes,
+            profitPercentageWithDivisor,
+            { from: ethAddress },
+            function(err, transactionHash) {
+                if ( err ) {
+                    reject(err)
+                } else {
+                    resolve(transactionHash)
+                }
+            }
+        )
+    })
+}
+const stakeTAOContent = (contracts, ethAddress, {
+    networkTokenAmountInBaseDenom,
+    primordialTokenAmountInBaseDenom,
+    fileDatKey,
+    metadataDatKey,
+    fileSizeInBytes,
+    baseChallenge,
+    encChallenge,
+    taoId,
+}) => {
+    return new Promise((resolve, reject) => {
+        contracts.aoContent.stakeTAOContent(
+            networkTokenAmountInBaseDenom,  // networkTokenIntegerAmount
+            0,  // networkTokenFractionalAmount
+            'ao',  // denomination
+            primordialTokenAmountInBaseDenom,
+            baseChallenge,
+            encChallenge,
+            fileDatKey,
+            metadataDatKey,
+            fileSizeInBytes,
+            taoId,
+            { from: ethAddress },
+            function(err, transactionHash) {
+                if ( err ) {
+                    reject(err)
+                } else {
+                    resolve(transactionHash)
+                }
+            }
+        )
+    })
+}
+const stakeCreativeCommonsContent = (contracts, ethAddress, {
+    networkTokenAmountInBaseDenom,
+    primordialTokenAmountInBaseDenom,
+    fileDatKey,
+    metadataDatKey,
+    fileSizeInBytes,
+    baseChallenge,
+    encChallenge,
+}) => {
+    return new Promise((resolve, reject) => {
+        contracts.aoContent.stakeCreativeCommonsContent(
+            networkTokenAmountInBaseDenom,  // networkTokenIntegerAmount
+            0,  // networkTokenFractionalAmount
+            'ao',  // denomination
+            primordialTokenAmountInBaseDenom,
+            baseChallenge,
+            encChallenge,
+            fileDatKey,
+            metadataDatKey,
+            fileSizeInBytes,
+            { from: ethAddress },
+            function(err, transactionHash) {
+                if ( err ) {
+                    reject(err)
+                } else {
+                    resolve(transactionHash)
+                }
+            }
+        )
+    })
+}
+
 export const setContentSubmittionResult = (result) => ({
     type: CONTENT_SUBMITTION_RESULT,
     payload: result
@@ -206,6 +343,7 @@ const initialState = {
         profitSplitPercentage: 10,
         stakeTokenType: 'primordial',
         stakePrimordialPercentage: 100,
+        contentLicense: 'AO',        
     },
     contentSubmittionResult: undefined,
     stakeTransaction: {
