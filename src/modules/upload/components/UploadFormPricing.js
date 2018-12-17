@@ -20,8 +20,9 @@ import { TokenBalance, fromBaseToHighestDenomination, fromDenominationValueToBas
 import withUserWallet from '../../wallet/containers/withUserWallet';
 import withUploadFormData from '../containers/withUploadFormData';
 import OverviewAside from './OverviewAside';
-import { BackButton, PrimaryButton } from './UploadFormNavButtons';
+import { BackButton } from './UploadFormNavButtons';
 import { TokenInput } from '../../../common/Inputs';
+import { PrimaryButton } from '../../../theme';
 
 
 const PricingInputCard = withStyles(({palette, shadows, spacing, transitions}) => ({
@@ -229,7 +230,7 @@ class UploadFormPricing extends Component {
     }
     _navBack = () => {
         // this.context.router.history.goBack()
-        this.context.router.history.replace('/app/view/upload/start')
+        this.context.router.history.replace('/app/view/upload/license')
     }
     _navForward = () => {
         const { wallet, form } = this.props
@@ -237,7 +238,7 @@ class UploadFormPricing extends Component {
         if ( wallet.networkTokenBalance.lt(form.networkTokensRequired) ||  wallet.primordialTokenBalance.lt(form.primordialTokensRequired) ) {
             nextRoute = '/app/view/upload/reload'
         }
-        this.context.router.history.push(nextRoute)
+        this.context.router.history.push(`${nextRoute}?from=pricing`)
     }
     render() {
         const { form } = this.props
