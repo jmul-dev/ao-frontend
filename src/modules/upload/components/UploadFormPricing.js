@@ -55,7 +55,7 @@ const PricingInputCard = withStyles(({palette, shadows, spacing, transitions}) =
             <div>
                 <Typography variant="caption">{'you stake'}</Typography>
                 <Typography variant="body2">
-                    <TokenBalance baseAmount={stake} decimals={1} includeAO={true} />
+                    <TokenBalance baseAmount={stake} decimals={1} includeAO={true} isPrimordial={true} />
                 </Typography>
             </div>
             <div>

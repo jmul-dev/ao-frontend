@@ -45,13 +45,13 @@ class UploadForm extends Component<Props> {
         if ( value ) {
             // Nav to next view
             this.props.updatePricingOption(1)
-            this.props.updateLastReachedStep('pricing')
+            this.props.updateLastReachedStep('license')
         }
     }
     render() {
         const { asPlaceholder, form, classes } = this.props        
         return form.video ? (
-            <Redirect to="/app/view/upload/pricing" />
+            <Redirect to="/app/view/upload/license" />
         ) : (
             <div className={`UploadForm ${asPlaceholder ? 'placeholder' : ''}`}>
                 <Typography className="title" variant="subheading" style={{display: 'flex', alignItems: 'flex-end'}}>

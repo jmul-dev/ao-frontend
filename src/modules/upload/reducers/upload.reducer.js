@@ -226,7 +226,7 @@ export const stakeContent = ({
         })        
     }
 }
-const stakeAOContent = (contracts, ethAddres, {
+const stakeAOContent = (contracts, ethAddress, {
     networkTokenAmountInBaseDenom, 
     primordialTokenAmountInBaseDenom, 
     fileDatKey, 
@@ -259,7 +259,7 @@ const stakeAOContent = (contracts, ethAddres, {
         )
     })
 }
-const stakeTAOContent = (contracts, ethAddres, {
+const stakeTAOContent = (contracts, ethAddress, {
     networkTokenAmountInBaseDenom,
     primordialTokenAmountInBaseDenom,
     fileDatKey,
@@ -292,7 +292,7 @@ const stakeTAOContent = (contracts, ethAddres, {
         )
     })
 }
-const stakeCreativeCommonsContent = (contracts, ethAddres, {
+const stakeCreativeCommonsContent = (contracts, ethAddress, {
     networkTokenAmountInBaseDenom,
     primordialTokenAmountInBaseDenom,
     fileDatKey,

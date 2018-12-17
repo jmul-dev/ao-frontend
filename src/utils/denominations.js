@@ -174,6 +174,106 @@ export const FileSize = ({sizeInBytes, decimals = 1}) => {
     )
 }
 
+/**
+ * This method helps determine a sufficient token split between a user's network and primordial
+ * token balances. For example, if a user has a balance of 10 AO and 10 AO+, and the targetAmount
+ * is 12 AO, we can split this 10 AO and 2 AO+ (if network is preferred) OR 10 AO+ and 2 AO (if 
+ * primordial is preferred). All values should be given in base denominations.
+ * 
+ * @param {Object} params
+ * @param {BigNumber} params.networkBalance
+ * @param {BigNumber} params.primordialBalance
+ * @param {String} params.preferredTokenType Token type that should be preferred if both network & primordial balance exists
+ * @param {String} params.requiredTokenType Token type that must be used
+ * @param {BigNumber} params.targetAmount The amount
+ * @returns {TokenSplit}
+ * 
+ * @typedef {Object} TokenSplit
+ * @property {BigNumber} networkAmount
+ * @property {BigNumber} primordialAmount
+ * @property {Number} splitPercentage Decimal value ranging from 0 - 100, 100 being 100% primordial, 0 being 100% network
+ * @property {Boolean} isSufficient Whether some combination of network and primordial tokens reach the target amount
+ * @property {BigNumber} insufficientAmount
+ * @property {String} tokenType "both" | "network" | "primordial"
+ */
+export const getPreferredTokenSplit = ({
+    networkBalance,
+    primordialBalance,
+    preferredTokenType = 'network',
+    requiredTokenType = null,
+    targetAmount,
+}) => {
+    let networkAmount = new BigNumber(0)
+    let primordialAmount = new BigNumber(0)
+    let isSufficient = false
+    let insufficientAmount = new BigNumber(0)
+    let tokenType = requiredTokenType || preferredTokenType
+    if ( requiredTokenType ) {
+        if ( requiredTokenType === 'network' ) {
+            return {
+                networkAmount: networkBalance.gte(targetAmount) ? targetAmount : networkBalance,
+                primordialAmount,
+                isSufficient: networkBalance.gte(targetAmount),
+                insufficientAmount: networkBalance.lt(targetAmount) ? targetAmount.minus(networkBalance) : new BigNumber(0),
+                splitPercentage: 0.0,
+                tokenType: 'network',
+            }
+        } else if ( requiredTokenType === 'primordial' ) {
+            return {
+                networkAmount,
+                primordialAmount: primordialBalance.gte(targetAmount) ? targetAmount : primordialBalance,
+                isSufficient: primordialBalance.gte(targetAmount),
+                insufficientAmount: primordialBalance.lt(targetAmount) ? targetAmount.minus(primordialBalance) : new BigNumber(0),
+                splitPercentage: 100.0,
+                tokenType: 'primordial',
+            }
+        }
+    } else {
+        if ( preferredTokenType === 'network' ) {
+            insufficientAmount = BigNumber.max( targetAmount.minus(networkBalance), 0 )
+            if ( insufficientAmount.gt(0) ) {
+                tokenType = 'both'
+                networkAmount = networkBalance                
+                insufficientAmount = BigNumber.max( insufficientAmount.minus(primordialBalance), 0 )                
+                if ( insufficientAmount.gt(0) ) {
+                    primordialAmount = primordialBalance                    
+                } else {
+                    primordialAmount = targetAmount.minus(networkAmount)
+                    isSufficient = true
+                }
+            } else {
+                networkAmount = targetAmount
+                isSufficient = true
+                tokenType = 'network'
+            }
+        } else if ( preferredTokenType === 'primordial' ) {
+            insufficientAmount = BigNumber.max( targetAmount.minus(primordialBalance), 0 )
+            if ( insufficientAmount.gt(0) ) {
+                tokenType = 'both'
+                primordialAmount = primordialBalance
+                insufficientAmount = BigNumber.max( insufficientAmount.minus(networkBalance), 0 )
+                if ( insufficientAmount.gt(0) ) {
+                    networkAmount = networkBalance                    
+                } else {
+                    networkAmount = targetAmount.minus(primordialAmount)
+                    isSufficient = true                    
+                }
+            } else {
+                primordialAmount = targetAmount
+                isSufficient = true
+                tokenType = 'primordial'
+            }   
+        }
+        return {
+            networkAmount,
+            primordialAmount,
+            insufficientAmount,
+            isSufficient,
+            splitPercentage: targetAmount.dividedBy(primordialAmount).multipliedBy(100).toNumber(),
+            tokenType,
+        }
+    }
+}
 
 /**
  * 
