@@ -16,6 +16,11 @@ const OverviewAside = ({form, includePricing = false}) => {
             </Paper>
             <Typography variant="caption" component="ul">
                 <li>
+                    <span>{'license'}</span>
+                    <span className="divider"></span>
+                    <b>{`${form.contentLicense}`}</b>
+                </li>
+                <li>
                     <span>{'file size'}</span>
                     <span className="divider"></span>
                     <b>{`${amount.toFixed(1)} ${denomination.fileSizeSuffix}`}</b>
