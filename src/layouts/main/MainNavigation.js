@@ -27,7 +27,7 @@ const openMetamask = () => {
     window.chrome.ipcRenderer.send('open-metamask-popup')
 }
 
-const MainNavigation = ({ isElectron, offcanvas, ethAddress, showDownloads, overlayViewsActive, primordialSaleEnded, classes }) => (
+const MainNavigation = ({ isElectron, offcanvas, ethAddress, showDownloads, overlayViewsActive, primordialSaleEnded, ingressTabDisabled, classes }) => (
     <nav className={classnames('MainNavigation', { offcanvas })}>
         <div className={classes.container}>
             <ul className={classes.navList}>
@@ -37,18 +37,18 @@ const MainNavigation = ({ isElectron, offcanvas, ethAddress, showDownloads, over
                             {ethAddress ? (
                                 <Account display="ethIcon" className={classes.navLinkIcon} size={20} />
                             ) : (
-                                <img src={navIconWalletSrc} className={classes.navLinkIcon} alt="Wallet" />  
-                            )}                            
+                                <img src={navIconWalletSrc} className={classes.navLinkIcon} alt="Wallet" />
+                            )}
                             <Typography variant="caption" className={classes.navLinkCopy}>{'My Wallet'}</Typography>
                         </div>
                         <div className={classes.navListItemWalletBalances}>
-                            <WalletBalances>{({primordialTokenBalanceFormatted, networkTokenBalanceFormatted}) => (
+                            <WalletBalances>{({ primordialTokenBalanceFormatted, networkTokenBalanceFormatted }) => (
                                 <React.Fragment>
-                                    <Typography variant="caption" className={classes.walletBalanceCopy} style={{marginBottom: 4}}>{primordialTokenBalanceFormatted}</Typography>
+                                    <Typography variant="caption" className={classes.walletBalanceCopy} style={{ marginBottom: 4 }}>{primordialTokenBalanceFormatted}</Typography>
                                     <Typography variant="caption" className={classes.walletBalanceCopy}>{networkTokenBalanceFormatted}</Typography>
                                 </React.Fragment>
-                            )}</WalletBalances>                            
-                        </div>                        
+                            )}</WalletBalances>
+                        </div>
                     </NavLink>
                 </li>
                 <li className={classes.navListItem}>
@@ -74,7 +74,7 @@ const MainNavigation = ({ isElectron, offcanvas, ethAddress, showDownloads, over
                         <img src={navIconUploadSrc} className={classes.navLinkIcon} alt="Upload Content" />
                         <Typography variant="caption" className={classes.navLinkCopy}>{'Upload Content'}</Typography>
                     </NavLink>
-                </li>                
+                </li>
                 <li className={classes.navListItem}>
                     <NavLink className={classes.navListItemLink} to="/app/view/settings" replace={overlayViewsActive}>
                         <img src={navIconSettingsSrc} className={classes.navLinkIcon} alt="Settings" />
@@ -82,7 +82,7 @@ const MainNavigation = ({ isElectron, offcanvas, ethAddress, showDownloads, over
                     </NavLink>
                 </li>
                 <li className={classes.navListItem}>
-                    <NavLink className={classes.navListItemLink} to="/app/view/ingress" replace={overlayViewsActive}>
+                    <NavLink className={classes.navListItemLink} to="/app/view/ingress" replace={overlayViewsActive} disabled={ingressTabDisabled}>
                         <img src={navIconIngressSrc} className={classes.navLinkIcon} alt="Ingress" />
                         <Typography variant="caption" className={classes.navLinkCopy}>{'Ingress'}</Typography>
                     </NavLink>
@@ -107,17 +107,17 @@ const MainNavigation = ({ isElectron, offcanvas, ethAddress, showDownloads, over
                         <Typography variant="caption" className={classes.navLinkCopy}>{'Developers'}</Typography>
                     </NavLink>
                 </li>
-            </ul>            
+            </ul>
             {showDownloads ? (
                 <div className={classes.downloadsContainer}>
                     <DownloadsList />
                 </div>
-            ) : null}             
+            ) : null}
         </div>
     </nav>
 )
 
-const styles = ({palette, spacing}) => ({
+const styles = ({ palette, spacing }) => ({
     container: {
         height: '100%',
         width: '100%',
@@ -130,52 +130,52 @@ const styles = ({palette, spacing}) => ({
         margin: 0,
         padding: 0,
     },
-        walletListItem: {
-            borderBottom: `1px solid ${palette.divider}`
+    walletListItem: {
+        borderBottom: `1px solid ${palette.divider}`
+    },
+    navListItem: {
+        overflow: 'hidden',
+    },
+    navListItemLink: {
+        padding: `${12}px ${spacing.unit * 2}px`,
+        display: 'flex',
+        alignItems: 'center',
+        textDecoration: 'none',
+        borderLeft: `3px solid transparent`,
+        opacity: 0.75,
+        '&.active': {
+            borderLeft: `3px solid ${palette.primary.main}`,
+            backgroundColor: palette.divider, // '#151515'
+            color: palette.common.white,
+            opacity: 1,
         },
-        navListItem: {
-            overflow: 'hidden',
-        },
-        navListItemLink: {
-            padding: `${12}px ${spacing.unit * 2}px`,
-            display: 'flex',
-            alignItems: 'center',
-            textDecoration: 'none',
-            borderLeft: `3px solid transparent`,
-            opacity: 0.75,
-            '&.active': {
-                borderLeft: `3px solid ${palette.primary.main}`,
-                backgroundColor: palette.divider, // '#151515'
-                color: palette.common.white,
-                opacity: 1,
-            },            
-        },
-            navListItemWallet: {
-                flexDirection: 'column',
-                alignItems: 'flex-start',
-                paddingTop: 32,
-                paddingBottom: 24,
-            },
-            navListItemWalletTitle: {
-                display: 'flex',
-                alignItems: 'center',
-            },
-            navListItemWalletBalances: {
-                paddingLeft: 29,
-                marginTop: 8,
-            },
-            walletBalanceCopy: {
-                color: '#777777',
-                fontWeight: 'bold',
-            },
-        navLinkCopy: {
-            fontWeight: 'bold',
-        },
-        navLinkIcon: {
-            height: 20,
-            width: 20,
-            marginRight: spacing.unit,
-        },
+    },
+    navListItemWallet: {
+        flexDirection: 'column',
+        alignItems: 'flex-start',
+        paddingTop: 32,
+        paddingBottom: 24,
+    },
+    navListItemWalletTitle: {
+        display: 'flex',
+        alignItems: 'center',
+    },
+    navListItemWalletBalances: {
+        paddingLeft: 29,
+        marginTop: 8,
+    },
+    walletBalanceCopy: {
+        color: '#777777',
+        fontWeight: 'bold',
+    },
+    navLinkCopy: {
+        fontWeight: 'bold',
+    },
+    navLinkIcon: {
+        height: 20,
+        width: 20,
+        marginRight: spacing.unit,
+    },
     downloadsContainer: {
         marginTop: 'auto',
         minHeight: 'min-content',
@@ -183,13 +183,14 @@ const styles = ({palette, spacing}) => ({
 })
 
 const mapStateToProps = (store) => {
-    return {        
+    return {
         offcanvas: store.video.teaserListingActive,
         showDownloads: store.app.ethAddress && store.app.states[APP_STATES.CORE_READY],
         overlayViewsActive: store.router.location.pathname.indexOf('/app/view') > -1,
         isElectron: store.electron.isElectron,
         ethAddress: store.app.ethAddress,
         primordialSaleEnded: store.ico.primordialSaleEnded,
+        ingressTabDisabled: !store.contracts.settings.ingressUrl,
     }
 }
 
