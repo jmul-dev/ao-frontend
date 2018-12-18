@@ -145,6 +145,15 @@ class AccountVideo extends PureComponent {
                                 <Divider />
                                 <div className={classes.contentListItem}>
                                     <Typography className={classes.contentLabel} variant="caption">
+                                        {'Content license'}
+                                    </Typography>
+                                    <Typography className={classes.content} variant="body2">
+                                        {video.contentLicense}
+                                    </Typography>
+                                </div>
+                                <Divider />
+                                <div className={classes.contentListItem}>
+                                    <Typography className={classes.contentLabel} variant="caption">
                                         {'Description'}
                                     </Typography>
                                     <Typography className={classes.content} variant="body2">
