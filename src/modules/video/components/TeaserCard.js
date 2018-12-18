@@ -13,8 +13,10 @@ import { ContentPurchaseAction, ContentPurchaseState } from './ContentPurchaseAc
 import moment from 'moment';
 import ClockIcon from '@material-ui/icons/Schedule';
 import PeerIcon from '@material-ui/icons/People';
+import InfoIcon from '@material-ui/icons/InfoOutline';
 import BigNumber from 'bignumber.js';
 import AccountRequired from '../../account/components/AccountRequired';
+import Tooltip from '@material-ui/core/Tooltip';
 
 
 type Props = {
@@ -44,7 +46,7 @@ class TeaserCard extends Component<Props> {
             usingTeaserSrc: true,
             videoSrcReady: false,
             exchangeModalOpen: false,
-            contentPrice: new BigNumber(props.video.stake),
+            contentPrice: new BigNumber(props.video.contentLicense === 'AO' ? props.video.stake : 0),
             contentPriceError: undefined,
         }
     }
@@ -217,7 +219,17 @@ class TeaserCard extends Component<Props> {
                         </Typography>
                         <div className="action-pane hide-fullscreen">
                             <Typography variant="body1">
-                                <TokenBalance baseAmount={contentPrice} /> {' / view'}
+                                {video.contentLicense === 'AO' ? (
+                                    <React.Fragment>
+                                        <TokenBalance baseAmount={contentPrice} />{' / view '}
+                                    </React.Fragment>                                    
+                                ) : (
+                                    <Tooltip title={`This content is covered under the ${video.contentLicense} license`} placement="left">
+                                        <span style={{pointerEvents: 'all'}}>
+                                            <TokenBalance baseAmount={0} />{' / view '}<InfoIcon style={{marginLeft: 4, fontSize: 16, verticalAlign: 'sub'}} />
+                                        </span>
+                                    </Tooltip>
+                                )}
                             </Typography>
                             <Typography variant="caption" gutterBottom>
                                 {`your balance: `}<TokenBalance baseAmount={networkTokenBalance} isPrimordial={false} />
@@ -234,7 +246,10 @@ class TeaserCard extends Component<Props> {
                     <div className="content-container hide-fullscreen">
                         <Grid container spacing={16} alignItems="flex-start" justify="flex-end" style={{height: 800}}>
                             <Grid item xs={6}>
-                                <Typography variant="body1">
+                                <Typography variant="body1" component="div">
+                                    {video.contentAttribution && (
+                                        <div style={{marginBottom: 8}}>{`Attribution: ${video.contentAttribution}`}</div>
+                                    )}
                                     {video.description}
                                 </Typography>
                             </Grid>
