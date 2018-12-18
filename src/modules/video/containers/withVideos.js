@@ -28,6 +28,8 @@ const videosQuery = gql(`
             description, 
             fileName, 
             contentType, 
+            contentLicense,
+            contentAttribution,
             fileUrl, 
             featuredImageUrl, 
             teaserUrl, 
