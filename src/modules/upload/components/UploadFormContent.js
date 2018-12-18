@@ -23,7 +23,10 @@ class UploadFormContent extends Component {
         this.props.updateLastReachedStep('content')
     }
     _navBack = () => {
-        this.context.router.history.replace('/app/view/upload/pricing')
+        let backRoute = 'pricing'
+        if ( this.props.history.location.search && this.props.history.location.search.indexOf('license') > -1 )
+            backRoute = 'license'
+        this.context.router.history.replace(`/app/view/upload/${backRoute}`)
     }
     _submit = () => {
         this.context.router.history.push('/app/view/upload/submit')
@@ -87,6 +90,20 @@ class UploadFormContent extends Component {
                                 label="description"
                                 multiline rows={4}
                             />
+                            {form.contentLicense === 'TAO' && (
+                                <TextInput
+                                    value={form.taoId}
+                                    onChange={this._handleTextInput("taoId")}
+                                    label="TAO ID"
+                                />
+                            )}
+                            {form.contentLicense === 'CC' && (
+                                <TextInput
+                                    value={form.contentAttribution}
+                                    onChange={this._handleTextInput("contentAttribution")}
+                                    label="Creative Commons content attribution"
+                                />
+                            )}
                         </div>
                         <nav className="upload-form-nav gutter-bottom">
                             <BackButton onClick={this._navBack}>{'back'}</BackButton>

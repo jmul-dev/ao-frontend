@@ -343,7 +343,9 @@ const initialState = {
         profitSplitPercentage: 10,
         stakeTokenType: 'primordial',
         stakePrimordialPercentage: 100,
-        contentLicense: 'AO',        
+        contentLicense: 'AO',
+        contentAttribution: undefined,
+        taoId: undefined,
     },
     contentSubmittionResult: undefined,
     stakeTransaction: {
@@ -354,7 +356,7 @@ const initialState = {
     }
 }
 export type UploadReducerType = {
-    lastReachedUploadStep: 'start' | 'pricing' | 'reload' | 'content' | 'submit',
+    lastReachedUploadStep: 'start' | 'license' | 'pricing' | 'reload' | 'content' | 'submit',
 }
 
 // Reducer

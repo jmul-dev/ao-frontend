@@ -22,7 +22,10 @@ class UploadFormReload extends Component {
     }
     _navBack = () => {
         // this.context.router.history.goBack()
-        this.context.router.history.replace('/app/view/upload/pricing')
+        let backRoute = 'pricing'
+        if ( this.props.history.location.search && this.props.history.location.search.indexOf('license') > -1 )
+            backRoute = 'license'
+        this.context.router.history.replace(`/app/view/upload/${backRoute}`)
     }
     componentWillReceiveProps( nextProps ) {
         const { wallet, form } = nextProps

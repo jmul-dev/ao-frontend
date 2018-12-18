@@ -1,4 +1,4 @@
-    // @flow
+// @flow
 import React, { Component } from 'react';
 import withUploadFormMutation, { UploadFormMutationProps } from '../containers/withUploadFormMutation';
 import { Redirect } from 'react-router-dom';
@@ -67,6 +67,7 @@ class UploadFormSubmit extends Component<Props> {
         }
         // 1. Trigger stake tx via metamask
         stakeContent({
+            contentLicense: form.contentLicense,
             networkTokenAmount,
             primordialTokenAmount,
             fileDatKey: contentSubmittionResult.fileDatKey,
@@ -75,6 +76,7 @@ class UploadFormSubmit extends Component<Props> {
             profitPercentage: form.profitSplitPercentage,
             baseChallenge: contentSubmittionResult.baseChallenge,
             encChallenge: contentSubmittionResult.encChallenge,
+            taoId: form.taoId,            
         }).then(transactionHash => {
             // 2. Submit the tx to core
             contentUploadStakeTransaction({
