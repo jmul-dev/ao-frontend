@@ -4,6 +4,7 @@ import AOContent from 'ao-contracts/build/contracts/AOContent.json';
 import AOEarning from 'ao-contracts/build/contracts/AOEarning.json';
 import AOLibrary from 'ao-contracts/build/contracts/AOLibrary.json';
 import AOPool from 'ao-contracts/build/contracts/AOPool.json';
+import AOSetting from 'ao-contracts/build/contracts/AOSetting.json';
 import debounce from 'debounce';
 import { APP_STATES, updateAppState, getNetworkName } from './app.reducer';
 import { updateIcoState } from '../modules/ico/reducers/ico.reducer';
@@ -15,6 +16,7 @@ export const BLOCKS_PER_EVENT_GETTER = 10000
 export const CONTRACTS_INITIALIZED = 'CONTRACTS_INITIALIZED'
 export const SET_EVENTS_SINCE_BLOCK_NUMBER = 'SET_EVENTS_SINCE_BLOCK_NUMBER'
 export const LATEST_BLOCK_NUMBER = 'LATEST_BLOCK_NUMBER'
+export const UPDATE_CONTRACT_SETTINGS = 'UPDATE_CONTRACT_SETTINGS'
 
 
 export const waitForTransactionReceipt = (transactionHash) => {
@@ -52,7 +54,8 @@ export const initializeContracts = (networkId) => {
                 !AOContent.networks[networkId] ||
                 !AOEarning.networks[networkId] ||
                 !AOLibrary.networks[networkId] ||
-                !AOPool.networks[networkId]
+                !AOPool.networks[networkId] ||
+                !AOSetting.networks[networkId]
             ) {
                 console.warn('Smart contracts have not been deployed on this network['+networkId+']')
                 dispatch(updateAppState(APP_STATES.CONTRACTS_INITIALIZED, false))
@@ -68,6 +71,7 @@ export const initializeContracts = (networkId) => {
                     aoEarning: window.web3.eth.contract(AOEarning.abi).at(AOEarning.networks[networkId].address),
                     aoLibrary: window.web3.eth.contract(AOLibrary.abi).at(AOLibrary.networks[networkId].address),
                     aoPool: window.web3.eth.contract(AOPool.abi).at(AOPool.networks[networkId].address),
+                    aoSetting: window.web3.eth.contract(AOSetting.abi).at(AOSetting.networks[networkId].address),
                 }
                 dispatch({
                     type: CONTRACTS_INITIALIZED,
@@ -76,6 +80,7 @@ export const initializeContracts = (networkId) => {
                 dispatch(updateAppState(APP_STATES.CONTRACTS_INITIALIZED, true))
                 dispatch(watchBlockNumber())
                 dispatch(updateIcoState())
+                dispatch(fetchSettingsFromContract())
             }
         } catch ( error ) {
             console.error('Error initializing contracts', error)
@@ -103,12 +108,43 @@ const watchBlockNumber = () => {
     }
 }
 
+const fetchSettingsFromContract = () => {
+    return (dispatch, getState) => {
+        const { contracts } = getState()
+        let settingsPromises = []
+        let ingressUrlPromise = new Promise((resolve, reject) => {
+            contracts.aoSetting.getSettingValuesByThoughtName('0x939b070c66152b3e7efb52ec631d680270ce14c4', 'ingressUrl', function(err, settingsValue) {
+                if (err) { reject(err) } else { resolve(settingsValue[4]) }
+            })
+        })
+        let aoUrlPromise = new Promise((resolve, reject) => {
+            contracts.aoSetting.getSettingValuesByThoughtName('0x939b070c66152b3e7efb52ec631d680270ce14c4', 'aoUrl', function(err, settingsValue) {
+                if (err) { reject(err) } else { resolve(settingsValue[4]) }
+            })
+        })        
+        Promise.all([ingressUrlPromise, aoUrlPromise]).then(settings => {
+            dispatch({
+                type: UPDATE_CONTRACT_SETTINGS,
+                payload: {
+                    ingressUrl: settings[0],
+                    aoUrl: settings[1],
+                }
+            })
+        }).catch(error => {
+            dispatch(addNotification({
+                message: `Error fetching latest AO settings from contracts: ${error.message}`,
+                variant: 'warning',
+            }))
+        })
+    }
+}
+
 
 // State
 const initialState = {
     latestBlockNumber: 0,
     settings: {
-        whitepaperUrl: undefined,
+        aoUrl: undefined,
         ingressUrl: undefined,
     }    
 }
@@ -125,6 +161,14 @@ export default function contractsReducer(state = initialState, action) {
             return {
                 ...state,
                 latestBlockNumber: action.payload
+            }
+        case UPDATE_CONTRACT_SETTINGS:
+            return {
+                ...state,
+                settings: {
+                    ...state.settings,
+                    ...action.payload,
+                }
             }
         default:
             return state

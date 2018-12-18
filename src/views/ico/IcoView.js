@@ -181,6 +181,6 @@ class IcoView extends PureComponent {
 }
 
 const mapStateToProps = (store) => ({
-    whitepaperUrl: store.contracts.settings.whitepaperUrl
+    whitepaperUrl: store.contracts.settings.aoUrl
 })
 export default connect(mapStateToProps)(IcoView)

@@ -1,7 +1,9 @@
 import React, { PureComponent } from 'react';
 import View from '../View';
+import { compose } from 'react-apollo';
 import withEthAddress from '../../modules/account/containers/withEthAddress';
 import AccountRequired from '../../modules/account/components/AccountRequired';
+import withContractSettings from '../../modules/settings/containers/withContractSettings';
 
 
 class IngressView extends PureComponent {
@@ -13,7 +15,7 @@ class IngressView extends PureComponent {
     }
     componentDidMount() {
         if ( this.state.isElectron && this.props.ethAddress ) {
-            window.chrome.ipcRenderer.send('OPEN_DAPP_WINDOW', "https://www.ingress.one")
+            window.chrome.ipcRenderer.send('OPEN_DAPP_WINDOW', this.props.contractSettings.ingressUrl)
         }
     }
     componentWillUnmount() {
@@ -26,18 +28,21 @@ class IngressView extends PureComponent {
             if (prevProps.ethAddress && !this.props.ethAddress) {
                 window.chrome.ipcRenderer.send('CLOSE_DAPP_WINDOW')
             } else if (!prevProps.ethAddress && this.props.ethAddress) {
-                window.chrome.ipcRenderer.send('OPEN_DAPP_WINDOW', "https://www.ingress.one")
+                window.chrome.ipcRenderer.send('OPEN_DAPP_WINDOW', this.props.contractSettings.ingressUrl)
             }
         }
     }
     render() {
+        const { contractSettings } = this.props
         const { isElectron } = this.state
+        if ( !contractSettings.ingressUrl )
+            return null;
         return (
             <View className={'IngressView'} padding="none">
                 <section style={{height: '100%', width: '100%'}}>
                     {!isElectron && (
                         <iframe 
-                            src="https://www.ingress.one" 
+                            src={contractSettings.ingressUrl} 
                             style={{height: '100%', width: '100%', border: 0}} 
                         />
                     )}
@@ -54,4 +59,7 @@ class IngressView extends PureComponent {
     }
 }
 
-export default withEthAddress(IngressView)
+export default compose(
+    withEthAddress,
+    withContractSettings,
+)(IngressView)
