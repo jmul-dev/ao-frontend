@@ -1,23 +1,25 @@
-import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
-import React, { Component } from 'react';
-import ReactPlayer from 'react-player';
-import { CSSTransition } from 'react-transition-group';
-import { PrimaryButton } from '../../../theme';
-import { TokenBalance } from '../../../utils/denominations';
-import DatStats from '../../content/components/DatStats';
-import ExchangeModal from '../../exchange/components/ExchangeModal';
-import withVideo from '../containers/withVideo';
-import '../styles/teaser-card.css';
-import { ContentPurchaseAction, ContentPurchaseState } from './ContentPurchaseActions';
-import moment from 'moment';
-import ClockIcon from '@material-ui/icons/Schedule';
-import PeerIcon from '@material-ui/icons/People';
-import InfoIcon from '@material-ui/icons/InfoOutline';
-import BigNumber from 'bignumber.js';
-import AccountRequired from '../../account/components/AccountRequired';
-import Tooltip from '@material-ui/core/Tooltip';
-
+import Grid from "@material-ui/core/Grid";
+import Typography from "@material-ui/core/Typography";
+import React, { Component } from "react";
+import ReactPlayer from "react-player";
+import { CSSTransition } from "react-transition-group";
+import { PrimaryButton } from "../../../theme";
+import { TokenBalance } from "../../../utils/denominations";
+import DatStats from "../../content/components/DatStats";
+import ExchangeModal from "../../exchange/components/ExchangeModal";
+import withVideo from "../containers/withVideo";
+import "../styles/teaser-card.css";
+import {
+    ContentPurchaseAction,
+    ContentPurchaseState
+} from "./ContentPurchaseActions";
+import moment from "moment";
+import ClockIcon from "@material-ui/icons/Schedule";
+import PeerIcon from "@material-ui/icons/People";
+import InfoIcon from "@material-ui/icons/InfoOutline";
+import BigNumber from "bignumber.js";
+import AccountRequired from "../../account/components/AccountRequired";
+import Tooltip from "@material-ui/core/Tooltip";
 
 type Props = {
     video: Object,
@@ -25,7 +27,7 @@ type Props = {
     isFullscreen: boolean,
     isTeaserEntered: boolean,
     // redux bound state
-    networkTokenBalance: Object,  // bignumber
+    networkTokenBalance: Object, // bignumber
     ethAddress: string,
     // redux bound methods
     setActiveVideo: Function,
@@ -34,150 +36,231 @@ type Props = {
     videoQuery: {
         video: Object,
         refetch: Function,
-        loading: boolean,
+        loading: boolean
     }
-}
+};
 
 class TeaserCard extends Component<Props> {
     constructor(props) {
-        super(props)
+        super(props);
         this.state = {
             videoSrc: props.video.teaserUrl,
             usingTeaserSrc: true,
             videoSrcReady: false,
             exchangeModalOpen: false,
-            contentPrice: new BigNumber(props.video.contentLicense === 'AO' ? props.video.stake : 0),
-            contentPriceError: undefined,
-        }
+            contentPrice: new BigNumber(
+                props.video.contentLicense === "AO" ? props.video.stake : 0
+            ),
+            contentPriceError: undefined
+        };
     }
     componentDidMount() {
-        if ( this.props.video.lastSeenContentHost ) {
-            this.props.getContentPrice(this.props.video.lastSeenContentHost.contentHostId).then((contentPrice) => {
-                this.setState({contentPrice})
-            }).catch(error => {
-                this.setState({contentPriceError: `Error fetching latest content price: ${error.message}`})
-            })
+        if (this.props.video.lastSeenContentHost) {
+            this.props
+                .getContentPrice(
+                    this.props.video.lastSeenContentHost.contentHostId
+                )
+                .then(contentPrice => {
+                    this.setState({ contentPrice });
+                })
+                .catch(error => {
+                    this.setState({
+                        contentPriceError: `Error fetching latest content price: ${
+                            error.message
+                        }`
+                    });
+                });
         }
     }
     _onExchangeModalClose = () => {
-        this.setState({exchangeModalOpen: false})
-    }
+        this.setState({ exchangeModalOpen: false });
+    };
     _playVideo = () => {
-        const { setActiveVideo, networkTokenBalance, video, videoQuery } = this.props
-        const { contentPrice } = this.state
-        if ( !videoQuery.video )
-            return console.warn('attempted playing video before video state was fetched')        
-        if ( videoQuery.video.state === 'STAKED' || videoQuery.video.state === 'DISCOVERABLE' ) {
+        const {
+            setActiveVideo,
+            networkTokenBalance,
+            video,
+            videoQuery
+        } = this.props;
+        const { contentPrice } = this.state;
+        if (!videoQuery.video)
+            return console.warn(
+                "attempted playing video before video state was fetched"
+            );
+        if (
+            videoQuery.video.state === "STAKED" ||
+            videoQuery.video.state === "DISCOVERABLE"
+        ) {
             // A: Video is in a playable state
-            setActiveVideo(this.props.video)
-        } else if ( videoQuery.video.state === 'DISCOVERED' ) {
+            setActiveVideo(this.props.video);
+        } else if (videoQuery.video.state === "DISCOVERED") {
             // B: Content has not began the purchase process
-            if ( networkTokenBalance.lt(contentPrice) ) {
+            if (networkTokenBalance.lt(contentPrice)) {
                 // B.1: Exchange modal if balance sucks
-                this.setState({exchangeModalOpen: true})
+                this.setState({ exchangeModalOpen: true });
             } else {
                 // B.2: Begin download (sorry the logic here is outdated, we should never hit this see _renderActionState)
-                return null
+                return null;
             }
         } else {
             // C: Content is going through the purchase process
             return null;
         }
-    }
+    };
     _onEnteredFullscreen = () => {
-        const { videoQuery } = this.props
-        if ( videoQuery && videoQuery.video ) {
+        const { videoQuery } = this.props;
+        if (videoQuery && videoQuery.video) {
             this.setState({
                 videoSrc: videoQuery.video.fileUrl,
-                usingTeaserSrc: false,
-            })
+                usingTeaserSrc: false
+            });
         }
-    }
+    };
     _onVideoSrcReady = () => {
         this.setState({
-            videoSrcReady: true,
-        })
-    }
+            videoSrcReady: true
+        });
+    };
     _openExchangeModal = () => {
-        this.setState({exchangeModalOpen: true})
-    }
-    _onExitingFullscreen = () => {}
+        this.setState({ exchangeModalOpen: true });
+    };
+    _onExitingFullscreen = () => {};
     _renderActionState = () => {
-        const { video, videoQuery, networkTokenBalance, ethAddress } = this.props
-        const { contentPrice } = this.state
-        const insufficientBalance = networkTokenBalance.lt(contentPrice) ? networkTokenBalance.minus(contentPrice).multipliedBy(-1).toNumber() : undefined
-        let contentState = 'DISCOVERED'
-        let content = video
-        const videoQueryLoading = videoQuery.loading
-        if ( videoQuery.video ) {
-            contentState = videoQuery.video.state
-            content = videoQuery.video
+        const {
+            video,
+            videoQuery,
+            networkTokenBalance,
+            ethAddress
+        } = this.props;
+        const { contentPrice } = this.state;
+        const insufficientBalance = networkTokenBalance.lt(contentPrice)
+            ? networkTokenBalance
+                  .minus(contentPrice)
+                  .multipliedBy(-1)
+                  .toNumber()
+            : undefined;
+        let contentState = "DISCOVERED";
+        let content = video;
+        const videoQueryLoading = videoQuery.loading;
+        if (videoQuery.video) {
+            contentState = videoQuery.video.state;
+            content = videoQuery.video;
         }
-        if ( insufficientBalance ) {
+        if (insufficientBalance) {
             return (
                 <PrimaryButton onClick={this._openExchangeModal}>
-                    <ContentPurchaseState content={content} currentUserEthAddress={ethAddress} />
+                    <ContentPurchaseState
+                        content={content}
+                        currentUserEthAddress={ethAddress}
+                    />
                 </PrimaryButton>
-            )
-        } else if ( contentState === 'DISCOVERABLE' ) {
+            );
+        } else if (contentState === "DISCOVERABLE") {
             // User has completed the purchase/host/discovery process, they can now play the video
             return (
-                <PrimaryButton onClick={this._playVideo} className="play-button">
-                    <ContentPurchaseState content={content} currentUserEthAddress={ethAddress} />
+                <PrimaryButton
+                    onClick={this._playVideo}
+                    className="play-button"
+                >
+                    <ContentPurchaseState
+                        content={content}
+                        currentUserEthAddress={ethAddress}
+                    />
                 </PrimaryButton>
-            )
+            );
         } else {
             return (
-                <ContentPurchaseAction currentUserEthAddress={ethAddress} contentRef={this.refs.videoContainer} content={content}>{({action, loading, error}) => (
-                    <PrimaryButton disabled={!action || loading || videoQueryLoading} onClick={() => {this._handleActionAndUpdateVideoQuery(action)}}>
-                        <ContentPurchaseState content={content} currentUserEthAddress={ethAddress} />
-                    </PrimaryButton>
-                )}</ContentPurchaseAction>
-            )
+                <ContentPurchaseAction
+                    currentUserEthAddress={ethAddress}
+                    contentRef={this.refs.videoContainer}
+                    content={content}
+                >
+                    {({ action, loading, error }) => (
+                        <PrimaryButton
+                            disabled={!action || loading || videoQueryLoading}
+                            onClick={() => {
+                                this._handleActionAndUpdateVideoQuery(action);
+                            }}
+                        >
+                            <ContentPurchaseState
+                                content={content}
+                                currentUserEthAddress={ethAddress}
+                            />
+                        </PrimaryButton>
+                    )}
+                </ContentPurchaseAction>
+            );
         }
-    }
-    _handleActionAndUpdateVideoQuery = (action) => {
-        action()
-        this.props.videoQuery.refetch().then(data => {
-            console.log(`refetched:`, data)
-        }).catch(error => {
-            console.error(`refetch error:`, error)
-        })
-    }
+    };
+    _handleActionAndUpdateVideoQuery = action => {
+        action();
+        this.props.videoQuery
+            .refetch()
+            .then(data => {
+                console.log(`refetched:`, data);
+            })
+            .catch(error => {
+                console.error(`refetch error:`, error);
+            });
+    };
     _renderLastSeen() {
-        const { video, videoQuery } = this.props        
-        if ( videoQuery.video && videoQuery.video.state === 'DISCOVERABLE' )
-            return null // user already owns this content
-        if ( !video.lastSeenContentHost )
-            return null
-        if ( video.recentlySeenHostsCount > 0 ) {
+        const { video, videoQuery } = this.props;
+        if (videoQuery.video && videoQuery.video.state === "DISCOVERABLE")
+            return null; // user already owns this content
+        if (!video.lastSeenContentHost) return null;
+        if (video.recentlySeenHostsCount > 0) {
             return (
-                <Typography color="primary" variant="body1" style={{display: 'flex', alignItems: 'center'}}>
-                    <PeerIcon style={{marginRight: 4}} /> {`${video.recentlySeenHostsCount} recently seen hosts`}
+                <Typography
+                    color="primary"
+                    variant="body1"
+                    style={{ display: "flex", alignItems: "center" }}
+                >
+                    <PeerIcon style={{ marginRight: 4 }} />{" "}
+                    {`${video.recentlySeenHostsCount} recently seen hosts`}
                 </Typography>
-            )
+            );
         }
-        const lastSeenDate = moment.utc(parseInt(video.lastSeenContentHost.timestamp, 10))
-        const likelyAvailableDate = moment().subtract(10, 'minutes')
-        const potentiallyAvailableDate = moment().subtract(20, 'minutes')
-        let accentColor = 'inherit'
-        if ( lastSeenDate.isAfter( likelyAvailableDate ) ) {
-            accentColor = 'primary'
-        } else if ( lastSeenDate.isAfter( potentiallyAvailableDate ) ) {
-            accentColor = 'secondary'
+        const lastSeenDate = moment.utc(
+            parseInt(video.lastSeenContentHost.timestamp, 10)
+        );
+        const likelyAvailableDate = moment().subtract(10, "minutes");
+        const potentiallyAvailableDate = moment().subtract(20, "minutes");
+        let accentColor = "inherit";
+        if (lastSeenDate.isAfter(likelyAvailableDate)) {
+            accentColor = "primary";
+        } else if (lastSeenDate.isAfter(potentiallyAvailableDate)) {
+            accentColor = "secondary";
         } else {
-            accentColor = 'error'
+            accentColor = "error";
         }
         return (
-            <Typography color={accentColor} variant="body1" style={{display: 'flex', alignItems: 'center'}}>
-                <ClockIcon style={{marginRight: 4}} /> {`last host seen ${lastSeenDate.fromNow()}`}
+            <Typography
+                color={accentColor}
+                variant="body1"
+                style={{ display: "flex", alignItems: "center" }}
+            >
+                <ClockIcon style={{ marginRight: 4 }} />{" "}
+                {`last host seen ${lastSeenDate.fromNow()}`}
             </Typography>
-        )
+        );
     }
     render() {
-        const { video, videoQuery, isActive, isFullscreen, isTeaserEntered, networkTokenBalance, contentMetrics } = this.props
-        const { videoSrc, usingTeaserSrc, contentPrice } = this.state
-        const insufficientBalance = networkTokenBalance.lt(contentPrice) ? networkTokenBalance.minus(contentPrice).multipliedBy(-1).toNumber() : undefined
+        const {
+            video,
+            videoQuery,
+            isActive,
+            isFullscreen,
+            isTeaserEntered,
+            networkTokenBalance,
+            contentMetrics
+        } = this.props;
+        const { videoSrc, usingTeaserSrc, contentPrice } = this.state;
+        const insufficientBalance = networkTokenBalance.lt(contentPrice)
+            ? networkTokenBalance
+                  .minus(contentPrice)
+                  .multipliedBy(-1)
+                  .toNumber()
+            : undefined;
         return (
             <CSSTransition
                 in={isFullscreen}
@@ -187,29 +270,51 @@ class TeaserCard extends Component<Props> {
                 onExiting={this._onExitingFullscreen}
             >
                 <div className="TeaserCard">
-                    <div className="media-container">                    
-                        <div 
-                            ref="videoContainer" 
-                            className="video-container" 
+                    <div className="media-container">
+                        <div
+                            ref="videoContainer"
+                            className="video-container"
                             onClick={isActive ? this._playVideo : undefined}
-                            >
-                            <ReactPlayer 
-                                key={usingTeaserSrc ? 'teaser' : 'video' /* Unmounts on src change. TODO: factor fullscreen video into VideoPlayback component */}
-                                url={`${process.env.REACT_APP_AO_CORE_URL}/${videoSrc}`}
+                        >
+                            <ReactPlayer
+                                key={
+                                    usingTeaserSrc
+                                        ? "teaser"
+                                        : "video" /* Unmounts on src change. TODO: factor fullscreen video into VideoPlayback component */
+                                }
+                                url={`${
+                                    process.env.REACT_APP_AO_CORE_URL
+                                }/${videoSrc}`}
                                 config={{
                                     file: {
                                         attributes: {
-                                            poster: `${process.env.REACT_APP_AO_CORE_URL}/${video.featuredImageUrl}`,
-                                            controlsList: 'nodownload',
+                                            poster: `${
+                                                process.env
+                                                    .REACT_APP_AO_CORE_URL
+                                            }/${video.featuredImageUrl}`,
+                                            controlsList: "nodownload"
                                         }
                                     }
                                 }}
                                 playing={isTeaserEntered && isActive}
                                 width="100%"
                                 height="100%"
-                                style={{position: 'absolute', top: 0, left: 0, zIndex: 1}}
-                                onReady={usingTeaserSrc ? undefined : this._onVideoSrcReady}
-                                onPlay={usingTeaserSrc ? undefined : this._onVideoSrcReady}
+                                style={{
+                                    position: "absolute",
+                                    top: 0,
+                                    left: 0,
+                                    zIndex: 1
+                                }}
+                                onReady={
+                                    usingTeaserSrc
+                                        ? undefined
+                                        : this._onVideoSrcReady
+                                }
+                                onPlay={
+                                    usingTeaserSrc
+                                        ? undefined
+                                        : this._onVideoSrcReady
+                                }
                                 loop={usingTeaserSrc}
                                 controls={!usingTeaserSrc}
                             />
@@ -219,36 +324,71 @@ class TeaserCard extends Component<Props> {
                         </Typography>
                         <div className="action-pane hide-fullscreen">
                             <Typography variant="body1">
-                                {video.contentLicense === 'AO' ? (
+                                {video.contentLicense === "AO" ? (
                                     <React.Fragment>
-                                        <TokenBalance baseAmount={contentPrice} />{' / view '}
-                                    </React.Fragment>                                    
+                                        <TokenBalance
+                                            baseAmount={contentPrice}
+                                        />
+                                    </React.Fragment>
                                 ) : (
-                                    <Tooltip title={`This content is covered under the ${video.contentLicense} license`} placement="left">
-                                        <span style={{pointerEvents: 'all'}}>
-                                            <TokenBalance baseAmount={0} />{' / view '}<InfoIcon style={{marginLeft: 4, fontSize: 16, verticalAlign: 'sub'}} />
+                                    <Tooltip
+                                        title={`This content is covered under the ${
+                                            video.contentLicense
+                                        } license`}
+                                        placement="left"
+                                    >
+                                        <span style={{ pointerEvents: "all" }}>
+                                            <TokenBalance baseAmount={0} />
+                                            <InfoIcon
+                                                style={{
+                                                    marginLeft: 4,
+                                                    fontSize: 16,
+                                                    verticalAlign: "sub"
+                                                }}
+                                            />
                                         </span>
                                     </Tooltip>
                                 )}
                             </Typography>
                             <Typography variant="caption" gutterBottom>
-                                {`your balance: `}<TokenBalance baseAmount={networkTokenBalance} isPrimordial={false} />
+                                {`your balance: `}
+                                <TokenBalance
+                                    baseAmount={networkTokenBalance}
+                                    isPrimordial={false}
+                                />
                             </Typography>
                             {this._renderLastSeen()}
-                            <AccountRequired>{this._renderActionState()}</AccountRequired>
+                            <AccountRequired>
+                                {this._renderActionState()}
+                            </AccountRequired>
                             {videoQuery.video ? (
-                                <div style={{marginTop: 8}}>
-                                    <DatStats stats={[videoQuery.video.metadataDatStats, videoQuery.video.fileDatStats]} />
+                                <div style={{ marginTop: 8 }}>
+                                    <DatStats
+                                        stats={[
+                                            videoQuery.video.metadataDatStats,
+                                            videoQuery.video.fileDatStats
+                                        ]}
+                                    />
                                 </div>
                             ) : null}
                         </div>
                     </div>
                     <div className="content-container hide-fullscreen">
-                        <Grid container spacing={16} alignItems="flex-start" justify="flex-end" style={{height: 800}}>
+                        <Grid
+                            container
+                            spacing={16}
+                            alignItems="flex-start"
+                            justify="flex-end"
+                            style={{ height: 800 }}
+                        >
                             <Grid item xs={6}>
                                 <Typography variant="body1" component="div">
                                     {video.contentAttribution && (
-                                        <div style={{marginBottom: 8}}>{`Attribution: ${video.contentAttribution}`}</div>
+                                        <div
+                                            style={{ marginBottom: 8 }}
+                                        >{`Attribution: ${
+                                            video.contentAttribution
+                                        }`}</div>
                                     )}
                                     {video.description}
                                 </Typography>
@@ -256,22 +396,23 @@ class TeaserCard extends Component<Props> {
                         </Grid>
                     </div>
                     {insufficientBalance ? (
-                        <ExchangeModal 
+                        <ExchangeModal
                             open={this.state.exchangeModalOpen}
                             onClose={this._onExchangeModalClose}
-                            exchangeType="network"                            
+                            exchangeType="network"
                             exchangeProps={{
-                                title: 'You have insufficient funds',
-                                subtitle: 'Purchase more ao to continue streaming.',
+                                title: "You have insufficient funds",
+                                subtitle:
+                                    "Purchase more ao to continue streaming.",
                                 requiredTokenAmount: insufficientBalance,
-                                requiredTokenCopy: 'Video cost:',
+                                requiredTokenCopy: "Video cost:"
                             }}
                         />
                     ) : null}
                 </div>
             </CSSTransition>
-        )
+        );
     }
 }
 
-export default withVideo(TeaserCard)
+export default withVideo(TeaserCard);
