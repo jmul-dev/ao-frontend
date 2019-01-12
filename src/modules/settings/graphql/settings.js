@@ -1,4 +1,4 @@
-import gql from 'graphql-tag';
+import gql from "graphql-tag";
 
 export type SettingsType = {
     maxDiskSpace: number,
@@ -7,8 +7,8 @@ export type SettingsType = {
     maxPeerConnections: number,
     runInBackground: boolean,
     runOnStartup: boolean,
-    checkForUpdates: boolean,
-}
+    checkForUpdates: boolean
+};
 
 export const SettingsFieldsFragment = `
     fragment SettingsFieldsFragment on Settings {
@@ -19,8 +19,9 @@ export const SettingsFieldsFragment = `
         runInBackground,
         runOnStartup,
         checkForUpdates,
+        ethNetworkRpc
     }
-`
+`;
 
 export const settingsQuery = gql(`
     query {
@@ -29,7 +30,7 @@ export const settingsQuery = gql(`
         }
     }
     ${SettingsFieldsFragment}
-`)
+`);
 
 export const updateSettingsMutation = gql(`
     mutation updateSettings($inputs: SettingsInputs) {
@@ -38,4 +39,4 @@ export const updateSettingsMutation = gql(`
         }
     }
     ${SettingsFieldsFragment}
-`)
+`);

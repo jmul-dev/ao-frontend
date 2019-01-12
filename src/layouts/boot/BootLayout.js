@@ -34,7 +34,7 @@ class BootLayout extends Component {
         // NOTE: if this app is running outside of electron the only method of communication
         // with core is through core's http interface. If we do not see that in a timely fashion
         // we warn the user
-        if (!isElectron) {
+        if (!this.props.isElectron) {
             this._connectionTimeout = setTimeout(() => {
                 this._networkErrorNotId = this.props.addNotification({
                     message: `Unable to connect to ao-core, make sure it is running at: ${
