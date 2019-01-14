@@ -6,11 +6,14 @@ import Grid from "@material-ui/core/Grid";
 import "./settings-view.css";
 import Export from "../../modules/account/components/Export";
 import withStatsContainer from "../../modules/stats/containers/withStatsContainer";
+import { getNetworkName } from "../../store/app.reducer";
 
 class SettingsView extends PureComponent {
     render() {
-        const { ethNetworkName, desktopVersion } = this.props;
+        const { ethNetworkName, ethNetworkId, desktopVersion } = this.props;
         const { statistics } = this.props.query;
+        let networkMismatch =
+            statistics && `${statistics.ethNetworkId}` !== `${ethNetworkId}`;
         return (
             <View className={"SettingsView"} padding="full">
                 <header style={{ display: "flex" }}>
@@ -33,9 +36,25 @@ class SettingsView extends PureComponent {
                     <Typography variant="caption" gutterBottom>
                         {`AO Frontend v${process.env.REACT_APP_VERSION}`}
                     </Typography>
-                    <Typography variant="caption" gutterBottom>
-                        {`Ethereum network: ${ethNetworkName}`}
-                    </Typography>
+                    {!networkMismatch ? (
+                        <Typography variant="caption" gutterBottom>
+                            {`Ethereum network: ${ethNetworkName}`}
+                        </Typography>
+                    ) : (
+                        <Typography
+                            color="error"
+                            variant="caption"
+                            gutterBottom
+                        >
+                            {`Network mismatch:`}
+                            <br />
+                            {`ao-frontend running on network: ${ethNetworkName}`}
+                            <br />
+                            {`ao-core running on network: ${getNetworkName(
+                                statistics.ethNetworkId
+                            )}`}
+                        </Typography>
+                    )}
                     <Typography
                         variant="caption"
                         style={{ marginTop: 16, marginBottom: 32 }}
