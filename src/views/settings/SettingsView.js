@@ -54,6 +54,12 @@ class SettingsView extends PureComponent {
                                 {`ao-core running on network: ${getNetworkName(
                                     statistics.ethNetworkId
                                 )}`}
+                                <br />
+                                <span
+                                    style={{
+                                        color: "rgba(255, 255, 255, 0.7)"
+                                    }}
+                                >{`Update the Ethereum RPC below or switch networks in Metamask`}</span>
                             </div>
                         </Typography>
                     )}
