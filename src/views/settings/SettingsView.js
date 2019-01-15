@@ -57,21 +57,19 @@ class SettingsView extends PureComponent {
                             </div>
                         </Typography>
                     )}
-                    <Typography
-                        variant="caption"
-                        style={{ marginTop: 16, marginBottom: 32 }}
-                    >{`NOTE: you may need to restart AO for settings to go into affect`}</Typography>
                 </section>
                 <Grid container spacing={16}>
                     <Grid item xs={12} sm={10} md={6}>
-                        <section>
-                            <Typography variant="subheading" gutterBottom>
-                                {"General"}
-                            </Typography>
+                        <section style={{ marginTop: -8, marginBottom: 32 }}>
                             <SettingsInput
                                 inputName="ethNetworkRpc"
                                 inputLabel="Ethereum RPC"
                             />
+                        </section>
+                        <section style={{ opacity: 0.3 }}>
+                            <Typography variant="subheading" gutterBottom>
+                                {"General"}
+                            </Typography>
                             <SettingsInput
                                 disabled
                                 inputName="runOnStartup"
