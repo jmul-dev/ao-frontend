@@ -1,18 +1,28 @@
-import App from './App'
-import { connect } from 'react-redux'
-import { graphql, compose } from 'react-apollo'
-import gql from "graphql-tag"
-import { connectToWeb3, updateAppState } from './store/app.reducer'
-import { listenOnIpcChannel, checkElectron } from './modules/electron/reducers/electron.reducer'
-import { addNotification, dismissNotification } from './modules/notifications/reducers/notifications.reducer'
+import App from "./App";
+import { connect } from "react-redux";
+import { graphql, compose } from "react-apollo";
+import gql from "graphql-tag";
+import {
+    connectToWeb3,
+    updateAppState,
+    setCoreEthNetworkId
+} from "./store/app.reducer";
+import {
+    listenOnIpcChannel,
+    checkElectron
+} from "./modules/electron/reducers/electron.reducer";
+import {
+    addNotification,
+    dismissNotification
+} from "./modules/notifications/reducers/notifications.reducer";
 
 // Redux
-const mapStateToProps = (store) => {
+const mapStateToProps = store => {
     return {
         app: store.app,
-        isElectron: store.electron.isElectron,
-    }
-}
+        isElectron: store.electron.isElectron
+    };
+};
 const mapDispatchToProps = {
     connectToWeb3,
     updateAppState,
@@ -20,7 +30,8 @@ const mapDispatchToProps = {
     checkElectron,
     addNotification,
     dismissNotification,
-}
+    setCoreEthNetworkId
+};
 
 // Graphql
 export const localNodeQuery = gql(`
@@ -32,17 +43,23 @@ export const localNodeQuery = gql(`
             publicKey,
             publicAddress,
         }
+        statistics {
+            ethNetworkId
+        }
     }
-`)
+`);
 
 export default compose(
     graphql(localNodeQuery, {
-        name: 'query',
+        name: "query",
         options: {
             notifyOnNetworkStatusChange: true,
-            pollInterval: 2500,  // periodically ping for node state change
-            errorPolicy: 'all',
+            pollInterval: 2500, // periodically ping for node state change
+            errorPolicy: "all"
         }
     }),
-    connect(mapStateToProps, mapDispatchToProps),
+    connect(
+        mapStateToProps,
+        mapDispatchToProps
+    )
 )(App);

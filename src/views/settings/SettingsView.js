@@ -48,11 +48,13 @@ class SettingsView extends PureComponent {
                         >
                             {`Network mismatch:`}
                             <br />
-                            {`ao-frontend running on network: ${ethNetworkName}`}
-                            <br />
-                            {`ao-core running on network: ${getNetworkName(
-                                statistics.ethNetworkId
-                            )}`}
+                            <div style={{ marginLeft: 8 }}>
+                                {`ao-frontend running on network: ${ethNetworkName}`}
+                                <br />
+                                {`ao-core running on network: ${getNetworkName(
+                                    statistics.ethNetworkId
+                                )}`}
+                            </div>
                         </Typography>
                     )}
                     <Typography

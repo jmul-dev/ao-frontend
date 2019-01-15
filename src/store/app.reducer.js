@@ -20,11 +20,16 @@ export const APP_STATES = {
     CONTRACTS_INITIALIZED: "CONTRACTS_INITIALIZED",
     APP_READY: "APP_READY"
 };
+export const SET_CORE_ETHEREUM_NETWORK_ID = "SET_CORE_ETHEREUM_NETWORK_ID";
 
 // Actions
 export const updateAppState = (key, value) => ({
     type: UPDATE_APP_STATE,
     payload: { key, value }
+});
+export const setCoreEthNetworkId = coreEthNetworkId => ({
+    type: SET_CORE_ETHEREUM_NETWORK_ID,
+    payload: coreEthNetworkId
 });
 export const connectToWeb3 = networkId => {
     return (dispatch, getState) => {
@@ -110,7 +115,8 @@ export type AppReducerType = {
     },
     ethNetworkId?: string | number,
     ethNetworkLink?: string,
-    ethAddress?: string
+    ethAddress?: string,
+    coreEthNetworkId?: string
 };
 
 // Reducer
@@ -138,6 +144,11 @@ export default function appReducer(state = initialState, action) {
                     ...state.states,
                     [action.payload.key]: action.payload.value
                 }
+            };
+        case SET_CORE_ETHEREUM_NETWORK_ID:
+            return {
+                ...state,
+                coreEthNetworkId: action.payload
             };
         default:
             return state;

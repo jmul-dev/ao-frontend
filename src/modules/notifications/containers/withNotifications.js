@@ -1,13 +1,15 @@
-import { connect } from 'react-redux'
-import { dismissNotification } from '../reducers/notifications.reducer'
-
+import { connect } from "react-redux";
+import { dismissNotification } from "../reducers/notifications.reducer";
 
 const mapDispatchToProps = {
-    dismissNotification,
-}
+    dismissNotification
+};
 
-const mapStateToProps = (state) => ({
-    notifications: state.notifications.notifications,
-})
+const mapStateToProps = state => ({
+    notifications: state.notifications.notifications
+});
 
-export default connect(mapStateToProps, mapDispatchToProps)
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+);
