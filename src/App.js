@@ -129,7 +129,7 @@ export default class App extends Component<Props> {
     }
     componentDidUpdate() {
         const { app, addNotification, dismissNotification } = this.props;
-        if ((app.coreEthNetworkId && app.ethNetworkId) || true) {
+        if (app.coreEthNetworkId && app.ethNetworkId) {
             if (`${app.coreEthNetworkId}` !== `${app.ethNetworkId}`) {
                 const coreEthNetworkName = getNetworkName(app.coreEthNetworkId);
                 this._networkMismatchNotificationId = addNotification({

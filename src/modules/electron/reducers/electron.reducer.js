@@ -28,6 +28,9 @@ export const listenOnIpcChannel = () => {
                     });
                 }
             );
+            window.chrome.ipcRenderer.send(
+                AO_CONSTANTS.IPC.AO_DESKTOP_VERSION_REQUEST
+            );
             window.chrome.ipcRenderer.on(
                 AO_CONSTANTS.IPC.AO_ETH_RPC_PROMPT,
                 function(event, { data }) {
@@ -38,7 +41,10 @@ export const listenOnIpcChannel = () => {
                 }
             );
             window.onerror = function(error, url, line) {
-                window.chrome.ipcRenderer.send("ERRORS_MAINWINDOW", error);
+                window.chrome.ipcRenderer.send(
+                    AO_CONSTANTS.IPC.ERRORS_MAINWINDOW,
+                    error
+                );
             };
             // Listen for external links (have to load via electron)
             document.addEventListener("click", function(event) {
@@ -48,7 +54,7 @@ export const listenOnIpcChannel = () => {
                 ) {
                     event.preventDefault();
                     window.chrome.ipcRenderer.send(
-                        "OPEN_EXTERNAL_LINK",
+                        AO_CONSTANTS.IPC.OPEN_EXTERNAL_LINK,
                         event.target.href
                     );
                 } else if (
@@ -58,7 +64,7 @@ export const listenOnIpcChannel = () => {
                 ) {
                     event.preventDefault();
                     window.chrome.ipcRenderer.send(
-                        "OPEN_EXTERNAL_LINK",
+                        AO_CONSTANTS.IPC.OPEN_EXTERNAL_LINK,
                         event.target.parentElement.href
                     );
                 }
