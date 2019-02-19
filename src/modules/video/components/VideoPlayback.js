@@ -1,55 +1,57 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import '../styles/video-playback.css';
-import withVideoPlayback from '../containers/withVideoPlayback';
-import withVideo from '../containers/withVideo';
-import Modal from '@material-ui/core/Modal';
-import { CSSTransition } from 'react-transition-group';
-import ReactPlayer from 'react-player'
-import { LogoIcon } from '../../../assets/Icons';
-import IconButton from '@material-ui/core/IconButton';
-import CloseIcon from '@material-ui/icons/Close';
-
+import React, { Component } from "react";
+import PropTypes from "prop-types";
+import "../styles/video-playback.css";
+import withVideoPlayback from "../containers/withVideoPlayback";
+import Modal from "@material-ui/core/Modal";
+import { CSSTransition } from "react-transition-group";
+import ReactPlayer from "react-player";
+import { LogoIcon } from "../../../assets/Icons";
+import IconButton from "@material-ui/core/IconButton";
+import CloseIcon from "@material-ui/icons/Close";
+import withUserContent from "../containers/withUserContent";
 
 class VideoPlaybackModal extends Component {
     static propTypes = {
         // redux bound state
         videoPlayback: PropTypes.shape({
             initialPosition: PropTypes.object,
-            contentId: PropTypes.string,
+            contentId: PropTypes.string
         }),
         // redux bound actions
-        setVideoPlayback: PropTypes.func.isRequired,
-    }
+        setVideoPlayback: PropTypes.func.isRequired
+    };
     constructor() {
-        super()
+        super();
         this.state = {
             open: false,
-            videoPlayback: undefined,
-        }
+            videoPlayback: undefined
+        };
     }
     componentWillUnmount() {
-        clearTimeout(this._unsetTimeout)
+        clearTimeout(this._unsetTimeout);
     }
     componentWillReceiveProps(nextProps) {
-        if (this.props.videoPlayback.contentId !== nextProps.videoPlayback.contentId) {
+        if (
+            this.props.videoPlayback.contentId !==
+            nextProps.videoPlayback.contentId
+        ) {
             this.setState({
                 open: !!nextProps.videoPlayback.contentId
-            })
+            });
         }
     }
     _close = () => {
-        this.setState({ open: false })
-    }
+        this.setState({ open: false });
+    };
     _exitPlayback = () => {
-        this.setState({ open: false })
-        this._unsetTimeout = setTimeout(this._unsetVideoPlayback, 250)
-    }
+        this.setState({ open: false });
+        this._unsetTimeout = setTimeout(this._unsetVideoPlayback, 250);
+    };
     _unsetVideoPlayback = () => {
-        this.props.setVideoPlayback({})
-    }
+        this.props.setVideoPlayback({});
+    };
     render() {
-        const { videoPlayback } = this.props
+        const { videoPlayback } = this.props;
         return (
             <Modal
                 open={this.state.open}
@@ -64,25 +66,30 @@ class VideoPlaybackModal extends Component {
                     unmountOnExit
                     exit={false}
                 >
-                    <div className={`VideoPlaybackModal`} style={videoPlayback.initialPosition}>
+                    <div
+                        className={`VideoPlaybackModal`}
+                        style={videoPlayback.initialPosition}
+                    >
                         <IconButton
                             className="playback-close"
                             onClick={this._exitPlayback}
                         >
                             <CloseIcon />
                         </IconButton>
-                        <WrappedVideoPlayback id={videoPlayback.contentId} />
+                        <WrappedVideoPlayback
+                            contentId={videoPlayback.contentId}
+                        />
                     </div>
                 </CSSTransition>
             </Modal>
-        )
+        );
     }
 }
 
 class VideoPlayback extends Component {
     render() {
-        const { videoQuery } = this.props
-        const { video, loading } = videoQuery
+        const { userContentQuery } = this.props;
+        const { userContent, loading } = userContentQuery;
         return (
             <div className="VideoPlayback">
                 {loading ? (
@@ -90,28 +97,32 @@ class VideoPlayback extends Component {
                         <LogoIcon />
                     </div>
                 ) : (
-                        <ReactPlayer
-                            url={`${process.env.REACT_APP_AO_CORE_URL}/${video.fileUrl}`}
-                            config={{
-                                file: {
-                                    attributes: {
-                                        poster: `${process.env.REACT_APP_AO_CORE_URL}/${video.featuredImageUrl}`,
-                                        controlsList: 'nodownload'
-                                    }
+                    <ReactPlayer
+                        url={`${process.env.REACT_APP_AO_CORE_URL}/${
+                            userContent.fileUrl
+                        }`}
+                        config={{
+                            file: {
+                                attributes: {
+                                    poster: `${
+                                        process.env.REACT_APP_AO_CORE_URL
+                                    }/${userContent.featuredImageUrl}`,
+                                    controlsList: "nodownload"
                                 }
-                            }}
-                            controls={true}
-                            playing={true}
-                            width="100%"
-                            height="100%"
-                            style={{ position: 'absolute', top: 0, left: 0 }}
-                        />
-                    )}
+                            }
+                        }}
+                        controls={true}
+                        playing={true}
+                        width="100%"
+                        height="100%"
+                        style={{ position: "absolute", top: 0, left: 0 }}
+                    />
+                )}
             </div>
-        )
+        );
     }
 }
 
-const WrappedVideoPlayback = withVideo(VideoPlayback)
+const WrappedVideoPlayback = withUserContent(VideoPlayback);
 
-export default withVideoPlayback(VideoPlaybackModal)
+export default withVideoPlayback(VideoPlaybackModal);

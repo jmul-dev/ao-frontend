@@ -58,7 +58,7 @@ class VideoListing extends Component<Props> {
     componentWillReceiveProps(nextProps) {
         if (this.props.searchString !== nextProps.searchString) {
             // TODO: may need to move into componentDidUpdate if props have not propogated to container withVideos
-            this.props.videos.refetch();
+            this.props.videosQuery.refetch();
         }
     }
     _exitFullscreenEscKeyListener = event => {
@@ -92,18 +92,21 @@ class VideoListing extends Component<Props> {
     }
     render() {
         const {
-            videos,
+            videosQuery,
             videosLoading,
             teaserListingActive,
             activeVideo,
             setActiveVideo,
             setTeaserListingState
         } = this.props;
-        const rowCount = videos.videos
-            ? Math.ceil(videos.videos.length / 3)
+        const rowCount = videosQuery.networkContent
+            ? Math.ceil(videosQuery.networkContent.length / 3)
             : 0;
-        if (videosLoading && !videos.videos) return null;
-        if (videos.videos && videos.videos.length === 0)
+        if (videosLoading && !videosQuery.networkContent) return null;
+        if (
+            videosQuery.networkContent &&
+            videosQuery.networkContent.length === 0
+        )
             return this._renderPlaceholderView();
         return (
             <div className="VideoListing" style={{ height: "100%" }}>
@@ -151,7 +154,7 @@ class VideoListing extends Component<Props> {
                     <div className="teaser-modal">
                         <div className="teaser-modal-backdrop" />
                         <TeaserListing
-                            videos={videos.videos}
+                            videos={videosQuery.networkContent}
                             activeTeaserVideoIndex={
                                 this.state.activeTeaserVideoIndex
                             }
@@ -201,7 +204,7 @@ class VideoListing extends Component<Props> {
     }
     _renderCell = ({ columnIndex, key, rowIndex, style }) => {
         const videoIndex = rowIndex * 3 + columnIndex;
-        const video = this.props.videos.videos[videoIndex];
+        const video = this.props.videosQuery.networkContent[videoIndex];
         const isActive = this.state.activeTeaserVideoIndex === videoIndex;
         return video ? (
             <div

@@ -141,7 +141,7 @@ export default class App extends Component<Props> {
                     },
                     ActionIcon: SettingsIcon
                 });
-            } else {
+            } else if (this._networkMismatchNotificationId !== null) {
                 dismissNotification(this._networkMismatchNotificationId);
                 this._networkMismatchNotificationId = null;
             }

@@ -7,7 +7,7 @@ import { PrimaryButton } from "../../../theme";
 import { TokenBalance } from "../../../utils/denominations";
 import DatStats from "../../content/components/DatStats";
 import ExchangeModal from "../../exchange/components/ExchangeModal";
-import withVideo from "../containers/withVideo";
+import withUserContent from "../containers/withUserContent";
 import "../styles/teaser-card.css";
 import {
     ContentPurchaseAction,
@@ -22,6 +22,7 @@ import AccountRequired from "../../account/components/AccountRequired";
 import Tooltip from "@material-ui/core/Tooltip";
 
 type Props = {
+    contentId: String,
     video: Object,
     isActive: boolean,
     isFullscreen: boolean,
@@ -33,7 +34,7 @@ type Props = {
     setActiveVideo: Function,
     getContentMetrics: Function,
     // graphql props
-    videoQuery: {
+    userContentQuery: {
         video: Object,
         refetch: Function,
         loading: boolean
@@ -80,20 +81,20 @@ class TeaserCard extends Component<Props> {
             setActiveVideo,
             networkTokenBalance,
             video,
-            videoQuery
+            userContentQuery
         } = this.props;
         const { contentPrice } = this.state;
-        if (!videoQuery.video)
+        if (!userContentQuery.userContent)
             return console.warn(
                 "attempted playing video before video state was fetched"
             );
         if (
-            videoQuery.video.state === "STAKED" ||
-            videoQuery.video.state === "DISCOVERABLE"
+            userContentQuery.userContent.state === "STAKED" ||
+            userContentQuery.userContent.state === "DISCOVERABLE"
         ) {
             // A: Video is in a playable state
             setActiveVideo(this.props.video);
-        } else if (videoQuery.video.state === "DISCOVERED") {
+        } else if (userContentQuery.userContent.state === "DISCOVERED") {
             // B: Content has not began the purchase process
             if (networkTokenBalance.lt(contentPrice)) {
                 // B.1: Exchange modal if balance sucks
@@ -108,10 +109,10 @@ class TeaserCard extends Component<Props> {
         }
     };
     _onEnteredFullscreen = () => {
-        const { videoQuery } = this.props;
-        if (videoQuery && videoQuery.video) {
+        const { userContentQuery } = this.props;
+        if (userContentQuery && userContentQuery.userContent) {
             this.setState({
-                videoSrc: videoQuery.video.fileUrl,
+                videoSrc: userContentQuery.userContent.fileUrl,
                 usingTeaserSrc: false
             });
         }
@@ -128,7 +129,7 @@ class TeaserCard extends Component<Props> {
     _renderActionState = () => {
         const {
             video,
-            videoQuery,
+            userContentQuery,
             networkTokenBalance,
             ethAddress
         } = this.props;
@@ -141,10 +142,10 @@ class TeaserCard extends Component<Props> {
             : undefined;
         let contentState = "DISCOVERED";
         let content = video;
-        const videoQueryLoading = videoQuery.loading;
-        if (videoQuery.video) {
-            contentState = videoQuery.video.state;
-            content = videoQuery.video;
+        const videoQueryLoading = userContentQuery.loading;
+        if (userContentQuery.userContent) {
+            contentState = userContentQuery.userContent.state;
+            content = userContentQuery.userContent;
         }
         if (insufficientBalance) {
             return (
@@ -194,7 +195,7 @@ class TeaserCard extends Component<Props> {
     };
     _handleActionAndUpdateVideoQuery = action => {
         action();
-        this.props.videoQuery
+        this.props.userContentQuery
             .refetch()
             .then(data => {
                 console.log(`refetched:`, data);
@@ -204,8 +205,11 @@ class TeaserCard extends Component<Props> {
             });
     };
     _renderLastSeen() {
-        const { video, videoQuery } = this.props;
-        if (videoQuery.video && videoQuery.video.state === "DISCOVERABLE")
+        const { video, userContentQuery } = this.props;
+        if (
+            userContentQuery.userContent &&
+            userContentQuery.userContent.state === "DISCOVERABLE"
+        )
             return null; // user already owns this content
         if (!video.lastSeenContentHost) return null;
         if (video.recentlySeenHostsCount > 0) {
@@ -247,7 +251,7 @@ class TeaserCard extends Component<Props> {
     render() {
         const {
             video,
-            videoQuery,
+            userContentQuery,
             isActive,
             isFullscreen,
             isTeaserEntered,
@@ -361,12 +365,14 @@ class TeaserCard extends Component<Props> {
                             <AccountRequired>
                                 {this._renderActionState()}
                             </AccountRequired>
-                            {videoQuery.video ? (
+                            {userContentQuery.userContent ? (
                                 <div style={{ marginTop: 8 }}>
                                     <DatStats
                                         stats={[
-                                            videoQuery.video.metadataDatStats,
-                                            videoQuery.video.fileDatStats
+                                            userContentQuery.userContent
+                                                .metadataDatStats,
+                                            userContentQuery.userContent
+                                                .fileDatStats
                                         ]}
                                     />
                                 </div>
@@ -415,4 +421,4 @@ class TeaserCard extends Component<Props> {
     }
 }
 
-export default withVideo(TeaserCard);
+export default withUserContent(TeaserCard);

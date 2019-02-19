@@ -1,64 +1,69 @@
-import { connect } from 'react-redux'
-import { graphql, compose } from 'react-apollo'
-import gql from "graphql-tag"
-import { setTeaserListingState, setActiveVideo } from '../reducers/video.reducer'
-
+import { connect } from "react-redux";
+import { graphql, compose } from "react-apollo";
+import gql from "graphql-tag";
+import {
+    setTeaserListingState,
+    setActiveVideo
+} from "../reducers/video.reducer";
 
 // Redux
 const mapDispatchToProps = {
     setTeaserListingState,
-    setActiveVideo,
-}
+    setActiveVideo
+};
 
-const mapStateToProps = (store) => {
+const mapStateToProps = store => {
     return {
         teaserListingActive: store.video.teaserListingActive,
         activeVideo: store.video.activeVideo,
-        searchString: store.video.searchString,
-    }
-}
+        searchString: store.video.searchString
+    };
+};
 
 // GraphQL
 const videosQuery = gql(`
-    query videos($query: String) {
-        videos(query: $query) {
-            id, 
-            state,
-            title, 
-            description, 
-            fileName, 
-            contentType, 
-            contentLicense,
-            contentAttribution,
-            fileUrl, 
-            featuredImageUrl, 
-            teaserUrl, 
-            stake,
-            isNetworkContent,
-            totalHosts,
-            recentlySeenHostsCount,
-            lastSeenContentHost {
-                contentHostId,
-                contentDatKey,
-                timestamp
+    query videos($query: String, $contentType: ContentType!) {
+        networkContent(query: $query, contentType: $contentType) {
+            ... on VideoContent {
+                id, 
+                state,
+                title, 
+                description, 
+                fileName, 
+                contentType, 
+                contentLicense,
+                contentAttribution,
+                fileUrl, 
+                featuredImageUrl, 
+                teaserUrl, 
+                stake,
+                isNetworkContent,
+                totalHosts,
+                recentlySeenHostsCount,
+                lastSeenContentHost {
+                    contentHostId,
+                    contentDatKey,
+                    timestamp
+                }
             }
         }
     }
-`)
+`);
 
-export default compose(    
-    connect(mapStateToProps, mapDispatchToProps),
+export default compose(
+    connect(
+        mapStateToProps,
+        mapDispatchToProps
+    ),
     graphql(videosQuery, {
-        name: 'videos',
+        name: "videosQuery",
         // Pull ethAddress input from redux props
-        options: (props) => ({
+        options: props => ({
             variables: {
-                // offset
-                // limit
-                // search
-                query: props.searchString
+                query: props.searchString,
+                contentType: "VOD"
             },
-            pollInterval: 3000,
+            pollInterval: 3000
         })
-    }),
+    })
 );
