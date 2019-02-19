@@ -11,7 +11,8 @@ type Props = {
     disabled?: boolean,
     accept?: string,
     updateUploadFormField: (string, any) => void,
-    onInputChange: any => void
+    onInputChange: any => void,
+    inputProps?: any
 };
 
 const styles = {
@@ -60,7 +61,14 @@ class FileUpload extends Component<Props> {
         }
     };
     render() {
-        const { inputValue, disabled, accept, style, classes } = this.props;
+        const {
+            inputValue,
+            disabled,
+            accept,
+            style,
+            classes,
+            inputProps
+        } = this.props;
         let innerStyles = {};
         let videoPreview = null;
         if (inputValue) {
@@ -86,6 +94,7 @@ class FileUpload extends Component<Props> {
                 onDrop={this._onDrop}
                 style={style}
                 accept={accept}
+                inputProps={inputProps}
             >
                 {videoPreview}
                 <div className={classes.inner} style={innerStyles}>

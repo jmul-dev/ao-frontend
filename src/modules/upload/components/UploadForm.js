@@ -47,7 +47,7 @@ class UploadForm extends Component<Props> {
             this.props.updateLastReachedStep("license");
         }
     };
-    _renderUploadPane = fileTypesMessage => (
+    _renderUploadPane = (fileTypesMessage, inputProps = {}) => (
         <li
             className={`${this.props.classes.li} ${
                 this.props.classes.liActive
@@ -58,6 +58,7 @@ class UploadForm extends Component<Props> {
                 inputName="video"
                 onInputChange={this._onFileInputChange}
                 style={{ paddingBottom: "50%" }}
+                inputProps={inputProps}
             >
                 <div className="video-input">
                     <Typography variant="display2" gutterBottom align="center">
@@ -88,7 +89,8 @@ class UploadForm extends Component<Props> {
         icon,
         active,
         disabled,
-        fileTypesMessage
+        fileTypesMessage,
+        fileInputProps
     }) => {
         const { classes } = this.props;
         return (
@@ -137,7 +139,8 @@ class UploadForm extends Component<Props> {
                         </ListItemIcon>
                     )}
                 </ListItem>
-                {active && this._renderUploadPane(fileTypesMessage)}
+                {active &&
+                    this._renderUploadPane(fileTypesMessage, fileInputProps)}
             </React.Fragment>
         );
     };
@@ -171,7 +174,12 @@ class UploadForm extends Component<Props> {
                         active: contentType === "DAPP",
                         disabled: false,
                         fileTypesMessage:
-                            "directory containing index.html or standalone html file"
+                            "directory containing index.html file",
+                        fileInputProps: {
+                            webkitdirectory: "",
+                            directory: "",
+                            multiple: true
+                        }
                     })}
                     {this._renderContentListItem({
                         contentType: "AUDIO",
