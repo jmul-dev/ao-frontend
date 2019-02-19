@@ -20,7 +20,7 @@ const mapStateToProps = (store, props) => {
 
 // GraphQL
 export const userContentQuery = gql(`
-    query content($id: ID!) {
+    query userContent($id: ID!) {
         userContent(id: $id) {
             ...VideoContentFragment,
             metadataDatStats {
@@ -42,8 +42,8 @@ export default compose(
     ),
     graphql(userContentQuery, {
         name: "userContentQuery",
-        options: ({ id }) => ({
-            variables: { id },
+        options: ({ contentId }) => ({
+            variables: { id: contentId },
             fetchPolicy: "cache-and-network"
         })
     })
