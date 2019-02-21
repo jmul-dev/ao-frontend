@@ -38,6 +38,30 @@ export const PRICING_DEFAULTS = [
     }
 ];
 
+/**
+ * Method that returns an error if the form is invalid.
+ *
+ * @param {object} form
+ * @returns {boolean} false if form is invalid
+ */
+export const isFormValid = form => {
+    let requiredFields = ["file", "featuredImage", "title", "description"];
+    switch (form.contentType) {
+        case "VOD":
+            requiredFields.push("videoTeaser");
+            break;
+        default:
+            break;
+    }
+    for (let i = 0; i < requiredFields.length; i++) {
+        const field = requiredFields[i];
+        if (!field) {
+            return false;
+        }
+    }
+    return true;
+};
+
 // Actions
 export const updateLastReachedStep = step => ({
     type: UPDATE_CURRENT_UPLOAD_STEP,

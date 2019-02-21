@@ -54,10 +54,13 @@ class FileUpload extends Component<Props> {
     props: Props;
     _onDrop = (acceptedFiles, rejectedFiles) => {
         const { updateUploadFormField, inputName, onInputChange } = this.props;
-        updateUploadFormField(inputName, acceptedFiles[0]);
-        if (onInputChange) onInputChange(acceptedFiles[0]);
+        let files =
+            acceptedFiles.length === 1 ? acceptedFiles[0] : acceptedFiles;
+        updateUploadFormField(inputName, files);
+        if (onInputChange) onInputChange(files);
         if (rejectedFiles.length > 0) {
             // TODO: dispatch notification?
+            console.warn(`rejected files:`, rejectedFiles);
         }
     };
     render() {
