@@ -17,6 +17,7 @@ import Radio from "@material-ui/core/Radio";
 import RadioGroup from "@material-ui/core/RadioGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import { compose } from "react-apollo";
+import { contentSize } from "../reducers/upload.reducer";
 
 class UploadFormLicenseView extends Component {
     static contextTypes = {
@@ -36,6 +37,7 @@ class UploadFormLicenseView extends Component {
         } else {
             // NOTE: we are automatically setting the stake amount in network OR primordial depending on user balance (network prefered).
             // This is because we skip the stake input stage, since stake amount is already fixed to file size.
+            const contentSizeInBytes = contentSize(form.content);
             const {
                 networkAmount,
                 primordialAmount,
@@ -45,7 +47,7 @@ class UploadFormLicenseView extends Component {
                 tokenType
             } = getPreferredTokenSplit({
                 preferredTokenType: "network",
-                targetAmount: new BigNumber(form.video.size),
+                targetAmount: new BigNumber(contentSizeInBytes),
                 networkBalance: wallet.networkTokenBalance,
                 primordialBalance: wallet.primordialTokenBalance
             });
@@ -54,7 +56,7 @@ class UploadFormLicenseView extends Component {
             } else {
                 this.props.updatePricingOption(
                     0,
-                    form.video.size,
+                    contentSizeInBytes,
                     form.profitSplitPercentage,
                     tokenType,
                     splitPercentage
@@ -69,7 +71,7 @@ class UploadFormLicenseView extends Component {
     };
     render() {
         const { form } = this.props;
-        if (!form.video) {
+        if (!form.content) {
             return <Redirect to={"/app/view/upload/start"} />;
         }
         return (

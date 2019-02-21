@@ -12,7 +12,7 @@ type Props = {
     accept?: string,
     updateUploadFormField: (string, any) => void,
     onInputChange: any => void,
-    inputProps?: any
+    inputProps: object
 };
 
 const styles = {
@@ -53,11 +53,18 @@ const styles = {
 class FileUpload extends Component<Props> {
     props: Props;
     _onDrop = (acceptedFiles, rejectedFiles) => {
-        const { updateUploadFormField, inputName, onInputChange } = this.props;
-        let files =
-            acceptedFiles.length === 1 ? acceptedFiles[0] : acceptedFiles;
-        updateUploadFormField(inputName, files);
-        if (onInputChange) onInputChange(files);
+        const {
+            updateUploadFormField,
+            inputName,
+            onInputChange,
+            inputProps
+        } = this.props;
+        let accepted = acceptedFiles[0];
+        if (inputProps && inputProps.multiple) {
+            accepted = acceptedFiles;
+        }
+        updateUploadFormField(inputName, accepted);
+        if (onInputChange) onInputChange(accepted);
         if (rejectedFiles.length > 0) {
             // TODO: dispatch notification?
             console.warn(`rejected files:`, rejectedFiles);
@@ -68,6 +75,7 @@ class FileUpload extends Component<Props> {
             inputValue,
             disabled,
             accept,
+            multiple,
             style,
             classes,
             inputProps
@@ -96,7 +104,8 @@ class FileUpload extends Component<Props> {
                 disabled={disabled}
                 onDrop={this._onDrop}
                 style={style}
-                accept={accept}
+                accept={inputProps.accept || accept}
+                multiple={inputProps.multiple || multiple}
                 inputProps={inputProps}
             >
                 {videoPreview}
@@ -107,6 +116,12 @@ class FileUpload extends Component<Props> {
         );
     }
 }
+FileUpload.defaultProps = {
+    disabled: false,
+    multiple: false,
+    accept: "*",
+    inputProps: {}
+};
 export default compose(
     withUploadFormValue,
     withStyles(styles)

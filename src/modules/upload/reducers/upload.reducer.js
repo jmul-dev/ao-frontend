@@ -45,7 +45,7 @@ export const PRICING_DEFAULTS = [
  * @returns {boolean} false if form is invalid
  */
 export const isFormValid = form => {
-    let requiredFields = ["video", "featuredImage", "title", "description"];
+    let requiredFields = ["content", "featuredImage", "title", "description"];
     switch (form.contentType) {
         case "VOD":
             requiredFields.push("videoTeaser");
@@ -68,6 +68,37 @@ export const isFormValid = form => {
     return true;
 };
 
+/**
+ * Get the total content size
+ *
+ * @param {Array<File> || File} files
+ * @returns {number} Size in bytes
+ */
+export const contentSize = files => {
+    return Array.isArray(files)
+        ? files.reduce((acc, file) => {
+              return acc + file.size;
+          }, 0)
+        : files.size;
+};
+
+/**
+ * If there are multiple files, this method will return
+ * the folder name found in the first file, otherwise
+ * returns the file name.
+ *
+ * @param {Array<File>} files
+ * @returns {string}
+ */
+export const contentNameFromFileInputs = files => {
+    if (files.length === 1) {
+        return files[0].name;
+    } else {
+        let filePath = files[0].webkitRelativePath;
+        return filePath.substring(0, filePath.indexOf("/") + 1);
+    }
+};
+
 // Actions
 export const updateLastReachedStep = step => ({
     type: UPDATE_CURRENT_UPLOAD_STEP,
@@ -83,10 +114,10 @@ export const updateUploadFormField = (inputName, inputValue) => ({
 export const resetUploadForm = () => {
     return (dispatch, getState) => {
         const state = getState();
-        const { video, videoTeaser, featuredImage } = state.upload.form;
+        const { content, videoTeaser, featuredImage } = state.upload.form;
         // Cleanup file resources
-        if (video) {
-            window.URL.revokeObjectURL(video.preview);
+        if (content && content.length === 1) {
+            window.URL.revokeObjectURL(content[0].preview);
         }
         if (videoTeaser) {
             window.URL.revokeObjectURL(videoTeaser.preview);
@@ -114,8 +145,8 @@ export const updatePricingOption = (
 ) => {
     return (dispatch, getState) => {
         const state = getState();
-        const file = state.upload.form.video;
-        const fileSize = file.size;
+        const content = state.upload.form.content;
+        const fileSize = contentSize(content);
         let payload = null;
         if (pricingOption > 0) {
             let pricingConstraints = PRICING_DEFAULTS[pricingOption - 1];
@@ -426,7 +457,7 @@ const initialState = {
     lastReachedUploadStep: "start",
     form: {
         contentType: "VOD",
-        video: undefined,
+        content: undefined, // May be single or multiple files!
         videoTeaser: undefined,
         featuredImage: undefined,
         title: "",

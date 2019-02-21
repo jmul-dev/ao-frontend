@@ -1,9 +1,10 @@
-import { graphql, compose } from 'react-apollo'
-import { connect } from 'react-redux'
-import gql from "graphql-tag"
-import VideoContentFragment from '../../../graphql/fragments/VideoContentFragment'
-import DatStatsFragment from '../../../graphql/fragments/DatStatsFragment'
-import { getContentMetrics } from '../reducers/account.reducer'
+import { graphql, compose } from "react-apollo";
+import { connect } from "react-redux";
+import gql from "graphql-tag";
+import VideoContentFragment from "../../../graphql/fragments/VideoContentFragment";
+import DatStatsFragment from "../../../graphql/fragments/DatStatsFragment";
+import { getContentMetrics } from "../reducers/account.reducer";
+import ContentFields from "../../../graphql/fragments/ContentFields";
 
 // GraphQL
 const accountVideos = gql(`
@@ -11,6 +12,7 @@ const accountVideos = gql(`
         node {
             id,
             stakedContent {
+                ${ContentFields}
                 ...VideoContentFragment,
                 metadataDatStats {
                     ...DatStatsFragment
@@ -20,6 +22,7 @@ const accountVideos = gql(`
                 }
             },
             hostedContent {
+                ${ContentFields}
                 ...VideoContentFragment,
                 metadataDatStats {
                     ...DatStatsFragment
@@ -32,28 +35,31 @@ const accountVideos = gql(`
     }
     ${VideoContentFragment}
     ${DatStatsFragment}
-`)
+`);
 
 const mapDispatchToProps = {
-    getContentMetrics,
-}
+    getContentMetrics
+};
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
     filter: state.account.videoListingFilter,
     ordering: state.account.videoListingOrdering,
-    contentMetrics: state.account.contentMetrics,
-})
+    contentMetrics: state.account.contentMetrics
+});
 
 export default compose(
     graphql(accountVideos, {
-        name: 'query',
-        options: (props) => ({
+        name: "query",
+        options: props => ({
             pollInterval: 1500,
             variables: {
                 // offset
                 // limit
-            },            
+            }
         })
     }),
-    connect(mapStateToProps, mapDispatchToProps)
+    connect(
+        mapStateToProps,
+        mapDispatchToProps
+    )
 );

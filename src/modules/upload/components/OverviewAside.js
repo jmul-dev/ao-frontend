@@ -7,10 +7,14 @@ import {
     fromBaseToHighestDenomination
 } from "../../../utils/denominations";
 import FolderIcon from "@material-ui/icons/Folder";
+import {
+    contentNameFromFileInputs,
+    contentSize
+} from "../reducers/upload.reducer";
 
 const OverviewAside = ({ form, includePricing = false }) => {
     const { amount, denomination } = fromBaseToHighestDenomination(
-        form.video.size
+        contentSize(form.content)
     );
     return (
         <aside className="OverviewAside">
@@ -75,23 +79,15 @@ const OverviewAside = ({ form, includePricing = false }) => {
 };
 export default OverviewAside;
 
-function fileOrFolderName(file) {
-    if (!Array.isArray(file)) {
-        return file.name;
-    } else {
-        let filePath = file.webkitRelativePath;
-        return filePath.substring(0, filePath.indexOf("/") + 1);
-    }
-}
-const ContentPreview = ({ contentType, video }) => {
+const ContentPreview = ({ contentType, content }) => {
     switch (contentType) {
         case "VOD":
             return (
                 <div
                     className="content-preview"
-                    style={{ backgroundImage: `url(${video.preview})` }}
+                    style={{ backgroundImage: `url(${content.preview})` }}
                 >
-                    <video src={video.preview} />
+                    <video src={content.preview} />
                 </div>
             );
         case "DAPP":
@@ -104,8 +100,8 @@ const ContentPreview = ({ contentType, video }) => {
                         style={{ color: "white" }}
                     >
                         <FolderIcon style={{ marginBottom: 6, fontSize: 32 }} />
-                        <Typography variant="caption">{`${fileOrFolderName(
-                            video
+                        <Typography variant="caption">{`${contentNameFromFileInputs(
+                            content
                         )}`}</Typography>
                     </div>
                 </div>

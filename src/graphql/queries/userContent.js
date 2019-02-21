@@ -3,8 +3,8 @@ import VideoContentFragment from "../fragments/VideoContentFragment";
 import ContentFields from "../fragments/ContentFields";
 
 export default gql(`
-    mutation ContentRequest($metadataDatKey: ID!) {
-        contentRequest(metadataDatKey: $metadataDatKey) {
+    query userContent($id: ID!) {
+        userContent(id: $id) {
             ${ContentFields}
             ...VideoContentFragment
         }

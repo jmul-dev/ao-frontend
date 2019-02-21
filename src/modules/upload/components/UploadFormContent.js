@@ -13,7 +13,7 @@ import { FileSize } from "../../../utils/denominations";
 import { PrimaryButton } from "../../../theme";
 import { isFormValid } from "../reducers/upload.reducer";
 
-const MAX_TEASER_FILE_SIZE_PERCENTAGE = 0.15;
+const MAX_TEASER_FILE_SIZE = 5.0 * Math.pow(10, 6); // 5MB
 
 class UploadFormContent extends Component {
     static contextTypes = {
@@ -34,14 +34,11 @@ class UploadFormContent extends Component {
     _submit = () => {
         this.context.router.history.push("/app/view/upload/submit");
     };
-    _onTeaserInputChange = inputFile => {
-        const maxTeaserFileSize =
-            this.props.form.video.size * MAX_TEASER_FILE_SIZE_PERCENTAGE;
-        if (inputFile.size > maxTeaserFileSize) {
+    _onTeaserInputChange = file => {
+        if (file.size > MAX_TEASER_FILE_SIZE) {
             this.props.updateUploadFormField("videoTeaser", undefined);
             this.props.addNotification({
-                message: `Your teaser video is too large. Currently, the network limits teaser video file sizes to <= ${MAX_TEASER_FILE_SIZE_PERCENTAGE *
-                    100}% of the original content upload.`,
+                message: `Your teaser video is too large. Currently, the network limits teaser video file sizes to <= ${MAX_TEASER_FILE_SIZE}MB.`,
                 variant: "warning"
             });
         }
@@ -51,7 +48,7 @@ class UploadFormContent extends Component {
     };
     render() {
         const { form } = this.props;
-        if (!form.video) {
+        if (!form.content) {
             return <Redirect to={"/app/view/upload/start"} />;
         }
         const formIsSubmittable = isFormValid(form);
@@ -81,10 +78,7 @@ class UploadFormContent extends Component {
                                 <Typography variant="body1" gutterBottom>
                                     {`teaser (mp4, mov) max size = `}
                                     <FileSize
-                                        sizeInBytes={
-                                            form.video.size *
-                                            MAX_TEASER_FILE_SIZE_PERCENTAGE
-                                        }
+                                        sizeInBytes={MAX_TEASER_FILE_SIZE}
                                     />
                                 </Typography>
                                 <FileUpload

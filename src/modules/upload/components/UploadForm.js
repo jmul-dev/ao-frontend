@@ -55,7 +55,7 @@ class UploadForm extends Component<Props> {
         >
             <FileUpload
                 disabled={this.props.asPlaceholder}
-                inputName="video"
+                inputName="content"
                 onInputChange={this._onFileInputChange}
                 style={{ paddingBottom: "50%" }}
                 inputProps={inputProps}
@@ -147,7 +147,7 @@ class UploadForm extends Component<Props> {
     render() {
         const { asPlaceholder, form, classes } = this.props;
         const contentType = form.contentType;
-        return form.video ? (
+        return form.content ? (
             <Redirect to="/app/view/upload/license" />
         ) : (
             <div className={`UploadForm ${asPlaceholder ? "placeholder" : ""}`}>
@@ -165,7 +165,10 @@ class UploadForm extends Component<Props> {
                         icon: videoIconSrc,
                         active: contentType === "VOD",
                         disabled: false,
-                        fileTypesMessage: "mp4 or mov files"
+                        fileTypesMessage: "mp4 or mov files",
+                        fileInputProps: {
+                            accept: "video/mp4,video/mov"
+                        }
                     })}
                     {this._renderContentListItem({
                         contentType: "DAPP",
