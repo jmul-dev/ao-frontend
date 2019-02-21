@@ -45,7 +45,7 @@ export const PRICING_DEFAULTS = [
  * @returns {boolean} false if form is invalid
  */
 export const isFormValid = form => {
-    let requiredFields = ["file", "featuredImage", "title", "description"];
+    let requiredFields = ["video", "featuredImage", "title", "description"];
     switch (form.contentType) {
         case "VOD":
             requiredFields.push("videoTeaser");
@@ -53,9 +53,15 @@ export const isFormValid = form => {
         default:
             break;
     }
+    if (form.contentLicense === "TAO") {
+        requiredFields.push("taoId");
+    }
     for (let i = 0; i < requiredFields.length; i++) {
-        const field = requiredFields[i];
-        if (!field) {
+        const fieldName = requiredFields[i];
+        const field = form[fieldName];
+        if (typeof field === "string" && field === "") {
+            return false;
+        } else if (field === null || field === undefined) {
             return false;
         }
     }
