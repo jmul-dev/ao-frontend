@@ -87,11 +87,13 @@ export const contentSize = files => {
  * the folder name found in the first file, otherwise
  * returns the file name.
  *
- * @param {Array<File>} files
+ * @param {Array<File> || File} files
  * @returns {string}
  */
 export const contentNameFromFileInputs = files => {
-    if (files.length === 1) {
+    if (files.name) {
+        return files.name;
+    } else if (files.length === 1) {
         return files[0].name;
     } else {
         let filePath = files[0].webkitRelativePath;

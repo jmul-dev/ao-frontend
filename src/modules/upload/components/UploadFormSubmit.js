@@ -56,7 +56,7 @@ class UploadFormSubmit extends Component<Props> {
         submitContent()
             .then(() => {
                 const contentSubmission = this.props.submitContentResult.data
-                    .submitVideoContent;
+                    .submitContent;
                 setContentSubmittionResult(contentSubmission);
                 this._stakeContent();
             })

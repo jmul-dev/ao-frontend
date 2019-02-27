@@ -47,6 +47,76 @@ class UploadForm extends Component<Props> {
             this.props.updateLastReachedStep("license");
         }
     };
+    render() {
+        const { asPlaceholder, form, classes } = this.props;
+        const contentType = form.contentType;
+        return form.content ? (
+            <Redirect to="/app/view/upload/license" />
+        ) : (
+            <div className={`UploadForm ${asPlaceholder ? "placeholder" : ""}`}>
+                <Typography
+                    className="title"
+                    variant="subheading"
+                    style={{ display: "flex", alignItems: "flex-end" }}
+                >
+                    {`Upload Content`}
+                </Typography>
+                <List>
+                    {this._renderContentListItem({
+                        contentType: "VOD",
+                        label: "Video",
+                        icon: videoIconSrc,
+                        active: contentType === "VOD",
+                        disabled: false,
+                        fileTypesMessage: "mp4 or mov files",
+                        fileInputProps: {
+                            accept: "video/mp4,video/mov"
+                        }
+                    })}
+                    {this._renderContentListItem({
+                        contentType: "DAPP",
+                        label: "Application",
+                        icon: applicationIconSrc,
+                        active: contentType === "DAPP",
+                        disabled: false,
+                        fileTypesMessage:
+                            "an individual html file or a zip folder of the dapp (with an index.html)",
+                        fileInputProps: {
+                            accept: "application/zip,text/html"
+                        }
+                    })}
+                    {this._renderContentListItem({
+                        contentType: "AUDIO",
+                        label: "Music",
+                        icon: musicIconSrc,
+                        active: contentType === "AUDIO",
+                        disabled: true
+                    })}
+                    {this._renderContentListItem({
+                        contentType: "PHOTO",
+                        label: "Image",
+                        icon: imageIconSrc,
+                        active: contentType === "PHOTO",
+                        disabled: true
+                    })}
+                    {this._renderContentListItem({
+                        contentType: "DOC",
+                        label: "Document",
+                        icon: documentIconSrc,
+                        active: contentType === "DOC",
+                        disabled: true
+                    })}
+                    {this._renderContentListItem({
+                        contentType: "ASSET",
+                        label: "Digital Asset",
+                        icon: assetIconSrc,
+                        active: contentType === "ASSET",
+                        disabled: true
+                    })}
+                </List>
+            </div>
+        );
+    }
     _renderUploadPane = (fileTypesMessage, inputProps = {}) => (
         <li
             className={`${this.props.classes.li} ${
@@ -58,7 +128,7 @@ class UploadForm extends Component<Props> {
                 inputName="content"
                 onInputChange={this._onFileInputChange}
                 style={{ paddingBottom: "50%" }}
-                inputProps={inputProps}
+                {...inputProps}
             >
                 <div className="video-input">
                     <Typography variant="display2" gutterBottom align="center">
@@ -144,78 +214,6 @@ class UploadForm extends Component<Props> {
             </React.Fragment>
         );
     };
-    render() {
-        const { asPlaceholder, form, classes } = this.props;
-        const contentType = form.contentType;
-        return form.content ? (
-            <Redirect to="/app/view/upload/license" />
-        ) : (
-            <div className={`UploadForm ${asPlaceholder ? "placeholder" : ""}`}>
-                <Typography
-                    className="title"
-                    variant="subheading"
-                    style={{ display: "flex", alignItems: "flex-end" }}
-                >
-                    {`Upload Content`}
-                </Typography>
-                <List>
-                    {this._renderContentListItem({
-                        contentType: "VOD",
-                        label: "Video",
-                        icon: videoIconSrc,
-                        active: contentType === "VOD",
-                        disabled: false,
-                        fileTypesMessage: "mp4 or mov files",
-                        fileInputProps: {
-                            accept: "video/mp4,video/mov"
-                        }
-                    })}
-                    {this._renderContentListItem({
-                        contentType: "DAPP",
-                        label: "Application",
-                        icon: applicationIconSrc,
-                        active: contentType === "DAPP",
-                        disabled: false,
-                        fileTypesMessage:
-                            "directory containing index.html file",
-                        fileInputProps: {
-                            webkitdirectory: "",
-                            directory: "",
-                            multiple: true
-                        }
-                    })}
-                    {this._renderContentListItem({
-                        contentType: "AUDIO",
-                        label: "Music",
-                        icon: musicIconSrc,
-                        active: contentType === "AUDIO",
-                        disabled: true
-                    })}
-                    {this._renderContentListItem({
-                        contentType: "PHOTO",
-                        label: "Image",
-                        icon: imageIconSrc,
-                        active: contentType === "PHOTO",
-                        disabled: true
-                    })}
-                    {this._renderContentListItem({
-                        contentType: "DOC",
-                        label: "Document",
-                        icon: documentIconSrc,
-                        active: contentType === "DOC",
-                        disabled: true
-                    })}
-                    {this._renderContentListItem({
-                        contentType: "ASSET",
-                        label: "Digital Asset",
-                        icon: assetIconSrc,
-                        active: contentType === "ASSET",
-                        disabled: true
-                    })}
-                </List>
-            </div>
-        );
-    }
 }
 
 const styles = ({ palette, spacing }) => ({
