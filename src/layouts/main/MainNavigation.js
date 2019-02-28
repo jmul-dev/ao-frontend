@@ -145,7 +145,7 @@ const MainNavigation = ({
                 <li className={classes.navListItem}>
                     <NavLink
                         className={classes.navListItemLink}
-                        to="/app/view/videos"
+                        to="/app/view/account"
                         replace={overlayViewsActive}
                     >
                         <img

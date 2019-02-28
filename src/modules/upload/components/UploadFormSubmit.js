@@ -139,9 +139,11 @@ class UploadFormSubmit extends Component<Props> {
         // TODO: these routes change based on content type
         if (submittedContentQuery.content)
             this.props.history.push(
-                `/app/view/videos/${submittedContentQuery.content.id}`
+                `/app/view/account/${submittedContentQuery.content.contentType.toLowerCase()}/${
+                    submittedContentQuery.content.id
+                }`
             );
-        else this.props.history.push(`/app/view/videos`);
+        else this.props.history.push(`/app/view/account`);
         this.props.resetUploadForm();
     };
     render() {

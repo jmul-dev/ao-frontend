@@ -16,9 +16,9 @@ import {
 } from "../../video/components/ContentPurchaseActions";
 import withContentMetrics from "../containers/withContentMetrics";
 import AccountVideoStats from "./AccountVideoStats";
-import withEthAddress from "../containers/withEthAddress";
+import withEthAddress from "../../account/containers/withEthAddress";
 
-class AccountVideoListItem extends Component {
+class ContentListItem extends Component {
     static propTypes = {
         currentUserEthAddress: PropTypes.string.isRequired,
         video: PropTypes.object.isRequired,
@@ -310,10 +310,10 @@ export default compose(
     withContentMetrics,
     withStyles(styles),
     withEthAddress
-)(AccountVideoListItem);
+)(ContentListItem);
 
-export const AccountVideoListItemPlaceholder = () => (
-    <div className="AccountVideoListItem placeholder">
+export const ContentListItemPlaceholder = () => (
+    <div className="ContentListItem placeholder">
         <Grid container spacing={16}>
             <Grid item sm={4}>
                 <div className="featured-image placeholder-bg" />

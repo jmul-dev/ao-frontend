@@ -49,8 +49,9 @@ export default compose(
         options: props => ({
             pollInterval: 1500,
             variables: {
-                // offset
-                // limit
+                inputs: {
+                    contentType: props.match.params.contentType
+                }
             }
         })
     }),
