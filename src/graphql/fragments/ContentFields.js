@@ -1,3 +1,6 @@
+import VideoContentFragment from "./VideoContentFragment";
+import DappContentFragment from "./DappContentFragment";
+
 const ContentFields = `
     __typename,
     id,
@@ -46,4 +49,11 @@ const ContentFields = `
         timestamp
     }
 `;
+
+export const ContentFieldsWithFragments = `
+    ${ContentFields}
+    ${VideoContentFragment}
+    ${DappContentFragment}
+`;
+
 export default ContentFields;

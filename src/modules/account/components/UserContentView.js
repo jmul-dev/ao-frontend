@@ -11,7 +11,7 @@ import {
     ContentPurchaseState
 } from "../../video/components/ContentPurchaseActions";
 import { PrimaryButton } from "../../../theme";
-import AccountVideoStats from "./AccountVideoStats";
+import UserContentStats from "./UserContentStats";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import Divider from "@material-ui/core/Divider";
@@ -148,7 +148,7 @@ class UserContentView extends PureComponent {
                     )}
                 </ContentPurchaseAction>
                 <Grid item xs={12} sm={7} md={7} lg={6}>
-                    <AccountVideoStats
+                    <UserContentStats
                         video={content}
                         metrics={metrics}
                         contentHostEarnings={contentHostEarnings}
@@ -317,26 +317,53 @@ class UserContentView extends PureComponent {
                                         {`dat://${content.metadataDatKey}`}
                                     </Typography>
                                 </div>
-                                <Divider />
-                                <div className={classes.contentListItem}>
-                                    <Typography
-                                        className={classes.contentLabel}
-                                        variant="caption"
-                                    >
-                                        {"Content metadata"}
-                                    </Typography>
-                                    <Typography
-                                        className={classes.content}
-                                        variant="body2"
-                                        component="pre"
-                                    >
-                                        {JSON.stringify(
-                                            content.metadata,
-                                            null,
-                                            "\t"
-                                        )}
-                                    </Typography>
-                                </div>
+                                {content.contentType === "VOD" && (
+                                    <React.Fragment>
+                                        <Divider />
+                                        <div
+                                            className={classes.contentListItem}
+                                        >
+                                            <Typography
+                                                className={classes.contentLabel}
+                                                variant="caption"
+                                            >
+                                                {"Content metadata"}
+                                            </Typography>
+                                            <Typography
+                                                className={classes.content}
+                                                variant="body2"
+                                                component="pre"
+                                            >
+                                                {JSON.stringify(
+                                                    content.metadata,
+                                                    null,
+                                                    "\t"
+                                                )}
+                                            </Typography>
+                                        </div>
+                                    </React.Fragment>
+                                )}
+                                {content.contentType === "DAPP" && (
+                                    <React.Fragment>
+                                        <Divider />
+                                        <div
+                                            className={classes.contentListItem}
+                                        >
+                                            <Typography
+                                                className={classes.contentLabel}
+                                                variant="caption"
+                                            >
+                                                {"Dapp index path:"}
+                                            </Typography>
+                                            <Typography
+                                                className={classes.content}
+                                                variant="body2"
+                                            >
+                                                {content.dappIndexPath}
+                                            </Typography>
+                                        </div>
+                                    </React.Fragment>
+                                )}
                             </div>
                         )}
                         {activeTabIndex === 1 && (

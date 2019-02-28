@@ -5,7 +5,7 @@ import withAccountVideoFilters from "../containers/withAccountVideoFilters";
 import PropTypes from "prop-types";
 import AccountViewContentTypeNav from "./AccountViewContentTypeNav";
 
-class AccountVideoFilters extends Component {
+class UserContentFilters extends Component {
     static propTypes = {
         contentType: PropTypes.string,
         // redux bound state
@@ -22,7 +22,7 @@ class AccountVideoFilters extends Component {
     render() {
         const { disabled, filter, contentType } = this.props;
         return (
-            <div className="AccountVideoFilters">
+            <div className="UserContentFilters">
                 <AccountViewContentTypeNav contentType={contentType} />
                 <div style={{ marginTop: 40, marginLeft: -16 }}>
                     <Button
@@ -65,4 +65,4 @@ class AccountVideoFilters extends Component {
     }
 }
 
-export default withAccountVideoFilters(AccountVideoFilters);
+export default withAccountVideoFilters(UserContentFilters);

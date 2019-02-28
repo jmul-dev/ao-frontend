@@ -3,7 +3,7 @@ import { Switch, Route } from "react-router";
 import View from "../View";
 import Typography from "@material-ui/core/Typography";
 import UserContentListing from "../../modules/account/components/UserContentListing";
-import AccountVideoFilters from "../../modules/account/components/AccountVideoFilters";
+import UserContentFilters from "../../modules/account/components/UserContentFilters";
 import Grid from "@material-ui/core/Grid";
 import withEthAddress from "../../modules/account/containers/withEthAddress";
 import AccountContentView from "./AccountContentView";
@@ -33,7 +33,7 @@ class AccountView extends Component {
                                     }) => (
                                         <React.Fragment>
                                             <div style={{ marginBottom: 16 }}>
-                                                <AccountVideoFilters
+                                                <UserContentFilters
                                                     contentType={contentType}
                                                     disabled={!ethAddress}
                                                 />

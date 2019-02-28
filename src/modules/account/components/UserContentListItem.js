@@ -15,7 +15,7 @@ import {
     getContentState
 } from "../../video/components/ContentPurchaseActions";
 import withContentMetrics from "../containers/withContentMetrics";
-import AccountVideoStats from "./AccountVideoStats";
+import UserContentStats from "./UserContentStats";
 import withEthAddress from "../../account/containers/withEthAddress";
 
 class ContentListItem extends Component {
@@ -114,7 +114,7 @@ class ContentListItem extends Component {
                         {content.title}
                     </Typography>
                     <div className={classes.statsContainer}>
-                        <AccountVideoStats
+                        <UserContentStats
                             video={content}
                             metrics={metrics}
                             peerConnectionSpeed={

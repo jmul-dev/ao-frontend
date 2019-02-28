@@ -3,7 +3,7 @@ import { setActiveVideo, getContentPrice } from "../reducers/video.reducer";
 import { graphql, compose } from "react-apollo";
 import gql from "graphql-tag";
 import DatStatsFragment from "../../../graphql/fragments/DatStatsFragment";
-import ContentFields from "../../../graphql/fragments/ContentFields";
+import { ContentFieldsWithFragments } from "../../../graphql/fragments/ContentFields";
 
 // Redux
 const mapDispatchToProps = {
@@ -22,7 +22,7 @@ const mapStateToProps = (store, props) => {
 export const userContentQuery = gql(`
     query userContent($id: ID!) {
         userContent(id: $id) {
-            ${ContentFields}
+            ${ContentFieldsWithFragments}
             metadataDatStats {
                 ...DatStatsFragment
             },
