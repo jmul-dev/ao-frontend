@@ -29,18 +29,24 @@ class AccountView extends PureComponent {
                                         disabled={!ethAddress}
                                     />
                                 </div>
-                                <Route
-                                    path="/app/view/account/:contentType"
-                                    render={({
-                                        match: {
-                                            params: { contentType }
-                                        }
-                                    }) => (
-                                        <UserContentListing
-                                            contentType={contentType}
-                                        />
-                                    )}
-                                />
+                                <Switch>
+                                    <Route
+                                        path="/app/view/account/:contentType"
+                                        render={({
+                                            match: {
+                                                params: { contentType }
+                                            }
+                                        }) => (
+                                            <UserContentListing
+                                                contentType={contentType}
+                                            />
+                                        )}
+                                    />
+                                    <Route
+                                        path="/app/view/account"
+                                        component={UserContentListing}
+                                    />
+                                </Switch>
                             </Grid>
                         </Grid>
                     </section>

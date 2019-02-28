@@ -1,14 +1,14 @@
-.ContentListing.placeholder {
+.UserContentListing.placeholder {
     display: flex;
     align-items: center;
     justify-content: center;
     min-height: 256px;
     flex-direction: column;
 }
-.ContentListing.placeholder .placeholder-actions {
+.UserContentListing.placeholder .placeholder-actions {
     margin-top: 24px;
 }
-.ContentListing.placeholder .placeholder-actions > * + * {
+.UserContentListing.placeholder .placeholder-actions > * + * {
     margin-left: 8px;
 }
 

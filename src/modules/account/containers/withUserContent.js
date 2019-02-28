@@ -7,10 +7,10 @@ import ContentFields from "../../../graphql/fragments/ContentFields";
 
 // GraphQL
 const userContent = gql(`
-    query {
+    query($inputs: UserContentInputs!) {
         node {
             id,
-            stakedContent {
+            stakedContent(inputs: $inputs) {
                 ${ContentFields}
                 metadataDatStats {
                     ...DatStatsFragment
@@ -19,7 +19,7 @@ const userContent = gql(`
                     ...DatStatsFragment
                 }
             },
-            hostedContent {
+            hostedContent(inputs: $inputs) {
                 ${ContentFields}
                 metadataDatStats {
                     ...DatStatsFragment
