@@ -1,4 +1,4 @@
-import React, { PureComponent } from "react";
+import React, { Component } from "react";
 import { Switch, Route } from "react-router";
 import View from "../View";
 import Typography from "@material-ui/core/Typography";
@@ -9,7 +9,7 @@ import withEthAddress from "../../modules/account/containers/withEthAddress";
 import AccountVideoView from "./AccountVideoView";
 import "./account-view.css";
 
-class AccountView extends PureComponent {
+class AccountView extends Component {
     render() {
         const { ethAddress } = this.props;
         return (
@@ -24,29 +24,26 @@ class AccountView extends PureComponent {
                     <section>
                         <Grid container spacing={16}>
                             <Grid item xs={12}>
-                                <div style={{ marginBottom: 16 }}>
-                                    <AccountVideoFilters
-                                        disabled={!ethAddress}
-                                    />
-                                </div>
-                                <Switch>
-                                    <Route
-                                        path="/app/view/account/:contentType"
-                                        render={({
-                                            match: {
-                                                params: { contentType }
-                                            }
-                                        }) => (
+                                <Route
+                                    path="/app/view/account/:contentType?"
+                                    render={({
+                                        match: {
+                                            params: { contentType }
+                                        }
+                                    }) => (
+                                        <React.Fragment>
+                                            <div style={{ marginBottom: 16 }}>
+                                                <AccountVideoFilters
+                                                    contentType={contentType}
+                                                    disabled={!ethAddress}
+                                                />
+                                            </div>
                                             <UserContentListing
                                                 contentType={contentType}
                                             />
-                                        )}
-                                    />
-                                    <Route
-                                        path="/app/view/account"
-                                        component={UserContentListing}
-                                    />
-                                </Switch>
+                                        </React.Fragment>
+                                    )}
+                                />
                             </Grid>
                         </Grid>
                     </section>

@@ -24,7 +24,8 @@ class AccountVideoView extends PureComponent {
         // react-router
         match: PropTypes.shape({
             params: PropTypes.shape({
-                videoId: PropTypes.string.isRequired
+                contentType: PropTypes.string.isRequired,
+                contentId: PropTypes.string.isRequired
             })
         }),
         // withStyles
@@ -35,7 +36,7 @@ class AccountVideoView extends PureComponent {
         return (
             <View className={classes.root} padding="full">
                 <AccountVideoViewWithQueryWrapped
-                    contentId={match.params.videoId}
+                    contentId={match.params.contentId}
                 />
             </View>
         );

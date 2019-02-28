@@ -46,11 +46,13 @@ const mapStateToProps = state => ({
 export default compose(
     graphql(userContent, {
         name: "query",
-        options: props => ({
+        options: ({ contentType }) => ({
             pollInterval: 1500,
             variables: {
                 inputs: {
-                    contentType: props.match.params.contentType
+                    contentType: contentType
+                        ? contentType.toUpperCase()
+                        : undefined
                 }
             }
         })
