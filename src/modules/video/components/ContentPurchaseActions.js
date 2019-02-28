@@ -6,6 +6,7 @@
 import { CircularProgress } from "@material-ui/core";
 import AlertIcon from "@material-ui/icons/ErrorOutline";
 import PlayIcon from "@material-ui/icons/PlayArrow";
+import TabIcon from "@material-ui/icons/Tab";
 import ReplayIcon from "@material-ui/icons/Replay";
 import React, { Component } from "react";
 import { compose, withApollo } from "react-apollo";
@@ -99,7 +100,7 @@ export const getContentState = (content, currentUserEthAddress) => {
             break;
         case "DOWNLOADED":
             // Content is download, indicate need to purchase
-            returnData.stateCopy = "Pay for video";
+            returnData.stateCopy = "Pay for content";
             returnData.StateIcon = AlertIcon;
             break;
         case "PURCHASING":
@@ -147,8 +148,13 @@ export const getContentState = (content, currentUserEthAddress) => {
             break;
         case "DISCOVERABLE":
         case "DISCOVERED":
-            returnData.stateCopy = "Watch now";
-            returnData.StateIcon = PlayIcon;
+            if (content.contentType === "VOD") {
+                returnData.stateCopy = "Watch now";
+                returnData.StateIcon = PlayIcon;
+            } else {
+                returnData.stateCopy = "View now";
+                returnData.StateIcon = TabIcon;
+            }
             break;
         default:
             break;
@@ -187,7 +193,7 @@ export const ContentPurchaseState = ({
             break;
         case "DOWNLOADED":
             // Content is download, indicate need to purchase
-            copy = "Pay for video";
+            copy = "Pay for content";
             Icon = AlertIcon;
             break;
         case "PURCHASING":
@@ -206,10 +212,10 @@ export const ContentPurchaseState = ({
         case "VERIFIED":
             // Content verified, automatically proceeds to encrypting
             isLoadingState = true;
-            copy = "Video verified";
+            copy = "Content verified";
             break;
         case "VERIFICATION_FAILED":
-            copy = "Video failed verification";
+            copy = "Content failed verification";
             Icon = AlertIcon;
             break;
         case "ENCRYPTED":
@@ -235,8 +241,13 @@ export const ContentPurchaseState = ({
             break;
         case "DISCOVERABLE":
         case "DISCOVERED":
-            copy = "Watch now";
-            Icon = PlayIcon;
+            if (content.contentType === "VOD") {
+                copy = "Watch now";
+                Icon = PlayIcon;
+            } else {
+                copy = "View now";
+                Icon = TabIcon;
+            }
             break;
         default:
             break;
@@ -578,8 +589,12 @@ class ContentPurchaseActionComponent extends Component {
             case "STAKED":
                 break;
             case "DISCOVERABLE":
-                action = this._watchContent;
-                actionCopy = "Watch now";
+                if (content.contentType === "VOD") {
+                    action = this._watchContent;
+                    actionCopy = "Watch now";
+                } else {
+                    // TODO: maybe switch based on content type
+                }
                 break;
             default:
                 break;

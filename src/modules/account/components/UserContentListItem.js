@@ -21,7 +21,7 @@ import withEthAddress from "../../account/containers/withEthAddress";
 class ContentListItem extends Component {
     static propTypes = {
         currentUserEthAddress: PropTypes.string.isRequired,
-        video: PropTypes.object.isRequired,
+        content: PropTypes.object.isRequired,
         filter: PropTypes.oneOf(["downloaded", "uploaded"]),
         metrics: PropTypes.shape({
             networkTokenStaked: PropTypes.instanceOf(BigNumber),
@@ -40,11 +40,11 @@ class ContentListItem extends Component {
     };
     _watchNowRef;
     componentDidMount() {
-        if (this.props.video.stakeId) {
-            this.props.getContentMetrics(this.props.video.stakeId);
+        if (this.props.content.stakeId) {
+            this.props.getContentMetrics(this.props.content.stakeId);
         }
-        if (this.props.video.contentHostId) {
-            this.props.getContentHostEarnings(this.props.video.contentHostId);
+        if (this.props.content.contentHostId) {
+            this.props.getContentHostEarnings(this.props.content.contentHostId);
         }
     }
     _renderContentMetrics = () => {
@@ -83,7 +83,7 @@ class ContentListItem extends Component {
     };
     _renderCardState() {
         const {
-            video,
+            content,
             metrics,
             contentHostEarnings,
             classes,
@@ -96,14 +96,14 @@ class ContentListItem extends Component {
             StateIcon,
             actionRequired,
             actionCopy
-        } = getContentState(video, this.props.currentUserEthAddress);
-        const transactions = video.transactions || {};
+        } = getContentState(content, this.props.currentUserEthAddress);
+        const transactions = content.transactions || {};
         if (isCompleted) {
             return (
                 <ButtonBase
                     component={Link}
-                    to={`/app/view/account/${video.contentType.toLowerCase()}/${
-                        video.id
+                    to={`/app/view/account/${content.contentType.toLowerCase()}/${
+                        content.id
                     }`}
                     className={classes.completedCardStateContainer}
                 >
@@ -111,11 +111,11 @@ class ContentListItem extends Component {
                         variant="subheading"
                         className={classes.completedCardStateContainerTitle}
                     >
-                        {video.title}
+                        {content.title}
                     </Typography>
                     <div className={classes.statsContainer}>
                         <AccountVideoStats
-                            video={video}
+                            video={content}
                             metrics={metrics}
                             peerConnectionSpeed={
                                 transactions.purchaseTx && !transactions.hostTx
@@ -144,12 +144,12 @@ class ContentListItem extends Component {
                     </div>
                     <div>
                         <Typography variant="subheading" component="div">
-                            {video.title}
+                            {content.title}
                         </Typography>
                         <ContentPurchaseAction
                             currentUserEthAddress={ethAddress}
                             contentRef={this._watchNowRef}
-                            content={video}
+                            content={content}
                         >
                             {({ action, actionCopy, loading }) => (
                                 <ButtonBase
@@ -174,8 +174,8 @@ class ContentListItem extends Component {
                     <ButtonBase
                         component={Link}
                         className={classes.incompleteNavLink}
-                        to={`/app/view/account/${video.contentType.toLowerCase()}/${
-                            video.id
+                        to={`/app/view/account/${content.contentType.toLowerCase()}/${
+                            content.id
                         }`}
                     >
                         <KeyboardArrowRightIcon
@@ -187,16 +187,16 @@ class ContentListItem extends Component {
         }
     }
     render() {
-        const { video, filter, classes, ethAddress } = this.props;
-        const transactions = video.transactions || {};
-        const isCompletedState = video.state === "DISCOVERABLE";
+        const { content, filter, classes, ethAddress } = this.props;
+        const transactions = content.transactions || {};
+        const isCompletedState = content.state === "DISCOVERABLE";
         return (
             <Grid className={classes.root} container spacing={16}>
                 <Grid item sm={4}>
                     <ContentPurchaseAction
                         currentUserEthAddress={ethAddress}
                         contentRef={this._watchNowRef}
-                        content={video}
+                        content={content}
                     >
                         {({ action, actionCopy, loading }) => {
                             // NOTE: only rendering the "play" action on previewImage
@@ -213,13 +213,13 @@ class ContentListItem extends Component {
                                             backgroundImage: `url(${
                                                 process.env
                                                     .REACT_APP_AO_CORE_URL
-                                            }/${video.featuredImageUrl})`,
+                                            }/${content.featuredImageUrl})`,
                                             opacity: isCompletedState ? 1 : 0.15
                                         }}
                                     >
                                         {isCompletedState ? (
                                             <ContentPurchaseState
-                                                content={video}
+                                                content={content}
                                                 currentUserEthAddress={
                                                     ethAddress
                                                 }

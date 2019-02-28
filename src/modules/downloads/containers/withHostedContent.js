@@ -24,7 +24,7 @@ const hostedContentQuery = gql(`
     query {
         node {
             id,
-            hostedContent {
+            hostedContent(inputs: {incomplete: true}) {
                 ${ContentFields}
             }
         }

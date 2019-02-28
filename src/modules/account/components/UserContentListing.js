@@ -9,7 +9,7 @@ import ExchangeModal from "../../exchange/components/ExchangeModal";
 import withUserContent from "../containers/withUserContent";
 import withEthAddress from "../containers/withEthAddress";
 import "../styles/account-video-listing.css";
-import AccountVideoListItem from "./AccountVideoListItem";
+import UserContentListItem from "./UserContentListItem";
 
 class UserContentListing extends Component {
     static propTypes = {
@@ -38,18 +38,18 @@ class UserContentListing extends Component {
         const { error, node } = this.props.query;
         if (!node) return null; // TODO: loading
         if (error) return this._renderErrorState();
-        const content =
+        const contentList =
             filter === "uploaded" ? node.stakedContent : node.hostedContent;
-        if (!content || content.length === 0)
+        if (!contentList || contentList.length === 0)
             return this._renderNoUserContent();
         return (
             <div className="UserContentListing">
                 <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
-                    {content.map((video, index) => (
-                        <li key={video.id}>
+                    {contentList.map((content, index) => (
+                        <li key={content.id}>
                             <Divider />
-                            <AccountVideoListItem
-                                video={video}
+                            <UserContentListItem
+                                content={content}
                                 filter={filter}
                                 currentUserEthAddress={ethAddress}
                             />
