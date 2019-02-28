@@ -1,19 +1,17 @@
 import { graphql, compose } from "react-apollo";
 import { connect } from "react-redux";
 import gql from "graphql-tag";
-import VideoContentFragment from "../../../graphql/fragments/VideoContentFragment";
 import DatStatsFragment from "../../../graphql/fragments/DatStatsFragment";
 import { getContentMetrics } from "../reducers/account.reducer";
 import ContentFields from "../../../graphql/fragments/ContentFields";
 
 // GraphQL
-const accountVideos = gql(`
+const userContent = gql(`
     query {
         node {
             id,
             stakedContent {
                 ${ContentFields}
-                ...VideoContentFragment,
                 metadataDatStats {
                     ...DatStatsFragment
                 },
@@ -23,7 +21,6 @@ const accountVideos = gql(`
             },
             hostedContent {
                 ${ContentFields}
-                ...VideoContentFragment,
                 metadataDatStats {
                     ...DatStatsFragment
                 },
@@ -33,7 +30,6 @@ const accountVideos = gql(`
             }
         }
     }
-    ${VideoContentFragment}
     ${DatStatsFragment}
 `);
 
@@ -48,7 +44,7 @@ const mapStateToProps = state => ({
 });
 
 export default compose(
-    graphql(accountVideos, {
+    graphql(userContent, {
         name: "query",
         options: props => ({
             pollInterval: 1500,

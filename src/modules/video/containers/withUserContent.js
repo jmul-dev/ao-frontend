@@ -2,7 +2,6 @@ import { connect } from "react-redux";
 import { setActiveVideo, getContentPrice } from "../reducers/video.reducer";
 import { graphql, compose } from "react-apollo";
 import gql from "graphql-tag";
-import VideoContentFragment from "../../../graphql/fragments/VideoContentFragment";
 import DatStatsFragment from "../../../graphql/fragments/DatStatsFragment";
 import ContentFields from "../../../graphql/fragments/ContentFields";
 
@@ -24,7 +23,6 @@ export const userContentQuery = gql(`
     query userContent($id: ID!) {
         userContent(id: $id) {
             ${ContentFields}
-            ...VideoContentFragment,
             metadataDatStats {
                 ...DatStatsFragment
             },
@@ -33,7 +31,6 @@ export const userContentQuery = gql(`
             }
         }
     }
-    ${VideoContentFragment}
     ${DatStatsFragment}
 `);
 

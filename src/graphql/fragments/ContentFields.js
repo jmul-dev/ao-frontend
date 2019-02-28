@@ -1,6 +1,3 @@
-/**
- * NOTE: these are shared across all content type
- */
 const ContentFields = `
     id,
     contentHostId,
@@ -46,6 +43,22 @@ const ContentFields = `
         contentHostId,
         contentDatKey,
         timestamp
+    }
+    ... on DappContent {
+        unpacked,
+        dappIndexPath
+    }
+    ... on VideoContent {
+        metadata {
+            encoding,
+            duration,
+            width,
+            height,
+            aspectRatio,
+            aspectRatioDisplay,
+            bitRate,
+            frameRate,
+        }
     }
 `;
 export default ContentFields;

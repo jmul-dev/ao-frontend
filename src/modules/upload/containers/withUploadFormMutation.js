@@ -8,7 +8,6 @@ import {
     updateLastReachedStep,
     resetUploadForm
 } from "../reducers/upload.reducer";
-import VideoContentFragment from "../../../graphql/fragments/VideoContentFragment";
 import userContentQuery from "../../../graphql/queries/userContent";
 import ContentFields from "../../../graphql/fragments/ContentFields";
 
@@ -44,19 +43,15 @@ const submitContentMutation = gql(`
     mutation submitContent($inputs: ContentSubmissionInputs) {
         submitContent(inputs: $inputs) {
             ${ContentFields}
-            ...VideoContentFragment
         }
     }
-    ${VideoContentFragment}
 `);
 export const contentUploadStakeTransaction = gql(`
     mutation contentUploadStakeTransaction($inputs: ContentUploadStakeTransactionInputs) {
         contentUploadStakeTransaction(inputs: $inputs) {
             ${ContentFields}
-            ...VideoContentFragment
         }
     }
-    ${VideoContentFragment}
 `);
 
 export default compose(

@@ -8,7 +8,6 @@
 import { connect } from "react-redux";
 import { graphql, compose } from "react-apollo";
 import gql from "graphql-tag";
-import VideoContentFragment from "../../../graphql/fragments/VideoContentFragment";
 import ContentFields from "../../../graphql/fragments/ContentFields";
 
 // Redux
@@ -27,11 +26,9 @@ const hostedContentQuery = gql(`
             id,
             hostedContent {
                 ${ContentFields}
-                ...VideoContentFragment
             }
         }
     }
-    ${VideoContentFragment}
 `);
 
 export default compose(
