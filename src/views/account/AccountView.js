@@ -6,7 +6,7 @@ import UserContentListing from "../../modules/account/components/UserContentList
 import AccountVideoFilters from "../../modules/account/components/AccountVideoFilters";
 import Grid from "@material-ui/core/Grid";
 import withEthAddress from "../../modules/account/containers/withEthAddress";
-import AccountVideoView from "./AccountVideoView";
+import AccountContentView from "./AccountContentView";
 import "./account-view.css";
 
 class AccountView extends Component {
@@ -50,7 +50,7 @@ class AccountView extends Component {
                 </View>
                 <Route
                     path="/app/view/account/:contentType/:contentId"
-                    component={AccountVideoView}
+                    component={AccountContentView}
                 />
             </React.Fragment>
         );

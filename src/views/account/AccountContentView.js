@@ -5,7 +5,7 @@ import React, { PureComponent } from "react";
 import { compose } from "react-apollo";
 import withUserContent from "../../modules/video/containers/withUserContent";
 import View from "../View";
-import AccountVideo from "../../modules/account/components/AccountVideo";
+import UserContentView from "../../modules/account/components/UserContentView";
 
 const styles = ({ palette, spacing }) => ({
     root: {
@@ -19,7 +19,7 @@ const styles = ({ palette, spacing }) => ({
     }
 });
 
-class AccountVideoView extends PureComponent {
+class AccountContentView extends PureComponent {
     static propTypes = {
         // react-router
         match: PropTypes.shape({
@@ -35,7 +35,7 @@ class AccountVideoView extends PureComponent {
         const { match, classes } = this.props;
         return (
             <View className={classes.root} padding="full">
-                <AccountVideoViewWithQueryWrapped
+                <AccountContentViewWithQueryWrapped
                     contentId={match.params.contentId}
                 />
             </View>
@@ -43,11 +43,11 @@ class AccountVideoView extends PureComponent {
     }
 }
 
-class AccountVideoViewWithQuery extends PureComponent {
+class AccountContentViewWithQuery extends PureComponent {
     static propTypes = {
         // withUserContent
         userContentQuery: PropTypes.shape({
-            video: PropTypes.object,
+            userContent: PropTypes.object,
             loading: PropTypes.boolean,
             error: PropTypes.any
         })
@@ -64,12 +64,12 @@ class AccountVideoViewWithQuery extends PureComponent {
         if (!userContentQuery.userContent) {
             return <Typography>{`Fetching...`}</Typography>;
         }
-        return <AccountVideo video={userContentQuery.userContent} />;
+        return <UserContentView content={userContentQuery.userContent} />;
     }
 }
 
-const AccountVideoViewWithQueryWrapped = withUserContent(
-    AccountVideoViewWithQuery
+const AccountContentViewWithQueryWrapped = withUserContent(
+    AccountContentViewWithQuery
 );
 
-export default withStyles(styles)(AccountVideoView);
+export default withStyles(styles)(AccountContentView);

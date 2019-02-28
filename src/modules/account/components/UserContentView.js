@@ -22,9 +22,9 @@ import { Link } from "react-router-dom";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import withEthAddress from "../containers/withEthAddress";
 
-class AccountVideo extends PureComponent {
+class UserContentView extends PureComponent {
     static propTypes = {
-        video: PropTypes.object.isRequired,
+        content: PropTypes.object.isRequired,
         // withStyles
         classes: PropTypes.object.isRequired,
         // withContentMetrics
@@ -52,17 +52,21 @@ class AccountVideo extends PureComponent {
         };
     }
     componentDidMount() {
-        if (this.props.video.stakeId) {
-            this.props.getContentMetrics(this.props.video.stakeId);
+        const { content } = this.props;
+        if (content.stakeId) {
+            this.props.getContentMetrics(content.stakeId);
         }
-        if (this.props.video.contentHostId) {
-            this.props.getContentHostEarnings(this.props.video.contentHostId);
+        if (content.contentHostId) {
+            this.props.getContentHostEarnings(content.contentHostId);
         }
-        if (this.props.video.purchaseId) {
+        if (content.purchaseId) {
             this.props
-                .getPurchaseReceipt(this.props.video.purchaseId)
+                .getPurchaseReceipt(content.purchaseId)
                 .then(result => {
                     this.setState({ purchaseReceipt: result });
+                })
+                .catch(error => {
+                    console.error(`Error getting purchase receipt:`, error);
                 });
         }
     }
@@ -75,13 +79,13 @@ class AccountVideo extends PureComponent {
         const { activeTabIndex } = this.state;
         const {
             classes,
-            video,
+            content,
             metrics,
             contentHostEarnings,
             ethAddress
         } = this.props;
-        const isCompletedState = video.state === "DISCOVERABLE";
-        const transactions = video.transactions || {};
+        const isCompletedState = content.state === "DISCOVERABLE";
+        const transactions = content.transactions || {};
         return (
             <Grid spacing={16} container>
                 <Grid item xs={12}>
@@ -98,7 +102,7 @@ class AccountVideo extends PureComponent {
                 <ContentPurchaseAction
                     currentUserEthAddress={ethAddress}
                     contentRef={this._watchNowRef}
-                    content={video}
+                    content={content}
                 >
                     {({ action, loading, error }) => (
                         <Fragment>
@@ -111,7 +115,7 @@ class AccountVideo extends PureComponent {
                                     style={{
                                         backgroundImage: `url(${
                                             process.env.REACT_APP_AO_CORE_URL
-                                        }/${video.featuredImageUrl})`,
+                                        }/${content.featuredImageUrl})`,
                                         opacity: isCompletedState ? 1 : 0.15
                                     }}
                                     disabled={!isCompletedState}
@@ -128,14 +132,14 @@ class AccountVideo extends PureComponent {
                                     variant="display3"
                                     gutterBottom
                                 >
-                                    {video.title}
+                                    {content.title}
                                 </Typography>
                                 <PrimaryButton
                                     disabled={!action || loading}
                                     onClick={action}
                                 >
                                     <ContentPurchaseState
-                                        content={video}
+                                        content={content}
                                         currentUserEthAddress={ethAddress}
                                     />
                                 </PrimaryButton>
@@ -145,7 +149,7 @@ class AccountVideo extends PureComponent {
                 </ContentPurchaseAction>
                 <Grid item xs={12} sm={7} md={7} lg={6}>
                     <AccountVideoStats
-                        video={video}
+                        video={content}
                         metrics={metrics}
                         contentHostEarnings={contentHostEarnings}
                         align="right"
@@ -217,7 +221,7 @@ class AccountVideo extends PureComponent {
                                         variant="body2"
                                     >
                                         {moment(
-                                            parseInt(video.createdAt, 10)
+                                            parseInt(content.createdAt, 10)
                                         ).format("M/D/YYYY")}
                                     </Typography>
                                 </div>
@@ -233,7 +237,7 @@ class AccountVideo extends PureComponent {
                                         className={classes.content}
                                         variant="body2"
                                     >
-                                        {video.creatorId}
+                                        {content.creatorId}
                                     </Typography>
                                 </div>
                                 <Divider />
@@ -248,7 +252,7 @@ class AccountVideo extends PureComponent {
                                         className={classes.content}
                                         variant="body2"
                                     >
-                                        {video.contentLicense}
+                                        {content.contentLicense}
                                     </Typography>
                                 </div>
                                 <Divider />
@@ -263,7 +267,7 @@ class AccountVideo extends PureComponent {
                                         className={classes.content}
                                         variant="body2"
                                     >
-                                        {video.description}
+                                        {content.description}
                                     </Typography>
                                 </div>
                                 <Divider />
@@ -279,7 +283,7 @@ class AccountVideo extends PureComponent {
                                         variant="body2"
                                     >
                                         <FileSize
-                                            sizeInBytes={video.fileSize}
+                                            sizeInBytes={content.fileSize}
                                         />
                                     </Typography>
                                 </div>
@@ -295,7 +299,7 @@ class AccountVideo extends PureComponent {
                                         className={classes.content}
                                         variant="body2"
                                     >
-                                        {`dat://${video.fileDatKey}`}
+                                        {`dat://${content.fileDatKey}`}
                                     </Typography>
                                 </div>
                                 <Divider />
@@ -310,7 +314,7 @@ class AccountVideo extends PureComponent {
                                         className={classes.content}
                                         variant="body2"
                                     >
-                                        {`dat://${video.metadataDatKey}`}
+                                        {`dat://${content.metadataDatKey}`}
                                     </Typography>
                                 </div>
                                 <Divider />
@@ -327,7 +331,7 @@ class AccountVideo extends PureComponent {
                                         component="pre"
                                     >
                                         {JSON.stringify(
-                                            video.metadata,
+                                            content.metadata,
                                             null,
                                             "\t"
                                         )}
@@ -520,7 +524,7 @@ class AccountVideo extends PureComponent {
                                         className={classes.content}
                                         variant="body2"
                                     >
-                                        {video.state}
+                                        {content.state}
                                     </Typography>
                                 </div>
                                 <Divider />
@@ -536,7 +540,7 @@ class AccountVideo extends PureComponent {
                                         variant="body2"
                                         component="pre"
                                     >
-                                        {JSON.stringify(video, null, "\t")}
+                                        {JSON.stringify(content, null, "\t")}
                                     </Typography>
                                 </div>
                                 <Divider />
@@ -630,4 +634,4 @@ export default compose(
     withStyles(styles),
     withContentMetrics,
     withEthAddress
-)(AccountVideo);
+)(UserContentView);
