@@ -11,6 +11,7 @@ import ReplayIcon from "@material-ui/icons/Replay";
 import React, { Component } from "react";
 import { compose, withApollo } from "react-apollo";
 import { connect } from "react-redux";
+import { withRouter } from "react-router-dom";
 import contentPurchaseTransactionMutation from "../../../graphql/mutations/contentPurchaseTransaction";
 import contentBecomeHostTransactionMutation from "../../../graphql/mutations/contentBecomeHostTransaction";
 import contentRequestMutation from "../../../graphql/mutations/contentRequest";
@@ -278,6 +279,7 @@ const mapStateToProps = (store, props) => {
 
 const withContentPurchaseActions = compose(
     withApollo,
+    withRouter,
     connect(
         mapStateToProps,
         mapDispatchToProps
@@ -287,12 +289,14 @@ const withContentPurchaseActions = compose(
 /**
  * ContentPurchaseAction:
  *
- * The god class of this frontend app.
+ * This class handles ALL of the AO content interactions/actions required to bring a piece
+ * of content in to a node and become a host for that content.
  *
  * @param {content} Object AO Content
  * @param {contentRef} Object A reference to the content being displayed (for animation purposes,
  *                            we get the bounding box of this ref and animate to fullscreen video)
  * @param {client} ApolloClient
+ * @param {history} History react-router-dom withRouter
  * @param {children} Function Accepting parameters {action}
  */
 class ContentPurchaseActionComponent extends Component {
@@ -508,6 +512,10 @@ class ContentPurchaseActionComponent extends Component {
         }
         setVideoPlayback({ contentId: content.id, initialPosition });
     };
+    _viewDapp = () => {
+        const { history, content } = this.props;
+        history.push(`/app/view/dapp/${content.id}`);
+    };
     _retryHostDiscovery = () => {
         const { content, client } = this.props;
         this.setState({ loading: true, error: null });
@@ -589,11 +597,13 @@ class ContentPurchaseActionComponent extends Component {
             case "STAKED":
                 break;
             case "DISCOVERABLE":
+                // TODO: maybe switch based on content type
                 if (content.contentType === "VOD") {
                     action = this._watchContent;
                     actionCopy = "Watch now";
-                } else {
-                    // TODO: maybe switch based on content type
+                } else if (content.contentType === "DAPP") {
+                    action = this._viewDapp;
+                    actionCopy = "View now";
                 }
                 break;
             default:
