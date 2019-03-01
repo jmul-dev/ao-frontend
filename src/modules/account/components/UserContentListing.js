@@ -33,7 +33,7 @@ class UserContentListing extends Component {
         }
     };
     render() {
-        const { ethAddress, filter } = this.props;
+        const { ethAddress, filter, contentType } = this.props;
         if (!ethAddress) return this._renderPlaceholderContentListing();
         const { error, node } = this.props.query;
         if (!node) return null; // TODO: loading
@@ -51,6 +51,7 @@ class UserContentListing extends Component {
                             <UserContentListItem
                                 content={content}
                                 filter={filter}
+                                listingContentType={contentType}
                                 currentUserEthAddress={ethAddress}
                             />
                         </li>
@@ -74,7 +75,7 @@ class UserContentListing extends Component {
     }
     _renderNoUserContent() {
         const { filter } = this.props;
-        let errorMessage = `Looks like you haven\'t ${filter} any videos.`;
+        let errorMessage = `Looks like you haven\'t ${filter} any content.`;
         return (
             <Fragment>
                 <Divider />

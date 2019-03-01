@@ -94,7 +94,7 @@ class AccountViewContentTypeNav extends Component {
                         className={classes.tabRoot}
                     />
                     <Tab
-                        label="applications"
+                        label="dapps"
                         value={"dapp"}
                         icon={
                             <img

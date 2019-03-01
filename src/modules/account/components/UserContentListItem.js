@@ -20,6 +20,7 @@ import withEthAddress from "../../account/containers/withEthAddress";
 
 class ContentListItem extends Component {
     static propTypes = {
+        listingContentType: PropTypes.string,
         currentUserEthAddress: PropTypes.string.isRequired,
         content: PropTypes.object.isRequired,
         filter: PropTypes.oneOf(["downloaded", "uploaded"]),
@@ -87,7 +88,8 @@ class ContentListItem extends Component {
             metrics,
             contentHostEarnings,
             classes,
-            ethAddress
+            ethAddress,
+            listingContentType
         } = this.props;
         const {
             isLoadingState,
@@ -102,9 +104,12 @@ class ContentListItem extends Component {
             return (
                 <ButtonBase
                     component={Link}
-                    to={`/app/view/account/${content.contentType.toLowerCase()}/${
-                        content.id
-                    }`}
+                    to={{
+                        pathname: `/app/view/account/${content.contentType.toLowerCase()}/${
+                            content.id
+                        }`,
+                        state: { listingContentType }
+                    }}
                     className={classes.completedCardStateContainer}
                 >
                     <Typography
@@ -174,9 +179,12 @@ class ContentListItem extends Component {
                     <ButtonBase
                         component={Link}
                         className={classes.incompleteNavLink}
-                        to={`/app/view/account/${content.contentType.toLowerCase()}/${
-                            content.id
-                        }`}
+                        to={{
+                            pathname: `/app/view/account/${content.contentType.toLowerCase()}/${
+                                content.id
+                            }`,
+                            state: { listingContentType }
+                        }}
                     >
                         <KeyboardArrowRightIcon
                             style={{ width: 32, height: 32, color: "#333333" }}

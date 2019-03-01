@@ -11,6 +11,7 @@ import WalletView from "../../views/wallet/WalletView";
 import DevelopersView from "../../views/developers/DevelopersView";
 import IngressView from "../../views/ingress/IngressView";
 import DaoView from "../../views/dao/DaoView";
+import DappView from "../../views/dapp/DappView";
 import VideoPlayback from "../../modules/video/components/VideoPlayback";
 import MainNavigation from "./MainNavigation";
 import { AnimatedRoute } from "react-router-transition";
@@ -29,6 +30,7 @@ const ViewRoutes = () => (
             <Route path="/app/view/developers" component={DevelopersView} />
             <Route path="/app/view/ingress" component={IngressView} />
             <Route path="/app/view/dao" component={DaoView} />
+            <Route path="/app/view/dapp/:contentId" component={DappView} />
         </Switch>
     </div>
 );

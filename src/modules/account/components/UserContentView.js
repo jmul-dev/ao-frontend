@@ -19,6 +19,7 @@ import { FileSize, TokenBalance } from "../../../utils/denominations";
 import EtherscanLink from "../../etherscan/EtherscanLink";
 import moment from "moment";
 import { Link } from "react-router-dom";
+import { withRouter } from "react-router";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import withEthAddress from "../containers/withEthAddress";
 
@@ -82,17 +83,25 @@ class UserContentView extends PureComponent {
             content,
             metrics,
             contentHostEarnings,
-            ethAddress
+            ethAddress,
+            location
         } = this.props;
         const isCompletedState = content.state === "DISCOVERABLE";
         const transactions = content.transactions || {};
+        const accountUserContentListingType = location.state
+            ? location.state.listingContentType
+            : undefined;
         return (
             <Grid spacing={16} container>
                 <Grid item xs={12}>
                     <ButtonBase
                         varient="contained"
                         component={Link}
-                        to={`/app/view/account`}
+                        to={`/app/view/account${
+                            accountUserContentListingType
+                                ? `/${accountUserContentListingType}`
+                                : ""
+                        }`}
                         className={classes.backNav}
                     >
                         <ArrowBackIcon />
@@ -658,6 +667,7 @@ const styles = ({ palette, spacing }) => ({
 });
 
 export default compose(
+    withRouter,
     withStyles(styles),
     withContentMetrics,
     withEthAddress
