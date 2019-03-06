@@ -10,6 +10,7 @@ import gql from "graphql-tag";
 import { withStyles } from "@material-ui/core/styles";
 import ButtonBase from "@material-ui/core/ButtonBase";
 import CloseIcon from "@material-ui/icons/Close";
+import { AO_CONSTANTS } from "ao-library";
 
 class DappView extends PureComponent {
     static propTypes = {
@@ -35,29 +36,39 @@ class DappView extends PureComponent {
         };
     }
     componentDidMount() {
-        if (this.state.isElectron && this.props.ethAddress) {
-            window.chrome.ipcRenderer.send(
-                "OPEN_DAPP_WINDOW",
-                this.props.contractSettings.ingressUrl
+        if (this.state.isElectron) {
+            this._openDappWindow();
+            window.chrome.ipcRenderer.on(
+                AO_CONSTANTS.IPC.DAPP_WINDOW_CLOSED,
+                this._onClose
             );
         }
     }
     componentWillUnmount() {
         if (this.state.isElectron && this.state.dappRendered) {
+            window.chrome.ipcRenderer.removeListener(
+                AO_CONSTANTS.IPC.DAPP_WINDOW_CLOSED,
+                this._onClose
+            );
             window.chrome.ipcRenderer.send("CLOSE_DAPP_WINDOW");
         }
     }
     componentDidUpdate(prevProps) {
         if (this.state.isElectron && !this.state.dappRendered) {
-            if (this.props.userContentQuery.userContent) {
-                const dappUrl = this.props.userContentQuery.userContent.fileUrl;
-                window.chrome.ipcRenderer.send("OPEN_DAPP_WINDOW", dappUrl);
-                this.setState({
-                    dappRendered: true
-                });
-            }
+            this._openDappWindow();
         }
     }
+    _openDappWindow = () => {
+        const { userContentQuery } = this.props;
+        const dappUrl = userContentQuery.userContent
+            ? userContentQuery.userContent.fileUrl
+            : undefined;
+        if (!dappUrl) return null;
+        window.chrome.ipcRenderer.send("OPEN_DAPP_WINDOW", dappUrl);
+        this.setState({
+            dappRendered: true
+        });
+    };
     _onClose = () => {
         this.props.history.goBack();
     };

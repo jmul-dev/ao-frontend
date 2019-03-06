@@ -727,7 +727,7 @@ anymatch@^2.0.0:
 
 "ao-library@git+ssh://git@git.y-designs.com:ao/ao-library.git":
   version "0.0.1"
-  resolved "git+ssh://git@git.y-designs.com:ao/ao-library.git#e93196dd262b625f0e5068945284710f74f548db"
+  resolved "git+ssh://git@git.y-designs.com:ao/ao-library.git#855ae806b3f683204539e92d9783feb62f3f0e9c"
 
 apollo-cache-inmemory@^1.2.5:
   version "1.2.10"
