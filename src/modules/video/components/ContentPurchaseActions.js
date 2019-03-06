@@ -3,23 +3,29 @@
  * 1. Copy/Icons/Loading state for the action
  * 2. The actual actions
  */
-import { CircularProgress } from '@material-ui/core';
-import AlertIcon from '@material-ui/icons/ErrorOutline';
-import PlayIcon from '@material-ui/icons/PlayArrow';
-import ReplayIcon from '@material-ui/icons/Replay';
-import React, { Component } from 'react';
-import { compose, withApollo } from 'react-apollo';
-import { connect } from 'react-redux';
-import contentPurchaseTransactionMutation from '../../../graphql/mutations/contentPurchaseTransaction';
-import contentBecomeHostTransactionMutation from '../../../graphql/mutations/contentBecomeHostTransaction';
-import contentRequestMutation from '../../../graphql/mutations/contentRequest';
-import contentRetryHostDiscoveryMutation from '../../../graphql/mutations/contentRetryHostDiscovery';
-import { becomeHost, buyContent, setVideoPlayback } from '../reducers/video.reducer';
-import { addNotification } from '../../notifications/reducers/notifications.reducer';
-import { localNodeQuery } from '../../../AppContainer';
-import { videoQuery } from '../containers/withVideo';
-import { stakeContent } from '../../upload/reducers/upload.reducer';
-import { contentUploadStakeTransaction } from '../../upload/containers/withUploadFormMutation';
+import { CircularProgress } from "@material-ui/core";
+import AlertIcon from "@material-ui/icons/ErrorOutline";
+import PlayIcon from "@material-ui/icons/PlayArrow";
+import TabIcon from "@material-ui/icons/Tab";
+import ReplayIcon from "@material-ui/icons/Replay";
+import React, { Component } from "react";
+import { compose, withApollo } from "react-apollo";
+import { connect } from "react-redux";
+import { withRouter } from "react-router-dom";
+import contentPurchaseTransactionMutation from "../../../graphql/mutations/contentPurchaseTransaction";
+import contentBecomeHostTransactionMutation from "../../../graphql/mutations/contentBecomeHostTransaction";
+import contentRequestMutation from "../../../graphql/mutations/contentRequest";
+import contentRetryHostDiscoveryMutation from "../../../graphql/mutations/contentRetryHostDiscovery";
+import {
+    becomeHost,
+    buyContent,
+    setVideoPlayback
+} from "../reducers/video.reducer";
+import { addNotification } from "../../notifications/reducers/notifications.reducer";
+import { localNodeQuery } from "../../../AppContainer";
+import { userContentQuery } from "../containers/withUserContent";
+import { stakeContent } from "../../upload/reducers/upload.reducer";
+import { contentUploadStakeTransaction } from "../../upload/containers/withUploadFormMutation";
 
 /*
 DISCOVERED
@@ -40,188 +46,223 @@ DISCOVERABLE
 */
 
 export const statesPendingUserAction = [
-    'HOST_DISCOVERY_FAILED',
-    'DOWNLOADED',
-    'DAT_INITIALIZED',
-    'DISCOVERABLE',
-    'DISCOVERED',
-]
+    "HOST_DISCOVERY_FAILED",
+    "DOWNLOADED",
+    "DAT_INITIALIZED",
+    "DISCOVERABLE",
+    "DISCOVERED"
+];
 
-const determineIfContentWasUploadedByCurrentUser = (content, currentUserEthAddress) => {
-    let creatorId = content && typeof content.creatorId === 'string' ? content.creatorId.toLowerCase() : undefined
-    let currentUser = currentUserEthAddress && typeof currentUserEthAddress === 'string' ? currentUserEthAddress.toLowerCase() : null
-    return creatorId === currentUser
-}
+const determineIfContentWasUploadedByCurrentUser = (
+    content,
+    currentUserEthAddress
+) => {
+    let creatorId =
+        content && typeof content.creatorId === "string"
+            ? content.creatorId.toLowerCase()
+            : undefined;
+    let currentUser =
+        currentUserEthAddress && typeof currentUserEthAddress === "string"
+            ? currentUserEthAddress.toLowerCase()
+            : null;
+    return creatorId === currentUser;
+};
 
 /**
- * 
+ *
  * @returns { isLoadingState, isCompleted, stateCopy, stateIcon, actionCopy, actionRequired, }
  */
 export const getContentState = (content, currentUserEthAddress) => {
-    const isUploadedContent = determineIfContentWasUploadedByCurrentUser(content, currentUserEthAddress)
+    const isUploadedContent = determineIfContentWasUploadedByCurrentUser(
+        content,
+        currentUserEthAddress
+    );
     let returnData = {
         isLoadingState: false,
-        isCompleted: content.state === 'DISCOVERABLE',
+        isCompleted: content.state === "DISCOVERABLE",
         stateCopy: null,
         StateIcon: null,
         actionRequired: statesPendingUserAction.indexOf(content.state) > -1,
-        actionCopy: null,
-    }
+        actionCopy: null
+    };
     switch (content.state) {
-        case 'HOST_DISCOVERY':
+        case "HOST_DISCOVERY":
             returnData.isLoadingState = true;
-            returnData.stateCopy = 'Finding host...';
+            returnData.stateCopy = "Finding host...";
             break;
-        case 'HOST_DISCOVERY_FAILED':
+        case "HOST_DISCOVERY_FAILED":
             returnData.isLoadingState = false;
-            returnData.stateCopy = 'Host not found, retry?';
+            returnData.stateCopy = "Host not found, retry?";
             returnData.StateIcon = ReplayIcon;
             break;
-        case 'DOWNLOADING':
+        case "DOWNLOADING":
             returnData.isLoadingState = true;
-            returnData.stateCopy = 'Downloading...';
+            returnData.stateCopy = "Downloading...";
             break;
-        case 'DOWNLOADED':
+        case "DOWNLOADED":
             // Content is download, indicate need to purchase
-            returnData.stateCopy = 'Pay for video';
+            returnData.stateCopy = "Pay for content";
             returnData.StateIcon = AlertIcon;
             break;
-        case 'PURCHASING':
+        case "PURCHASING":
             returnData.isLoadingState = true;
-            returnData.stateCopy = 'Paying...';
+            returnData.stateCopy = "Paying...";
             break;
-        case 'PURCHASED':
+        case "PURCHASED":
             // Content is purchased, waiting for decryption key
             returnData.isLoadingState = true;
-            returnData.stateCopy = 'Waiting for decryption key...';
+            returnData.stateCopy = "Waiting for decryption key...";
             break;
-        case 'DECRYPTION_KEY_RECEIVED':
-            returnData.stateCopy = 'Verifying content...';
+        case "DECRYPTION_KEY_RECEIVED":
+            returnData.stateCopy = "Verifying content...";
             returnData.StateIcon = AlertIcon;
             break;
-        case 'VERIFIED':
+        case "VERIFIED":
             // Content verified, automatically proceeds to encrypting
             returnData.isLoadingState = true;
-            returnData.stateCopy = 'Video verified';
+            returnData.stateCopy = "Video verified";
             break;
-        case 'VERIFICATION_FAILED':
-            returnData.stateCopy = 'Video failed verification';
+        case "VERIFICATION_FAILED":
+            returnData.stateCopy = "Video failed verification";
             returnData.StateIcon = AlertIcon;
             break;
-        case 'ENCRYPTED':
+        case "ENCRYPTED":
             // Video is encrypted, indicate need to becomeHost/stake
             returnData.isLoadingState = true;
-            returnData.stateCopy = 'Initializing content...';
+            returnData.stateCopy = "Initializing content...";
             break;
-        case 'DAT_INITIALIZED':
-            returnData.stateCopy = isUploadedContent ? 'Stake content' : 'Submit verification and become host';
+        case "DAT_INITIALIZED":
+            returnData.stateCopy = isUploadedContent
+                ? "Stake content"
+                : "Submit verification and become host";
             returnData.StateIcon = AlertIcon;
             break;
-        case 'STAKING':
+        case "STAKING":
             returnData.isLoadingState = true;
-            returnData.stateCopy = isUploadedContent ? 'Staking content...' : 'Submitting verification...';
+            returnData.stateCopy = isUploadedContent
+                ? "Staking content..."
+                : "Submitting verification...";
             break;
-        case 'STAKED':
+        case "STAKED":
             returnData.isLoadingState = true;
-            returnData.stateCopy = 'Making discoverable...';
+            returnData.stateCopy = "Making discoverable...";
             break;
-        case 'DISCOVERABLE':
-        case 'DISCOVERED':
-            returnData.stateCopy = 'Watch now';
-            returnData.StateIcon = PlayIcon;
+        case "DISCOVERABLE":
+        case "DISCOVERED":
+            if (content.contentType === "VOD") {
+                returnData.stateCopy = "Watch now";
+                returnData.StateIcon = PlayIcon;
+            } else {
+                returnData.stateCopy = "View now";
+                returnData.StateIcon = TabIcon;
+            }
             break;
         default:
             break;
     }
     if (returnData.isLoadingState) {
-        returnData.StateIcon = CircularProgress //<CircularProgress size={20} style={{ marginRight: 8 }} />
+        returnData.StateIcon = CircularProgress; //<CircularProgress size={20} style={{ marginRight: 8 }} />
     }
-    return returnData
-}
+    return returnData;
+};
 
-export const ContentPurchaseState = ({ content, iconOnly = false, currentUserEthAddress }) => {
-    const isUploadedContent = determineIfContentWasUploadedByCurrentUser(content, currentUserEthAddress)
-    let isLoadingState = false
-    let Icon = null
-    let copy = null
+export const ContentPurchaseState = ({
+    content,
+    iconOnly = false,
+    currentUserEthAddress
+}) => {
+    const isUploadedContent = determineIfContentWasUploadedByCurrentUser(
+        content,
+        currentUserEthAddress
+    );
+    let isLoadingState = false;
+    let Icon = null;
+    let copy = null;
     switch (content.state) {
-        case 'HOST_DISCOVERY':
+        case "HOST_DISCOVERY":
             isLoadingState = true;
-            copy = 'Finding host...';
+            copy = "Finding host...";
             break;
-        case 'HOST_DISCOVERY_FAILED':
+        case "HOST_DISCOVERY_FAILED":
             isLoadingState = false;
-            copy = 'Host not found, retry?';
+            copy = "Host not found, retry?";
             Icon = ReplayIcon;
             break;
-        case 'DOWNLOADING':
+        case "DOWNLOADING":
             isLoadingState = true;
-            copy = 'Downloading...';
+            copy = "Downloading...";
             break;
-        case 'DOWNLOADED':
+        case "DOWNLOADED":
             // Content is download, indicate need to purchase
-            copy = 'Pay for video';
+            copy = "Pay for content";
             Icon = AlertIcon;
             break;
-        case 'PURCHASING':
+        case "PURCHASING":
             isLoadingState = true;
-            copy = 'Paying...';
+            copy = "Paying...";
             break;
-        case 'PURCHASED':
+        case "PURCHASED":
             // Content is purchased, waiting for decryption key
             isLoadingState = true;
-            copy = 'Waiting for decryption key...';
+            copy = "Waiting for decryption key...";
             break;
-        case 'DECRYPTION_KEY_RECEIVED':
-            copy = 'Verifying content...';
+        case "DECRYPTION_KEY_RECEIVED":
+            copy = "Verifying content...";
             Icon = AlertIcon;
             break;
-        case 'VERIFIED':
+        case "VERIFIED":
             // Content verified, automatically proceeds to encrypting
             isLoadingState = true;
-            copy = 'Video verified';
+            copy = "Content verified";
             break;
-        case 'VERIFICATION_FAILED':
-            copy = 'Video failed verification';
+        case "VERIFICATION_FAILED":
+            copy = "Content failed verification";
             Icon = AlertIcon;
             break;
-        case 'ENCRYPTED':
+        case "ENCRYPTED":
             // Video is encrypted, indicate need to becomeHost/stake
             isLoadingState = true;
-            copy = 'Initializing content...';
+            copy = "Initializing content...";
             break;
-        case 'DAT_INITIALIZED':
-            copy = isUploadedContent ? 'Stake content' : 'Submit verification and become host';
+        case "DAT_INITIALIZED":
+            copy = isUploadedContent
+                ? "Stake content"
+                : "Submit verification and become host";
             Icon = AlertIcon;
             break;
-        case 'STAKING':
+        case "STAKING":
             isLoadingState = true;
-            copy = isUploadedContent ? 'Staking content...' : 'Submitting verification...';
+            copy = isUploadedContent
+                ? "Staking content..."
+                : "Submitting verification...";
             break;
-        case 'STAKED':
+        case "STAKED":
             isLoadingState = true;
-            copy = 'Making discoverable...';
+            copy = "Making discoverable...";
             break;
-        case 'DISCOVERABLE':
-        case 'DISCOVERED':
-            copy = 'Watch now';
-            Icon = PlayIcon;
+        case "DISCOVERABLE":
+        case "DISCOVERED":
+            if (content.contentType === "VOD") {
+                copy = "Watch now";
+                Icon = PlayIcon;
+            } else {
+                copy = "View now";
+                Icon = TabIcon;
+            }
             break;
         default:
             break;
     }
     return (
-        <div style={{ display: 'flex', alignItems: 'center' }}>
+        <div style={{ display: "flex", alignItems: "center" }}>
             {isLoadingState ? (
                 <CircularProgress size={20} style={{ marginRight: 8 }} />
             ) : null}
-            {Icon ? (
-                <Icon style={{ marginRight: 8 }} />
-            ) : null}
+            {Icon ? <Icon style={{ marginRight: 8 }} /> : null}
             {iconOnly ? null : copy}
         </div>
-    )
-}
+    );
+};
 
 // Redux actions
 const mapDispatchToProps = {
@@ -229,108 +270,142 @@ const mapDispatchToProps = {
     becomeHost,
     setVideoPlayback,
     addNotification,
-    stakeContent,
-}
+    stakeContent
+};
 // Redux state
 const mapStateToProps = (store, props) => {
-    return {
-
-    }
-}
+    return {};
+};
 
 const withContentPurchaseActions = compose(
     withApollo,
-    connect(mapStateToProps, mapDispatchToProps)
-)
+    withRouter,
+    connect(
+        mapStateToProps,
+        mapDispatchToProps
+    )
+);
 
 /**
  * ContentPurchaseAction:
- * 
- * The god class of this frontend app.
- * 
+ *
+ * This class handles ALL of the AO content interactions/actions required to bring a piece
+ * of content in to a node and become a host for that content.
+ *
  * @param {content} Object AO Content
- * @param {contentRef} Object A reference to the content being displayed (for animation purposes, 
+ * @param {contentRef} Object A reference to the content being displayed (for animation purposes,
  *                            we get the bounding box of this ref and animate to fullscreen video)
  * @param {client} ApolloClient
+ * @param {history} History react-router-dom withRouter
  * @param {children} Function Accepting parameters {action}
  */
 class ContentPurchaseActionComponent extends Component {
     static defaultProps = {
-        currentUserEthAddress: ''
-    }
+        currentUserEthAddress: ""
+    };
     constructor() {
-        super()
+        super();
         this.state = {
             loading: false,
-            error: null,
-        }
+            error: null
+        };
     }
-    _dispatchErrorNotificationAndStopLoading = (error, errorMessage, errorContext) => {
-        console.error(errorContext, error)
+    _dispatchErrorNotificationAndStopLoading = (
+        error,
+        errorMessage,
+        errorContext
+    ) => {
+        console.error(errorContext, error);
         // TODO: error notification
-        this.setState({ loading: false, error: errorMessage })
+        this.setState({ loading: false, error: errorMessage });
         this.props.addNotification({
             message: `${errorMessage}: ${error.message}`,
-            variant: 'error'
-        })
-    }
+            variant: "error"
+        });
+    };
     _downloadContentAction = () => {
-        const { client, content } = this.props
-        this.setState({ loading: true, error: null })
-        client.mutate({
-            mutation: contentRequestMutation,
-            variables: {
-                metadataDatKey: content.id
-            },
-            refetchQueries: [{
-                query: videoQuery,
-                variables: { id: content.id }
-            }],
-        }).then(({ data, ...props }) => {
-            console.log(data, props);
-            this.setState({ loading: false })
-        }).catch(error => {
-            this._dispatchErrorNotificationAndStopLoading(error, 'Failed to request content', 'Error during contentRequestMutation')
-        })
-    }
+        const { client, content } = this.props;
+        this.setState({ loading: true, error: null });
+        client
+            .mutate({
+                mutation: contentRequestMutation,
+                variables: {
+                    metadataDatKey: content.id
+                },
+                refetchQueries: [
+                    {
+                        query: userContentQuery,
+                        variables: { contentId: content.id }
+                    }
+                ]
+            })
+            .then(({ data, ...props }) => {
+                console.log(data, props);
+                this.setState({ loading: false });
+            })
+            .catch(error => {
+                this._dispatchErrorNotificationAndStopLoading(
+                    error,
+                    "Failed to request content",
+                    "Error during contentRequestMutation"
+                );
+            });
+    };
     _buyContentAction = () => {
-        const { buyContent, content, client } = this.props
-        this.setState({ loading: true, error: null })
+        const { buyContent, content, client } = this.props;
+        this.setState({ loading: true, error: null });
         try {
             // 1. Get user's public key (required for buyContent contract call)
             const { node } = client.readQuery({
                 query: localNodeQuery
-            })
-            const { publicAddress, publicKey } = node
+            });
+            const { publicAddress, publicKey } = node;
             // 2. Trigger the buyContent transaction via metamask
-            buyContent(content.contentHostId, publicKey, publicAddress).then(transactionHash => {
-                // 3. Notify core that the user is purchasing content
-                client.mutate({
-                    mutation: contentPurchaseTransactionMutation,
-                    variables: {
-                        inputs: {
-                            transactionHash,
-                            contentId: content.id,
-                            contentHostId: content.contentHostId,
-                        }
-                    }
-                }).then(({ data, ...props }) => {
-                    console.log(data, props)
-                    this.setState({ loading: false })
-                    // 3. Not sure we need to do anything here, state will be updated via polling on content.state
-                }).catch(error => {
-                    this._dispatchErrorNotificationAndStopLoading(error, 'Failed to move content to purchasing state', 'Error during contentPurchaseTransactionMutation')
+            buyContent(content.contentHostId, publicKey, publicAddress)
+                .then(transactionHash => {
+                    // 3. Notify core that the user is purchasing content
+                    client
+                        .mutate({
+                            mutation: contentPurchaseTransactionMutation,
+                            variables: {
+                                inputs: {
+                                    transactionHash,
+                                    contentId: content.id,
+                                    contentHostId: content.contentHostId
+                                }
+                            }
+                        })
+                        .then(({ data, ...props }) => {
+                            console.log(data, props);
+                            this.setState({ loading: false });
+                            // 3. Not sure we need to do anything here, state will be updated via polling on content.state
+                        })
+                        .catch(error => {
+                            this._dispatchErrorNotificationAndStopLoading(
+                                error,
+                                "Failed to move content to purchasing state",
+                                "Error during contentPurchaseTransactionMutation"
+                            );
+                        });
                 })
-            }).catch(error => {
-                this._dispatchErrorNotificationAndStopLoading(error, 'Buy content transaction failed', 'Error during buyContent action')
-            })
+                .catch(error => {
+                    this._dispatchErrorNotificationAndStopLoading(
+                        error,
+                        "Buy content transaction failed",
+                        "Error during buyContent action"
+                    );
+                });
         } catch (error) {
-            this._dispatchErrorNotificationAndStopLoading(error, 'Unable to get user publicAddress from cache', 'Error during buyContent action')
+            this._dispatchErrorNotificationAndStopLoading(
+                error,
+                "Unable to get user publicAddress from cache",
+                "Error during buyContent action"
+            );
         }
-    }
+    };
     _becomeHostAction = () => {
-        const { becomeHost, content, client } = this.props
-        this.setState({ loading: true, error: null })
+        const { becomeHost, content, client } = this.props;
+        this.setState({ loading: true, error: null });
         // 1. Metamask transaction
         becomeHost({
             contentId: content.id,
@@ -338,143 +413,206 @@ class ContentPurchaseActionComponent extends Component {
             signature: content.baseChallengeSignature,
             encChallenge: content.encChallenge,
             contentDatKey: content.fileDatKey,
-            metadataDatKey: content.metadataDatKey,
-        }).then(transactionHash => {
-            // 2. Notify core that the user is attempting to host content
-            client.mutate({
-                mutation: contentBecomeHostTransactionMutation,
-                variables: {
-                    inputs: {
-                        transactionHash,
-                        contentId: content.id,
-                    }
-                }
-            }).then(({ data, ...props }) => {
-                this.setState({ loading: false })
-                // 3. Not sure we need to do anything here, state will be updated via pulling on content.state
-            }).catch(error => {
-                this._dispatchErrorNotificationAndStopLoading(error, 'Failed to move content to hosting state', 'Error during contentBecomeHostTransaction mutation')
-            })
-        }).catch(error => {
-            this._dispatchErrorNotificationAndStopLoading(error, 'Host content transaction failed', 'Error during becomeHost action')
+            metadataDatKey: content.metadataDatKey
         })
-    }
+            .then(transactionHash => {
+                // 2. Notify core that the user is attempting to host content
+                client
+                    .mutate({
+                        mutation: contentBecomeHostTransactionMutation,
+                        variables: {
+                            inputs: {
+                                transactionHash,
+                                contentId: content.id
+                            }
+                        }
+                    })
+                    .then(({ data, ...props }) => {
+                        this.setState({ loading: false });
+                        // 3. Not sure we need to do anything here, state will be updated via pulling on content.state
+                    })
+                    .catch(error => {
+                        this._dispatchErrorNotificationAndStopLoading(
+                            error,
+                            "Failed to move content to hosting state",
+                            "Error during contentBecomeHostTransaction mutation"
+                        );
+                    });
+            })
+            .catch(error => {
+                this._dispatchErrorNotificationAndStopLoading(
+                    error,
+                    "Host content transaction failed",
+                    "Error during becomeHost action"
+                );
+            });
+    };
     _stakeContentAction = () => {
-        const { stakeContent, content, client } = this.props
-        this.setState({ loading: true, error: null })
+        const { stakeContent, content, client } = this.props;
+        this.setState({ loading: true, error: null });
         stakeContent({
-            networkTokenAmount: Math.floor(content.stake * (1 - (content.stakePrimordialPercentage / 100.0))),
-            primordialTokenAmount: Math.ceil(content.stake * (content.stakePrimordialPercentage / 100.0)),
+            networkTokenAmount: Math.floor(
+                content.stake * (1 - content.stakePrimordialPercentage / 100.0)
+            ),
+            primordialTokenAmount: Math.ceil(
+                content.stake * (content.stakePrimordialPercentage / 100.0)
+            ),
             fileDatKey: content.fileDatKey,
             metadataDatKey: content.metadataDatKey,
             fileSizeInBytes: content.fileSize,
             profitPercentage: content.profitSplitPercentage,
             baseChallenge: content.baseChallenge,
-            encChallenge: content.encChallenge,
-        }).then(transactionHash => {
-            // 2. Submit the tx to core
-            client.mutate({
-                mutation: contentUploadStakeTransaction,
-                variables: {
-                    inputs: {
-                        contentId: content.id,
-                        transactionHash,
-                    }
-                }
-            }).then(() => {
-                this.setState({ loading: false })
-            }).catch(error => {
-                this._dispatchErrorNotificationAndStopLoading(error, 'Failed to update content\'s stake transaction', '_stakeContentAction')
+            encChallenge: content.encChallenge
+        })
+            .then(transactionHash => {
+                // 2. Submit the tx to core
+                client
+                    .mutate({
+                        mutation: contentUploadStakeTransaction,
+                        variables: {
+                            inputs: {
+                                contentId: content.id,
+                                transactionHash
+                            }
+                        }
+                    })
+                    .then(() => {
+                        this.setState({ loading: false });
+                    })
+                    .catch(error => {
+                        this._dispatchErrorNotificationAndStopLoading(
+                            error,
+                            "Failed to update content's stake transaction",
+                            "_stakeContentAction"
+                        );
+                    });
             })
-        }).catch(error => {
-            this._dispatchErrorNotificationAndStopLoading(error, 'Error during stake process', '_stakeContentAction')
-        })
-    }
+            .catch(error => {
+                this._dispatchErrorNotificationAndStopLoading(
+                    error,
+                    "Error during stake process",
+                    "_stakeContentAction"
+                );
+            });
+    };
     _watchContent = () => {
-        const { setVideoPlayback, content, contentRef } = this.props
-        let initialPosition = {}
+        const { setVideoPlayback, content, contentRef } = this.props;
+        let initialPosition = {};
         if (contentRef) {
-            let clientRect = contentRef.getBoundingClientRect()
-            const propertySelection = (({ top, right, bottom, left, width, height }) => ({ top, right, bottom, left, width, height }))
-            initialPosition = propertySelection(clientRect)
+            let clientRect = contentRef.getBoundingClientRect();
+            const propertySelection = ({
+                top,
+                right,
+                bottom,
+                left,
+                width,
+                height
+            }) => ({ top, right, bottom, left, width, height });
+            initialPosition = propertySelection(clientRect);
         }
-        setVideoPlayback({ contentId: content.id, initialPosition })
-    }
+        setVideoPlayback({ contentId: content.id, initialPosition });
+    };
+    _viewDapp = () => {
+        const { history, content } = this.props;
+        history.push(`/app/view/dapp/${content.id}`);
+    };
     _retryHostDiscovery = () => {
-        const { content, client } = this.props
-        this.setState({ loading: true, error: null })
-        client.mutate({
-            mutation: contentRetryHostDiscoveryMutation,
-            variables: {
-                id: content.id
-            }
-        }).then(({ data, ...props }) => {
-            this.setState({ loading: false })
-        }).catch(error => {
-            this._dispatchErrorNotificationAndStopLoading(error, 'Failed to retry host discovery', 'Error during contentRetryHostDiscoveryMutation')
-        })
-    }
+        const { content, client } = this.props;
+        this.setState({ loading: true, error: null });
+        client
+            .mutate({
+                mutation: contentRetryHostDiscoveryMutation,
+                variables: {
+                    id: content.id
+                }
+            })
+            .then(({ data, ...props }) => {
+                this.setState({ loading: false });
+            })
+            .catch(error => {
+                this._dispatchErrorNotificationAndStopLoading(
+                    error,
+                    "Failed to retry host discovery",
+                    "Error during contentRetryHostDiscoveryMutation"
+                );
+            });
+    };
     render() {
-        const { content, currentUserEthAddress, children } = this.props
-        const { loading, error } = this.state
-        const isUploadedContent = determineIfContentWasUploadedByCurrentUser(content, currentUserEthAddress)
-        let action = null
-        let actionCopy = ''
+        const { content, currentUserEthAddress, children } = this.props;
+        const { loading, error } = this.state;
+        const isUploadedContent = determineIfContentWasUploadedByCurrentUser(
+            content,
+            currentUserEthAddress
+        );
+        let action = null;
+        let actionCopy = "";
         switch (content.state) {
-            case 'HOST_DISCOVERY':
+            case "HOST_DISCOVERY":
                 break;
-            case 'HOST_DISCOVERY_FAILED':
+            case "HOST_DISCOVERY_FAILED":
                 // TODO: retry host discovery?
-                action = this._retryHostDiscovery
-                actionCopy = 'Find host'
+                action = this._retryHostDiscovery;
+                actionCopy = "Find host";
                 break;
-            case 'DISCOVERED':
+            case "DISCOVERED":
                 // The first action, download content (bring in to core)
-                action = this._downloadContentAction
-                actionCopy = 'Download content'
+                action = this._downloadContentAction;
+                actionCopy = "Download content";
                 break;
-            case 'DOWNLOADING':
+            case "DOWNLOADING":
                 // No action to take
                 break;
-            case 'DOWNLOADED':
+            case "DOWNLOADED":
                 // Content is download, purchase action now available
-                action = this._buyContentAction
-                actionCopy = 'Purchase content'
+                action = this._buyContentAction;
+                actionCopy = "Purchase content";
                 break;
-            case 'PURCHASING':
+            case "PURCHASING":
                 break;
-            case 'PURCHASED':
+            case "PURCHASED":
                 // Content is purchased, waiting for decryption key
                 break;
-            case 'DECRYPTION_KEY_RECEIVED':
+            case "DECRYPTION_KEY_RECEIVED":
                 // Verifying content
                 break;
-            case 'VERIFIED':
+            case "VERIFIED":
                 // Content verified, automatically proceeds to encrypting
                 break;
-            case 'VERIFICATION_FAILED':
+            case "VERIFICATION_FAILED":
                 // TODO: action = ? remove content from node?
                 break;
-            case 'ENCRYPTED':
+            case "ENCRYPTED":
                 // Video is encrypted, waiting for dat initialization
                 break;
-            case 'DAT_INITIALIZED':
-                action = isUploadedContent ? this._stakeContentAction : this._becomeHostAction
-                actionCopy = isUploadedContent ? 'Stake content' : 'Become host'
+            case "DAT_INITIALIZED":
+                action = isUploadedContent
+                    ? this._stakeContentAction
+                    : this._becomeHostAction;
+                actionCopy = isUploadedContent
+                    ? "Stake content"
+                    : "Become host";
                 break;
-            case 'STAKING':
+            case "STAKING":
                 break;
-            case 'STAKED':
+            case "STAKED":
                 break;
-            case 'DISCOVERABLE':
-                action = this._watchContent
-                actionCopy = 'Watch now'
+            case "DISCOVERABLE":
+                // TODO: maybe switch based on content type
+                if (content.contentType === "VOD") {
+                    action = this._watchContent;
+                    actionCopy = "Watch now";
+                } else if (content.contentType === "DAPP") {
+                    action = this._viewDapp;
+                    actionCopy = "View now";
+                }
                 break;
             default:
                 break;
         }
-        return children({ action, actionCopy, loading, error })
+        return children({ action, actionCopy, loading, error });
     }
 }
 
-export const ContentPurchaseAction = withContentPurchaseActions(ContentPurchaseActionComponent)
+export const ContentPurchaseAction = withContentPurchaseActions(
+    ContentPurchaseActionComponent
+);

@@ -145,7 +145,7 @@ const MainNavigation = ({
                 <li className={classes.navListItem}>
                     <NavLink
                         className={classes.navListItemLink}
-                        to="/app/view/videos"
+                        to="/app/view/account"
                         replace={overlayViewsActive}
                     >
                         <img
@@ -319,6 +319,9 @@ const styles = ({ palette, spacing }) => ({
             backgroundColor: palette.divider, // '#151515'
             color: palette.common.white,
             opacity: 1
+        },
+        "&:hover": {
+            backgroundColor: `rgba(255, 255, 255, 0.1)`
         }
     },
     navListItemWallet: {

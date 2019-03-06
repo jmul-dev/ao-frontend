@@ -1,113 +1,127 @@
 import BigNumber from "bignumber.js";
 
 // Constants
-export const ACCOUNT_VIDEO_LISTING_FILTER = 'ACCOUNT_VIDEO_LISTING_FILTER'
-export const ACCOUNT_VIDEO_LISTING_ORDERING = 'ACCOUNT_VIDEO_LISTING_ORDERING'
-export const UPDATE_CONTENT_METRICS_BY_STAKE_ID = 'UPDATE_CONTENT_METRICS_BY_STAKE_ID'
-export const ACCOUNT_CONTENT_TYPE_FILTER = 'ACCOUNT_CONTENT_TYPE_FILTER'
-export const UPDATE_CONTENT_HOST_EARNINGS = 'UPDATE_CONTENT_HOST_EARNINGS'
-export const MEDIA_TYPES = ['all', 'video', 'image', 'music', 'document', 'digital_asset', 'application']
+export const ACCOUNT_VIDEO_LISTING_FILTER = "ACCOUNT_VIDEO_LISTING_FILTER";
+export const ACCOUNT_VIDEO_LISTING_ORDERING = "ACCOUNT_VIDEO_LISTING_ORDERING";
+export const UPDATE_CONTENT_METRICS_BY_STAKE_ID =
+    "UPDATE_CONTENT_METRICS_BY_STAKE_ID";
+export const ACCOUNT_CONTENT_TYPE_FILTER = "ACCOUNT_CONTENT_TYPE_FILTER";
+export const UPDATE_CONTENT_HOST_EARNINGS = "UPDATE_CONTENT_HOST_EARNINGS";
+export const MEDIA_TYPES = [
+    "all",
+    "video",
+    "image",
+    "music",
+    "document",
+    "digital_asset",
+    "application"
+];
 
 // Actions
-export const setAccountContentTypeFilter = (filter) => ({
-    type: ACCOUNT_CONTENT_TYPE_FILTER,
-    payload: filter
-})
-export const setAccountVideoListingFilter = (filter) => ({
+export const setAccountVideoListingFilter = filter => ({
     type: ACCOUNT_VIDEO_LISTING_FILTER,
     payload: filter
-})
-export const setAccountVideoListingOrdering = (ordering) => ({
+});
+export const setAccountVideoListingOrdering = ordering => ({
     type: ACCOUNT_VIDEO_LISTING_ORDERING,
     payload: ordering
-})
-export const getContentMetrics = (stakeId) => {
+});
+export const getContentMetrics = stakeId => {
     return (dispatch, getState) => {
-        const { contracts, ico } = getState()
-        contracts.aoLibrary.getContentMetrics(contracts.aoContent.address, contracts.aoEarning.address, stakeId, function(err, result) {
-            if ( !err ) {
-                dispatch({
-                    type: UPDATE_CONTENT_METRICS_BY_STAKE_ID,
-                    payload: {
-                        stakeId,
-                        networkTokenStaked: new BigNumber(result[0]),
-                        primordialTokenStaked: new BigNumber(result[1]),
-                        primordialTokenStakedWeight: new BigNumber(result[2]).dividedBy(ico.weightedIndexDivisor),
-                        totalStakeEarning: new BigNumber(result[3]),
-                        totalHostEarning: new BigNumber(result[4]),
-                        totalFoundationEarning: new BigNumber(result[5]),
-                    }
-                })
+        const { contracts, ico } = getState();
+        contracts.aoLibrary.getContentMetrics(
+            contracts.aoContent.address,
+            contracts.aoEarning.address,
+            stakeId,
+            function(err, result) {
+                if (!err) {
+                    dispatch({
+                        type: UPDATE_CONTENT_METRICS_BY_STAKE_ID,
+                        payload: {
+                            stakeId,
+                            networkTokenStaked: new BigNumber(result[0]),
+                            primordialTokenStaked: new BigNumber(result[1]),
+                            primordialTokenStakedWeight: new BigNumber(
+                                result[2]
+                            ).dividedBy(ico.weightedIndexDivisor),
+                            totalStakeEarning: new BigNumber(result[3]),
+                            totalHostEarning: new BigNumber(result[4]),
+                            totalFoundationEarning: new BigNumber(result[5])
+                        }
+                    });
+                }
             }
-        })
-    }
-}
-export const getContentHostEarnings = (contentHostId) => {
+        );
+    };
+};
+export const getContentHostEarnings = contentHostId => {
     return (dispatch, getState) => {
-        const { contracts } = getState()
-        contracts.aoEarning.totalHostContentEarningById(contentHostId, function(err, hostEarnings) {
-            if ( !err ) {
+        const { contracts } = getState();
+        contracts.aoEarning.totalHostContentEarningById(contentHostId, function(
+            err,
+            hostEarnings
+        ) {
+            if (!err) {
                 dispatch({
                     type: UPDATE_CONTENT_HOST_EARNINGS,
                     payload: {
                         contentHostId,
-                        earnings: new BigNumber(hostEarnings),
+                        earnings: new BigNumber(hostEarnings)
                     }
-                })
+                });
             }
-        })
-    }
-}
-export const getPurchaseReceipt = (purchaseId) => {
-    return (dispatch, getState) => {    
-        return new Promise((resolve, reject) => {    
-            const { contracts } = getState()
-            if ( !purchaseId )
-                return reject(new Error(`getPurchaseReceipt called with no purchaseId`))
-            contracts.aoContent.purchaseReceiptById(purchaseId, function(err, result) {
-                if ( !err ) {
+        });
+    };
+};
+export const getPurchaseReceipt = purchaseId => {
+    return (dispatch, getState) => {
+        return new Promise((resolve, reject) => {
+            const { contracts } = getState();
+            if (!purchaseId)
+                return reject(
+                    new Error(`getPurchaseReceipt called with no purchaseId`)
+                );
+            contracts.aoContent.purchaseReceiptById(purchaseId, function(
+                err,
+                result
+            ) {
+                if (!err) {
                     resolve({
                         contentHostId: result[0],
                         buyer: result[1],
                         networkAmount: result[2],
                         publicAddress: result[3],
                         timestamp: result[4]
-                    })
+                    });
                 } else {
-                    reject(err)
+                    reject(err);
                 }
-            })
-        })
-    }
-}
+            });
+        });
+    };
+};
 
 // State
 const initialState = {
-    videoListingFilter: 'downloaded',  // uploaded || downloaded
-    videoListingOrdering: 'recent',  // recent || earned || staked
-    contentTypeFilter: MEDIA_TYPES[0],  // MEDIA_TYPES
-    contentMetrics: {},  // stakeId => { metrics }
-    contentHostEarnings: {},  // contentHostId => BigNumber
-}
+    videoListingFilter: "downloaded", // uploaded || downloaded
+    videoListingOrdering: "recent", // recent || earned || staked
+    contentMetrics: {}, // stakeId => { metrics }
+    contentHostEarnings: {} // contentHostId => BigNumber
+};
 
 // Reducer
 export default function accountReducer(state = initialState, action) {
     switch (action.type) {
-        case ACCOUNT_CONTENT_TYPE_FILTER:
-            return {
-                ...state,
-                contentTypeFilter: action.payload,
-            }
         case ACCOUNT_VIDEO_LISTING_FILTER:
             return {
                 ...state,
-                videoListingFilter: action.payload,
-            }
+                videoListingFilter: action.payload
+            };
         case ACCOUNT_VIDEO_LISTING_ORDERING:
             return {
                 ...state,
-                videoListingOrdering: action.payload,
-            }
+                videoListingOrdering: action.payload
+            };
         case UPDATE_CONTENT_METRICS_BY_STAKE_ID:
             return {
                 ...state,
@@ -115,7 +129,7 @@ export default function accountReducer(state = initialState, action) {
                     ...state.contentMetrics,
                     [action.payload.stakeId]: action.payload
                 }
-            }
+            };
         case UPDATE_CONTENT_HOST_EARNINGS:
             return {
                 ...state,
@@ -123,8 +137,8 @@ export default function accountReducer(state = initialState, action) {
                     ...state.contentHostEarnings,
                     [action.payload.contentHostId]: action.payload.earnings
                 }
-            }
+            };
         default:
-            return state
+            return state;
     }
 }

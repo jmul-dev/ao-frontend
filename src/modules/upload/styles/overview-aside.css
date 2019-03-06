@@ -19,3 +19,30 @@
 .OverviewAside ul li > :last-child {
     flex-shrink: 0;
 }
+.OverviewAside .content-preview {
+    width: 100%;
+    padding-bottom: 56.25%;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: relative;
+    background: #000000;
+}
+.OverviewAside .content-preview video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: auto;
+}
+.OverviewAside .content-preview .content-preview-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
