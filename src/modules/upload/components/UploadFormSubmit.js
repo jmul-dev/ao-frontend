@@ -137,10 +137,10 @@ class UploadFormSubmit extends Component<Props> {
     _continue = () => {
         const { submittedContentQuery } = this.props;
         // TODO: these routes change based on content type
-        if (submittedContentQuery.content)
+        if (submittedContentQuery.userContent)
             this.props.history.push(
-                `/app/view/account/${submittedContentQuery.content.contentType.toLowerCase()}/${
-                    submittedContentQuery.content.id
+                `/app/view/account/${submittedContentQuery.userContent.contentType.toLowerCase()}/${
+                    submittedContentQuery.userContent.id
                 }`
             );
         else this.props.history.push(`/app/view/account`);
@@ -197,8 +197,8 @@ class UploadFormSubmit extends Component<Props> {
             submittedContentQuery
         } = this.props;
         const submittedContent =
-            submittedContentQuery && submittedContentQuery.content
-                ? submittedContentQuery.content
+            submittedContentQuery && submittedContentQuery.userContent
+                ? submittedContentQuery.userContent
                 : undefined;
         // TODO: use the content.state coming in from submittedContentQuery.data.video.state === 'STAKED' | 'STAKING' | 'DAT_INITIALIZED'
         // logic in reverse order of event occurances
@@ -273,8 +273,8 @@ class UploadFormSubmit extends Component<Props> {
             submittedContentQuery
         } = this.props;
         const submittedContent =
-            submittedContentQuery && submittedContentQuery.content
-                ? submittedContentQuery.content
+            submittedContentQuery && submittedContentQuery.userContent
+                ? submittedContentQuery.userContent
                 : undefined;
         const messageStyle = {
             wordWrap: "break-word",

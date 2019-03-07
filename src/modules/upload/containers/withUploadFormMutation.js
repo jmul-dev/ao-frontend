@@ -80,10 +80,11 @@ export default compose(
     }),
     graphql(userContentQuery, {
         name: "submittedContentQuery",
-        options: props => ({
+        options: ({ contentSubmittionResult }) => ({
+            skip: !contentSubmittionResult || !contentSubmittionResult.id, // This query is used to poll after content was submitted, so we skip initial query
             variables: {
-                id: props.contentSubmittionResult
-                    ? props.contentSubmittionResult.id
+                id: contentSubmittionResult
+                    ? contentSubmittionResult.id
                     : undefined
             }
         })
