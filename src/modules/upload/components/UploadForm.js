@@ -20,6 +20,7 @@ import videoIconSrc from "../../../assets/media-type-video.svg";
 import musicIconSrc from "../../../assets/media-type-music.svg";
 import imageIconSrc from "../../../assets/media-type-image.svg";
 import documentIconSrc from "../../../assets/media-type-document.svg";
+import pdfIconSrc from "../../../assets/media-type-pdf.svg";
 import applicationIconSrc from "../../../assets/media-type-application.svg";
 import assetIconSrc from "../../../assets/media-type-digital-asset.svg";
 
@@ -88,7 +89,7 @@ class UploadForm extends Component<Props> {
                     {this._renderContentListItem({
                         contentType: "PDF",
                         label: "PDF",
-                        icon: documentIconSrc,
+                        icon: pdfIconSrc,
                         active: contentType === "PDF",
                         disabled: false,
                         fileTypesMessage: "pdf file",
