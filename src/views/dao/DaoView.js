@@ -1,36 +1,82 @@
-import React, { PureComponent } from 'react';
-import View from '../View';
-import Typography from '@material-ui/core/Typography';
-import EtherscanLink from '../../modules/etherscan/EtherscanLink';
+import React, { PureComponent } from "react";
+import View from "../View";
+import Typography from "@material-ui/core/Typography";
+import EtherscanLink from "../../modules/etherscan/EtherscanLink";
+import { compose } from "react-apollo";
+import withEthAddress from "../../modules/account/containers/withEthAddress";
+import AccountRequired from "../../modules/account/components/AccountRequired";
+import withUserDapps from "./withUserDapps";
+import UserDappListing from "./UserDappListing";
+import NetworkDappListing from "./NetworkDappListing";
 
+const DaoDescriptionPane = ({ ethAddress }) => (
+    <section style={{ marginTop: 48, opacity: 0.5 }}>
+        <Typography variant="body1">
+            {`Abstract Order (“AO”) is governed by The Autonomous Organization (“The AO”). The User Interface for The AO is accesible via the AO network and, once discovered, will show up below. Reference the AO whitepaper for details on the purpose and operation of The AO.`}
+            <EtherscanLink type="address" value={`TODO`} />
+        </Typography>
+    </section>
+);
 
+const DaoViewNoUser = () => (
+    <React.Fragment>
+        <DaoDescriptionPane />
+        <div
+            style={{
+                height: "100%",
+                width: "100%",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center"
+            }}
+        >
+            <AccountRequired>
+                <div>{/* placeholder */}</div>
+            </AccountRequired>
+        </div>
+    </React.Fragment>
+);
 
-export default class DaoView extends PureComponent {
-    render() {
+const DaoViewWithUser = withUserDapps(
+    ({ userDappsQuery: { loading, error, node } }) => {
+        if (loading) return null;
+        if (error && !node) return `Error loading dapps...`;
+        const dapps = [].concat(node.stakedContent, node.hostedContent);
         return (
-            <View className={'DaoView'} padding="full">
+            <React.Fragment>
+                {dapps.length === 0 ? (
+                    <DaoDescriptionPane />
+                ) : (
+                    <React.Fragment>
+                        <Typography variant="subheading" gutterBottom>
+                            {"Your Dapps"}
+                        </Typography>
+                        <UserDappListing dapps={dapps} />
+                    </React.Fragment>
+                )}
+                <Typography variant="subheading" gutterBottom>
+                    {"Discovered Dapps"}
+                </Typography>
+                <NetworkDappListing />
+            </React.Fragment>
+        );
+    }
+);
+
+class DaoView extends PureComponent {
+    render() {
+        const { ethAddress } = this.props;
+        return (
+            <View className={"DaoView"} padding="full">
                 <header>
                     <Typography variant="subheading" gutterBottom>
-                        {'The AO'}
+                        {"The AO"}
                     </Typography>
                 </header>
-                <section style={{marginTop: 48, opacity: 0.5}}>
-                    <Typography variant="body1">
-                        {`Abstract Order (“AO”) is governed by The Autonomous Organization (“The AO”). The User Interface for The AO is coming soon. However, the contracts and governance structure for the AO already exists and is fully operational. View the AO contracts here: `}
-                        <EtherscanLink type="address" value={`TODO`} />
-                    </Typography>
-                    <Typography variant="caption" style={{
-                        position: 'absolute',
-                        top: '50%',
-                        left: '50%',
-                        fontSize: '32px',
-                        transform: 'translate(-50%, -50%) rotate(-10deg)',
-                        fontStyle: 'italic',
-                    }}>
-                        {'Coming soon...'}
-                    </Typography>
-                </section>
+                {!ethAddress ? <DaoViewNoUser /> : <DaoViewWithUser />}
             </View>
         );
     }
 }
+
+export default compose(withEthAddress)(DaoView);

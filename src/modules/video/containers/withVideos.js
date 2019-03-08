@@ -63,7 +63,7 @@ export default compose(
                 query: props.searchString,
                 contentType: "VOD"
             },
-            pollInterval: 3000
+            pollInterval: 5000
         })
     })
 );
