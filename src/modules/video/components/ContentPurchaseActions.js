@@ -320,7 +320,8 @@ class ContentPurchaseActionComponent extends Component {
         this.setState({ loading: false, error: errorMessage });
         this.props.addNotification({
             message: `${errorMessage}: ${error.message}`,
-            variant: "error"
+            variant: "error",
+            action: "dismiss"
         });
     };
     _downloadContentAction = () => {
@@ -451,6 +452,7 @@ class ContentPurchaseActionComponent extends Component {
         const { stakeContent, content, client } = this.props;
         this.setState({ loading: true, error: null });
         stakeContent({
+            contentLicense: content.contentLicense,
             networkTokenAmount: Math.floor(
                 content.stake * (1 - content.stakePrimordialPercentage / 100.0)
             ),
