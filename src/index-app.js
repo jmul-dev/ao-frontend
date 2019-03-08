@@ -18,7 +18,7 @@ const store = configureStore();
 const fragmentMatcher = new IntrospectionFragmentMatcher({
     introspectionQueryResultData: {
         __schema: {
-            types: ["VideoContent", "DappContent"]
+            types: ["VideoContent", "DappContent", "PdfContent"]
         }
     }
 });
@@ -49,7 +49,8 @@ render(
 
 if (module.hot) {
     module.hot.accept("./Root", () => {
-        const NextRoot = require("./Root"); // eslint-disable-line global-require
+        const NextRoot = require("./Root").default; // eslint-disable-line global-require
+        console.info(NextRoot);
         render(
             <HotLoaderContainer>
                 <NextRoot store={store} history={history} client={client} />

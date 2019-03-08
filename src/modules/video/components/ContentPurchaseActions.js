@@ -6,7 +6,7 @@
 import { CircularProgress } from "@material-ui/core";
 import AlertIcon from "@material-ui/icons/ErrorOutline";
 import PlayIcon from "@material-ui/icons/PlayArrow";
-import TabIcon from "@material-ui/icons/Tab";
+import LaunchIcon from "@material-ui/icons/Launch";
 import ReplayIcon from "@material-ui/icons/Replay";
 import React, { Component } from "react";
 import { compose, withApollo } from "react-apollo";
@@ -154,7 +154,7 @@ export const getContentState = (content, currentUserEthAddress) => {
                 returnData.StateIcon = PlayIcon;
             } else {
                 returnData.stateCopy = "View now";
-                returnData.StateIcon = TabIcon;
+                returnData.StateIcon = LaunchIcon;
             }
             break;
         default:
@@ -247,7 +247,7 @@ export const ContentPurchaseState = ({
                 Icon = PlayIcon;
             } else {
                 copy = "View now";
-                Icon = TabIcon;
+                Icon = LaunchIcon;
             }
             break;
         default:
