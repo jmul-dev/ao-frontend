@@ -1,7 +1,6 @@
 import React, { PureComponent } from "react";
 import View from "../View";
 import { compose } from "react-apollo";
-import withEthAddress from "../../modules/account/containers/withEthAddress";
 import { userContentQuery } from "../../modules/video/containers/withUserContent";
 import PropTypes from "prop-types";
 import { graphql } from "react-apollo";
@@ -12,7 +11,7 @@ import ButtonBase from "@material-ui/core/ButtonBase";
 import CloseIcon from "@material-ui/icons/Close";
 import { AO_CONSTANTS } from "ao-library";
 
-class DappView extends PureComponent {
+class DappContentView extends PureComponent {
     static propTypes = {
         // react-router
         match: PropTypes.shape({
@@ -78,7 +77,7 @@ class DappView extends PureComponent {
         const { loading, error, userContent } = this.props.userContentQuery;
         const { isElectron, dappRendered } = this.state;
         return (
-            <View className={"DappView"} padding="none">
+            <View className={"DappContentView"} padding="none">
                 <section style={{ height: "100%", width: "100%" }}>
                     <div className={classes.statusBar}>
                         <ButtonBase
@@ -152,6 +151,5 @@ const withDappContentQuery = graphql(dappContentQuery, {
 
 export default compose(
     withStyles(styles, { withTheme: true }),
-    withEthAddress,
     withDappContentQuery
-)(DappView);
+)(DappContentView);

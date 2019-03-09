@@ -512,9 +512,13 @@ class ContentPurchaseActionComponent extends Component {
         }
         setVideoPlayback({ contentId: content.id, initialPosition });
     };
-    _viewDapp = () => {
+    _viewContent = () => {
         const { history, content } = this.props;
-        history.push(`/app/view/dapp/${content.id}`);
+        history.push(
+            `/app/view/content/${content.contentType.toLowerCase()}/${
+                content.id
+            }`
+        );
     };
     _retryHostDiscovery = () => {
         const { content, client } = this.props;
@@ -601,8 +605,8 @@ class ContentPurchaseActionComponent extends Component {
                 if (content.contentType === "VOD") {
                     action = this._watchContent;
                     actionCopy = "Watch now";
-                } else if (content.contentType === "DAPP") {
-                    action = this._viewDapp;
+                } else {
+                    action = this._viewContent;
                     actionCopy = "View now";
                 }
                 break;
