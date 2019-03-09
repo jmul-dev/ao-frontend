@@ -20,6 +20,7 @@ import videoIconSrc from "../../../assets/media-type-video.svg";
 import musicIconSrc from "../../../assets/media-type-music.svg";
 import imageIconSrc from "../../../assets/media-type-image.svg";
 import documentIconSrc from "../../../assets/media-type-document.svg";
+import pdfIconSrc from "../../../assets/media-type-pdf.svg";
 import applicationIconSrc from "../../../assets/media-type-application.svg";
 import assetIconSrc from "../../../assets/media-type-digital-asset.svg";
 
@@ -86,6 +87,17 @@ class UploadForm extends Component<Props> {
                         }
                     })}
                     {this._renderContentListItem({
+                        contentType: "PDF",
+                        label: "PDF",
+                        icon: pdfIconSrc,
+                        active: contentType === "PDF",
+                        disabled: false,
+                        fileTypesMessage: "pdf file",
+                        fileInputProps: {
+                            accept: "application/pdf"
+                        }
+                    })}
+                    {this._renderContentListItem({
                         contentType: "AUDIO",
                         label: "Music",
                         icon: musicIconSrc,
@@ -100,17 +112,17 @@ class UploadForm extends Component<Props> {
                         disabled: true
                     })}
                     {this._renderContentListItem({
-                        contentType: "DOC",
-                        label: "Document",
-                        icon: documentIconSrc,
-                        active: contentType === "DOC",
-                        disabled: true
-                    })}
-                    {this._renderContentListItem({
                         contentType: "ASSET",
                         label: "Digital Asset",
                         icon: assetIconSrc,
                         active: contentType === "ASSET",
+                        disabled: true
+                    })}
+                    {this._renderContentListItem({
+                        contentType: "DOC",
+                        label: "Documents",
+                        icon: documentIconSrc,
+                        active: contentType === "DOC",
                         disabled: true
                     })}
                 </List>
@@ -163,6 +175,12 @@ class UploadForm extends Component<Props> {
         fileInputProps
     }) => {
         const { classes } = this.props;
+        let onClickHandler = undefined;
+        if (!disabled) {
+            onClickHandler = active
+                ? this._onClickListItem.bind(this, null)
+                : this._onClickListItem.bind(this, contentType);
+        }
         return (
             <React.Fragment>
                 <ListItem
@@ -173,11 +191,7 @@ class UploadForm extends Component<Props> {
                     }`}
                     disabled={disabled}
                     button={!disabled}
-                    onClick={
-                        active
-                            ? this._onClickListItem.bind(this, null)
-                            : this._onClickListItem.bind(this, contentType)
-                    }
+                    onClick={onClickHandler}
                 >
                     <ListItemIcon>
                         <img src={icon} alt={label} className={classes.icon} />

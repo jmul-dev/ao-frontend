@@ -10,6 +10,7 @@ import videoIconSrc from "../../../assets/media-type-video.svg";
 import musicIconSrc from "../../../assets/media-type-music.svg";
 import imageIconSrc from "../../../assets/media-type-image.svg";
 import documentIconSrc from "../../../assets/media-type-document.svg";
+import pdfIconSrc from "../../../assets/media-type-pdf.svg";
 import applicationIconSrc from "../../../assets/media-type-application.svg";
 import assetIconSrc from "../../../assets/media-type-digital-asset.svg";
 import { compose } from "react-apollo";
@@ -106,6 +107,18 @@ class AccountViewContentTypeNav extends Component {
                         className={classes.tabRoot}
                     />
                     <Tab
+                        label="pdfs"
+                        value={"pdf"}
+                        icon={
+                            <img
+                                className={classes.icon}
+                                src={pdfIconSrc}
+                                alt="pdf content"
+                            />
+                        }
+                        className={classes.tabRoot}
+                    />
+                    <Tab
                         disabled
                         label="music"
                         value={"music"}
@@ -133,19 +146,6 @@ class AccountViewContentTypeNav extends Component {
                     />
                     <Tab
                         disabled
-                        label="documents"
-                        value={"doc"}
-                        icon={
-                            <img
-                                className={classes.icon}
-                                src={documentIconSrc}
-                                alt="document content"
-                            />
-                        }
-                        className={classes.tabRoot}
-                    />
-                    <Tab
-                        disabled
                         label="digital asset"
                         value={"asset"}
                         icon={
@@ -153,6 +153,19 @@ class AccountViewContentTypeNav extends Component {
                                 className={classes.icon}
                                 src={assetIconSrc}
                                 alt="digital asset content"
+                            />
+                        }
+                        className={classes.tabRoot}
+                    />
+                    <Tab
+                        disabled
+                        label="documents"
+                        value={"doc"}
+                        icon={
+                            <img
+                                className={classes.icon}
+                                src={documentIconSrc}
+                                alt="document content"
                             />
                         }
                         className={classes.tabRoot}
