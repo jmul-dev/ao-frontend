@@ -7,7 +7,6 @@ const ContentFields = `
     contentHostId,
     state,
     stakeId,
-    nodeId,
     creatorId,
     taoId,
     purchaseId,
