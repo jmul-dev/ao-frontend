@@ -100,9 +100,10 @@ const ContentPreview = ({ contentType, content }) => {
                         style={{ color: "white" }}
                     >
                         <FolderIcon style={{ marginBottom: 6, fontSize: 32 }} />
-                        <Typography variant="caption">{`${contentNameFromFileInputs(
-                            content
-                        )}`}</Typography>
+                        <Typography
+                            variant="caption"
+                            align="center"
+                        >{`${contentNameFromFileInputs(content)}`}</Typography>
                     </div>
                 </div>
             );

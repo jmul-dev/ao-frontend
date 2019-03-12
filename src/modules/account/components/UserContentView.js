@@ -105,7 +105,7 @@ class UserContentView extends PureComponent {
                         className={classes.backNav}
                     >
                         <ArrowBackIcon />
-                        <Typography variant="body1">{`back to my videos`}</Typography>
+                        <Typography variant="body1">{`back to my content`}</Typography>
                     </ButtonBase>
                 </Grid>
                 <ContentPurchaseAction
@@ -127,12 +127,14 @@ class UserContentView extends PureComponent {
                                         }/${content.featuredImageUrl})`,
                                         opacity: isCompletedState ? 1 : 0.15
                                     }}
-                                    disabled={!isCompletedState}
+                                    disabled={!isCompletedState || !action}
                                     onClick={action}
                                 >
-                                    <div>
-                                        <PlayIcon />
-                                    </div>
+                                    {content.contentType === "VOD" && (
+                                        <div>
+                                            <PlayIcon />
+                                        </div>
+                                    )}
                                 </ButtonBase>
                             </Grid>
                             <Grid item xs={12} sm={5} md={5} lg={6}>
@@ -635,7 +637,8 @@ const styles = ({ palette, spacing }) => ({
         fontWeight: "bold"
     },
     content: {
-        color: "#777777"
+        color: "#777777",
+        overflow: "auto"
     },
     // Tabs
     tabs: {

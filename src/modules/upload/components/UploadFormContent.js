@@ -87,6 +87,17 @@ class UploadFormContent extends Component {
                                     onInputChange={this._onTeaserInputChange}
                                 >
                                     <AddIcon />
+                                    {form.content.contentType !== "VOD" && (
+                                        <Typography
+                                            variant="caption"
+                                            color="secondary"
+                                            style={{
+                                                position: "absolute",
+                                                bottom: 8,
+                                                right: 8
+                                            }}
+                                        >{`optional`}</Typography>
+                                    )}
                                 </FileUpload>
                             </Grid>
                         </Grid>

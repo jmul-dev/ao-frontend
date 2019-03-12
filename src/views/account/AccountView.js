@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Switch, Route } from "react-router";
+import { Route } from "react-router";
 import View from "../View";
 import Typography from "@material-ui/core/Typography";
 import UserContentListing from "../../modules/account/components/UserContentListing";
