@@ -58,7 +58,11 @@ const DaoViewWithUser = compose(
                 )}
             </section>
             <section>
-                <Typography variant="subheading" gutterBottom>
+                <Typography
+                    variant="subheading"
+                    gutterBottom
+                    style={{ borderBottom: `1px solid #333`, paddingBottom: 8 }}
+                >
                     {"Discovered Dapps"}
                 </Typography>
                 <NetworkDappListing />
@@ -71,7 +75,11 @@ class DaoView extends PureComponent {
     render() {
         const { ethAddress } = this.props;
         return (
-            <View className={"DaoView"} padding="full">
+            <View
+                className={"DaoView"}
+                padding="default"
+                style={{ paddingTop: 120 }}
+            >
                 {!ethAddress ? <DaoViewNoUser /> : <DaoViewWithUser />}
             </View>
         );

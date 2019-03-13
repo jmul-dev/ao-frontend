@@ -79,7 +79,10 @@ const featuredStyles = ({}) => ({
         display: "block"
     },
     title: {
-        fontWeight: "bold"
+        fontWeight: "bold",
+        whiteSpace: "nowrap",
+        overflow: "hidden",
+        textOverflow: "ellipsis"
     }
 });
 
@@ -91,7 +94,7 @@ const ContentCardFeatured = compose(withStyles(featuredStyles))(
         >
             {({ action, actionCopy, loading }) => (
                 <div>
-                    <Grid container spacing={16} alignItems="center">
+                    <Grid container spacing={24} alignItems="center">
                         <Grid item xs={6}>
                             <img
                                 className={classes.featuredImage}
@@ -108,7 +111,10 @@ const ContentCardFeatured = compose(withStyles(featuredStyles))(
                             >
                                 {content.title}
                             </Typography>
-                            <Typography variant="body1" gutterBottom>
+                            <Typography
+                                variant="body1"
+                                style={{ marginBottom: 24 }}
+                            >
                                 {content.description}
                             </Typography>
                             <PrimaryButton
