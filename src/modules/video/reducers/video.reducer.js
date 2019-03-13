@@ -2,7 +2,7 @@ import BigNumber from "bignumber.js";
 import { triggerMetamaskPopupWithinElectron } from "../../../utils/electron";
 import { formattedTokenAmount } from "../../../utils/denominations";
 import { addNotification } from "../../notifications/reducers/notifications.reducer";
-
+import { waitForTransactionReceipt } from "../../../store/contracts.reducer";
 // Constants
 export const SET_TEASER_LISTING_STATE = "SET_TEASER_LISTING_STATE";
 export const SET_ACTIVE_VIDEO = "SET_ACTIVE_VIDEO";
@@ -157,6 +157,19 @@ export const buyContent = (contentHostId, publicKey, publicAddress) => {
                                                 }
                                                 // 3a. Transaction submitted succesfully (has not been confirmed)
                                                 resolve(transactionHash);
+                                                waitForTransactionReceipt(
+                                                    transactionHash
+                                                ).catch(error => {
+                                                    // The TX failed for some reason...
+                                                    dispatch(
+                                                        addNotification({
+                                                            action: "dismiss",
+                                                            message:
+                                                                "Purchase content transaction failed...",
+                                                            variant: "error"
+                                                        })
+                                                    );
+                                                });
                                             }
                                         );
                                     })

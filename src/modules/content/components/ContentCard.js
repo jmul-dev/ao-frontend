@@ -10,6 +10,7 @@ import withEthAddress from "../../account/containers/withEthAddress";
 import { withStyles } from "@material-ui/core/styles";
 import { PrimaryButton } from "../../../theme";
 import withContentById from "../containers/withContentById";
+import OfflineIcon from "@material-ui/icons/CloudOff";
 
 /**
  * ContentCard
@@ -28,8 +29,9 @@ import withContentById from "../containers/withContentById";
  *
  * @param {string} contentId
  * @param {string} variant default | featured
- * @param {string} ethAddress The current users eth address
- * @param {object} query The graphql query for fetching userContent and networkContent
+ *
+ * @param {string} ethAddress The current users eth address (withEthAddress)
+ * @param {object} query The graphql query for fetching userContent and networkContent (withContentById)
  */
 const ContentCard = ({
     contentId,
@@ -83,6 +85,10 @@ const featuredStyles = ({}) => ({
         whiteSpace: "nowrap",
         overflow: "hidden",
         textOverflow: "ellipsis"
+    },
+    description: {
+        maxHeight: 96,
+        overflow: "auto"
     }
 });
 
@@ -135,16 +141,97 @@ const ContentCardFeatured = compose(withStyles(featuredStyles))(
 );
 ContentCardFeatured.displayName = "ContentCardFeatured";
 
-const defaultStyles = ({}) => ({});
+const defaultStyles = ({}) => ({
+    root: {
+        marginBottom: 48
+    },
+    featuredImage: {
+        backgroundPosition: "center",
+        backgroundSize: "cover",
+        backgroundRepeat: "no-repeat",
+        paddingBottom: "56.25%",
+        marginBottom: 8,
+        position: "relative"
+    },
+    offlineOverlay: {
+        position: "absolute",
+        top: 0,
+        left: 0,
+        width: "100%",
+        height: "100%",
+        backgroundColor: "rgba(0,0,0,0.75)",
+        padding: 16
+    },
+    offlineText: {
+        display: "flex",
+        alignItems: "center"
+    },
+    contentDescription: {
+        maxHeight: 120,
+        overflow: "auto"
+    },
+    actionButton: {
+        marginTop: 8
+    }
+});
 
 const ContentCardDefault = compose(withStyles(defaultStyles))(
-    ({ content, ethAddress, classes }) => (
-        <ContentPurchaseAction
-            currentUserEthAddress={ethAddress}
-            content={content}
-        >
-            {({ action, actionCopy, loading }) => <div>{`TODO`}</div>}
-        </ContentPurchaseAction>
-    )
+    ({ content, ethAddress, classes }) => {
+        const isOffline = content.recentlySeenHostsCount < 1;
+        return (
+            <ContentPurchaseAction
+                currentUserEthAddress={ethAddress}
+                content={content}
+            >
+                {({ action, actionCopy, loading }) => (
+                    <div className={classes.root}>
+                        <div
+                            className={classes.featuredImage}
+                            style={{
+                                backgroundImage: `url(${
+                                    process.env.REACT_APP_AO_CORE_URL
+                                }/${content.featuredImageUrl})`
+                            }}
+                        >
+                            {isOffline && (
+                                <div className={classes.offlineOverlay}>
+                                    <Typography
+                                        variant="caption"
+                                        className={classes.offlineText}
+                                    >
+                                        <OfflineIcon
+                                            style={{ marginRight: 8 }}
+                                        />
+                                        {`currently offline`}
+                                    </Typography>
+                                </div>
+                            )}
+                        </div>
+                        <Typography variant="subheading" gutterBottom>
+                            {content.title}
+                        </Typography>
+                        <Typography
+                            variant="body1"
+                            gutterBottom
+                            className={classes.contentDescription}
+                        >
+                            {content.description}
+                        </Typography>
+                        <PrimaryButton
+                            size="small"
+                            disabled={!action || loading}
+                            onClick={action}
+                            className={classes.actionButton}
+                        >
+                            <ContentPurchaseState
+                                content={content}
+                                currentUserEthAddress={ethAddress}
+                            />
+                        </PrimaryButton>
+                    </div>
+                )}
+            </ContentPurchaseAction>
+        );
+    }
 );
 ContentCardDefault.displayName = "ContentCardDefault";

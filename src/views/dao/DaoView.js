@@ -2,6 +2,7 @@ import React, { PureComponent } from "react";
 import View from "../View";
 import Typography from "@material-ui/core/Typography";
 import EtherscanLink from "../../modules/etherscan/EtherscanLink";
+import { Link } from "react-router-dom";
 import { compose } from "react-apollo";
 import withEthAddress from "../../modules/account/containers/withEthAddress";
 import AccountRequired from "../../modules/account/components/AccountRequired";
@@ -9,7 +10,7 @@ import withNetworkDapps from "./withNetworkDapps";
 import withTheAoDappId from "./withTheAoDappId";
 import ContentCard from "../../modules/content/components/ContentCard";
 import NetworkDappListing from "./NetworkDappListing";
-import { Grid } from "@material-ui/core";
+import { Grid, ButtonBase } from "@material-ui/core";
 
 const DaoViewNoUser = () => (
     <React.Fragment>
@@ -60,10 +61,30 @@ const DaoViewWithUser = compose(
             <section>
                 <Typography
                     variant="subheading"
-                    gutterBottom
-                    style={{ borderBottom: `1px solid #333`, paddingBottom: 8 }}
+                    style={{
+                        borderBottom: `1px solid #333`,
+                        paddingBottom: 8,
+                        marginBottom: 24,
+                        position: "relative",
+                        display: "flex"
+                    }}
                 >
                     {"Discovered Dapps"}
+                    <ButtonBase
+                        component={Link}
+                        to={{
+                            pathname: `/app/view/account/dapp`
+                        }}
+                        style={{
+                            alignSelf: "flex-end",
+                            marginLeft: "auto"
+                        }}
+                    >
+                        <Typography
+                            variant="body1"
+                            color="textSecondary"
+                        >{`View downloaded dapps`}</Typography>
+                    </ButtonBase>
                 </Typography>
                 <NetworkDappListing />
             </section>
@@ -78,7 +99,7 @@ class DaoView extends PureComponent {
             <View
                 className={"DaoView"}
                 padding="default"
-                style={{ paddingTop: 120 }}
+                style={{ paddingTop: 120, paddingBottom: 120 }}
             >
                 {!ethAddress ? <DaoViewNoUser /> : <DaoViewWithUser />}
             </View>
