@@ -21,6 +21,8 @@ import DownloadsList from "../../modules/downloads/components/DownloadsList";
 import { APP_STATES } from "../../store/app.reducer";
 import Account from "../../modules/account/components/Account";
 import WalletBalances from "../../modules/wallet/components/WalletBalances";
+import Tooltip from "@material-ui/core/Tooltip";
+import WarningIcon from "@material-ui/icons/Warning";
 
 const openMetamask = () => {
     window.chrome.ipcRenderer.send("open-metamask-popup");
@@ -59,11 +61,16 @@ const MainNavigation = ({
                                     size={20}
                                 />
                             ) : (
-                                <img
-                                    src={navIconWalletSrc}
-                                    className={classes.navLinkIcon}
-                                    alt="Wallet"
-                                />
+                                <Tooltip
+                                    title={`Sign in via Metamask`}
+                                    placement="right"
+                                >
+                                    <WarningIcon
+                                        className={classes.navLinkIcon}
+                                        alt="Sign in"
+                                        color="action"
+                                    />
+                                </Tooltip>
                             )}
                             <Typography
                                 variant="caption"
