@@ -57,15 +57,15 @@ const determineIfContentWasUploadedByCurrentUser = (
     content,
     currentUserEthAddress
 ) => {
-    let creatorId =
-        content && typeof content.creatorId === "string"
-            ? content.creatorId.toLowerCase()
+    let creatorEthAddress =
+        content && typeof content.creatorEthAddress === "string"
+            ? content.creatorEthAddress.toLowerCase()
             : undefined;
     let currentUser =
         currentUserEthAddress && typeof currentUserEthAddress === "string"
             ? currentUserEthAddress.toLowerCase()
             : null;
-    return creatorId === currentUser;
+    return creatorEthAddress === currentUser;
 };
 
 /**
@@ -320,7 +320,8 @@ class ContentPurchaseActionComponent extends Component {
         this.setState({ loading: false, error: errorMessage });
         this.props.addNotification({
             message: `${errorMessage}: ${error.message}`,
-            variant: "error"
+            variant: "error",
+            action: "dismiss"
         });
     };
     _downloadContentAction = () => {
@@ -451,6 +452,7 @@ class ContentPurchaseActionComponent extends Component {
         const { stakeContent, content, client } = this.props;
         this.setState({ loading: true, error: null });
         stakeContent({
+            contentLicense: content.contentLicense,
             networkTokenAmount: Math.floor(
                 content.stake * (1 - content.stakePrimordialPercentage / 100.0)
             ),
@@ -462,7 +464,8 @@ class ContentPurchaseActionComponent extends Component {
             fileSizeInBytes: content.fileSize,
             profitPercentage: content.profitSplitPercentage,
             baseChallenge: content.baseChallenge,
-            encChallenge: content.encChallenge
+            encChallenge: content.encChallenge,
+            taoId: content.taoId, // only shows up if content type === TAO
         })
             .then(transactionHash => {
                 // 2. Submit the tx to core

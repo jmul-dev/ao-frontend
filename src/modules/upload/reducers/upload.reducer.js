@@ -294,7 +294,8 @@ export const stakeContent = ({
                     break;
             }
             if (stakeContentPromise === null) {
-                rejectAndDispatchError(new Error("Invalid content license"));
+                rejectAndDispatchError(new Error(`Invalid content license: ${contentLicense}`));
+                return;
             }
             stakeContentPromise
                 .then(transactionHash => {
