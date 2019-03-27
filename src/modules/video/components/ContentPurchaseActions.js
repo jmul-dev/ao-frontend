@@ -336,7 +336,7 @@ class ContentPurchaseActionComponent extends Component {
                 refetchQueries: [
                     {
                         query: userContentQuery,
-                        variables: { contentId: content.id }
+                        variables: { id: content.id }
                     }
                 ]
             })
