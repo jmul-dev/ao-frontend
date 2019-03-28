@@ -17,7 +17,7 @@ export const updateIcoState = () => {
             );
             return;
         }
-        contracts.aoToken.networkExchangeEnded(function(err, ended) {
+        contracts.aoIon.networkExchangeEnded(function(err, ended) {
             if (ended) {
                 dispatch({
                     type: UPDATE_PRIMORDIAL_STATE,
@@ -28,7 +28,7 @@ export const updateIcoState = () => {
             }
         });
         // primordialTotalBought
-        contracts.aoToken.primordialTotalSupply(function(err, supply) {
+        contracts.aoIon.primordialTotalSupply(function(err, supply) {
             if (supply) {
                 dispatch({
                     type: UPDATE_PRIMORDIAL_STATE,
@@ -38,7 +38,7 @@ export const updateIcoState = () => {
                 });
             }
         });
-        contracts.aoToken.TOTAL_PRIMORDIAL_FOR_SALE(function(err, supply) {
+        contracts.aoIon.TOTAL_PRIMORDIAL_FOR_SALE(function(err, supply) {
             if (supply) {
                 dispatch({
                     type: UPDATE_PRIMORDIAL_STATE,
@@ -48,7 +48,7 @@ export const updateIcoState = () => {
                 });
             }
         });
-        contracts.aoToken.primordialBuyPrice(function(err, buyPrice) {
+        contracts.aoIon.primordialBuyPrice(function(err, buyPrice) {
             if (buyPrice) {
                 dispatch({
                     type: UPDATE_PRIMORDIAL_STATE,
@@ -96,7 +96,7 @@ export const startListeningForRecentTransactions = () => {
         if (!ico.lotCreationEvent) {
             let fromBlock = contracts.latestBlockNumber - 15 * 4 * 60 * 24 * 30; // ~30 days worth of txs
             if (fromBlock < 0) fromBlock = 0;
-            let lotCreationEvent = contracts.aoToken.LotCreation(
+            let lotCreationEvent = contracts.aoIonLot.LotCreation(
                 {},
                 { fromBlock, toBlock: "latest" }
             );
@@ -106,6 +106,7 @@ export const startListeningForRecentTransactions = () => {
             });
             lotCreationEvent.watch((error, result) => {
                 if (result) {
+                    // event LotCreation(address indexed lotOwner, bytes32 indexed lotId, uint256 multiplier, uint256 primordialAmount, uint256 networkBonusAmount);
                     dispatch({
                         type: LOT_CREATION_EVENT_RECEIVED,
                         payload: {
@@ -116,10 +117,10 @@ export const startListeningForRecentTransactions = () => {
                                 .dividedBy(ico.weightedIndexDivisor)
                                 .toNumber(),
                             primordialTokenAmount: new BigNumber(
-                                result.args.primordialTokenAmount
+                                result.args.primordialAmount
                             ),
                             networkTokenBonusAmount: new BigNumber(
-                                result.args.networkTokenBonusAmount
+                                result.args.networkBonusAmount
                             )
                         }
                     });
@@ -143,10 +144,11 @@ export const calculatePrimoridialExchangeMultiplierAndBonus = tokenAmount => {
                 );
                 return reject();
             }
-            contracts.aoToken.calculateMultiplierAndBonus(
+            contracts.aoIon.calculateMultiplierAndBonus(
                 tokenAmount.toString(),
                 function(err, results) {
                     if (results) {
+                        // [multiplier, bonus percentage, bonus amount]
                         resolve({
                             multiplier: new BigNumber(results[0])
                                 .dividedBy(ico.weightedIndexDivisor)

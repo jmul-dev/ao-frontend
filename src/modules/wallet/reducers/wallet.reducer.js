@@ -40,7 +40,7 @@ export const getTokenBalanceForAccount = ( account ) => {
         const { contracts, app } = getState()
         if ( !app.states[APP_STATES.CONTRACTS_INITIALIZED] )
             return console.warn('Attempting to make contract call before contract initialized')
-        contracts.aoToken.balanceOf(account, function(err, result) {
+        contracts.aoIon.balanceOf(account, function(err, result) {
             if ( !err ) {
                 dispatch({
                     type: BALANCE_CHANGE,
@@ -50,7 +50,7 @@ export const getTokenBalanceForAccount = ( account ) => {
                 })
             }
         })   
-        contracts.aoToken.primordialBalanceOf(account, function(err, result) {
+        contracts.aoIon.primordialBalanceOf(account, function(err, result) {
             if ( !err ) {
                 dispatch({
                     type: BALANCE_CHANGE,
@@ -67,7 +67,8 @@ export const getTokensStaked = () => {
         const { app, contracts } = getState()
         if ( !app.ethAddress )
             return console.warn(`getTokensStaked called with no ethAddress`)
-        contracts.aoToken.stakedBalance(app.ethAddress, function(err, result) {
+        // TODO: contracts.aoIon.primordialStakedBalance should be included in this metric
+        contracts.aoIon.stakedBalance(app.ethAddress, function(err, result) {
             if ( !err ) {
                 dispatch({
                     type: UPDATE_ACCOUNT_TOTAL_STAKED,
@@ -84,12 +85,12 @@ export const getTokensEarned = () => {
             return console.warn(`getTokensEarned called with no ethAddress`)
         const account = app.ethAddress
         let stakeContentEarningPromise = new Promise((resolve, reject) => {
-            contracts.aoEarning.stakeContentEarning(account, function(err, result) {
+            contracts.aoEarning.stakedContentStakeEarning(account, function(err, result) {
                 resolve(new BigNumber(result || 0))
             })
         })
         let hostContentEarningPromise = new Promise((resolve, reject) => {
-            contracts.aoEarning.hostContentEarning(account, function(err, result) {
+            contracts.aoEarning.stakedContentHostEarning(account, function(err, result) {
                 resolve(new BigNumber(result || 0))
             })
         })
@@ -133,6 +134,11 @@ export default function walletReducer(state = initialState, action) {
             return {
                 ...state,
                 ...action.payload
+            }
+        case UPDATE_ACCOUNT_TOTAL_STAKED:
+            return {
+                ...state,
+                tokenStaked: action.payload,
             }
         default:
             return state

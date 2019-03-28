@@ -2,6 +2,7 @@ import AOTreasury from "ao-contracts/build/contracts/AOTreasury.json";
 import AOContent from "ao-contracts/build/contracts/AOContent.json";
 import AOContentFactory from "ao-contracts/build/contracts/AOContentFactory.json";
 import AOContentHost from "ao-contracts/build/contracts/AOContentHost.json";
+import AOStakedContent from "ao-contracts/build/contracts/AOStakedContent.json";
 import AOEarning from "ao-contracts/build/contracts/AOEarning.json";
 import AOLibrary from "ao-contracts/build/contracts/AOLibrary.json";
 import AOPool from "ao-contracts/build/contracts/AOPool.json";
@@ -59,6 +60,7 @@ export const initializeContracts = networkId => {
                 AOContent,
                 AOContentFactory,
                 AOContentHost,
+                AOStakedContent,
                 AOEarning,
                 AOLibrary,
                 AOPool,
@@ -69,7 +71,7 @@ export const initializeContracts = networkId => {
             ]
             let initializedContracts = contracts.reduce((acc, contract) => {
                 if (!contract.networks[networkId]) {
-                    return throw new Error(`${contract.contractName} has not been deployed to network ${networkId}`)
+                    throw new Error(`${contract.contractName} has not been deployed to network ${networkId}`)
                 }
                 // lowercasing "AO"
                 const contractInstanceName = "ao" + contract.contractName.substring(2)
@@ -138,7 +140,7 @@ const fetchSettingsFromContract = () => {
     return (dispatch, getState) => {
         const { contracts } = getState();
         // 1. We have to fetch the settings TAO id before fetching the actual settings
-        contracts.aoToken.settingTAOId((err, settingsTAOId) => {
+        contracts.aoIon.settingTAOId((err, settingsTAOId) => {
             let ingressUrlPromise = new Promise((resolve, reject) => {
                 contracts.aoSetting.getSettingValuesByTAOName(
                     settingsTAOId,
