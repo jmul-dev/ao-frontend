@@ -58,15 +58,15 @@ const determineIfContentWasUploadedByCurrentUser = (
     content,
     currentUserEthAddress
 ) => {
-    let creatorId =
-        content && typeof content.creatorId === "string"
-            ? content.creatorId.toLowerCase()
+    let creatorEthAddress =
+        content && typeof content.creatorEthAddress === "string"
+            ? content.creatorEthAddress.toLowerCase()
             : undefined;
     let currentUser =
         currentUserEthAddress && typeof currentUserEthAddress === "string"
             ? currentUserEthAddress.toLowerCase()
             : null;
-    return creatorId === currentUser;
+    return creatorEthAddress === currentUser;
 };
 
 /**
@@ -473,7 +473,8 @@ class ContentPurchaseActionComponent extends Component {
             fileSizeInBytes: content.fileSize,
             profitPercentage: content.profitSplitPercentage,
             baseChallenge: content.baseChallenge,
-            encChallenge: content.encChallenge
+            encChallenge: content.encChallenge,
+            taoId: content.taoId, // only shows up if content type === TAO
         })
             .then(transactionHash => {
                 // 2. Submit the tx to core

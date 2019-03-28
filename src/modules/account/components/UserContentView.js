@@ -248,7 +248,8 @@ class UserContentView extends PureComponent {
                                         className={classes.content}
                                         variant="body2"
                                     >
-                                        {content.creatorId}
+                                        {`Eth address: ${content.creatorEthAddress}`}<br/>
+                                        {`AO public key: ${content.creatorNodePublicKey}`}
                                     </Typography>
                                 </div>
                                 <Divider />
@@ -266,6 +267,27 @@ class UserContentView extends PureComponent {
                                         {content.contentLicense}
                                     </Typography>
                                 </div>
+                                {content.contentLicense === "TAO" && (
+                                    <React.Fragment>
+                                        <Divider />
+                                        <div
+                                            className={classes.contentListItem}
+                                        >
+                                            <Typography
+                                                className={classes.contentLabel}
+                                                variant="caption"
+                                            >
+                                                {"TAO id:"}
+                                            </Typography>
+                                            <Typography
+                                                className={classes.content}
+                                                variant="body2"
+                                            >
+                                                {content.taoId}
+                                            </Typography>
+                                        </div>
+                                    </React.Fragment>
+                                )}
                                 <Divider />
                                 <div className={classes.contentListItem}>
                                     <Typography
@@ -374,7 +396,7 @@ class UserContentView extends PureComponent {
                                             </Typography>
                                         </div>
                                     </React.Fragment>
-                                )}
+                                )}                                
                             </div>
                         )}
                         {activeTabIndex === 1 && (
