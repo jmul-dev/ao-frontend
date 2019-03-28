@@ -1,10 +1,15 @@
-import AOToken from "ao-contracts/build/contracts/AOToken.json";
 import AOTreasury from "ao-contracts/build/contracts/AOTreasury.json";
 import AOContent from "ao-contracts/build/contracts/AOContent.json";
+import AOContentFactory from "ao-contracts/build/contracts/AOContentFactory.json";
+import AOContentHost from "ao-contracts/build/contracts/AOContentHost.json";
 import AOEarning from "ao-contracts/build/contracts/AOEarning.json";
 import AOLibrary from "ao-contracts/build/contracts/AOLibrary.json";
 import AOPool from "ao-contracts/build/contracts/AOPool.json";
 import AOSetting from "ao-contracts/build/contracts/AOSetting.json";
+import AOIon from "ao-contracts/build/contracts/AOIon.json";
+import AOIonLot from "ao-contracts/build/contracts/AOIonLot.json";
+import AOPurchaseReceipt from "ao-contracts/build/contracts/AOPurchaseReceipt.json";
+
 import debounce from "debounce";
 import { APP_STATES, updateAppState, getNetworkName } from "./app.reducer";
 import { updateIcoState } from "../modules/ico/reducers/ico.reducer";
@@ -49,68 +54,59 @@ export const waitForTransactionReceipt = transactionHash => {
 export const initializeContracts = networkId => {
     return (dispatch, getState) => {
         try {
-            if (
-                !AOToken.networks[networkId] ||
-                !AOTreasury.networks[networkId] ||
-                !AOContent.networks[networkId] ||
-                !AOEarning.networks[networkId] ||
-                !AOLibrary.networks[networkId] ||
-                !AOPool.networks[networkId] ||
-                !AOSetting.networks[networkId]
-            ) {
+            let contracts = [
+                AOTreasury,
+                AOContent,
+                AOContentFactory,
+                AOContentHost,
+                AOEarning,
+                AOLibrary,
+                AOPool,
+                AOSetting,
+                AOIon,
+                AOIonLot,
+                AOPurchaseReceipt,
+            ]
+            let initializedContracts = contracts.reduce((acc, contract) => {
+                if (!contract.networks[networkId]) {
+                    return throw new Error(`${contract.contractName} has not been deployed to network ${networkId}`)
+                }
+                // lowercasing "AO"
+                const contractInstanceName = "ao" + contract.contractName.substring(2)
+                return Object.assign(acc, {
+                    [contractInstanceName]: window.web3.eth
+                        .contract(contract.abi)
+                        .at(contract.networks[networkId].address)
+                })
+            }, {})
+            dispatch({
+                type: CONTRACTS_INITIALIZED,
+                payload: initializedContracts
+            });
+            dispatch(
+                updateAppState(APP_STATES.CONTRACTS_INITIALIZED, true)
+            );
+            dispatch(watchBlockNumber());
+            dispatch(updateIcoState());
+            dispatch(fetchSettingsFromContract());
+        } catch (error) {
+            console.error("Error initializing contracts", error);
+            if ( error.message.indexOf("has not been deployed") > -1 ) {
                 console.warn(
-                    "Smart contracts have not been deployed on this network[" +
-                        networkId +
-                        "]"
+                    "Smart contracts have not been deployed on this network: " + networkId
                 );
                 dispatch(
                     updateAppState(APP_STATES.CONTRACTS_INITIALIZED, false)
                 );
-                const networkIds = Object.keys(AOToken.networks)
+                const networkIds = Object.keys(AOSetting.networks)
                     .map(networkId => getNetworkName(networkId))
                     .join(", ");
                 dispatch(
                     addNotification({
-                        message: `The Ethereum network you selected is not supported. Avialable networks: ${networkIds}`
+                        message: `The Ethereum network you selected is not supported. Available networks: ${networkIds}`
                     })
                 );
-            } else {
-                const contracts = {
-                    aoToken: window.web3.eth
-                        .contract(AOToken.abi)
-                        .at(AOToken.networks[networkId].address),
-                    aoTreasury: window.web3.eth
-                        .contract(AOTreasury.abi)
-                        .at(AOTreasury.networks[networkId].address),
-                    aoContent: window.web3.eth
-                        .contract(AOContent.abi)
-                        .at(AOContent.networks[networkId].address),
-                    aoEarning: window.web3.eth
-                        .contract(AOEarning.abi)
-                        .at(AOEarning.networks[networkId].address),
-                    aoLibrary: window.web3.eth
-                        .contract(AOLibrary.abi)
-                        .at(AOLibrary.networks[networkId].address),
-                    aoPool: window.web3.eth
-                        .contract(AOPool.abi)
-                        .at(AOPool.networks[networkId].address),
-                    aoSetting: window.web3.eth
-                        .contract(AOSetting.abi)
-                        .at(AOSetting.networks[networkId].address)
-                };
-                dispatch({
-                    type: CONTRACTS_INITIALIZED,
-                    payload: contracts
-                });
-                dispatch(
-                    updateAppState(APP_STATES.CONTRACTS_INITIALIZED, true)
-                );
-                dispatch(watchBlockNumber());
-                dispatch(updateIcoState());
-                dispatch(fetchSettingsFromContract());
-            }
-        } catch (error) {
-            console.error("Error initializing contracts", error);
+            }            
         }
     };
 };
