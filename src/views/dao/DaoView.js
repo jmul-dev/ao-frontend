@@ -51,11 +51,13 @@ const DaoViewWithUser = compose(
     return (
         <React.Fragment>
             <section style={{ minHeight: 400 }}>
-                {featuredDapp && (
+                {featuredDapp.length > 0 ? (
                     <ContentCard
                         variant="featured"
                         contentId={featuredDapp[0].id}
                     />
+                ) : (
+                    <DaoViewNoUser />
                 )}
             </section>
             <section>
