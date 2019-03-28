@@ -137,7 +137,7 @@ export const buyContent = (contentHostId, publicKey, publicAddress) => {
                                         triggerMetamaskPopupWithinElectron(
                                             getState
                                         );
-                                        contracts.aoContent.buyContent(
+                                        contracts.aoPurchaseReceipt.buyContent(
                                             contentHostId,
                                             contentPrice.toNumber(), // networkIntegerAmount
                                             0, // networkFractionAmount
@@ -196,7 +196,7 @@ export const becomeHost = ({
             const { contracts, app } = state;
             // 1. becomeHost
             triggerMetamaskPopupWithinElectron(getState);
-            contracts.aoContent.becomeHost(
+            contracts.aoContentHost.becomeHost(
                 purchaseId,
                 signature.v,
                 signature.r,
@@ -230,7 +230,7 @@ export const getContentPrice = contentHostId => {
             let contentPricePromises = [];
             contentPricePromises.push(
                 new Promise((resolve, reject) => {
-                    contracts.aoContent.contentHostPrice(
+                    contracts.aoContentHost.contentHostPrice(
                         contentHostId,
                         (error, contentPrice) => {
                             if (error) {
@@ -251,7 +251,7 @@ export const getContentPrice = contentHostId => {
             );
             contentPricePromises.push(
                 new Promise((resolve, reject) => {
-                    contracts.aoContent.contentHostPaidByAO(
+                    contracts.aoContentHost.contentHostPaidByAO(
                         contentHostId,
                         (error, contentPricePaidByAO) => {
                             if (error) {
@@ -287,7 +287,7 @@ export const checkContentHostIsStaked = contentHostId => {
         return new Promise((resolve, reject) => {
             const state = getState();
             const { contracts } = state;
-            contracts.aoContent.contentHostById(contentHostId, function(
+            contracts.aoContentHost.getById(contentHostId, function(
                 err,
                 result
             ) {
@@ -296,7 +296,7 @@ export const checkContentHostIsStaked = contentHostId => {
                     return reject(new Error(`Content host not found`));
                 }
                 const stakeId = result[0];
-                contracts.aoContent.stakedContentById(stakeId, function(
+                contracts.aoStakedContent.getById(stakeId, function(
                     err,
                     result
                 ) {

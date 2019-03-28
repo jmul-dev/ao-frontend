@@ -44,7 +44,7 @@ export const exchangeEthForPrimordialTokens = (ethCost) => {
         } else {
             dispatch({type: EXCHANGE_TRANSACTION.INITIALIZED})
             triggerMetamaskPopupWithinElectron(getState)
-            contracts.aoToken.networkExchangeEnded(function(err, ended) {
+            contracts.aoIon.networkExchangeEnded(function(err, ended) {
                 if ( err ) {
                     dispatchError(err)
                 } else if ( ended ) {
@@ -53,14 +53,14 @@ export const exchangeEthForPrimordialTokens = (ethCost) => {
                     console.log(ethCost)
                     const ethCostInWei = new BigNumber(window.web3.toWei(ethCost, 'ether'));
                     console.log(ethCostInWei.toNumber())
-                    contracts.aoToken.buyPrimordialToken({
+                    contracts.aoIon.buyPrimordial({
                         from: app.ethAddress,
                         value: ethCostInWei.toNumber()
                     }, function(err, transactionHash) {
                         if ( err ) {
                             dispatchError(err)
                         } else {
-                            let eventListener = contracts.aoToken.LotCreation({lotOwner: app.ethAddress}, function(error, result) {
+                            let eventListener = contracts.aoIonLot.LotCreation({lotOwner: app.ethAddress}, function(error, result) {
                                 if ( result && result.transactionHash === transactionHash ) {
                                     dispatch({
                                         type: EXCHANGE_TRANSACTION.RESULT,
@@ -225,10 +225,10 @@ export const getPrimordialExchangeRate = () => {
     return (dispatch, getState) => {
         const state = getState()
         const { contracts } = state
-        if ( !contracts.aoToken )
+        if ( !contracts.aoIon )
             return console.warn(`Attempting to call contract method before contract initialization`)
         // TODO: also fetch network token exchange rate
-        contracts.aoToken.primordialBuyPrice(function(err, result) {
+        contracts.aoIon.primordialBuyPrice(function(err, result) {
             if ( result ) {
                 dispatch({
                     type: UPDATE_EXCHANGE_RATE,

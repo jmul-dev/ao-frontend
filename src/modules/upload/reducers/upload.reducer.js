@@ -305,7 +305,7 @@ export const stakeContent = ({
                      * as well. This is really only helpful for error messages.
                      */
                     // 2.
-                    let eventListener = contracts.aoContent.StakeContent(
+                    let eventListener = contracts.aoContentFactory.StakeContent(
                         { stakeOwner: app.ethAddress },
                         function(error, result) {
                             if (
@@ -355,7 +355,7 @@ const stakeAOContent = (
     }
 ) => {
     return new Promise((resolve, reject) => {
-        contracts.aoContent.stakeAOContent(
+        contracts.aoContentFactory.stakeAOContent(
             networkTokenAmountInBaseDenom, // networkTokenIntegerAmount
             0, // networkTokenFractionalAmount
             "ao", // denomination
@@ -392,7 +392,7 @@ const stakeTAOContent = (
     }
 ) => {
     return new Promise((resolve, reject) => {
-        contracts.aoContent.stakeTAOContent(
+        contracts.aoContentFactory.stakeTAOContent(
             networkTokenAmountInBaseDenom, // networkTokenIntegerAmount
             0, // networkTokenFractionalAmount
             "ao", // denomination
@@ -428,7 +428,7 @@ const stakeCreativeCommonsContent = (
     }
 ) => {
     return new Promise((resolve, reject) => {
-        contracts.aoContent.stakeCreativeCommonsContent(
+        contracts.aoContentFactory.stakeCreativeCommonsContent(
             networkTokenAmountInBaseDenom, // networkTokenIntegerAmount
             0, // networkTokenFractionalAmount
             "ao", // denomination

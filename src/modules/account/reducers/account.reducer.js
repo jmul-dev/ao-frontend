@@ -29,9 +29,7 @@ export const setAccountVideoListingOrdering = ordering => ({
 export const getContentMetrics = stakeId => {
     return (dispatch, getState) => {
         const { contracts, ico } = getState();
-        contracts.aoLibrary.getContentMetrics(
-            contracts.aoContent.address,
-            contracts.aoEarning.address,
+        contracts.aoContentFactory.getContentMetrics(
             stakeId,
             function(err, result) {
                 if (!err) {
@@ -57,7 +55,7 @@ export const getContentMetrics = stakeId => {
 export const getContentHostEarnings = contentHostId => {
     return (dispatch, getState) => {
         const { contracts } = getState();
-        contracts.aoEarning.totalHostContentEarningById(contentHostId, function(
+        contracts.aoEarning.contentHostEarning(contentHostId, function(
             err,
             hostEarnings
         ) {
@@ -81,17 +79,22 @@ export const getPurchaseReceipt = purchaseId => {
                 return reject(
                     new Error(`getPurchaseReceipt called with no purchaseId`)
                 );
-            contracts.aoContent.purchaseReceiptById(purchaseId, function(
+            contracts.aoPurchaseReceipt.getById(purchaseId, function(
                 err,
                 result
             ) {
                 if (!err) {
                     resolve({
                         contentHostId: result[0],
-                        buyer: result[1],
-                        networkAmount: result[2],
-                        publicAddress: result[3],
-                        timestamp: result[4]
+                        stakedContentId: result[1],
+                        contentId: result[2],
+                        buyer: result[3],
+                        price: result[4],
+                        amountPaidByBuyer: result[5],
+                        amountPaidByAO: result[6],
+                        publicKey: result[7],
+                        publicAddress: result[8],
+                        createdOnTimestamp: result[9]
                     });
                 } else {
                     reject(err);
