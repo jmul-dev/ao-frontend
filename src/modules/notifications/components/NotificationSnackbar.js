@@ -74,6 +74,7 @@ const NotificationSnackbar = ({
     if (typeof action === "function") {
         actions.push(
             <IconButton
+                key={`action0`}
                 color="inherit"
                 className={classes.action}
                 onClick={action}

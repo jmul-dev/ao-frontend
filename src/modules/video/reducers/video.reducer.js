@@ -1,6 +1,8 @@
 import BigNumber from "bignumber.js";
 import { triggerMetamaskPopupWithinElectron } from "../../../utils/electron";
-
+import { formattedTokenAmount } from "../../../utils/denominations";
+import { addNotification } from "../../notifications/reducers/notifications.reducer";
+import { waitForTransactionReceipt } from "../../../store/contracts.reducer";
 // Constants
 export const SET_TEASER_LISTING_STATE = "SET_TEASER_LISTING_STATE";
 export const SET_ACTIVE_VIDEO = "SET_ACTIVE_VIDEO";
@@ -67,6 +69,45 @@ export const setSearchBarActive = state => ({
 });
 
 /**
+ * Resolve if amount is greater than or equal to wallet balance, otherwise rejects.
+ *
+ * @param {BigNumber} { amount }
+ * @param {boolean} { isPrimordial }
+ * @return {Promise}
+ */
+export const ensureSufficientBalance = ({ amount, isPrimordial = false }) => {
+    return (dispatch, getState) => {
+        return new Promise((resolve, reject) => {
+            const state = getState();
+            const { tokenBalance, primordialTokenBalance } = state.wallet;
+            let difference = new BigNumber(0);
+            if (!isPrimordial) {
+                difference = tokenBalance.minus(amount);
+            } else {
+                difference = primordialTokenBalance.minus(amount);
+            }
+            if (difference.lt(0)) {
+                const formattedDifference = formattedTokenAmount(
+                    difference.multipliedBy(-1),
+                    2,
+                    true,
+                    isPrimordial
+                );
+                reject(
+                    new Error(
+                        `Insufficient balance, ${formattedDifference.value} ${
+                            formattedDifference.label
+                        } required.`
+                    )
+                );
+            } else {
+                resolve();
+            }
+        });
+    };
+};
+
+/**
  * NOTE: this method resolves once we have a transactionHash (not the actual purchase receipt)
  */
 export const buyContent = (contentHostId, publicKey, publicAddress) => {
@@ -84,30 +125,55 @@ export const buyContent = (contentHostId, publicKey, publicAddress) => {
                         // 1. Get latest price
                         dispatch(getContentPrice(contentHostId))
                             .then(contentPrice => {
-                                // 2. buyContent
-                                triggerMetamaskPopupWithinElectron(getState);
-                                contracts.aoContent.buyContent(
-                                    contentHostId,
-                                    contentPrice.toNumber(), // networkIntegerAmount
-                                    0, // networkFractionAmount
-                                    "ao",
-                                    publicKey, // publicKey of requesting node
-                                    publicAddress, // publicAddress of requesting node
-                                    { from: app.ethAddress },
-                                    (error, transactionHash) => {
-                                        if (error) {
-                                            console.error(
-                                                `buyContent error: ${
-                                                    error.message
-                                                }`
-                                            );
-                                            reject(error);
-                                            return;
-                                        }
-                                        // 3a. Transaction submitted succesfully (has not been confirmed)
-                                        resolve(transactionHash);
-                                    }
-                                );
+                                // 2. Ensure sufficient balance!
+                                dispatch(
+                                    ensureSufficientBalance({
+                                        amount: contentPrice,
+                                        isPrimordial: false
+                                    })
+                                )
+                                    .then(() => {
+                                        // 3. buyContent
+                                        triggerMetamaskPopupWithinElectron(
+                                            getState
+                                        );
+                                        contracts.aoContent.buyContent(
+                                            contentHostId,
+                                            contentPrice.toNumber(), // networkIntegerAmount
+                                            0, // networkFractionAmount
+                                            "ao",
+                                            publicKey, // publicKey of requesting node
+                                            publicAddress, // publicAddress of requesting node
+                                            { from: app.ethAddress },
+                                            (error, transactionHash) => {
+                                                if (error) {
+                                                    console.error(
+                                                        `buyContent error: ${
+                                                            error.message
+                                                        }`
+                                                    );
+                                                    reject(error);
+                                                    return;
+                                                }
+                                                // 3a. Transaction submitted succesfully (has not been confirmed)
+                                                resolve(transactionHash);
+                                                waitForTransactionReceipt(
+                                                    transactionHash
+                                                ).catch(error => {
+                                                    // The TX failed for some reason...
+                                                    dispatch(
+                                                        addNotification({
+                                                            action: "dismiss",
+                                                            message:
+                                                                "Purchase content transaction failed...",
+                                                            variant: "error"
+                                                        })
+                                                    );
+                                                });
+                                            }
+                                        );
+                                    })
+                                    .catch(reject);
                             })
                             .catch(reject);
                     })

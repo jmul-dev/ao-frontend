@@ -8,6 +8,7 @@ import AlertIcon from "@material-ui/icons/ErrorOutline";
 import PlayIcon from "@material-ui/icons/PlayArrow";
 import LaunchIcon from "@material-ui/icons/Launch";
 import ReplayIcon from "@material-ui/icons/Replay";
+import DownloadIcon from "@material-ui/icons/GetApp";
 import React, { Component } from "react";
 import { compose, withApollo } from "react-apollo";
 import { connect } from "react-redux";
@@ -241,13 +242,21 @@ export const ContentPurchaseState = ({
             copy = "Making discoverable...";
             break;
         case "DISCOVERABLE":
-        case "DISCOVERED":
             if (content.contentType === "VOD") {
                 copy = "Watch now";
                 Icon = PlayIcon;
             } else {
                 copy = "View now";
                 Icon = LaunchIcon;
+            }
+            break;
+        case "DISCOVERED":
+            if (content.recentlySeenHostsCount < 1) {
+                copy = "No hosts found";
+                Icon = AlertIcon;
+            } else {
+                copy = "Download now";
+                Icon = DownloadIcon;
             }
             break;
         default:
@@ -563,8 +572,13 @@ class ContentPurchaseActionComponent extends Component {
                 break;
             case "DISCOVERED":
                 // The first action, download content (bring in to core)
-                action = this._downloadContentAction;
-                actionCopy = "Download content";
+                if (content.recentlySeenHostsCount < 1) {
+                    action = null;
+                    actionCopy = "No hosts found";
+                } else {
+                    action = this._downloadContentAction;
+                    actionCopy = "Download content";
+                }
                 break;
             case "DOWNLOADING":
                 // No action to take
