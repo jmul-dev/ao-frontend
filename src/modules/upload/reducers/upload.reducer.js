@@ -305,7 +305,7 @@ export const stakeContent = ({
                      * as well. This is really only helpful for error messages.
                      */
                     // 2.
-                    let eventListener = contracts.aoContentFactory.StakeContent(
+                    let eventListener = contracts.aoStakedContent.StakeContent(
                         { stakeOwner: app.ethAddress },
                         function(error, result) {
                             if (
