@@ -419,7 +419,7 @@ class ContentPurchaseActionComponent extends Component {
         // 1. Metamask transaction
         becomeHost({
             contentId: content.id,
-            purchaseId: content.purchaseId,
+            purchaseReceiptId: content.purchaseReceiptId,
             signature: content.baseChallengeSignature,
             encChallenge: content.encChallenge,
             contentDatKey: content.fileDatKey,

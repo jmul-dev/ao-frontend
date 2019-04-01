@@ -60,9 +60,9 @@ class UserContentView extends PureComponent {
         if (content.contentHostId) {
             this.props.getContentHostEarnings(content.contentHostId);
         }
-        if (content.purchaseId) {
+        if (content.purchaseReceiptId) {
             this.props
-                .getPurchaseReceipt(content.purchaseId)
+                .getPurchaseReceipt(content.purchaseReceiptId)
                 .then(result => {
                     this.setState({ purchaseReceipt: result });
                 })

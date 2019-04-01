@@ -12,7 +12,7 @@ const ContentFields = `
     creatorNodePublicKey,
     creatorEthAddress,
     taoId,
-    purchaseId,
+    purchaseReceiptId,
     contentType,
     contentLicense,
     contentAttribution,

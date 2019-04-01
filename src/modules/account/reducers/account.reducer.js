@@ -71,15 +71,15 @@ export const getContentHostEarnings = contentHostId => {
         });
     };
 };
-export const getPurchaseReceipt = purchaseId => {
+export const getPurchaseReceipt = purchaseReceiptId => {
     return (dispatch, getState) => {
         return new Promise((resolve, reject) => {
             const { contracts } = getState();
-            if (!purchaseId)
+            if (!purchaseReceiptId)
                 return reject(
-                    new Error(`getPurchaseReceipt called with no purchaseId`)
+                    new Error(`getPurchaseReceipt called with no purchaseReceiptId`)
                 );
-            contracts.aoPurchaseReceipt.getById(purchaseId, function(
+            contracts.aoPurchaseReceipt.getById(purchaseReceiptId, function(
                 err,
                 result
             ) {

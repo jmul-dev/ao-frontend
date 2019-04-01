@@ -184,7 +184,7 @@ export const buyContent = (contentHostId, publicKey, publicAddress) => {
 };
 export const becomeHost = ({
     contentId,
-    purchaseId,
+    purchaseReceiptId,
     signature,
     encChallenge,
     contentDatKey,
@@ -197,7 +197,7 @@ export const becomeHost = ({
             // 1. becomeHost
             triggerMetamaskPopupWithinElectron(getState);
             contracts.aoContentHost.becomeHost(
-                purchaseId,
+                purchaseReceiptId,
                 signature.v,
                 signature.r,
                 signature.s,
