@@ -11,6 +11,7 @@ import WalletView from "../../views/wallet/WalletView";
 import DevelopersView from "../../views/developers/DevelopersView";
 import IngressView from "../../views/ingress/IngressView";
 import DaoView from "../../views/dao/DaoView";
+import NameRegistrationView from "../../views/registration/NameRegistrationView";
 import ContentView from "../../views/content";
 import VideoPlayback from "../../modules/video/components/VideoPlayback";
 import MainNavigation from "./MainNavigation";
@@ -61,6 +62,12 @@ const MainLayout = () => (
         <MainNavigation />
         {/* Video Playback (always mounted for animation purposes) */}
         <VideoPlayback />
+        {/* Registration view (modal overlay) */}
+        <Route
+            exact
+            path="/app/registration"
+            component={NameRegistrationView}
+        />
     </main>
 );
 export default MainLayout;
