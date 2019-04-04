@@ -247,6 +247,7 @@ class UserContentView extends PureComponent {
                                     <Typography
                                         className={classes.content}
                                         variant="body2"
+                                        style={{whiteSpace: 'nowrap'}}
                                     >
                                         {`Eth address: ${content.creatorEthAddress}`}<br/>
                                         {`AO public key: ${content.creatorNodePublicKey}`}
