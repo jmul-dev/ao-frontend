@@ -6,7 +6,7 @@ import {
     ContentPurchaseAction,
     ContentPurchaseState
 } from "../../modules/video/components/ContentPurchaseActions";
-import withEthAddress from "../../modules/account/containers/withEthAddress";
+import withUserIdentifiers from "../../modules/account/containers/withUserIdentifiers";
 import { compose } from "react-apollo";
 import { PrimaryButton } from "../../theme";
 
@@ -81,5 +81,5 @@ const styles = ({ spacing }) => ({
 
 export default compose(
     withStyles(styles),
-    withEthAddress
+    withUserIdentifiers
 )(DappListItem);

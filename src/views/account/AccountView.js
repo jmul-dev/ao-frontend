@@ -5,7 +5,7 @@ import Typography from "@material-ui/core/Typography";
 import UserContentListing from "../../modules/account/components/UserContentListing";
 import UserContentFilters from "../../modules/account/components/UserContentFilters";
 import Grid from "@material-ui/core/Grid";
-import withEthAddress from "../../modules/account/containers/withEthAddress";
+import withUserIdentifiers from "../../modules/account/containers/withUserIdentifiers";
 import AccountContentView from "./AccountContentView";
 import "./account-view.css";
 
@@ -57,4 +57,4 @@ class AccountView extends Component {
     }
 }
 
-export default withEthAddress(AccountView);
+export default withUserIdentifiers(AccountView);

@@ -16,7 +16,7 @@ import {
 } from "../../video/components/ContentPurchaseActions";
 import withContentMetrics from "../containers/withContentMetrics";
 import UserContentStats from "./UserContentStats";
-import withEthAddress from "../../account/containers/withEthAddress";
+import withUserIdentifiers from "../../account/containers/withUserIdentifiers";
 
 class ContentListItem extends Component {
     static propTypes = {
@@ -36,7 +36,7 @@ class ContentListItem extends Component {
         getContentHostEarnings: PropTypes.func.isRequired,
         // withStyles
         classes: PropTypes.object.isRequired,
-        // withEthAddress
+        // withUserIdentifiers
         ethAddress: PropTypes.string.isRequired
     };
     _watchNowRef;
@@ -317,7 +317,7 @@ const styles = ({ spacing }) => ({
 export default compose(
     withContentMetrics,
     withStyles(styles),
-    withEthAddress
+    withUserIdentifiers
 )(ContentListItem);
 
 export const ContentListItemPlaceholder = () => (

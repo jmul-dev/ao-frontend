@@ -6,7 +6,7 @@ import {
 } from "../../video/components/ContentPurchaseActions";
 import { Grid, Typography, ButtonBase } from "@material-ui/core";
 import { compose } from "react-apollo";
-import withEthAddress from "../../account/containers/withEthAddress";
+import withUserIdentifiers from "../../account/containers/withUserIdentifiers";
 import { withStyles } from "@material-ui/core/styles";
 import { PrimaryButton } from "../../../theme";
 import withContentById from "../containers/withContentById";
@@ -30,7 +30,7 @@ import OfflineIcon from "@material-ui/icons/CloudOff";
  * @param {string} contentId
  * @param {string} variant default | featured
  *
- * @param {string} ethAddress The current users eth address (withEthAddress)
+ * @param {string} ethAddress The current users eth address (withUserIdentifiers)
  * @param {object} query The graphql query for fetching userContent and networkContent (withContentById)
  */
 const ContentCard = ({
@@ -63,7 +63,7 @@ const ContentCard = ({
 };
 
 export default compose(
-    withEthAddress,
+    withUserIdentifiers,
     withContentById
 )(ContentCard);
 

@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 import { PrimaryButton } from "../../../theme";
 import ExchangeModal from "../../exchange/components/ExchangeModal";
 import withUserContent from "../containers/withUserContent";
-import withEthAddress from "../containers/withEthAddress";
+import withUserIdentifiers from "../containers/withUserIdentifiers";
 import "../styles/account-video-listing.css";
 import UserContentListItem from "./UserContentListItem";
 
@@ -131,5 +131,5 @@ class UserContentListing extends Component {
 
 export default compose(
     withUserContent,
-    withEthAddress
+    withUserIdentifiers
 )(UserContentListing);

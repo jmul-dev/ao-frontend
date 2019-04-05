@@ -4,7 +4,7 @@ import Wallet from "../../modules/wallet/components/Wallet";
 import Typography from "@material-ui/core/Typography";
 import Account from "../../modules/account/components/Account";
 import Grid from "@material-ui/core/Grid";
-import withEthAddress from "../../modules/account/containers/withEthAddress";
+import withUserIdentifiers from "../../modules/account/containers/withUserIdentifiers";
 import ConsoleContainer from "../../modules/console/containers/ConsoleContainer";
 
 class WalletView extends PureComponent {
@@ -93,4 +93,4 @@ class WalletView extends PureComponent {
     }
 }
 
-export default withEthAddress(WalletView);
+export default withUserIdentifiers(WalletView);
