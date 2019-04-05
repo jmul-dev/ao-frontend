@@ -9,6 +9,7 @@ import {
     initializeContracts,
     waitForTransactionReceipt
 } from "./contracts.reducer";
+import { triggerMetamaskPopupWithinElectron } from "../utils/electron";
 
 // Constants
 export const WEB3_CONNECTED = "WEB3_CONNECTED";
@@ -185,6 +186,7 @@ export const registerNameUnderEthAddress = ({ name, ethAddress }) => {
                 });
             } else {
                 // 2. Submit the name
+                triggerMetamaskPopupWithinElectron(getState);
                 contracts.nameFactory.createName(
                     name,
                     "",

@@ -1,17 +1,19 @@
-import React, { Component } from "react";
-import PropTypes from "prop-types";
-import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
-import TextInput from "./TextInput";
-import { AddIcon } from "../../../assets/Icons";
-import withUploadFormData from "../containers/withUploadFormData";
+import Typography from "@material-ui/core/Typography";
+import PropTypes from "prop-types";
+import React, { Component } from "react";
 import { Redirect } from "react-router-dom";
-import { BackButton } from "./UploadFormNavButtons";
-import OverviewAside from "./OverviewAside";
-import FileUpload from "./FileUpload";
-import { FileSize } from "../../../utils/denominations";
+import { compose } from "redux";
+import { AddIcon } from "../../../assets/Icons";
 import { PrimaryButton } from "../../../theme";
+import { FileSize } from "../../../utils/denominations";
+import withUserIdentifiers from "../../account/containers/withUserIdentifiers";
+import withUploadFormData from "../containers/withUploadFormData";
 import { isFormValid } from "../reducers/upload.reducer";
+import FileUpload from "./FileUpload";
+import OverviewAside from "./OverviewAside";
+import TextInput from "./TextInput";
+import { BackButton } from "./UploadFormNavButtons";
 
 const MAX_TEASER_FILE_SIZE = 5.0 * Math.pow(10, 6); // 5MB
 
@@ -32,7 +34,12 @@ class UploadFormContent extends Component {
         this.context.router.history.replace(`/app/view/upload/${backRoute}`);
     };
     _submit = () => {
-        this.context.router.history.push("/app/view/upload/submit");
+        const { aoName, ethAddress } = this.props;
+        if (!aoName) {
+            this.context.router.history.push(`/app/registration`);
+        } else {
+            this.context.router.history.push("/app/view/upload/submit");
+        }
     };
     _onTeaserInputChange = file => {
         if (file.size > MAX_TEASER_FILE_SIZE) {
@@ -148,4 +155,7 @@ class UploadFormContent extends Component {
         );
     }
 }
-export default withUploadFormData(UploadFormContent);
+export default compose(
+    withUploadFormData,
+    withUserIdentifiers
+)(UploadFormContent);

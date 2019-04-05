@@ -21,7 +21,10 @@ class NameRegistrationView extends Component {
             <Modal
                 open={true}
                 onClose={this.onClose}
-                BackdropProps={{ style: { backgroundColor: "rgba(0,0,0,1)" } }}
+                BackdropProps={{
+                    style: { backgroundColor: "rgba(0,0,0,1)" },
+                    transitionDuration: 0
+                }}
                 className="NameRegistrationModal"
             >
                 <div className="modal-content-container">

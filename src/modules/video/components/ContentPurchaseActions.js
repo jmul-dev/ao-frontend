@@ -323,6 +323,14 @@ class ContentPurchaseActionComponent extends Component {
             error: null
         };
     }
+    _preActionHook = action => {
+        const { aoName, ethAddress } = this.props;
+        if (!aoName) {
+            this.props.history.push("/app/registration");
+        } else {
+            action();
+        }
+    };
     _dispatchErrorNotificationAndStopLoading = (
         error,
         errorMessage,
@@ -633,6 +641,9 @@ class ContentPurchaseActionComponent extends Component {
                 break;
             default:
                 break;
+        }
+        if (typeof action === "function") {
+            action = this._preActionHook.bind(this, action);
         }
         return children({ action, actionCopy, loading, error });
     }

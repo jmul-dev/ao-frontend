@@ -56,7 +56,6 @@ class DownloadsListItem extends Component {
             actionRequired,
             actionCopy
         } = getContentState(content, currentUserEthAddress);
-        console.log(`Watch now ref:`, this._watchNowRef);
         return (
             <ContentPurchaseAction
                 contentRef={this._watchNowRef}
