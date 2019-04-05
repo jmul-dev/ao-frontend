@@ -9,7 +9,7 @@ import ConsoleContainer from "../../modules/console/containers/ConsoleContainer"
 
 class WalletView extends PureComponent {
     render() {
-        const { ethAddress } = this.props;
+        const { ethAddress, aoName } = this.props;
         return (
             <View
                 className={`WalletView ${
@@ -53,6 +53,12 @@ class WalletView extends PureComponent {
                             </Typography>
                         </div>
                     </div>
+                    {aoName && (
+                        <Typography variant="body1" style={{ marginLeft: 32 }}>
+                            <b style={{ marginRight: 6 }}>{`Username:`}</b>
+                            {`${aoName.name}`}
+                        </Typography>
+                    )}
                 </header>
                 <section>
                     <Grid container spacing={16}>

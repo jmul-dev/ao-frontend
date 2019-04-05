@@ -30,6 +30,10 @@ const styles = ({}) => ({
         top: 32,
         left: 32,
         color: "#999999"
+    },
+    registrationCompleteContainer: {
+        display: "flex",
+        alignItems: "center"
     }
 });
 
@@ -93,11 +97,17 @@ class NameRegistrationForm extends Component {
                 </Typography>
                 <div style={{ marginTop: 16 }}>
                     {aoName && aoName.nameId ? (
-                        <Typography variant="body1">
-                            {`Your registered name, `}
-                            <b>{aoName.name}</b>
-                            {`, is now associated with the following Ethereum address: ${ethAddress}`}
-                        </Typography>
+                        <div className={classes.registrationCompleteContainer}>
+                            <Typography variant="body1">
+                                {`Your registered name, `}
+                                <b>{aoName.name}</b>
+                                {`, is now associated with the following Ethereum address: ${ethAddress}`}
+                            </Typography>
+                            <PrimaryButton
+                                onClick={this._exitNameRegistration}
+                                style={{ marginLeft: 24 }}
+                            >{`Done`}</PrimaryButton>
+                        </div>
                     ) : (
                         <form onSubmit={this._submit} className={classes.form}>
                             <TextField
