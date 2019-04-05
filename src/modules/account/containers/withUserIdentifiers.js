@@ -2,7 +2,7 @@ import { connect } from "react-redux";
 
 const mapStateToProps = state => ({
     ethAddress: state.app.ethAddress,
-    aoNameId: state.app.aoNameId
+    aoName: state.app.aoName
 });
 
 export default connect(mapStateToProps);

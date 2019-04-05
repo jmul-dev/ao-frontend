@@ -9,6 +9,8 @@ import TextField from "@material-ui/core/TextField";
 import { PrimaryButton } from "../../../theme";
 import { withStyles } from "@material-ui/core/styles";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import { IconButton } from "@material-ui/core";
+import CloseIcon from "@material-ui/icons/Close";
 
 const styles = ({}) => ({
     form: {
@@ -21,8 +23,13 @@ const styles = ({}) => ({
     },
     progress: {
         position: "absolute",
-        left: "100%",
-        marginLeft: 16
+        left: 16
+    },
+    closeButton: {
+        position: "absolute",
+        top: 32,
+        left: 32,
+        color: "#999999"
     }
 });
 
@@ -40,7 +47,10 @@ class NameRegistrationForm extends Component {
         }).isRequired,
         // withUserIdentifiers
         ethAddress: PropTypes.string.isRequired,
-        aoNameId: PropTypes.string,
+        aoName: PropTypes.shape({
+            id: PropTypes.string,
+            name: PropTypes.string
+        }),
         // withStyles
         classes: PropTypes.object.isRequired
     };
@@ -61,8 +71,11 @@ class NameRegistrationForm extends Component {
             name: nameInput
         });
     };
+    _exitNameRegistration = () => {
+        this.props.history.goBack();
+    };
     render() {
-        const { ethAddress, registrationState, classes } = this.props;
+        const { ethAddress, aoName, registrationState, classes } = this.props;
         const formDisabled =
             registrationState.initialized && !registrationState.error;
         const transactionPending =
@@ -79,43 +92,63 @@ class NameRegistrationForm extends Component {
                     {`This allows for decentralized account recovery and mitigates the risk of a single key loss.`}
                 </Typography>
                 <div style={{ marginTop: 16 }}>
-                    <form onSubmit={this._submit} className={classes.form}>
-                        <TextField
-                            value={this.state.nameInput}
-                            onChange={this._onInputChange}
-                            placeholder={`Name for account ${ethAddress}`}
-                            label={`Username`}
-                            error={!!registrationState.error}
-                            helperText={
-                                registrationState.error
-                                    ? registrationState.error.message
-                                    : ""
-                            }
-                            FormHelperTextProps={{
-                                className: classes.formHelperText
-                            }}
-                            fullWidth
-                            disabled={formDisabled}
-                        />
-                        <div style={{ marginLeft: 16, position: "relative" }}>
-                            <PrimaryButton
-                                type="submit"
-                                disabled={
-                                    formDisabled ||
-                                    !this.state.nameInput ||
-                                    this.state.nameInput.length < 3 ||
-                                    this.state.nameInput.length > 20
+                    {aoName && aoName.nameId ? (
+                        <Typography variant="body1">
+                            {`Your registered name, `}
+                            <b>{aoName.name}</b>
+                            {`, is now associated with the following Ethereum address: ${ethAddress}`}
+                        </Typography>
+                    ) : (
+                        <form onSubmit={this._submit} className={classes.form}>
+                            <TextField
+                                value={this.state.nameInput}
+                                onChange={this._onInputChange}
+                                placeholder={`Name for account ${ethAddress}`}
+                                label={`Username`}
+                                error={!!registrationState.error}
+                                helperText={
+                                    registrationState.error
+                                        ? registrationState.error.message
+                                        : ""
                                 }
-                                size="mini"
-                            >{`Submit`}</PrimaryButton>
-                            {transactionPending && (
-                                <CircularProgress
-                                    className={classes.progress}
-                                />
-                            )}
-                        </div>
-                    </form>
+                                FormHelperTextProps={{
+                                    className: classes.formHelperText
+                                }}
+                                fullWidth
+                                disabled={formDisabled}
+                            />
+                            <div
+                                style={{ marginLeft: 16, position: "relative" }}
+                            >
+                                <PrimaryButton
+                                    type="submit"
+                                    disabled={
+                                        formDisabled ||
+                                        !this.state.nameInput ||
+                                        this.state.nameInput.length < 3 ||
+                                        this.state.nameInput.length > 20
+                                    }
+                                    style={{
+                                        visibility: transactionPending
+                                            ? "hidden"
+                                            : "visible"
+                                    }}
+                                >{`Submit`}</PrimaryButton>
+                                {transactionPending && (
+                                    <CircularProgress
+                                        className={classes.progress}
+                                    />
+                                )}
+                            </div>
+                        </form>
+                    )}
                 </div>
+                <IconButton
+                    onClick={this._exitNameRegistration}
+                    className={classes.closeButton}
+                >
+                    <CloseIcon style={{ fontSize: 32 }} />
+                </IconButton>
             </div>
         );
     }

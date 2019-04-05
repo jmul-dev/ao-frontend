@@ -11,7 +11,7 @@ type Props = {
 const Account = ({
     display,
     ethAddress,
-    aoNameId,
+    aoName,
     dispatch,
     ...props
 }: Props) => {

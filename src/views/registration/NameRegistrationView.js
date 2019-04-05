@@ -16,7 +16,7 @@ class NameRegistrationView extends Component {
         });
     };
     render() {
-        const { ethAddress, aoNameId } = this.props;
+        const { ethAddress, aoName } = this.props;
         return (
             <Modal
                 open={true}

@@ -24,7 +24,7 @@ export const APP_STATES = {
     APP_READY: "APP_READY"
 };
 export const SET_CORE_ETHEREUM_NETWORK_ID = "SET_CORE_ETHEREUM_NETWORK_ID";
-export const AO_NAME_ID_CHANGE = "AO_NAME_ID_CHANGE";
+export const AO_NAME_CHANGE = "AO_NAME_CHANGE";
 export const AO_NAME_REGISTRATION_TRANSACTION = Object.freeze({
     INITIALIZED: "AO_NAME_REGISTRATION_TRANSACTION.INITIALIZED",
     SUBMITTED: "AO_NAME_REGISTRATION_TRANSACTION.SUBMITTED",
@@ -122,11 +122,33 @@ export const getRegisteredNameByEthAddress = ethAddress => {
                     result === "0x0000000000000000000000000000000000000000"
                         ? undefined
                         : result;
-                dispatch({
-                    type: AO_NAME_ID_CHANGE,
-                    payload: nameId
-                });
-                resolve(nameId);
+                if (!nameId) {
+                    dispatch({
+                        type: AO_NAME_CHANGE,
+                        payload: undefined
+                    });
+                } else {
+                    // Fetch the name details (including name)
+                    contracts.nameFactory.getName(nameId, function(
+                        err,
+                        result
+                    ) {
+                        if (err) return reject(err);
+                        dispatch({
+                            type: AO_NAME_CHANGE,
+                            payload: {
+                                nameId,
+                                name: result[0],
+                                originId: result[1],
+                                datHash: result[2],
+                                database: result[3],
+                                keyValue: result[4],
+                                contentId: result[5],
+                                typeId: result[6]
+                            }
+                        });
+                    });
+                }
             });
         });
     };
@@ -191,11 +213,11 @@ export const registerNameUnderEthAddress = ({ name, ethAddress }) => {
                                 dispatch(
                                     getRegisteredNameByEthAddress(ethAddress)
                                 )
-                                    .then(aoNameId => {
+                                    .then(nameObject => {
                                         dispatch({
                                             type:
                                                 AO_NAME_REGISTRATION_TRANSACTION.RESULT,
-                                            payload: aoNameId
+                                            payload: nameObject
                                         });
                                     })
                                     .catch(err => {
@@ -234,7 +256,7 @@ const initialState = {
     ethNetworkId: undefined,
     ethNetworkLink: "https://etherscan.io",
     ethAddress: undefined,
-    aoNameId: undefined,
+    aoName: undefined,
     aoNameRegistrationState: {
         initialized: undefined,
         transactionHash: undefined,
@@ -249,7 +271,16 @@ export type AppReducerType = {
     ethNetworkId?: string | number,
     ethNetworkLink?: string,
     ethAddress?: string,
-    aoNameId?: string,
+    aoName?: {
+        id: string,
+        name: string,
+        originId: string,
+        datHash: string,
+        database: string,
+        keyValue: string,
+        contentId: string,
+        typeId: string
+    },
     aoNameRegistrationState: {
         initialized: boolean,
         transactionHash: string,
@@ -290,10 +321,10 @@ export default function appReducer(state = initialState, action) {
                 ...state,
                 coreEthNetworkId: action.payload
             };
-        case AO_NAME_ID_CHANGE:
+        case AO_NAME_CHANGE:
             return {
                 ...state,
-                aoNameId: action.payload
+                aoName: action.payload
             };
         case AO_NAME_REGISTRATION_TRANSACTION.INITIALIZED:
             return {
