@@ -94,10 +94,7 @@ const featuredStyles = ({}) => ({
 
 const ContentCardFeatured = compose(withStyles(featuredStyles))(
     ({ content, ethAddress, classes }) => (
-        <ContentPurchaseAction
-            currentUserEthAddress={ethAddress}
-            content={content}
-        >
+        <ContentPurchaseAction content={content}>
             {({ action, actionCopy, loading }) => (
                 <div>
                     <Grid container spacing={24} alignItems="center">
@@ -179,10 +176,7 @@ const ContentCardDefault = compose(withStyles(defaultStyles))(
     ({ content, ethAddress, classes }) => {
         const isOffline = content.recentlySeenHostsCount < 1;
         return (
-            <ContentPurchaseAction
-                currentUserEthAddress={ethAddress}
-                content={content}
-            >
+            <ContentPurchaseAction content={content}>
                 {({ action, actionCopy, loading }) => (
                     <div className={classes.root}>
                         <div

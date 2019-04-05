@@ -172,7 +172,6 @@ class TeaserCard extends Component<Props> {
         } else {
             return (
                 <ContentPurchaseAction
-                    currentUserEthAddress={ethAddress}
                     contentRef={this.refs.videoContainer}
                     content={content}
                 >

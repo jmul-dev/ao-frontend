@@ -59,7 +59,6 @@ class DownloadsListItem extends Component {
         console.log(`Watch now ref:`, this._watchNowRef);
         return (
             <ContentPurchaseAction
-                currentUserEthAddress={currentUserEthAddress}
                 contentRef={this._watchNowRef}
                 content={content}
             >

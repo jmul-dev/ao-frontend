@@ -32,12 +32,6 @@ type Props = {
 
 class UploadForm extends Component<Props> {
     props: Props;
-    constructor() {
-        super();
-        this.state = {
-            initialRedirect: false
-        };
-    }
     componentDidMount() {
         this.props.resetUploadForm();
     }

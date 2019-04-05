@@ -19,10 +19,7 @@ class DappListItem extends Component {
         const { classes, content, ethAddress } = this.props;
         return (
             <div className={classes.root}>
-                <ContentPurchaseAction
-                    content={content}
-                    currentUserEthAddress={ethAddress}
-                >
+                <ContentPurchaseAction content={content}>
                     {({ action, actionCopy, loading }) => (
                         <div
                             className={classes.previewImage}

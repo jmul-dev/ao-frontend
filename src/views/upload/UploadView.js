@@ -1,16 +1,16 @@
 // @flow
 import React, { PureComponent } from "react";
-import View from "../View";
 import { Route, Switch } from "react-router-dom";
+import withUserIdentifiers from "../../modules/account/containers/withUserIdentifiers";
 import UploadForm from "../../modules/upload/components/UploadForm";
+import UploadFormContent from "../../modules/upload/components/UploadFormContent";
 import UploadFormLicenseView from "../../modules/upload/components/UploadFormLicenseView";
 import UploadFormPricing from "../../modules/upload/components/UploadFormPricing";
 import UploadFormReload from "../../modules/upload/components/UploadFormReload";
-import UploadFormContent from "../../modules/upload/components/UploadFormContent";
 import UploadFormSubmit from "../../modules/upload/components/UploadFormSubmit";
 import UploadFormContinue from "../../modules/upload/containers/UploadFormContinue";
+import View from "../View";
 import "./upload-view.css";
-import withUserIdentifiers from "../../modules/account/containers/withUserIdentifiers";
 
 class UploadView extends PureComponent {
     render() {

@@ -109,7 +109,6 @@ class UserContentView extends PureComponent {
                     </ButtonBase>
                 </Grid>
                 <ContentPurchaseAction
-                    currentUserEthAddress={ethAddress}
                     contentRef={this._watchNowRef}
                     content={content}
                 >

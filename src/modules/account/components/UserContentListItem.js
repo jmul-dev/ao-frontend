@@ -152,7 +152,6 @@ class ContentListItem extends Component {
                             {content.title}
                         </Typography>
                         <ContentPurchaseAction
-                            currentUserEthAddress={ethAddress}
                             contentRef={this._watchNowRef}
                             content={content}
                         >
@@ -202,7 +201,6 @@ class ContentListItem extends Component {
             <Grid className={classes.root} container spacing={16}>
                 <Grid item sm={4}>
                     <ContentPurchaseAction
-                        currentUserEthAddress={ethAddress}
                         contentRef={this._watchNowRef}
                         content={content}
                     >
