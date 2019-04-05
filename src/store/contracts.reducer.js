@@ -10,6 +10,8 @@ import AOSetting from "ao-contracts/build/contracts/AOSetting.json";
 import AOIon from "ao-contracts/build/contracts/AOIon.json";
 import AOIonLot from "ao-contracts/build/contracts/AOIonLot.json";
 import AOPurchaseReceipt from "ao-contracts/build/contracts/AOPurchaseReceipt.json";
+import NameFactory from "ao-contracts/build/contracts/NameFactory.json";
+import NameTAOLookup from "ao-contracts/build/contracts/NameTAOLookup.json";
 
 import debounce from "debounce";
 import { APP_STATES, updateAppState, getNetworkName } from "./app.reducer";
@@ -68,34 +70,48 @@ export const initializeContracts = networkId => {
                 AOIon,
                 AOIonLot,
                 AOPurchaseReceipt,
-            ]
+                NameFactory,
+                NameTAOLookup
+            ];
             let initializedContracts = contracts.reduce((acc, contract) => {
                 if (!contract.networks[networkId]) {
-                    throw new Error(`${contract.contractName} has not been deployed to network ${networkId}`)
+                    throw new Error(
+                        `${
+                            contract.contractName
+                        } has not been deployed to network ${networkId}`
+                    );
                 }
-                // lowercasing "AO"
-                const contractInstanceName = "ao" + contract.contractName.substring(2)
+                let contractInstanceName = contract.contractName;
+                if (contractInstanceName.indexOf("AO") === 0) {
+                    // lowercasing "AO"
+                    contractInstanceName =
+                        "ao" + contract.contractName.substring(2);
+                } else {
+                    // lowercase first char
+                    contractInstanceName =
+                        contract.contractName[0].toLowerCase() +
+                        contract.contractName.substring(1);
+                }
                 return Object.assign(acc, {
                     [contractInstanceName]: window.web3.eth
                         .contract(contract.abi)
                         .at(contract.networks[networkId].address)
-                })
-            }, {})
+                });
+            }, {});
             dispatch({
                 type: CONTRACTS_INITIALIZED,
                 payload: initializedContracts
             });
-            dispatch(
-                updateAppState(APP_STATES.CONTRACTS_INITIALIZED, true)
-            );
+            dispatch(updateAppState(APP_STATES.CONTRACTS_INITIALIZED, true));
             dispatch(watchBlockNumber());
             dispatch(updateIcoState());
             dispatch(fetchSettingsFromContract());
         } catch (error) {
             console.error("Error initializing contracts", error);
-            if ( error.message.indexOf("has not been deployed") > -1 ) {
+            if (error.message.indexOf("has not been deployed") > -1) {
                 console.warn(
-                    "Smart contracts have not been deployed on this network: " + networkId
+                    "Smart contracts have not been deployed on this network: " +
+                        networkId
                 );
                 dispatch(
                     updateAppState(APP_STATES.CONTRACTS_INITIALIZED, false)
@@ -108,7 +124,7 @@ export const initializeContracts = networkId => {
                         message: `The Ethereum network you selected is not supported. Available networks: ${networkIds}`
                     })
                 );
-            }            
+            }
         }
     };
 };

@@ -21,7 +21,7 @@ import moment from "moment";
 import { Link } from "react-router-dom";
 import { withRouter } from "react-router";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
-import withEthAddress from "../containers/withEthAddress";
+import withUserIdentifiers from "../containers/withUserIdentifiers";
 
 class UserContentView extends PureComponent {
     static propTypes = {
@@ -41,7 +41,7 @@ class UserContentView extends PureComponent {
         getContentMetrics: PropTypes.func.isRequired,
         getContentHostEarnings: PropTypes.func.isRequired,
         getPurchaseReceipt: PropTypes.func.isRequired,
-        // withEthAddress
+        // withUserIdentifiers
         ethAddress: PropTypes.string.isRequired
     };
     _watchNowRef;
@@ -109,7 +109,6 @@ class UserContentView extends PureComponent {
                     </ButtonBase>
                 </Grid>
                 <ContentPurchaseAction
-                    currentUserEthAddress={ethAddress}
                     contentRef={this._watchNowRef}
                     content={content}
                 >
@@ -249,8 +248,13 @@ class UserContentView extends PureComponent {
                                         variant="body2"
                                         style={{whiteSpace: 'nowrap'}}
                                     >
-                                        {`Eth address: ${content.creatorEthAddress}`}<br/>
-                                        {`AO public key: ${content.creatorNodePublicKey}`}
+                                        {`Eth address: ${
+                                            content.creatorEthAddress
+                                        }`}
+                                        <br />
+                                        {`AO public key: ${
+                                            content.creatorNodePublicKey
+                                        }`}
                                     </Typography>
                                 </div>
                                 <Divider />
@@ -397,7 +401,7 @@ class UserContentView extends PureComponent {
                                             </Typography>
                                         </div>
                                     </React.Fragment>
-                                )}                                
+                                )}
                             </div>
                         )}
                         {activeTabIndex === 1 && (
@@ -696,5 +700,5 @@ export default compose(
     withRouter,
     withStyles(styles),
     withContentMetrics,
-    withEthAddress
+    withUserIdentifiers
 )(UserContentView);

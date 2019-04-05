@@ -5,7 +5,11 @@ import {
     getEthBalanceForAccount,
     getTokenBalanceForAccount
 } from "../modules/wallet/reducers/wallet.reducer";
-import { initializeContracts } from "./contracts.reducer";
+import {
+    initializeContracts,
+    waitForTransactionReceipt
+} from "./contracts.reducer";
+import { triggerMetamaskPopupWithinElectron } from "../utils/electron";
 
 // Constants
 export const WEB3_CONNECTED = "WEB3_CONNECTED";
@@ -21,6 +25,14 @@ export const APP_STATES = {
     APP_READY: "APP_READY"
 };
 export const SET_CORE_ETHEREUM_NETWORK_ID = "SET_CORE_ETHEREUM_NETWORK_ID";
+export const AO_NAME_CHANGE = "AO_NAME_CHANGE";
+export const AO_NAME_REGISTRATION_TRANSACTION = Object.freeze({
+    INITIALIZED: "AO_NAME_REGISTRATION_TRANSACTION.INITIALIZED",
+    SUBMITTED: "AO_NAME_REGISTRATION_TRANSACTION.SUBMITTED",
+    RESULT: "AO_NAME_REGISTRATION_TRANSACTION.RESULT",
+    ERROR: "AO_NAME_REGISTRATION_TRANSACTION.ERROR",
+    RESET: "AO_NAME_REGISTRATION_TRANSACTION.RESET"
+});
 
 // Actions
 export const updateAppState = (key, value) => ({
@@ -58,6 +70,7 @@ export const connectToWeb3 = networkId => {
                     if (account) {
                         dispatch(getEthBalanceForAccount(account));
                         dispatch(getTokenBalanceForAccount(account));
+                        dispatch(getRegisteredNameByEthAddress(account));
                     }
                 }
                 // Poll for account change
@@ -93,6 +106,143 @@ export const getNetworkName = (networkId, shortname = false) => {
             return shortname ? "" : `Unkown Network (id:${networkId})`;
     }
 };
+export const getRegisteredNameByEthAddress = ethAddress => {
+    return (dispatch, getState) => {
+        return new Promise((resolve, reject) => {
+            if (!ethAddress)
+                return reject(
+                    new Error("getRegisteredName called without an ethAddress")
+                );
+            const { contracts } = getState();
+            contracts.nameFactory.ethAddressToNameId(ethAddress, function(
+                err,
+                result
+            ) {
+                if (err) return reject(err);
+                const nameId =
+                    result === "0x0000000000000000000000000000000000000000"
+                        ? undefined
+                        : result;
+                if (!nameId) {
+                    dispatch({
+                        type: AO_NAME_CHANGE,
+                        payload: undefined
+                    });
+                } else {
+                    // Fetch the name details (including name)
+                    contracts.nameFactory.getName(nameId, function(
+                        err,
+                        result
+                    ) {
+                        if (err) return reject(err);
+                        dispatch({
+                            type: AO_NAME_CHANGE,
+                            payload: {
+                                nameId,
+                                name: result[0],
+                                originId: result[1],
+                                datHash: result[2],
+                                database: result[3],
+                                keyValue: result[4],
+                                contentId: result[5],
+                                typeId: result[6]
+                            }
+                        });
+                    });
+                }
+            });
+        });
+    };
+};
+export const registerNameUnderEthAddress = ({ name, ethAddress }) => {
+    return (dispatch, getState) => {
+        const { contracts } = getState();
+        dispatch({
+            type: AO_NAME_REGISTRATION_TRANSACTION.INITIALIZED
+        });
+        // 0. name validation
+        const validUsername = /^[a-zA-Z0-9_-]{3,20}$/.test(name);
+        console.log(validUsername, name);
+        if (!validUsername) {
+            dispatch({
+                type: AO_NAME_REGISTRATION_TRANSACTION.ERROR,
+                payload: new Error(
+                    `validation requirements: 3-20 characters, no spaces, hyphen and underscores allowed`
+                )
+            });
+            return null;
+        }
+        // 1. Check that the name does not exist already
+        contracts.nameTAOLookup.isExist(name, function(err, doesExist) {
+            if (err) {
+                dispatch({
+                    type: AO_NAME_REGISTRATION_TRANSACTION.ERROR,
+                    payload: err
+                });
+            } else if (doesExist) {
+                dispatch({
+                    type: AO_NAME_REGISTRATION_TRANSACTION.ERROR,
+                    payload: new Error(`Name is already registered`)
+                });
+            } else {
+                // 2. Submit the name
+                triggerMetamaskPopupWithinElectron(getState);
+                contracts.nameFactory.createName(
+                    name,
+                    "",
+                    "",
+                    "",
+                    "",
+                    {
+                        from: ethAddress
+                    },
+                    function(err, transactionHash) {
+                        if (err) {
+                            dispatch({
+                                type: AO_NAME_REGISTRATION_TRANSACTION.ERROR,
+                                payload: err
+                            });
+                            return null;
+                        }
+                        dispatch({
+                            type: AO_NAME_REGISTRATION_TRANSACTION.SUBMITTED,
+                            payload: transactionHash
+                        });
+                        // 3. Wait for tx to resolve
+                        waitForTransactionReceipt(transactionHash)
+                            .then(() => {
+                                // 4. Tx complete, query for nameId
+                                dispatch(
+                                    getRegisteredNameByEthAddress(ethAddress)
+                                )
+                                    .then(nameObject => {
+                                        dispatch({
+                                            type:
+                                                AO_NAME_REGISTRATION_TRANSACTION.RESULT,
+                                            payload: nameObject
+                                        });
+                                    })
+                                    .catch(err => {
+                                        dispatch({
+                                            type:
+                                                AO_NAME_REGISTRATION_TRANSACTION.ERROR,
+                                            payload: err
+                                        });
+                                    });
+                            })
+                            .catch(err => {
+                                dispatch({
+                                    type:
+                                        AO_NAME_REGISTRATION_TRANSACTION.ERROR,
+                                    payload: err
+                                });
+                            });
+                    }
+                );
+            }
+        });
+    };
+};
 
 // State
 const initialState = {
@@ -107,7 +257,14 @@ const initialState = {
     },
     ethNetworkId: undefined,
     ethNetworkLink: "https://etherscan.io",
-    ethAddress: undefined
+    ethAddress: undefined,
+    aoName: undefined,
+    aoNameRegistrationState: {
+        initialized: undefined,
+        transactionHash: undefined,
+        result: undefined,
+        error: undefined
+    }
 };
 export type AppReducerType = {
     state: {
@@ -116,6 +273,22 @@ export type AppReducerType = {
     ethNetworkId?: string | number,
     ethNetworkLink?: string,
     ethAddress?: string,
+    aoName?: {
+        id: string,
+        name: string,
+        originId: string,
+        datHash: string,
+        database: string,
+        keyValue: string,
+        contentId: string,
+        typeId: string
+    },
+    aoNameRegistrationState: {
+        initialized: boolean,
+        transactionHash: string,
+        result: any,
+        error: any
+    },
     coreEthNetworkId?: string
 };
 
@@ -149,6 +322,49 @@ export default function appReducer(state = initialState, action) {
             return {
                 ...state,
                 coreEthNetworkId: action.payload
+            };
+        case AO_NAME_CHANGE:
+            return {
+                ...state,
+                aoName: action.payload
+            };
+        case AO_NAME_REGISTRATION_TRANSACTION.INITIALIZED:
+            return {
+                ...state,
+                aoNameRegistrationState: {
+                    initialized: true
+                }
+            };
+        case AO_NAME_REGISTRATION_TRANSACTION.SUBMITTED:
+            return {
+                ...state,
+                aoNameRegistrationState: {
+                    ...state.aoNameRegistrationState,
+                    transactionHash: action.payload
+                }
+            };
+        case AO_NAME_REGISTRATION_TRANSACTION.RESULT:
+            return {
+                ...state,
+                aoNameRegistrationState: {
+                    ...state.aoNameRegistrationState,
+                    result: action.payload
+                }
+            };
+        case AO_NAME_REGISTRATION_TRANSACTION.ERROR:
+            return {
+                ...state,
+                aoNameRegistrationState: {
+                    ...state.aoNameRegistrationState,
+                    error: action.payload
+                }
+            };
+        case AO_NAME_REGISTRATION_TRANSACTION.RESET:
+            return {
+                ...state,
+                aoNameRegistrationState: {
+                    ...initialState.aoNameRegistrationState
+                }
             };
         default:
             return state;

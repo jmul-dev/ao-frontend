@@ -4,12 +4,12 @@ import Wallet from "../../modules/wallet/components/Wallet";
 import Typography from "@material-ui/core/Typography";
 import Account from "../../modules/account/components/Account";
 import Grid from "@material-ui/core/Grid";
-import withEthAddress from "../../modules/account/containers/withEthAddress";
+import withUserIdentifiers from "../../modules/account/containers/withUserIdentifiers";
 import ConsoleContainer from "../../modules/console/containers/ConsoleContainer";
 
 class WalletView extends PureComponent {
     render() {
-        const { ethAddress } = this.props;
+        const { ethAddress, aoName } = this.props;
         return (
             <View
                 className={`WalletView ${
@@ -53,6 +53,12 @@ class WalletView extends PureComponent {
                             </Typography>
                         </div>
                     </div>
+                    {aoName && (
+                        <Typography variant="body1" style={{ marginLeft: 32 }}>
+                            <b style={{ marginRight: 6 }}>{`Username:`}</b>
+                            {`${aoName.name}`}
+                        </Typography>
+                    )}
                 </header>
                 <section>
                     <Grid container spacing={16}>
@@ -93,4 +99,4 @@ class WalletView extends PureComponent {
     }
 }
 
-export default withEthAddress(WalletView);
+export default withUserIdentifiers(WalletView);

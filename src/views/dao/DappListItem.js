@@ -6,7 +6,7 @@ import {
     ContentPurchaseAction,
     ContentPurchaseState
 } from "../../modules/video/components/ContentPurchaseActions";
-import withEthAddress from "../../modules/account/containers/withEthAddress";
+import withUserIdentifiers from "../../modules/account/containers/withUserIdentifiers";
 import { compose } from "react-apollo";
 import { PrimaryButton } from "../../theme";
 
@@ -19,10 +19,7 @@ class DappListItem extends Component {
         const { classes, content, ethAddress } = this.props;
         return (
             <div className={classes.root}>
-                <ContentPurchaseAction
-                    content={content}
-                    currentUserEthAddress={ethAddress}
-                >
+                <ContentPurchaseAction content={content}>
                     {({ action, actionCopy, loading }) => (
                         <div
                             className={classes.previewImage}
@@ -81,5 +78,5 @@ const styles = ({ spacing }) => ({
 
 export default compose(
     withStyles(styles),
-    withEthAddress
+    withUserIdentifiers
 )(DappListItem);

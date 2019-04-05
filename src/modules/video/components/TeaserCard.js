@@ -172,7 +172,6 @@ class TeaserCard extends Component<Props> {
         } else {
             return (
                 <ContentPurchaseAction
-                    currentUserEthAddress={ethAddress}
                     contentRef={this.refs.videoContainer}
                     content={content}
                 >
@@ -405,7 +404,7 @@ class TeaserCard extends Component<Props> {
                         <ExchangeModal
                             open={this.state.exchangeModalOpen}
                             onClose={this._onExchangeModalClose}
-                            exchangeType="network"
+                            exchangeType="primordialIfActive"
                             exchangeProps={{
                                 title: "You have insufficient funds",
                                 subtitle:

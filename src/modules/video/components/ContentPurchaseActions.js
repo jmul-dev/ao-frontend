@@ -27,6 +27,7 @@ import { localNodeQuery } from "../../../AppContainer";
 import { userContentQuery } from "../containers/withUserContent";
 import { stakeContent } from "../../upload/reducers/upload.reducer";
 import { contentUploadStakeTransaction } from "../../upload/containers/withUploadFormMutation";
+import withUserIdentifiers from "../../account/containers/withUserIdentifiers";
 
 /*
 DISCOVERED
@@ -289,6 +290,7 @@ const mapStateToProps = (store, props) => {
 const withContentPurchaseActions = compose(
     withApollo,
     withRouter,
+    withUserIdentifiers,
     connect(
         mapStateToProps,
         mapDispatchToProps
@@ -302,6 +304,8 @@ const withContentPurchaseActions = compose(
  * of content in to a node and become a host for that content.
  *
  * @param {content} Object AO Content
+ * @param {aoName} Object
+ * @param {ethAddress} String
  * @param {contentRef} Object A reference to the content being displayed (for animation purposes,
  *                            we get the bounding box of this ref and animate to fullscreen video)
  * @param {client} ApolloClient
@@ -310,7 +314,7 @@ const withContentPurchaseActions = compose(
  */
 class ContentPurchaseActionComponent extends Component {
     static defaultProps = {
-        currentUserEthAddress: ""
+        ethAddress: ""
     };
     constructor() {
         super();
@@ -319,6 +323,14 @@ class ContentPurchaseActionComponent extends Component {
             error: null
         };
     }
+    _preActionHook = action => {
+        const { aoName, ethAddress } = this.props;
+        if (!aoName) {
+            this.props.history.push("/app/registration");
+        } else {
+            action();
+        }
+    };
     _dispatchErrorNotificationAndStopLoading = (
         error,
         errorMessage,
@@ -474,7 +486,7 @@ class ContentPurchaseActionComponent extends Component {
             profitPercentage: content.profitSplitPercentage,
             baseChallenge: content.baseChallenge,
             encChallenge: content.encChallenge,
-            taoId: content.taoId, // only shows up if content type === TAO
+            taoId: content.taoId // only shows up if content type === TAO
         })
             .then(transactionHash => {
                 // 2. Submit the tx to core
@@ -554,11 +566,11 @@ class ContentPurchaseActionComponent extends Component {
             });
     };
     render() {
-        const { content, currentUserEthAddress, children } = this.props;
+        const { content, ethAddress, children } = this.props;
         const { loading, error } = this.state;
         const isUploadedContent = determineIfContentWasUploadedByCurrentUser(
             content,
-            currentUserEthAddress
+            ethAddress
         );
         let action = null;
         let actionCopy = "";
@@ -629,6 +641,9 @@ class ContentPurchaseActionComponent extends Component {
                 break;
             default:
                 break;
+        }
+        if (typeof action === "function") {
+            action = this._preActionHook.bind(this, action);
         }
         return children({ action, actionCopy, loading, error });
     }

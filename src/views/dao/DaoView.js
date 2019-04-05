@@ -4,7 +4,7 @@ import Typography from "@material-ui/core/Typography";
 import EtherscanLink from "../../modules/etherscan/EtherscanLink";
 import { Link } from "react-router-dom";
 import { compose } from "react-apollo";
-import withEthAddress from "../../modules/account/containers/withEthAddress";
+import withUserIdentifiers from "../../modules/account/containers/withUserIdentifiers";
 import AccountRequired from "../../modules/account/components/AccountRequired";
 import withNetworkDapps from "./withNetworkDapps";
 import withTheAoDappId from "./withTheAoDappId";
@@ -109,4 +109,4 @@ class DaoView extends PureComponent {
     }
 }
 
-export default compose(withEthAddress)(DaoView);
+export default compose(withUserIdentifiers)(DaoView);

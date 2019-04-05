@@ -138,7 +138,7 @@ class UserContentStats extends PureComponent {
                         </Typography>
                     </div>
                 )}
-                {metrics ? (
+                {metrics && transactions.stakeTx ? (
                     <div>
                         <Typography
                             className={classes.statLabel}
