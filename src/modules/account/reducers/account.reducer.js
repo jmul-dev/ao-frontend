@@ -5,6 +5,7 @@ export const ACCOUNT_VIDEO_LISTING_FILTER = "ACCOUNT_VIDEO_LISTING_FILTER";
 export const ACCOUNT_VIDEO_LISTING_ORDERING = "ACCOUNT_VIDEO_LISTING_ORDERING";
 export const UPDATE_CONTENT_METRICS_BY_STAKE_ID =
     "UPDATE_CONTENT_METRICS_BY_STAKE_ID";
+export const UPDATE_TAO_CONTENT_STATE = "UPDATE_TAO_CONTENT_STATE";
 export const ACCOUNT_CONTENT_TYPE_FILTER = "ACCOUNT_CONTENT_TYPE_FILTER";
 export const UPDATE_CONTENT_HOST_EARNINGS = "UPDATE_CONTENT_HOST_EARNINGS";
 export const MEDIA_TYPES = [
@@ -29,27 +30,27 @@ export const setAccountVideoListingOrdering = ordering => ({
 export const getContentMetrics = stakeId => {
     return (dispatch, getState) => {
         const { contracts, ico } = getState();
-        contracts.aoContentFactory.getContentMetrics(
-            stakeId,
-            function(err, result) {
-                if (!err) {
-                    dispatch({
-                        type: UPDATE_CONTENT_METRICS_BY_STAKE_ID,
-                        payload: {
-                            stakeId,
-                            networkTokenStaked: new BigNumber(result[0]),
-                            primordialTokenStaked: new BigNumber(result[1]),
-                            primordialTokenStakedWeight: new BigNumber(
-                                result[2]
-                            ).dividedBy(ico.weightedIndexDivisor),
-                            totalStakeEarning: new BigNumber(result[3]),
-                            totalHostEarning: new BigNumber(result[4]),
-                            totalFoundationEarning: new BigNumber(result[5])
-                        }
-                    });
-                }
+        contracts.aoContentFactory.getContentMetrics(stakeId, function(
+            err,
+            result
+        ) {
+            if (!err) {
+                dispatch({
+                    type: UPDATE_CONTENT_METRICS_BY_STAKE_ID,
+                    payload: {
+                        stakeId,
+                        networkTokenStaked: new BigNumber(result[0]),
+                        primordialTokenStaked: new BigNumber(result[1]),
+                        primordialTokenStakedWeight: new BigNumber(
+                            result[2]
+                        ).dividedBy(ico.weightedIndexDivisor),
+                        totalStakeEarning: new BigNumber(result[3]),
+                        totalHostEarning: new BigNumber(result[4]),
+                        totalFoundationEarning: new BigNumber(result[5])
+                    }
+                });
             }
-        );
+        });
     };
 };
 export const getContentHostEarnings = contentHostId => {
@@ -77,7 +78,9 @@ export const getPurchaseReceipt = purchaseReceiptId => {
             const { contracts } = getState();
             if (!purchaseReceiptId)
                 return reject(
-                    new Error(`getPurchaseReceipt called with no purchaseReceiptId`)
+                    new Error(
+                        `getPurchaseReceipt called with no purchaseReceiptId`
+                    )
                 );
             contracts.aoPurchaseReceipt.getById(purchaseReceiptId, function(
                 err,
@@ -103,13 +106,30 @@ export const getPurchaseReceipt = purchaseReceiptId => {
         });
     };
 };
+export const getTaoContentState = contentId => {
+    return (dispatch, getState) => {
+        const { contracts } = getState();
+        contracts.aoContent.getById(contentId, function(err, result) {
+            if (!err) {
+                dispatch({
+                    type: UPDATE_TAO_CONTENT_STATE,
+                    payload: {
+                        contentId,
+                        taoContentState: result[4]
+                    }
+                });
+            }
+        });
+    };
+};
 
 // State
 const initialState = {
     videoListingFilter: "downloaded", // uploaded || downloaded
     videoListingOrdering: "recent", // recent || earned || staked
     contentMetrics: {}, // stakeId => { metrics }
-    contentHostEarnings: {} // contentHostId => BigNumber
+    contentHostEarnings: {}, // contentHostId => BigNumber
+    taoContentState: {} // contentId
 };
 
 // Reducer
@@ -139,6 +159,14 @@ export default function accountReducer(state = initialState, action) {
                 contentHostEarnings: {
                     ...state.contentHostEarnings,
                     [action.payload.contentHostId]: action.payload.earnings
+                }
+            };
+        case UPDATE_TAO_CONTENT_STATE:
+            return {
+                ...state,
+                taoContentState: {
+                    ...state.taoContentState,
+                    [action.payload.contentId]: action.payload.taoContentState
                 }
             };
         default:

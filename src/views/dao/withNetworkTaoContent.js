@@ -4,23 +4,23 @@ import ContentFields from "../../graphql/fragments/ContentFields";
 import DappContentFragment from "../../graphql/fragments/DappContentFragment";
 
 // GraphQL
-const networkDappsQuery = gql(`
-    query networkDapps($contentType: ContentType!) {
-        networkContent(contentType: $contentType) {
+const networkTaoContentQuery = gql(`
+    query networkTaoContentQuery($contentLicense: ContentLicense!) {
+        networkContent(contentLicense: $contentLicense) {
             ${ContentFields}
             ${DappContentFragment}
         }
     }
 `);
 
-const withNetworkDapps = graphql(networkDappsQuery, {
-    name: "networkDappsQuery",
+const withNetworkTaoContent = graphql(networkTaoContentQuery, {
+    name: "networkTaoContentQuery",
     options: props => ({
         variables: {
-            contentType: "DAPP"
+            contentLicense: "TAO"
         },
         pollInterval: 5000
     })
 });
 
-export default withNetworkDapps;
+export default withNetworkTaoContent;

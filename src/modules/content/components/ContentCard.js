@@ -11,6 +11,7 @@ import { withStyles } from "@material-ui/core/styles";
 import { PrimaryButton } from "../../../theme";
 import withContentById from "../containers/withContentById";
 import OfflineIcon from "@material-ui/icons/CloudOff";
+import Tooltip from "@material-ui/core/Tooltip";
 
 /**
  * ContentCard
@@ -32,22 +33,31 @@ import OfflineIcon from "@material-ui/icons/CloudOff";
  *
  * @param {string} ethAddress The current users eth address (withUserIdentifiers)
  * @param {object} query The graphql query for fetching userContent and networkContent (withContentById)
+ * @param {string} taoContentState
+ * @param {function} getTaoContentState
  */
 const ContentCard = ({
     contentId,
     variant = "default",
     ethAddress,
-    query: { loading, error, userContent, networkContent }
+    query: { loading, error, userContent, networkContent },
+    taoContentState,
+    getTaoContentState
 }) => {
     if (loading && !networkContent) return null;
     if (error && !networkContent) return null;
+    if (!taoContentState) {
+        console.log(`ContentCard:${contentId}:getTaoState`);
+        getTaoContentState(contentId);
+    }
     // Use userContent first, otherwise fall back to networkContent
-    const contentForActions = userContent || networkContent[0];
+    let contentForActions = userContent || networkContent[0];
     switch (variant) {
         case "featured":
             return (
                 <ContentCardFeatured
                     content={contentForActions}
+                    taoContentState={taoContentState}
                     ethAddress={ethAddress}
                 />
             );
@@ -56,6 +66,7 @@ const ContentCard = ({
             return (
                 <ContentCardDefault
                     content={contentForActions}
+                    taoContentState={taoContentState}
                     ethAddress={ethAddress}
                 />
             );
@@ -93,7 +104,7 @@ const featuredStyles = ({}) => ({
 });
 
 const ContentCardFeatured = compose(withStyles(featuredStyles))(
-    ({ content, ethAddress, classes }) => (
+    ({ content, taoContentState, ethAddress, classes }) => (
         <ContentPurchaseAction content={content}>
             {({ action, actionCopy, loading }) => (
                 <div>
@@ -173,8 +184,11 @@ const defaultStyles = ({}) => ({
 });
 
 const ContentCardDefault = compose(withStyles(defaultStyles))(
-    ({ content, ethAddress, classes }) => {
-        const isOffline = content.recentlySeenHostsCount < 1;
+    ({ content, taoContentState, ethAddress, classes }) => {
+        let isOffline = content.recentlySeenHostsCount < 1;
+        if (content.nodeEthAddress === ethAddress) {
+            isOffline = false;
+        }
         return (
             <ContentPurchaseAction content={content}>
                 {({ action, actionCopy, loading }) => (
@@ -204,6 +218,13 @@ const ContentCardDefault = compose(withStyles(defaultStyles))(
                         <Typography variant="subheading" gutterBottom>
                             {content.title}
                         </Typography>
+                        {content.contentLicense === "TAO" && (
+                            <div style={{ marginBottom: 8 }}>
+                                <TaoContentState
+                                    taoContentState={taoContentState}
+                                />
+                            </div>
+                        )}
                         <Typography
                             variant="body1"
                             gutterBottom
@@ -229,3 +250,57 @@ const ContentCardDefault = compose(withStyles(defaultStyles))(
     }
 );
 ContentCardDefault.displayName = "ContentCardDefault";
+
+const taoContentStyles = ({ palette }) => ({
+    typography: {},
+    indicator: {
+        width: 8,
+        height: 8,
+        borderRadius: 4,
+        marginRight: 6,
+        textAlign: "center",
+        display: "inline-block"
+    },
+    indicatorWarning: {
+        backgroundColor: palette.warning.main
+    },
+    indicatorError: {
+        backgroundColor: palette.error.main
+    },
+    indicatorSuccess: {
+        backgroundColor: palette.primary.main
+    }
+});
+const TaoContentState = withStyles(taoContentStyles, { withTheme: true })(
+    ({ taoContentState, classes }) => {
+        let label = "";
+        let color = "";
+        switch (taoContentState) {
+            case "Pending Review":
+                label = "pending review";
+                color = classes.indicatorWarning;
+                break;
+            case "Accepted to TAO":
+                label = "verified";
+                color = classes.indicatorSuccess;
+                break;
+            case "Submitted":
+            default:
+                label = "unverified";
+                color = classes.indicatorError;
+                break;
+        }
+        return (
+            <Tooltip title="The status of this content is derived from The AO">
+                <Typography variant="caption" className={classes.typography}>
+                    <span
+                        className={`${classes.indicator} ${color}`}
+                        style={{ backgroundColor: color }}
+                    />
+                    {label}
+                </Typography>
+            </Tooltip>
+        );
+    }
+);
+TaoContentState.displayName = "TaoContentState";
