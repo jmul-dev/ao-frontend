@@ -183,14 +183,27 @@ const fetchSettingsFromContract = () => {
                     }
                 );
             });
-            // TODO: fetch The AO dapp id
-            Promise.all([ingressUrlPromise, aoUrlPromise])
+            let aoDappIdPromise = new Promise((resolve, reject) => {
+                contracts.aoSetting.getSettingValuesByTAOName(
+                    settingsTAOId,
+                    "theAoDappId",
+                    function(err, settingsValue) {
+                        if (err) {
+                            reject(err);
+                        } else {
+                            resolve(settingsValue[4]);
+                        }
+                    }
+                );
+            });
+            Promise.all([ingressUrlPromise, aoUrlPromise, aoDappIdPromise])
                 .then(settings => {
                     dispatch({
                         type: UPDATE_CONTRACT_SETTINGS,
                         payload: {
                             ingressUrl: settings[0],
-                            aoUrl: settings[1]
+                            aoUrl: settings[1],
+                            theAoDappId: settings[2]
                         }
                     });
                 })
@@ -213,7 +226,8 @@ const initialState = {
     latestBlockNumber: 0,
     settings: {
         aoUrl: undefined,
-        ingressUrl: undefined
+        ingressUrl: undefined,
+        theAoDappId: undefined
     }
 };
 
