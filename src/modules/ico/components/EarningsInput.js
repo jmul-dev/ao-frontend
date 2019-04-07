@@ -1,103 +1,121 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
-import Input from '@material-ui/core/Input';
-import InputLabel from '@material-ui/core/InputLabel';
-import FormControl from '@material-ui/core/FormControl';
-import { DenominationSelect, fromBaseToDenominationValue, fromDenominationValueToBase } from '../../../utils/denominations';
-import BigNumber from 'bignumber.js';
+import React, { PureComponent } from "react";
+import PropTypes from "prop-types";
+import { withStyles } from "@material-ui/core/styles";
+import Input from "@material-ui/core/Input";
+import InputLabel from "@material-ui/core/InputLabel";
+import FormControl from "@material-ui/core/FormControl";
+import {
+    DenominationSelect,
+    fromBaseToDenominationValue,
+    fromDenominationValueToBase
+} from "../../../utils/denominations";
+import BigNumber from "bignumber.js";
 
-
-const styles = (theme) => ({
+const styles = theme => ({
     formControl: {
-        borderBottom: `1px solid ${theme.palette.grey['600']}`
+        borderBottom: `1px solid ${theme.palette.grey["600"]}`
     },
     input: {
         color: theme.palette.primary.main,
-        padding: `${theme.spacing.unit / 2}px ${theme.spacing.unit * 2}px`,        
+        padding: `${theme.spacing.unit / 2}px ${theme.spacing.unit * 2}px`,
         fontSize: `1.313rem`
     },
     inputDenominationSpacing: {
-        paddingRight: theme.spacing.unit * 16,
+        paddingRight: theme.spacing.unit * 16
     },
     inputLabel: {
         left: theme.spacing.unit * 2,
         top: theme.spacing.unit,
-        color: `${theme.palette.grey['600']} !important`,
-        fontWeight: 'bold'
+        color: `${theme.palette.grey["600"]} !important`,
+        fontWeight: "bold"
     },
     denominationSelect: {
-        position: 'absolute',
+        position: "absolute",
         right: theme.spacing.unit * 2,
-        bottom: theme.spacing.unit - 2,        
+        bottom: theme.spacing.unit - 2
     },
     denominationSelectRoot: {
-        color: `${theme.palette.grey['600']} !important`,
-        '& > select + svg': {
-            color: `${theme.palette.grey['600']} !important`,
+        color: `${theme.palette.grey["600"]} !important`,
+        "& > select + svg": {
+            color: `${theme.palette.grey["600"]} !important`
         }
     },
     percentage: {
         fontSize: `1.313rem`,
         color: theme.palette.primary.main,
-        position: 'absolute',
+        position: "absolute",
         bottom: 12,
-        left: theme.spacing.unit * 2,  // updated based on input length
-    },
+        left: theme.spacing.unit * 2 // updated based on input length
+    }
 });
 
-class EarningsInput extends Component {
+class EarningsInput extends PureComponent {
     constructor(props) {
-        super(props)
-        const characterLength = props.value ? (`${props.value}`.length || 1) : 1
+        super(props);
+        const characterLength = props.value ? `${props.value}`.length || 1 : 1;
         this.state = {
-            inputValue: new BigNumber( props.value ),
+            inputValue: new BigNumber(props.value),
             denominationValue: props.denominationValue,
-            percentageSpacing: 16 + 12 * characterLength,
-        }
+            percentageSpacing: 16 + 12 * characterLength
+        };
     }
-    _onInputChange = (event) => {
-        const { integerOnly, includeDenomination } = this.props
-        const characterLength = event.target.value.length || 1
-        let parseFn = integerOnly ? parseInt : parseFloat
-        let inputValue = new BigNumber(parseFn(event.target.value) || 1)
+    _onInputChange = event => {
+        const { integerOnly, includeDenomination } = this.props;
+        const characterLength = event.target.value.length || 1;
+        let parseFn = integerOnly ? parseInt : parseFloat;
+        let inputValue = new BigNumber(parseFn(event.target.value) || 1);
         // Need to convert back to baseDenom value
-        if ( includeDenomination ) {
-            inputValue = fromDenominationValueToBase(inputValue, this.state.denominationValue)
+        if (includeDenomination) {
+            inputValue = fromDenominationValueToBase(
+                inputValue,
+                this.state.denominationValue
+            );
         }
         this.setState({
             inputValue,
             percentageSpacing: 16 + 12 * characterLength
-        })
-        this.props.onChange(inputValue.toNumber())
-    }
-    _onDenominationChange = (nextDenom) => {
+        });
+        this.props.onChange(inputValue.toNumber());
+    };
+    _onDenominationChange = nextDenom => {
         // this.state.inputValue === baseValue, converting from baseValue to the new denom baseValue
-        let previousDenomInputValue = fromBaseToDenominationValue(this.state.inputValue, this.state.denominationValue)
-        let inputValue = fromDenominationValueToBase(previousDenomInputValue, nextDenom.name)
+        let previousDenomInputValue = fromBaseToDenominationValue(
+            this.state.inputValue,
+            this.state.denominationValue
+        );
+        let inputValue = fromDenominationValueToBase(
+            previousDenomInputValue,
+            nextDenom.name
+        );
         this.setState({
             denominationValue: nextDenom.name,
-            inputValue,
-        })
-        this.props.onChange(inputValue.toNumber())
-    }
+            inputValue
+        });
+        this.props.onChange(inputValue.toNumber());
+    };
     render() {
-        const { 
-            classes,  
+        const {
+            classes,
             label,
             includeDenomination,
             isPrimordial,
-            isPercentage,
+            isPercentage
         } = this.props;
         // NOTE: if using denominations, we convert from baseDenom value to the target denom value
         // but the baseDenom value is what is saved/passed around
-        let inputValue = this.state.inputValue
-        if ( includeDenomination ) {
-            inputValue = fromBaseToDenominationValue(inputValue, this.state.denominationValue)
+        let inputValue = this.state.inputValue;
+        if (includeDenomination) {
+            inputValue = fromBaseToDenominationValue(
+                inputValue,
+                this.state.denominationValue
+            );
         }
         return (
             <FormControl className={classes.formControl} fullWidth>
-                <InputLabel disableAnimation={true} className={classes.inputLabel}>
+                <InputLabel
+                    disableAnimation={true}
+                    className={classes.inputLabel}
+                >
                     {label}
                 </InputLabel>
                 <Input
@@ -105,20 +123,27 @@ class EarningsInput extends Component {
                     step={1}
                     value={inputValue.toNumber()}
                     onChange={this._onInputChange}
-                    className={`${classes.input} ${includeDenomination ? classes.inputDenominationSpacing : null}`}
+                    className={`${classes.input} ${
+                        includeDenomination
+                            ? classes.inputDenominationSpacing
+                            : null
+                    }`}
                     disableUnderline={true}
                 />
                 {isPercentage ? (
-                    <div className={classes.percentage} style={{left: this.state.percentageSpacing}}>{`%`}</div>
+                    <div
+                        className={classes.percentage}
+                        style={{ left: this.state.percentageSpacing }}
+                    >{`%`}</div>
                 ) : null}
                 {includeDenomination ? (
-                    <DenominationSelect 
+                    <DenominationSelect
                         value={this.state.denominationValue}
                         onChange={this._onDenominationChange}
                         isPrimordial={isPrimordial}
                         className={classes.denominationSelect}
                         classes={{
-                            root: classes.denominationSelectRoot,
+                            root: classes.denominationSelectRoot
                         }}
                     />
                 ) : null}
@@ -130,20 +155,23 @@ class EarningsInput extends Component {
 EarningsInput.propTypes = {
     classes: PropTypes.object.isRequired,
     onChange: PropTypes.func.isRequired,
-    value: PropTypes.instanceOf(BigNumber).isRequired,
+    value: PropTypes.oneOfType([
+        PropTypes.instanceOf(BigNumber),
+        PropTypes.number
+    ]).isRequired,
     label: PropTypes.string.isRequired,
     includeDenomination: PropTypes.bool,
     denominationValue: PropTypes.string,
     isPrimordial: PropTypes.bool,
     isPercentage: PropTypes.bool,
-    integerOnly: PropTypes.bool,
+    integerOnly: PropTypes.bool
 };
 
 EarningsInput.defaultProps = {
     value: new BigNumber(1),
     includeDenomination: false,
     isPercentage: false,
-    integerOnly: false,
-}
+    integerOnly: false
+};
 
 export default withStyles(styles)(EarningsInput);

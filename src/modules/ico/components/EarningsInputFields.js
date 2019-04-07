@@ -1,98 +1,101 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
-import EarningInput from './EarningsInput';
-
+import React, { Component } from "react";
+import PropTypes from "prop-types";
+import { withStyles } from "@material-ui/core/styles";
+import EarningsInput from "./EarningsInput";
 
 const styles = theme => ({
     containerInputs: {
-        background: theme.palette.common.black,        
+        background: theme.palette.common.black
     },
     stakeInputs: {
-        display: 'flex',
-    },
+        display: "flex"
+    }
 });
 
 class EarningsInputFields extends Component {
     constructor(props) {
-        super(props)
+        super(props);
         this.state = {
             inputs: props.inputs
-        }
+        };
     }
-    _handleInputChange = (inputName) => (value) => {
+    _handleInputChange = inputName => value => {
         const updatedInputs = {
             ...this.state.inputs,
             [inputName]: value
-        }
+        };
         this.setState({
             inputs: updatedInputs
-        })
-        this.props.onChange(updatedInputs)
-    }
+        });
+        this.props.onChange(updatedInputs);
+    };
     render() {
         const { classes } = this.props;
         const { inputs } = this.state;
         return (
             <div className={classes.containerInputs}>
-                <EarningInput 
+                <EarningsInput
                     label={`Staked AO`}
                     value={inputs.networkTokensStaked}
-                    onChange={this._handleInputChange('networkTokensStaked')}
+                    onChange={this._handleInputChange("networkTokensStaked")}
                     includeDenomination={true}
-                    denominationValue={'giga'}                    
+                    denominationValue={"giga"}
                 />
-                <EarningInput 
+                <EarningsInput
                     label={`Staked AO+`}
                     value={inputs.primordialTokensStaked}
-                    onChange={this._handleInputChange('primordialTokensStaked')}
+                    onChange={this._handleInputChange("primordialTokensStaked")}
                     includeDenomination={true}
-                    denominationValue={'giga'}
+                    denominationValue={"giga"}
                     isPrimordial={true}
                 />
-                <EarningInput
+                <EarningsInput
                     label={`AO+ Multiplier`}
                     value={inputs.primordialTokenMultiplier}
-                    onChange={this._handleInputChange('primordialTokenMultiplier')}                    
+                    onChange={this._handleInputChange(
+                        "primordialTokenMultiplier"
+                    )}
                 />
-                <EarningInput
+                <EarningsInput
                     label={`Network Nodes`}
                     value={inputs.networkNodes}
-                    onChange={this._handleInputChange('networkNodes')}
+                    onChange={this._handleInputChange("networkNodes")}
                     integerOnly={true}
                 />
-                <EarningInput
+                <EarningsInput
                     label={`Daily node growth`}
                     value={inputs.dailyGrowth}
-                    onChange={this._handleInputChange('dailyGrowth')}
+                    onChange={this._handleInputChange("dailyGrowth")}
                     integerOnly={true}
                     isPercentage={true}
                 />
-                <EarningInput
+                <EarningsInput
                     label={`Daily content request rate`}
                     value={inputs.dailyContentRequestRate}
-                    onChange={this._handleInputChange('dailyContentRequestRate')}
+                    onChange={this._handleInputChange(
+                        "dailyContentRequestRate"
+                    )}
                     integerOnly={true}
                     isPercentage={true}
                 />
-                <EarningInput
+                <EarningsInput
                     label={`Saturation`}
                     value={inputs.saturation}
-                    onChange={this._handleInputChange('saturation')}
+                    onChange={this._handleInputChange("saturation")}
                     integerOnly={true}
                     isPercentage={true}
                 />
-                <EarningInput
+                <EarningsInput
                     label={`Creator share`}
                     value={inputs.creatorShare}
-                    onChange={this._handleInputChange('creatorShare')}
+                    onChange={this._handleInputChange("creatorShare")}
                     integerOnly={true}
                     isPercentage={true}
                 />
-                <EarningInput
+                <EarningsInput
                     label={`Network inflation`}
                     value={inputs.networkInflation}
-                    onChange={this._handleInputChange('networkInflation')}
+                    onChange={this._handleInputChange("networkInflation")}
                     integerOnly={true}
                     isPercentage={true}
                 />
@@ -121,13 +124,13 @@ EarningsInputFields.propTypes = {
         saturation: PropTypes.number.isRequired,
         creatorShare: PropTypes.number.isRequired,
         networkInflation: PropTypes.number.isRequired,
-        weightedPrimordialTokenMultiplier: PropTypes.number.isRequired,
+        weightedPrimordialTokenMultiplier: PropTypes.number.isRequired
     }),
-    onChange: PropTypes.func.isRequired,
+    onChange: PropTypes.func.isRequired
 };
 
 EarningsInputFields.defaultProps = {
     inputs: {}
-}
+};
 
 export default withStyles(styles)(EarningsInputFields);
