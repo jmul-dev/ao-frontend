@@ -53,6 +53,7 @@ export default class App extends Component<Props> {
     }
     componentDidCatch(error, info) {
         this.setState({ didCatch: true, didCatchError: error });
+        console.error(`App::componentDidCatch`, error);
         if (this.props.isElectron) {
             window.chrome.ipcRenderer.send(AO_CONSTANTS.IPC.ERRORS_REACT, {
                 error,

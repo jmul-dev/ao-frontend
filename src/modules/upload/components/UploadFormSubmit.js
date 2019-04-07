@@ -14,6 +14,7 @@ import "../styles/upload-form-submit.css";
 import { Prompt } from "react-router";
 import EtherscanLink from "../../etherscan/EtherscanLink";
 import LinearProgress from "@material-ui/core/LinearProgress";
+import { isElectron } from "../../../utils/electron";
 
 type Props = {
     // Redux bound state
@@ -122,7 +123,7 @@ class UploadFormSubmit extends Component<Props> {
         });
     };
     _cancel = () => {
-        if (this.props.contentSubmittionResult) {
+        if (this.props.contentSubmittionResult && !isElectron()) {
             if (
                 window.confirm(
                     "Are you sure? Your content will be saved, allowing you to stake at a later date."

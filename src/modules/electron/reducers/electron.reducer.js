@@ -1,4 +1,5 @@
 import { AO_CONSTANTS } from "ao-library";
+import { isElectron } from "../../../utils/electron";
 
 // Constants
 export const ELECTRON_EVENT_LOG = "ELECTRON_EVENT_LOG";
