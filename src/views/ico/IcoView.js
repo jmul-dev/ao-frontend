@@ -4,7 +4,6 @@ import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import PropTypes from "prop-types";
 import React, { PureComponent } from "react";
-import { connect } from "react-redux";
 import PrimordialExchangeForm from "../../modules/exchange/components/PrimordialExchangeForm";
 import ComparisonTable from "../../modules/ico/components/ComparisonTable";
 import EarningsCalculator from "../../modules/ico/components/EarningsCalculator";
@@ -14,11 +13,9 @@ import { darkTheme, lightTheme, PrimaryButton } from "../../theme";
 import View from "../View";
 import "./ico-view-images.css";
 import "./ico-view.css";
+import WhitepaperLink from "../../modules/ico/components/WhitepaperLink";
 
-class IcoView extends PureComponent {
-    static propTypes = {
-        whitepaperUrl: PropTypes.string
-    };
+export default class IcoView extends PureComponent {
     constructor() {
         super();
         this.state = {
@@ -52,21 +49,12 @@ class IcoView extends PureComponent {
                         <Typography variant="display2" className="subtitle">
                             {`The AO is Abstract Order organizing information into an information-currency that powers the Autonomous Organization governing a decentralized socio-economic ecosystem and distributed application platform.`}
                         </Typography>
-                        {this.props.whitepaperUrl && (
-                            <Typography
-                                variant="body1"
-                                component="a"
-                                href={this.props.whitepaperUrl}
-                                target="_blank"
-                                className="whitepaper-link"
-                                style={{
-                                    marginTop: 24,
-                                    display: "inline-block"
-                                }}
-                            >
-                                {`whitepaper`}
-                            </Typography>
-                        )}
+                        <WhitepaperLink
+                            style={{
+                                marginTop: 24,
+                                display: "inline-block"
+                            }}
+                        />
                     </div>
                     <div className="progress-banner">
                         <Grid container spacing={16} alignItems="center">
@@ -269,25 +257,10 @@ class IcoView extends PureComponent {
                             >{`Exchange ETH for AO+`}</Typography>
                             <PrimordialExchangeForm />
                         </div>
-                        {this.props.whitepaperUrl && (
-                            <Typography
-                                variant="body1"
-                                component="a"
-                                href={this.props.whitepaperUrl}
-                                target="_blank"
-                                className="whitepaper-link"
-                            >
-                                {`whitepaper`}
-                            </Typography>
-                        )}
+                        <WhitepaperLink />
                     </section>
                 </MuiThemeProvider>
             </View>
         );
     }
 }
-
-const mapStateToProps = store => ({
-    whitepaperUrl: store.contracts.settings.aoUrl
-});
-export default connect(mapStateToProps)(IcoView);

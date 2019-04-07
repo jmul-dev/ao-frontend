@@ -11,8 +11,15 @@ import withTheAoDappId from "./withTheAoDappId";
 import ContentCard from "../../modules/content/components/ContentCard";
 import NetworkTaoContentListing from "./NetworkTaoContentListing";
 import { Grid, ButtonBase } from "@material-ui/core";
+import WhitepaperLink from "../../modules/ico/components/WhitepaperLink";
+import { connect } from "react-redux";
 
-const DaoViewNoUser = () => (
+const mapStateToProps = state => ({
+    theAoContractAddress: state.contracts.theAO
+        ? state.contracts.theAO.address
+        : undefined
+});
+const DaoViewNoUser = connect(mapStateToProps)(({ theAoContractAddress }) => (
     <React.Fragment>
         <Grid container>
             <Grid item xs={12} md={7}>
@@ -23,7 +30,13 @@ const DaoViewNoUser = () => (
                 <section style={{ marginTop: 32 }}>
                     <Typography variant="body1">
                         {`Abstract Order (“AO”) is governed by The Autonomous Organization (“The AO”). The User Interface for The AO is accesible via the AO network and, once discovered, will show up below. Reference the AO whitepaper for details on the purpose and operation of The AO.`}
-                        <EtherscanLink type="address" value={`TODO`} />
+                        <WhitepaperLink style={{ marginTop: 8 }} />
+                        {theAoContractAddress && (
+                            <EtherscanLink
+                                type="address"
+                                value={theAoContractAddress}
+                            />
+                        )}
                     </Typography>
                 </section>
                 <section style={{ marginTop: 24 }}>
@@ -34,7 +47,7 @@ const DaoViewNoUser = () => (
             </Grid>
         </Grid>
     </React.Fragment>
-);
+));
 
 const DaoViewWithUser = compose(
     withTheAoDappId,

@@ -183,6 +183,7 @@ const fetchSettingsFromContract = () => {
                     }
                 );
             });
+            // TODO: fetch The AO dapp id
             Promise.all([ingressUrlPromise, aoUrlPromise])
                 .then(settings => {
                     dispatch({
