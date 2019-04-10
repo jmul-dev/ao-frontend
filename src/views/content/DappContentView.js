@@ -1,15 +1,15 @@
-import React, { PureComponent } from "react";
-import View from "../View";
-import { compose } from "react-apollo";
-import { userContentQuery } from "../../modules/video/containers/withUserContent";
-import PropTypes from "prop-types";
-import { graphql } from "react-apollo";
-import { ContentFieldsWithFragments } from "../../graphql/fragments/ContentFields";
-import gql from "graphql-tag";
-import { withStyles } from "@material-ui/core/styles";
+import { Typography } from "@material-ui/core";
 import ButtonBase from "@material-ui/core/ButtonBase";
+import { withStyles } from "@material-ui/core/styles";
 import CloseIcon from "@material-ui/icons/Close";
 import { AO_CONSTANTS } from "ao-library";
+import gql from "graphql-tag";
+import PropTypes from "prop-types";
+import React, { PureComponent } from "react";
+import { compose, graphql } from "react-apollo";
+import { ContentFieldsWithFragments } from "../../graphql/fragments/ContentFields";
+import TaoContentVerificationState from "../../modules/content/components/TaoContentVerificationState";
+import View from "../View";
 
 class DappContentView extends PureComponent {
     static propTypes = {
@@ -76,7 +76,7 @@ class DappContentView extends PureComponent {
         const { contentId } = this.props.match.params;
         const { loading, error, userContent } = this.props.userContentQuery;
         const { isElectron, dappRendered } = this.state;
-        return (
+        return userContent ? (
             <View className={"DappContentView"} padding="none">
                 <section style={{ height: "100%", width: "100%" }}>
                     <div className={classes.statusBar}>
@@ -87,7 +87,14 @@ class DappContentView extends PureComponent {
                         >
                             <CloseIcon />
                         </ButtonBase>
-                        Dapp status bar (verified, name, close, etc..)
+                        <Typography>{userContent.title}</Typography>
+                        {userContent.contentLicense === "TAO" && (
+                            <div className={classes.verificationContainer}>
+                                <TaoContentVerificationState
+                                    contentId={userContent.id}
+                                />
+                            </div>
+                        )}
                     </div>
                     <div className={classes.dappWindowContainer}>
                         {!isElectron && userContent && (
@@ -105,7 +112,7 @@ class DappContentView extends PureComponent {
                     </div>
                 </section>
             </View>
-        );
+        ) : null;
     }
 }
 
@@ -126,6 +133,10 @@ const styles = ({ palette }) => ({
         height: `calc(100% - 40px)`,
         overflow: "auto",
         backgroundColor: "white"
+    },
+    verificationContainer: {
+        marginLeft: "auto",
+        marginRight: 16
     }
 });
 

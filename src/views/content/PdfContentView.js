@@ -1,15 +1,14 @@
-import React, { PureComponent } from "react";
-import View from "../View";
-import { compose } from "react-apollo";
-import { userContentQuery } from "../../modules/video/containers/withUserContent";
-import PropTypes from "prop-types";
-import { graphql } from "react-apollo";
-import { ContentFieldsWithFragments } from "../../graphql/fragments/ContentFields";
-import gql from "graphql-tag";
-import { withStyles } from "@material-ui/core/styles";
+import { Typography } from "@material-ui/core";
 import ButtonBase from "@material-ui/core/ButtonBase";
+import { withStyles } from "@material-ui/core/styles";
 import CloseIcon from "@material-ui/icons/Close";
-import { AO_CONSTANTS } from "ao-library";
+import gql from "graphql-tag";
+import PropTypes from "prop-types";
+import React, { PureComponent } from "react";
+import { compose, graphql } from "react-apollo";
+import { ContentFieldsWithFragments } from "../../graphql/fragments/ContentFields";
+import TaoContentVerificationState from "../../modules/content/components/TaoContentVerificationState";
+import View from "../View";
 
 class PdfContentView extends PureComponent {
     static propTypes = {
@@ -34,7 +33,7 @@ class PdfContentView extends PureComponent {
         const { classes } = this.props;
         const { contentId } = this.props.match.params;
         const { loading, error, userContent } = this.props.userContentQuery;
-        return (
+        return userContent ? (
             <View className={"PdfContentView"} padding="none">
                 <section style={{ height: "100%", width: "100%" }}>
                     <div className={classes.statusBar}>
@@ -45,6 +44,14 @@ class PdfContentView extends PureComponent {
                         >
                             <CloseIcon />
                         </ButtonBase>
+                        <Typography>{userContent.title}</Typography>
+                        {userContent.contentLicense === "TAO" && (
+                            <div className={classes.verificationContainer}>
+                                <TaoContentVerificationState
+                                    contentId={userContent.id}
+                                />
+                            </div>
+                        )}
                     </div>
                     <div className={classes.dappWindowContainer}>
                         {userContent && (
@@ -60,7 +67,7 @@ class PdfContentView extends PureComponent {
                     </div>
                 </section>
             </View>
-        );
+        ) : null;
     }
 }
 
@@ -80,6 +87,10 @@ const styles = ({ palette }) => ({
     dappWindowContainer: {
         height: `calc(100% - 40px)`,
         overflow: "auto"
+    },
+    verificationContainer: {
+        marginLeft: "auto",
+        marginRight: 16
     }
 });
 

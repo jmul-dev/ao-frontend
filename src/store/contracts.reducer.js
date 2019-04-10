@@ -157,6 +157,7 @@ const fetchSettingsFromContract = () => {
         const { contracts } = getState();
         // 1. We have to fetch the settings TAO id before fetching the actual settings
         contracts.aoIon.settingTAOId((err, settingsTAOId) => {
+            console.log(`settingsTAOId:`, settingsTAOId);
             let ingressUrlPromise = new Promise((resolve, reject) => {
                 contracts.aoSetting.getSettingValuesByTAOName(
                     settingsTAOId,
