@@ -29,7 +29,7 @@ class DownloadsList extends Component {
     }
     render() {
         const { loading, node } = this.props.hostedContentQuery;
-        if (loading) return null;
+        if (loading && !node) return null;
         if (!node || (node && !node.hostedContent)) return null; // no incomplete hosted content
         const { recentlyHostedContentIds } = this.props;
         const incompleteContent = node.hostedContent.filter(content => {
