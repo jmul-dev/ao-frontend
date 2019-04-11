@@ -2,12 +2,11 @@ import { Typography } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
 import PropTypes from "prop-types";
 import React, { PureComponent } from "react";
-import { compose } from "react-apollo";
+import UserContentView from "../../modules/account/components/UserContentView";
 import withUserContent from "../../modules/video/containers/withUserContent";
 import View from "../View";
-import UserContentView from "../../modules/account/components/UserContentView";
 
-const styles = ({ palette, spacing }) => ({
+const styles = ({ palette }) => ({
     root: {
         position: "absolute",
         top: 0,
@@ -53,7 +52,7 @@ class AccountContentViewWithQuery extends PureComponent {
         })
     };
     render() {
-        const { match, classes, userContentQuery, metrics } = this.props;
+        const { userContentQuery } = this.props;
         if (userContentQuery.error) {
             return (
                 <Typography>{`An error occured while fetching your video: ${

@@ -5,7 +5,7 @@ import Fade from "@material-ui/core/Fade";
 
 class Stats extends Component {
     render() {
-        const { statistics, loading, error } = this.props.query;
+        const { statistics, error } = this.props.query;
         if (error || !statistics) return null;
         return (
             <Fade in={true}>

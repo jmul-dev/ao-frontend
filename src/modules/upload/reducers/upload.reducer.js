@@ -292,6 +292,8 @@ export const stakeContent = ({
                         }
                     );
                     break;
+                default:
+                    break;
             }
             if (stakeContentPromise === null) {
                 rejectAndDispatchError(new Error(`Invalid content license: ${contentLicense}`));

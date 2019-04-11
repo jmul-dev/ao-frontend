@@ -14,7 +14,7 @@ import "./upload-view.css";
 
 class UploadView extends PureComponent {
     render() {
-        const { ethAddress, match } = this.props;
+        const { ethAddress } = this.props;
         return (
             <View className={"UploadView"} padding="full">
                 {ethAddress ? (

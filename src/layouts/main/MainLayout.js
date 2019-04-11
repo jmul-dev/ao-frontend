@@ -1,24 +1,19 @@
-// @flow
 import React from "react";
-import { Switch, Route, Redirect } from "react-router";
-import { Link } from "react-router-dom";
-import SettingsView from "../../views/settings/SettingsView";
+import { Redirect, Route, Switch } from "react-router";
+import VideoPlayback from "../../modules/video/components/VideoPlayback";
 import AccountView from "../../views/account/AccountView";
 import BrowseView from "../../views/browse/BrowseView";
-import UploadView from "../../views/upload/UploadView";
-import IcoView from "../../views/ico/IcoView";
-import WalletView from "../../views/wallet/WalletView";
-import DevelopersView from "../../views/developers/DevelopersView";
-import IngressView from "../../views/ingress/IngressView";
-import DaoView from "../../views/dao/DaoView";
-import NameRegistrationView from "../../views/registration/NameRegistrationView";
 import ContentView from "../../views/content";
-import VideoPlayback from "../../modules/video/components/VideoPlayback";
-import MainNavigation from "./MainNavigation";
-import { AnimatedRoute } from "react-router-transition";
-import { MuiThemeProvider } from "@material-ui/core/styles";
-import { lightTheme } from "../../theme";
+import DaoView from "../../views/dao/DaoView";
+import DevelopersView from "../../views/developers/DevelopersView";
+import IcoView from "../../views/ico/IcoView";
+import IngressView from "../../views/ingress/IngressView";
+import NameRegistrationView from "../../views/registration/NameRegistrationView";
+import SettingsView from "../../views/settings/SettingsView";
+import UploadView from "../../views/upload/UploadView";
+import WalletView from "../../views/wallet/WalletView";
 import "./main-layout.css";
+import MainNavigation from "./MainNavigation";
 
 const ViewRoutes = () => (
     <div className="overlay-view-container">

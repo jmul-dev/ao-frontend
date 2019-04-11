@@ -1,22 +1,17 @@
-// @flow
+import Button from "@material-ui/core/Button";
+import { default as MaterialTextField } from "@material-ui/core/TextField";
 import React, { Component } from "react";
 import withSettingsMutation, {
-    SettingsMutationProps
+    WithSettingsMutationPropTypes
 } from "../containers/withSettingsMutation";
-import FormControl from "@material-ui/core/FormControl";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import { default as MaterialTextField } from "@material-ui/core/TextField";
-import Button from "@material-ui/core/Button";
+import PropTypes from "prop-types";
 
-type Props =
-    | SettingsMutationProps
-    | {
-          inputName: "ethNetworkRpc",
-          inputLabel: string
-      };
-
-class TextInput extends Component<Props> {
-    props: Props;
+class TextInput extends Component {
+    static propTypes = {
+        ...WithSettingsMutationPropTypes,
+        inputName: PropTypes.string.isRequired,
+        inputLabel: PropTypes.string
+    };
     constructor(props) {
         super(props);
         this.state = {
@@ -73,16 +68,7 @@ class TextInput extends Component<Props> {
         });
     };
     render() {
-        const {
-            inputName,
-            inputLabel,
-            data,
-            updateSettings,
-            updateSettingsError,
-            updateSettingsLoading,
-            updateSettingsResult,
-            ...props
-        } = this.props;
+        const { data } = this.props;
         const { settings } = data;
         if (!settings) return null;
         return (

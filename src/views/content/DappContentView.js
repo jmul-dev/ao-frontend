@@ -73,9 +73,8 @@ class DappContentView extends PureComponent {
     };
     render() {
         const { classes } = this.props;
-        const { contentId } = this.props.match.params;
-        const { loading, error, userContent } = this.props.userContentQuery;
-        const { isElectron, dappRendered } = this.state;
+        const { userContent } = this.props.userContentQuery;
+        const { isElectron } = this.state;
         return userContent ? (
             <View className={"DappContentView"} padding="none">
                 <section style={{ height: "100%", width: "100%" }}>
@@ -99,6 +98,7 @@ class DappContentView extends PureComponent {
                     <div className={classes.dappWindowContainer}>
                         {!isElectron && userContent && (
                             <iframe
+                                title={userContent.title}
                                 src={`${process.env.REACT_APP_AO_CORE_URL}/${
                                     userContent.fileUrl
                                 }`}

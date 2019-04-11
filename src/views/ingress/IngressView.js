@@ -46,6 +46,7 @@ class IngressView extends PureComponent {
                 <section style={{ height: "100%", width: "100%" }}>
                     {!isElectron && (
                         <iframe
+                            title="Ingress"
                             src={contractSettings.ingressUrl}
                             style={{ height: "100%", width: "100%", border: 0 }}
                         />

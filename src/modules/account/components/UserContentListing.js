@@ -75,7 +75,7 @@ class UserContentListing extends Component {
     }
     _renderNoUserContent() {
         const { filter } = this.props;
-        let errorMessage = `Looks like you haven\'t ${filter} any content.`;
+        let errorMessage = `Looks like you haven't ${filter} any content.`;
         return (
             <Fragment>
                 <Divider />

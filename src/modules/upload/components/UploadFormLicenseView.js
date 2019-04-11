@@ -1,23 +1,20 @@
-import React, { Component } from "react";
-import PropTypes from "prop-types";
-import Typography from "@material-ui/core/Typography";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Grid from "@material-ui/core/Grid";
-import TextInput from "./TextInput";
-import { AddIcon } from "../../../assets/Icons";
-import withUploadFormData from "../containers/withUploadFormData";
-import withUserWallet from "../../wallet/containers/withUserWallet";
-import { Redirect } from "react-router-dom";
-import { BackButton } from "./UploadFormNavButtons";
-import OverviewAside from "./OverviewAside";
-import FileUpload from "./FileUpload";
-import { getPreferredTokenSplit } from "../../../utils/denominations";
-import { PrimaryButton } from "../../../theme";
-import BigNumber from "bignumber.js";
 import Radio from "@material-ui/core/Radio";
 import RadioGroup from "@material-ui/core/RadioGroup";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Typography from "@material-ui/core/Typography";
+import BigNumber from "bignumber.js";
+import PropTypes from "prop-types";
+import React, { Component } from "react";
 import { compose } from "react-apollo";
+import { Redirect } from "react-router-dom";
+import { PrimaryButton } from "../../../theme";
+import { getPreferredTokenSplit } from "../../../utils/denominations";
+import withUserWallet from "../../wallet/containers/withUserWallet";
+import withUploadFormData from "../containers/withUploadFormData";
 import { contentSize } from "../reducers/upload.reducer";
+import OverviewAside from "./OverviewAside";
+import { BackButton } from "./UploadFormNavButtons";
 
 class UploadFormLicenseView extends Component {
     static contextTypes = {
@@ -39,10 +36,7 @@ class UploadFormLicenseView extends Component {
             // This is because we skip the stake input stage, since stake amount is already fixed to file size.
             const contentSizeInBytes = contentSize(form.content);
             const {
-                networkAmount,
-                primordialAmount,
                 isSufficient,
-                insufficientAmount,
                 splitPercentage,
                 tokenType
             } = getPreferredTokenSplit({

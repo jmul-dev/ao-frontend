@@ -1,5 +1,4 @@
-// @flow
-import React, { Component, Node } from "react";
+import React, { Component } from "react";
 import MainLayout from "./layouts/main/MainLayout";
 import BootLayout from "./layouts/boot/BootLayout";
 import DevelopmentBarContainer from "./modules/devbar/containers/DevelopmentBarContainer";
@@ -13,35 +12,27 @@ import "./app.css";
 import PropTypes from "prop-types";
 import SettingsIcon from "@material-ui/icons/Settings";
 
-type Props = {
-    children: Node,
-    query: {
-        loading: boolean,
-        error?: string,
-        state?: string,
-        node?: {
-            id: string
-        },
-        networkStatus: number
-    },
-    // redux connected state
-    app: Object,
-    isElectron: boolean,
-    // redux connected actions
-    updateAppState: Function,
-    connectToWeb3: Function,
-    listenOnIpcChannel: Function,
-    checkElectron: Function,
-    addNotification: Function,
-    dismissNotification: Function,
-    setCoreEthNetworkId: Function
-};
-
-export default class App extends Component<Props> {
+export default class App extends Component {
     static contextTypes = {
-        router: PropTypes.object.isRequired
+        router: PropTypes.object.isRequired,
+        children: PropTypes.node,
+        query: PropTypes.shape({
+            loading: PropTypes.bool.isRequired,
+            error: PropTypes.string,
+            state: PropTypes.string,
+            node: PropTypes.object,
+            networkStatus: PropTypes.number
+        }).isRequired,
+        app: PropTypes.object.isRequired,
+        isElectron: PropTypes.bool.isRequired,
+        updateAppState: PropTypes.func.isRequired,
+        connectToWeb3: PropTypes.func.isRequired,
+        listenOnIpcChannel: PropTypes.func.isRequired,
+        checkElectron: PropTypes.func.isRequired,
+        addNotification: PropTypes.func.isRequired,
+        dismissNotification: PropTypes.func.isRequired,
+        setCoreEthNetworkId: PropTypes.func.isRequired
     };
-    props: Props;
     _networkDisconnectedErrorNotificationId = null;
     _networkMismatchNotificationId = null;
     constructor() {
@@ -63,7 +54,6 @@ export default class App extends Component<Props> {
     }
     componentDidMount() {
         const {
-            app,
             connectToWeb3,
             listenOnIpcChannel,
             checkElectron,
@@ -85,7 +75,7 @@ export default class App extends Component<Props> {
             }
         }
     }
-    componentWillReceiveProps(nextProps: Props) {
+    componentWillReceiveProps(nextProps) {
         const { app, query, updateAppState } = this.props;
         if (!query.state && nextProps.query.state !== undefined) {
             // no core state -> core state, means our core connection has been established
@@ -149,7 +139,7 @@ export default class App extends Component<Props> {
         }
     }
     render() {
-        const { query, app, isElectron } = this.props;
+        const { query, app } = this.props;
         const includeDevBar = false; // process.env.NODE_ENV !== 'production'
         return (
             <div

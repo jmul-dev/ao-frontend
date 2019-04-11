@@ -1,26 +1,14 @@
-import React, { Component } from "react";
-import { Route } from "react-router";
-import Typography from "@material-ui/core/Typography";
 import Modal from "@material-ui/core/Modal";
-import Grid from "@material-ui/core/Grid";
-import withUserIdentifiers from "../../modules/account/containers/withUserIdentifiers";
-import NameRegistrationForm from "../../modules/registration/components/NameRegistrationForm";
+import React, { Component } from "react";
 import { LogoIcon } from "../../assets/Icons";
+import NameRegistrationForm from "../../modules/registration/components/NameRegistrationForm";
 import "./name-registration-view.css";
 
-class NameRegistrationView extends Component {
-    state = { open: true };
-    onClose = () => {
-        this.setState({
-            open: false
-        });
-    };
+export default class NameRegistrationView extends Component {
     render() {
-        const { ethAddress, aoName } = this.props;
         return (
             <Modal
                 open={true}
-                onClose={this.onClose}
                 BackdropProps={{
                     style: { backgroundColor: "rgba(0,0,0,1)" },
                     transitionDuration: 0
@@ -38,5 +26,3 @@ class NameRegistrationView extends Component {
         );
     }
 }
-
-export default withUserIdentifiers(NameRegistrationView);

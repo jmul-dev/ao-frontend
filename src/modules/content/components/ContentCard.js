@@ -1,17 +1,15 @@
+import { Grid, Typography } from "@material-ui/core";
+import { withStyles } from "@material-ui/core/styles";
+import OfflineIcon from "@material-ui/icons/CloudOff";
 import React from "react";
+import { compose } from "react-apollo";
+import { PrimaryButton } from "../../../theme";
+import withUserIdentifiers from "../../account/containers/withUserIdentifiers";
 import {
     ContentPurchaseAction,
-    ContentPurchaseState,
-    getContentState
+    ContentPurchaseState
 } from "../../video/components/ContentPurchaseActions";
-import { Grid, Typography, ButtonBase } from "@material-ui/core";
-import { compose } from "react-apollo";
-import withUserIdentifiers from "../../account/containers/withUserIdentifiers";
-import { withStyles } from "@material-ui/core/styles";
-import { PrimaryButton } from "../../../theme";
 import withContentById from "../containers/withContentById";
-import OfflineIcon from "@material-ui/icons/CloudOff";
-import Tooltip from "@material-ui/core/Tooltip";
 import TaoContentVerificationState from "./TaoContentVerificationState";
 
 /**
@@ -36,6 +34,7 @@ import TaoContentVerificationState from "./TaoContentVerificationState";
  * @param {object} query The graphql query for fetching userContent and networkContent (withContentById)
  */
 const ContentCard = ({
+    // @ts-ignore
     contentId,
     variant = "default",
     ethAddress,
@@ -76,7 +75,7 @@ export default compose(
  * side-by-side rendering of the content's featured image on left
  * side and title/description/action on the right side.
  */
-const featuredStyles = ({}) => ({
+const featuredStyles = () => ({
     featuredImage: {
         width: "100%",
         height: "auto",
@@ -102,6 +101,7 @@ const ContentCardFeatured = compose(withStyles(featuredStyles))(
                     <Grid container spacing={24} alignItems="center">
                         <Grid item xs={6}>
                             <img
+                                alt={content.title}
                                 className={classes.featuredImage}
                                 src={`${process.env.REACT_APP_AO_CORE_URL}/${
                                     content.featuredImageUrl
@@ -141,7 +141,7 @@ const ContentCardFeatured = compose(withStyles(featuredStyles))(
 );
 ContentCardFeatured.displayName = "ContentCardFeatured";
 
-const defaultStyles = ({}) => ({
+const defaultStyles = () => ({
     root: {
         marginBottom: 48
     },
@@ -183,7 +183,7 @@ const ContentCardDefault = compose(withStyles(defaultStyles))(
         }
         return (
             <ContentPurchaseAction content={content}>
-                {({ action, actionCopy, loading, downloadProgress }) => (
+                {({ action, loading, downloadProgress }) => (
                     <div className={classes.root}>
                         <div
                             className={classes.featuredImage}

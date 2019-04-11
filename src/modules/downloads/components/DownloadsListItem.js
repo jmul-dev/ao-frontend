@@ -1,20 +1,19 @@
-import React, { Component } from "react";
+import { IconButton } from "@material-ui/core";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 import ListItemText from "@material-ui/core/ListItemText";
-import PropTypes from "prop-types";
-import Typography from "@material-ui/core/Typography";
-import {
-    getContentState,
-    ContentPurchaseAction
-} from "../../video/components/ContentPurchaseActions";
-import { withStyles } from "@material-ui/core/styles";
-import { ButtonBase, IconButton } from "@material-ui/core";
-import MoreVertIcon from "@material-ui/icons/MoreVert";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
+import { withStyles } from "@material-ui/core/styles";
+import MoreVertIcon from "@material-ui/icons/MoreVert";
+import PropTypes from "prop-types";
+import React, { Component } from "react";
 import { Link } from "react-router-dom";
+import {
+    ContentPurchaseAction,
+    getContentState
+} from "../../video/components/ContentPurchaseActions";
 
 class DownloadsListItem extends Component {
     static propTypes = {
@@ -48,14 +47,10 @@ class DownloadsListItem extends Component {
     };
     render() {
         const { content, classes, currentUserEthAddress } = this.props;
-        const { actionsMenuActive } = this.state;
-        const {
-            isLoadingState,
-            stateCopy,
-            StateIcon,
-            actionRequired,
-            actionCopy
-        } = getContentState(content, currentUserEthAddress);
+        const { stateCopy, StateIcon, actionRequired } = getContentState(
+            content,
+            currentUserEthAddress
+        );
         return (
             <ContentPurchaseAction
                 contentRef={this._watchNowRef}

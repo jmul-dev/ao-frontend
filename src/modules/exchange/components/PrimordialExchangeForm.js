@@ -1,8 +1,7 @@
+import Typography from '@material-ui/core/Typography';
 import React, { Component } from 'react';
 import withExchangeContainer from '../containers/withExchangeContainer';
-import PropTypes from 'prop-types';
 import ExchangeForm from './ExchangeForm';
-import Typography from '@material-ui/core/Typography';
 
 
 class PrimordialExchangeForm extends Component {
@@ -14,7 +13,7 @@ class PrimordialExchangeForm extends Component {
             this.props.getPrimordialExchangeRate()
         }
     }
-    _onSubmit = ({ethInput, tokenInput}) => {
+    _onSubmit = ({ethInput}) => {
         this.props.exchangeEthForPrimordialTokens( ethInput )
     }
     render() {

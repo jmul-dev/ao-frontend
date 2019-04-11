@@ -1,20 +1,8 @@
-// @flow
 import React from "react";
 import EthereumIcon, { EthereumIconPlaceholder } from "./EthereumIcon";
 import withUserIdentifiers from "../containers/withUserIdentifiers";
 
-type Props = {
-    display: "ethAddress" | "ethIcon",
-    ethAddress?: string
-};
-
-const Account = ({
-    display,
-    ethAddress,
-    aoName,
-    dispatch,
-    ...props
-}: Props) => {
+const Account = ({ display, ethAddress, aoName, dispatch, ...props }) => {
     switch (display) {
         case "ethAddress":
             if (ethAddress)

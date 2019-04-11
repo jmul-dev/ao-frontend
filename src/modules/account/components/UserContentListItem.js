@@ -88,17 +88,12 @@ class ContentListItem extends Component {
             metrics,
             contentHostEarnings,
             classes,
-            ethAddress,
             listingContentType
         } = this.props;
-        const {
-            isLoadingState,
-            isCompleted,
-            stateCopy,
-            StateIcon,
-            actionRequired,
-            actionCopy
-        } = getContentState(content, this.props.currentUserEthAddress);
+        const { isCompleted, stateCopy, StateIcon } = getContentState(
+            content,
+            this.props.currentUserEthAddress
+        );
         const transactions = content.transactions || {};
         if (isCompleted) {
             return (
@@ -194,8 +189,7 @@ class ContentListItem extends Component {
         }
     }
     render() {
-        const { content, filter, classes, ethAddress } = this.props;
-        const transactions = content.transactions || {};
+        const { content, classes, ethAddress } = this.props;
         const isCompletedState = content.state === "DISCOVERABLE";
         return (
             <Grid className={classes.root} container spacing={16}>
@@ -204,7 +198,7 @@ class ContentListItem extends Component {
                         contentRef={this._watchNowRef}
                         content={content}
                     >
-                        {({ action, actionCopy, loading }) => {
+                        {({ action }) => {
                             // NOTE: only rendering the "play" action on previewImage
                             return (
                                 <ButtonBase

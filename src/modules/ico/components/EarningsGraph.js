@@ -44,7 +44,7 @@ class EarningsGraph extends PureComponent {
         )
     }
     render() {
-        const { classes, dataset, theme, denomination } = this.props;
+        const { dataset, theme } = this.props;
         console.log(`EarningsGraph::render`)
         return (
             <div className="EarningsGraph">

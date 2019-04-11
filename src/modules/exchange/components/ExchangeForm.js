@@ -1,17 +1,16 @@
-import React, { Component, Fragment } from 'react';
-import withExchangeContainer from '../containers/withExchangeContainer';
-import Typography from '@material-ui/core/Typography';
-import { PrimaryButton } from '../../../theme';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import EtherscanLink from '../../etherscan/EtherscanLink';
-import Account from '../../account/components/Account';
-import { TokenInput, EthereumInput } from '../../../common/Inputs';
-import BigNumber from 'bignumber.js';
-import { compose } from 'react-apollo';
 import { withStyles } from '@material-ui/core/styles';
+import Typography from '@material-ui/core/Typography';
+import BigNumber from 'bignumber.js';
 import PropTypes from 'prop-types';
+import React, { Component } from 'react';
+import { EthereumInput, TokenInput } from '../../../common/Inputs';
+import { PrimaryButton } from '../../../theme';
+import { denominationsByName, fromBaseToDenominationValue, fromBaseToHighestDenomination, fromDenominationValueToBase, TokenBalance } from '../../../utils/denominations';
+import Account from '../../account/components/Account';
+import EtherscanLink from '../../etherscan/EtherscanLink';
 import WalletBalances from '../../wallet/components/WalletBalances';
-import { fromBaseToDenominationValue, fromDenominationValueToBase, fromBaseToHighestDenomination, denominationsByName, TokenBalance } from '../../../utils/denominations';
+import withExchangeContainer from '../containers/withExchangeContainer';
 
 
 class ExchangeForm extends Component {
@@ -111,7 +110,7 @@ class ExchangeForm extends Component {
         this.props.resetExchange()
     }
     render() {
-        const { ethAddress, isPrimordialExchange, exchange, exchangeRate, classes } = this.props
+        const { ethAddress, isPrimordialExchange, exchangeRate, classes } = this.props
         const { exchangeTransaction } = this.props.exchange
         const { primordialExchangeBonuses } = this.state
         const currentDenomination = denominationsByName[this.state.tokenInputDenomination]
@@ -129,7 +128,7 @@ class ExchangeForm extends Component {
                                 <b>{'id:'}</b> <Account display="ethAddress" />
                             </Typography>
                             <div>
-                                <WalletBalances>{({ primordialTokenBalance, networkTokenBalance, ethBalance }) => (
+                                <WalletBalances>{({ ethBalance }) => (
                                     <Typography variant="body1"><b>{`${ethBalance.toFixed(3)} ETH`}</b></Typography>
                                 )}</WalletBalances>
                             </div>

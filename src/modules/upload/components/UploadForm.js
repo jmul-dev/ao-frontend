@@ -1,37 +1,27 @@
-import React, { Component } from "react";
-import { Redirect } from "react-router";
-import FileUpload from "../components/FileUpload";
-import Typography from "@material-ui/core/Typography";
-import Button from "@material-ui/core/Button";
-import { PrimaryButton } from "../../../theme";
-import withUploadFormData from "../containers/withUploadFormData";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 import ListItemText from "@material-ui/core/ListItemText";
 import { withStyles } from "@material-ui/core/styles";
-import { compose } from "react-apollo";
-import CloseIcon from "@material-ui/icons/Remove";
+import Typography from "@material-ui/core/Typography";
 import OpenIcon from "@material-ui/icons/Add";
-import AccountRequired from "../../account/components/AccountRequired";
-
-import videoIconSrc from "../../../assets/media-type-video.svg";
-import musicIconSrc from "../../../assets/media-type-music.svg";
-import imageIconSrc from "../../../assets/media-type-image.svg";
-import documentIconSrc from "../../../assets/media-type-document.svg";
-import pdfIconSrc from "../../../assets/media-type-pdf.svg";
+import CloseIcon from "@material-ui/icons/Remove";
+import React, { Component } from "react";
+import { compose } from "react-apollo";
+import { Redirect } from "react-router";
 import applicationIconSrc from "../../../assets/media-type-application.svg";
 import assetIconSrc from "../../../assets/media-type-digital-asset.svg";
+import documentIconSrc from "../../../assets/media-type-document.svg";
+import imageIconSrc from "../../../assets/media-type-image.svg";
+import musicIconSrc from "../../../assets/media-type-music.svg";
+import pdfIconSrc from "../../../assets/media-type-pdf.svg";
+import videoIconSrc from "../../../assets/media-type-video.svg";
+import { PrimaryButton } from "../../../theme";
+import AccountRequired from "../../account/components/AccountRequired";
+import FileUpload from "../components/FileUpload";
+import withUploadFormData from "../containers/withUploadFormData";
 
-type Props = {
-    asPlaceholder: boolean,
-    updatePricingOption: Function,
-    updateLastReachedStep: Function
-};
-
-class UploadForm extends Component<Props> {
-    props: Props;
+class UploadForm extends Component {
     componentDidMount() {
         this.props.resetUploadForm();
     }
@@ -43,7 +33,7 @@ class UploadForm extends Component<Props> {
         }
     };
     render() {
-        const { asPlaceholder, form, classes } = this.props;
+        const { asPlaceholder, form } = this.props;
         const contentType = form.contentType;
         return form.content ? (
             <Redirect to="/app/view/upload/license" />
@@ -224,7 +214,7 @@ class UploadForm extends Component<Props> {
     };
 }
 
-const styles = ({ palette, spacing }) => ({
+const styles = ({ spacing }) => ({
     icon: {
         height: 24,
         width: 24

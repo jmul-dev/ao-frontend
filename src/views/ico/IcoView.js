@@ -1,19 +1,17 @@
 import { MuiThemeProvider } from "@material-ui/core";
-import Divider from "@material-ui/core/Divider";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
-import PropTypes from "prop-types";
 import React, { PureComponent } from "react";
 import PrimordialExchangeForm from "../../modules/exchange/components/PrimordialExchangeForm";
 import ComparisonTable from "../../modules/ico/components/ComparisonTable";
 import EarningsCalculator from "../../modules/ico/components/EarningsCalculator";
 import IcoStats from "../../modules/ico/components/IcoStats";
 import RecentTransactions from "../../modules/ico/components/RecentTransactions";
+import WhitepaperLink from "../../modules/ico/components/WhitepaperLink";
 import { darkTheme, lightTheme, PrimaryButton } from "../../theme";
 import View from "../View";
 import "./ico-view-images.css";
 import "./ico-view.css";
-import WhitepaperLink from "../../modules/ico/components/WhitepaperLink";
 
 export default class IcoView extends PureComponent {
     constructor() {

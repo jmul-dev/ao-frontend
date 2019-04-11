@@ -34,7 +34,7 @@ class UploadFormContent extends Component {
         this.context.router.history.replace(`/app/view/upload/${backRoute}`);
     };
     _submit = () => {
-        const { aoName, ethAddress } = this.props;
+        const { aoName } = this.props;
         if (!aoName) {
             this.context.router.history.push(`/app/registration`);
         } else {

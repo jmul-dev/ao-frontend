@@ -350,7 +350,7 @@ class ContentPurchaseActionComponent extends Component {
         }
     }
     _preActionHook = action => {
-        const { aoName, ethAddress } = this.props;
+        const { aoName } = this.props;
         if (!aoName) {
             this.props.history.push("/app/registration");
         } else {

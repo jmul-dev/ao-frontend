@@ -1,49 +1,50 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { withStyles, MuiThemeProvider } from '@material-ui/core/styles';
-import Paper from '@material-ui/core/Paper';
-import Typography from '@material-ui/core/Typography';
-import EarningsInputFields from './EarningsInputFields';
-import { darkTheme } from '../../../theme';
-import EarningsGraph from './EarningsGraph';
-import { fromBaseToHighestDenomination, denominations, denominationsByName } from '../../../utils/denominations';
+import Paper from "@material-ui/core/Paper";
+import { MuiThemeProvider, withStyles } from "@material-ui/core/styles";
+import Typography from "@material-ui/core/Typography";
+import PropTypes from "prop-types";
+import React, { Component } from "react";
+import { darkTheme } from "../../../theme";
+import {
+    denominationsByName,
+    fromBaseToHighestDenomination
+} from "../../../utils/denominations";
+import EarningsGraph from "./EarningsGraph";
+import EarningsInputFields from "./EarningsInputFields";
 
-
-const DAY_RANGE = 365
-
+const DAY_RANGE = 365;
 
 const styles = theme => ({
     root: {
-        display: 'flex',
-        alignItems: 'center',
+        display: "flex",
+        alignItems: "center"
     },
     gridLeft: {
         width: 250,
-        flexShrink: 0,
+        flexShrink: 0
     },
-        paperInputs: {
-            overflow: 'hidden',
-            borderTopRightRadius: 0,
-            borderBottomRightRadius: 0,
-        },
+    paperInputs: {
+        overflow: "hidden",
+        borderTopRightRadius: 0,
+        borderBottomRightRadius: 0
+    },
     gridRight: {
-        flex: 1,
+        flex: 1
     },
-        paperGraph: {
-            overflow: 'hidden'
-        },
+    paperGraph: {
+        overflow: "hidden"
+    }
 });
 
 class EarningsCalculator extends Component {
     constructor() {
-        super()
+        super();
         this.state = {
             dataset: [],
-            preferredDenomination: denominationsByName['giga'],
+            preferredDenomination: denominationsByName["giga"],
             yAxisRange: 0,
             userInputs: {
-                networkTokensStaked: 1 * Math.pow(10, 9),  // 1 giga AO
-                primordialTokensStaked: 1.5 * Math.pow(10, 9),  // 1.5 giga AO+
+                networkTokensStaked: 1 * Math.pow(10, 9), // 1 giga AO
+                primordialTokensStaked: 1.5 * Math.pow(10, 9), // 1.5 giga AO+
                 primordialTokenMultiplier: 3.5,
                 networkNodes: 100,
                 dailyGrowth: 1,
@@ -51,32 +52,44 @@ class EarningsCalculator extends Component {
                 saturation: 20,
                 creatorShare: 30,
                 networkInflation: 10,
-                weightedPrimordialTokenMultiplier: 310,
+                weightedPrimordialTokenMultiplier: 310
             }
-        }
+        };
     }
     componentDidMount() {
-        this._generateDataset()
+        this._generateDataset();
     }
-    _onInputsChange = (updatedInputs) => {
+    _onInputsChange = updatedInputs => {
         this.setState({ userInputs: updatedInputs }, () => {
-            this._generateDataset()
-        })
-    }
+            this._generateDataset();
+        });
+    };
     _generateDataset = () => {
-        const { userInputs } = this.state
+        const { userInputs } = this.state;
         // Determine the denomination to show (lowest denominator)
-        const networkTokens = fromBaseToHighestDenomination(userInputs.networkTokensStaked)
-        const primordialTokens = fromBaseToHighestDenomination(userInputs.primordialTokensStaked)
-        let preferredDenomination = networkTokens.denomination
-        let preferredDenominationPower = networkTokens.denomination.powerOfTen
-        if ( primordialTokens.denomination.powerOfTen > preferredDenominationPower ) {
-            preferredDenomination = primordialTokens.denomination
-            preferredDenominationPower = primordialTokens.denomination.powerOfTen
+        const networkTokens = fromBaseToHighestDenomination(
+            userInputs.networkTokensStaked
+        );
+        const primordialTokens = fromBaseToHighestDenomination(
+            userInputs.primordialTokensStaked
+        );
+        let preferredDenomination = networkTokens.denomination;
+        let preferredDenominationPower = networkTokens.denomination.powerOfTen;
+        if (
+            primordialTokens.denomination.powerOfTen >
+            preferredDenominationPower
+        ) {
+            preferredDenomination = primordialTokens.denomination;
+            preferredDenominationPower =
+                primordialTokens.denomination.powerOfTen;
         }
 
-        const networkTokensStakedInPreferredDenomination = userInputs.networkTokensStaked / Math.pow(10, preferredDenominationPower)
-        const primordialTokensStakedInPreferredDenomination = userInputs.primordialTokensStaked / Math.pow(10, preferredDenominationPower)
+        const networkTokensStakedInPreferredDenomination =
+            userInputs.networkTokensStaked /
+            Math.pow(10, preferredDenominationPower);
+        const primordialTokensStakedInPreferredDenomination =
+            userInputs.primordialTokensStaked /
+            Math.pow(10, preferredDenominationPower);
         let inputs = {
             ...userInputs,
             // Converting staked values into giga-denomination
@@ -88,70 +101,77 @@ class EarningsCalculator extends Component {
             saturation: userInputs.saturation / 100.0,
             creatorShare: userInputs.creatorShare / 100.0,
             networkInflation: userInputs.networkInflation / 100.0,
-            weightedPrimordialTokenMultiplier: (networkTokensStakedInPreferredDenomination + (primordialTokensStakedInPreferredDenomination * userInputs.primordialTokenMultiplier)) / (networkTokensStakedInPreferredDenomination + primordialTokensStakedInPreferredDenomination) / 100.0,
-        }
-        let dataset = []
+            weightedPrimordialTokenMultiplier:
+                (networkTokensStakedInPreferredDenomination +
+                    primordialTokensStakedInPreferredDenomination *
+                        userInputs.primordialTokenMultiplier) /
+                (networkTokensStakedInPreferredDenomination +
+                    primordialTokensStakedInPreferredDenomination) /
+                100.0
+        };
+        let dataset = [];
         // Mimicking data sheet
         for (let row = 0; row < DAY_RANGE; row++) {
-            let previousRow = dataset[row - 1]
+            let previousRow = dataset[row - 1];
             /* day, nodes, reqNodes, nodesWithContent, baseAo, cumBaseAo, baseInflationAo, cumBaseInflationAo, ao+BonusAo, creatorAoFromContent, nodeAOFromContent, creatorBaseAo */
-            let rowData = {}
+            let rowData = {};
             // day
-            rowData[0] = row + 1
+            rowData[0] = row + 1;
             // nodes
-            rowData[1] = previousRow ? 
-                previousRow[1] * (1 + inputs.dailyGrowth) :
-                inputs.networkNodes
+            rowData[1] = previousRow
+                ? previousRow[1] * (1 + inputs.dailyGrowth)
+                : inputs.networkNodes;
             // reqNodes
-            rowData[2] = rowData[1] * inputs.dailyContentRequestRate
+            rowData[2] = rowData[1] * inputs.dailyContentRequestRate;
             // nodesWithContent
-            if (row === 0)
-                rowData[3] = rowData[2]
-            else if (row === 1)
-                rowData[3] = rowData[2] + previousRow[3]
+            if (row === 0) rowData[3] = rowData[2];
+            else if (row === 1) rowData[3] = rowData[2] + previousRow[3];
             else
-                rowData[3] = (rowData[2] + previousRow[3]) / rowData[1] < inputs.saturation ? rowData[2] + previousRow[3] : previousRow[3]
+                rowData[3] =
+                    (rowData[2] + previousRow[3]) / rowData[1] <
+                    inputs.saturation
+                        ? rowData[2] + previousRow[3]
+                        : previousRow[3];
             // baseAo
-            rowData[4] = previousRow ?
-                rowData[2] * inputs.networkTokensStaked + inputs.primordialTokensStaked :
-                (inputs.networkTokensStaked + inputs.primordialTokensStaked) * -1
+            rowData[4] = previousRow
+                ? rowData[2] * inputs.networkTokensStaked +
+                  inputs.primordialTokensStaked
+                : (inputs.networkTokensStaked + inputs.primordialTokensStaked) *
+                  -1;
             // cumBaseAo
-            rowData[5] = previousRow ?                    
-                rowData[4] + previousRow[5] :
-                rowData[4]
+            rowData[5] = previousRow ? rowData[4] + previousRow[5] : rowData[4];
             // baseInflationAo
-            rowData[6] = previousRow ?
-                rowData[2] * inputs.networkInflation :
-                0
+            rowData[6] = previousRow ? rowData[2] * inputs.networkInflation : 0;
             // cumBaseInflationAo
-            rowData[7] = previousRow ?
-                rowData[6] + previousRow[7] :
-                0
+            rowData[7] = previousRow ? rowData[6] + previousRow[7] : 0;
             // ao+BonusAo
-            rowData[8] = rowData[7] * inputs.weightedPrimordialTokenMultiplier
+            rowData[8] = rowData[7] * inputs.weightedPrimordialTokenMultiplier;
             // creatorAoFromContent
-            rowData[9] = previousRow ?
-                (rowData[8] + rowData[5]) * inputs.creatorShare :
-                0
+            rowData[9] = previousRow
+                ? (rowData[8] + rowData[5]) * inputs.creatorShare
+                : 0;
             // nodeAOFromContent
-            rowData[10] = previousRow ?
-                (rowData[5] + rowData[8]) * (1 - inputs.creatorShare) :
-                0
+            rowData[10] = previousRow
+                ? (rowData[5] + rowData[8]) * (1 - inputs.creatorShare)
+                : 0;
             // creatorBaseAo
-            rowData[11] = previousRow ?
-                (rowData[5] + rowData[7]) * inputs.creatorShare :
-                rowData[5]
-            dataset.push(rowData)
+            rowData[11] = previousRow
+                ? (rowData[5] + rowData[7]) * inputs.creatorShare
+                : rowData[5];
+            dataset.push(rowData);
         }
-        this.setState({dataset, preferredDenomination})
-    }
+        this.setState({ dataset, preferredDenomination });
+    };
     render() {
         const { classes } = this.props;
-        const { dataset, preferredDenomination } = this.state
+        const { dataset, preferredDenomination } = this.state;
         return (
             <div className={classes.root}>
                 <div className={classes.gridLeft}>
-                    <Typography variant="subheading" style={{color: '#BCBCBC'}}>{`Inputs`}</Typography>
+                    <Typography
+                        variant="subheading"
+                        style={{ color: "#BCBCBC" }}
+                    >{`Inputs`}</Typography>
                     <Paper elevation={18} className={classes.paperInputs}>
                         <MuiThemeProvider theme={darkTheme}>
                             <EarningsInputFields
@@ -163,7 +183,10 @@ class EarningsCalculator extends Component {
                 </div>
                 <div className={classes.gridRight}>
                     <Paper elevation={24} className={classes.paperGraph}>
-                        <EarningsGraph dataset={dataset} denomination={preferredDenomination} />
+                        <EarningsGraph
+                            dataset={dataset}
+                            denomination={preferredDenomination}
+                        />
                     </Paper>
                 </div>
             </div>
@@ -172,7 +195,7 @@ class EarningsCalculator extends Component {
 }
 
 EarningsCalculator.propTypes = {
-    classes: PropTypes.object.isRequired,
+    classes: PropTypes.object.isRequired
 };
 
 export default withStyles(styles)(EarningsCalculator);

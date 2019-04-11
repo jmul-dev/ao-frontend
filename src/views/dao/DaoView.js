@@ -1,17 +1,16 @@
-import React, { PureComponent } from "react";
-import View from "../View";
+import { ButtonBase, Grid } from "@material-ui/core";
 import Typography from "@material-ui/core/Typography";
-import EtherscanLink from "../../modules/etherscan/EtherscanLink";
-import { Link } from "react-router-dom";
+import React, { PureComponent } from "react";
 import { compose } from "react-apollo";
-import withUserIdentifiers from "../../modules/account/containers/withUserIdentifiers";
+import { Link } from "react-router-dom";
 import AccountRequired from "../../modules/account/components/AccountRequired";
+import withUserIdentifiers from "../../modules/account/containers/withUserIdentifiers";
+import ContentCard from "../../modules/content/components/ContentCard";
+import WhitepaperLink from "../../modules/ico/components/WhitepaperLink";
+import View from "../View";
+import NetworkTaoContentListing from "./NetworkTaoContentListing";
 import withNetworkTaoContent from "./withNetworkTaoContent";
 import withTheAoDappId from "./withTheAoDappId";
-import ContentCard from "../../modules/content/components/ContentCard";
-import NetworkTaoContentListing from "./NetworkTaoContentListing";
-import { Grid, ButtonBase } from "@material-ui/core";
-import WhitepaperLink from "../../modules/ico/components/WhitepaperLink";
 
 const DaoViewNoUser = () => (
     <React.Fragment>

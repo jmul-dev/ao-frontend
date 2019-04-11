@@ -1,17 +1,16 @@
-import React, { Component } from "react";
-import View from "../View";
-import Clock from "../../modules/clock/components/Clock";
-import VideoListing from "../../modules/video/components/VideoListing";
-import SearchBar from "../../modules/video/components/SearchBar";
-import withSearch from "../../modules/video/containers/withSearch";
-import className from "classnames";
-import IconButton from "@material-ui/core/IconButton";
-import SearchIcon from "@material-ui/icons/Search";
 import Backdrop from "@material-ui/core/Backdrop";
-import Slide from "@material-ui/core/Slide";
 import Fade from "@material-ui/core/Fade";
-import "./browse-view.css";
+import IconButton from "@material-ui/core/IconButton";
+import Slide from "@material-ui/core/Slide";
+import SearchIcon from "@material-ui/icons/Search";
+import className from "classnames";
+import React, { Component } from "react";
 import Stats from "../../modules/stats/components/Stats";
+import SearchBar from "../../modules/video/components/SearchBar";
+import VideoListing from "../../modules/video/components/VideoListing";
+import withSearch from "../../modules/video/containers/withSearch";
+import View from "../View";
+import "./browse-view.css";
 
 class BrowseView extends Component {
     _openSearchBar = () => {
@@ -25,7 +24,7 @@ class BrowseView extends Component {
         this.props.updateSearchValue("");
     };
     render() {
-        const { searchString, searchBarActive, ethAddress } = this.props;
+        const { searchString, searchBarActive } = this.props;
         const searchActive =
             !searchBarActive && searchString && searchString.length > 0;
         const containerClasses = className("BrowseView", {

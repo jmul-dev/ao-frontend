@@ -12,7 +12,7 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import { IconButton } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
 
-const styles = ({}) => ({
+const styles = () => ({
     form: {
         display: "flex",
         alignItems: "flex-end"

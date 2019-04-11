@@ -52,25 +52,29 @@ const OverviewAside = ({ form, includePricing = false }) => {
                                 />
                             </b>
                         </li>
-                        <li>
-                            <span>{"you charge"}</span>
-                            <span className="divider" />
-                            <b className="em-submit">
-                                <TokenBalance
-                                    baseAmount={form.stake}
-                                    decimals={1}
-                                    includeAO={true}
-                                />
-                                {` / view`}
-                            </b>
-                        </li>
-                        <li>
-                            <span>{"you make"}</span>
-                            <span className="divider" />
-                            <b className="em-submit">{`${
-                                form.profitSplitPercentage
-                            }% profits`}</b>
-                        </li>
+                        {form.contentLicense === "AO" && (
+                            <React.Fragment>
+                                <li>
+                                    <span>{"you charge"}</span>
+                                    <span className="divider" />
+                                    <b className="em-submit">
+                                        <TokenBalance
+                                            baseAmount={form.stake}
+                                            decimals={1}
+                                            includeAO={true}
+                                        />
+                                        {` / view`}
+                                    </b>
+                                </li>
+                                <li>
+                                    <span>{"you make"}</span>
+                                    <span className="divider" />
+                                    <b className="em-submit">{`${
+                                        form.profitSplitPercentage
+                                    }% profits`}</b>
+                                </li>
+                            </React.Fragment>
+                        )}
                     </React.Fragment>
                 ) : null}
             </Typography>

@@ -1,10 +1,9 @@
-import React, { Component } from 'react';
-import withExchangeContainer from '../containers/withExchangeContainer';
-import PropTypes from 'prop-types';
-import ExchangeForm from './ExchangeForm';
-import { compose } from 'react-apollo';
-import withExchangePoolsContainer from '../containers/withExchangePoolsContainer';
 import BigNumber from 'bignumber.js';
+import React, { Component } from 'react';
+import { compose } from 'react-apollo';
+import withExchangeContainer from '../containers/withExchangeContainer';
+import withExchangePoolsContainer from '../containers/withExchangePoolsContainer';
+import ExchangeForm from './ExchangeForm';
 
 
 class NetworkExchangeForm extends Component {
@@ -18,7 +17,7 @@ class NetworkExchangeForm extends Component {
         this.props.stopListeningForAvailableExchangePools()
     }
     _onSubmit = ({ethInput, tokenInputInBaseDenomination}) => {
-        const { targetExchangePool, targetExchangeRate } = this.props
+        const { targetExchangePool } = this.props
         this.props.exchangeEthForNetworkTokens({
             poolId: targetExchangePool.poolId,
             poolPrice: targetExchangePool.price,

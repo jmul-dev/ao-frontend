@@ -1,13 +1,14 @@
 import gql from "graphql-tag";
+import PropTypes from "prop-types";
 
-export type SettingsType = {
-    maxDiskSpace: number,
-    maxBandwidthUp: number,
-    maxBandwidthDown: number,
-    maxPeerConnections: number,
-    runInBackground: boolean,
-    runOnStartup: boolean,
-    checkForUpdates: boolean
+export const SettingsPropTypes = {
+    maxDiskSpace: PropTypes.number,
+    maxBandwidthUp: PropTypes.number,
+    maxBandwidthDown: PropTypes.number,
+    maxPeerConnections: PropTypes.number,
+    runInBackground: PropTypes.bool,
+    runOnStartup: PropTypes.bool,
+    checkForUpdates: PropTypes.bool
 };
 
 export const SettingsFieldsFragment = `

@@ -31,8 +31,7 @@ class PdfContentView extends PureComponent {
     };
     render() {
         const { classes } = this.props;
-        const { contentId } = this.props.match.params;
-        const { loading, error, userContent } = this.props.userContentQuery;
+        const { userContent } = this.props.userContentQuery;
         return userContent ? (
             <View className={"PdfContentView"} padding="none">
                 <section style={{ height: "100%", width: "100%" }}>

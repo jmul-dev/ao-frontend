@@ -21,6 +21,7 @@ import BigNumber from "bignumber.js";
 import AccountRequired from "../../account/components/AccountRequired";
 import Tooltip from "@material-ui/core/Tooltip";
 
+/*
 type Props = {
     contentId: String,
     video: Object,
@@ -40,8 +41,9 @@ type Props = {
         loading: boolean
     }
 };
+*/
 
-class TeaserCard extends Component<Props> {
+class TeaserCard extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -80,7 +82,6 @@ class TeaserCard extends Component<Props> {
         const {
             setActiveVideo,
             networkTokenBalance,
-            video,
             userContentQuery
         } = this.props;
         const { contentPrice } = this.state;
@@ -255,8 +256,7 @@ class TeaserCard extends Component<Props> {
             isActive,
             isFullscreen,
             isTeaserEntered,
-            networkTokenBalance,
-            contentMetrics
+            networkTokenBalance
         } = this.props;
         const { videoSrc, usingTeaserSrc, contentPrice } = this.state;
         const insufficientBalance = networkTokenBalance.lt(contentPrice)

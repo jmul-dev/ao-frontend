@@ -1,4 +1,4 @@
-import { graphql, compose } from "react-apollo";
+import { graphql } from "react-apollo";
 import gql from "graphql-tag";
 import ContentFields from "../../graphql/fragments/ContentFields";
 import DappContentFragment from "../../graphql/fragments/DappContentFragment";
@@ -15,7 +15,7 @@ const networkTaoContentQuery = gql(`
 
 const withNetworkTaoContent = graphql(networkTaoContentQuery, {
     name: "networkTaoContentQuery",
-    options: props => ({
+    options: () => ({
         variables: {
             contentLicense: "TAO"
         },

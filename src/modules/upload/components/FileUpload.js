@@ -107,7 +107,6 @@ class FileUpload extends Component<Props> {
             disabled,
             accept,
             multiple,
-            style,
             classes,
             directory,
             mozdirectory,
@@ -138,12 +137,7 @@ class FileUpload extends Component<Props> {
                 accept={accept}
                 multiple={multiple}
             >
-                {({
-                    getRootProps,
-                    getInputProps,
-                    isDragActive,
-                    rejectedFiles
-                }) => {
+                {({ getRootProps, getInputProps, isDragActive }) => {
                     return (
                         <div
                             {...getRootProps()}

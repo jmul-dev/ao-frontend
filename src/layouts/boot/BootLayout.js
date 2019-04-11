@@ -1,4 +1,3 @@
-// @flow
 /**
  * BootLayout is rendered when:
  *   ao-core is not connected && ready
@@ -53,7 +52,6 @@ class BootLayout extends Component {
         }
     }
     render() {
-        const { isElectron } = this.props;
         return (
             <div className="BootLayout">
                 <div className="loading-container" style={{ padding: 16 }}>

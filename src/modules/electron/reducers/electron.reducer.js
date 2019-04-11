@@ -90,14 +90,14 @@ export const submitEthereumRpcValue = rpcEndpoint => {
 export const checkElectron = () => {
     return {
         type: SET_IS_ELECTRON,
-        payload: !!(window.chrome && window.chrome.ipcRenderer)
+        payload: isElectron()
     };
 };
 
 // State
 const initialState = {
     eventLogs: [],
-    isElectron: !!(window.chrome && window.chrome.ipcRenderer),
+    isElectron: isElectron(),
     desktopVersion: undefined,
     ethRpcPrompt: undefined
 };

@@ -1,9 +1,7 @@
-import BigNumber from "../../node_modules/bignumber.js";
-import React, { Component, Fragment } from 'react';
-import PropTypes from 'prop-types';
 import Select from '@material-ui/core/Select';
 import { withStyles } from '@material-ui/core/styles';
-import TextField from '@material-ui/core/TextField';
+import React, { Fragment } from 'react';
+import BigNumber from "../../node_modules/bignumber.js";
 
 
 export const denominations = [

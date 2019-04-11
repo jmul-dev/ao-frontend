@@ -1,13 +1,12 @@
+import Grid from "@material-ui/core/Grid";
 import React, { Component } from "react";
 import { Route } from "react-router";
-import View from "../View";
-import Typography from "@material-ui/core/Typography";
-import UserContentListing from "../../modules/account/components/UserContentListing";
 import UserContentFilters from "../../modules/account/components/UserContentFilters";
-import Grid from "@material-ui/core/Grid";
+import UserContentListing from "../../modules/account/components/UserContentListing";
 import withUserIdentifiers from "../../modules/account/containers/withUserIdentifiers";
-import AccountContentView from "./AccountContentView";
+import View from "../View";
 import "./account-view.css";
+import AccountContentView from "./AccountContentView";
 
 class AccountView extends Component {
     render() {

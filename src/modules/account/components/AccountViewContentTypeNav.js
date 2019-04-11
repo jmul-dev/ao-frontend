@@ -1,19 +1,18 @@
-import React, { Component } from "react";
-import { withRouter } from "react-router";
 import { withStyles } from "@material-ui/core/styles";
-import PropTypes from "prop-types";
-import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
-import Typography from "@material-ui/core/Typography";
+import Tabs from "@material-ui/core/Tabs";
+import PropTypes from "prop-types";
+import React, { Component } from "react";
+import { compose } from "react-apollo";
+import { withRouter } from "react-router";
 import allMediaIconSrc from "../../../assets/media-type-all.svg";
-import videoIconSrc from "../../../assets/media-type-video.svg";
-import musicIconSrc from "../../../assets/media-type-music.svg";
-import imageIconSrc from "../../../assets/media-type-image.svg";
-import documentIconSrc from "../../../assets/media-type-document.svg";
-import pdfIconSrc from "../../../assets/media-type-pdf.svg";
 import applicationIconSrc from "../../../assets/media-type-application.svg";
 import assetIconSrc from "../../../assets/media-type-digital-asset.svg";
-import { compose } from "react-apollo";
+import documentIconSrc from "../../../assets/media-type-document.svg";
+import imageIconSrc from "../../../assets/media-type-image.svg";
+import musicIconSrc from "../../../assets/media-type-music.svg";
+import pdfIconSrc from "../../../assets/media-type-pdf.svg";
+import videoIconSrc from "../../../assets/media-type-video.svg";
 
 const styles = ({ palette, spacing }) => ({
     root: {
@@ -77,7 +76,7 @@ class AccountViewContentTypeNav extends Component {
                             <img
                                 className={classes.icon}
                                 src={allMediaIconSrc}
-                                alt="all content"
+                                alt="all content icon"
                             />
                         }
                         className={classes.tabRoot}
@@ -89,7 +88,7 @@ class AccountViewContentTypeNav extends Component {
                             <img
                                 className={classes.icon}
                                 src={videoIconSrc}
-                                alt="video content"
+                                alt="video content icon"
                             />
                         }
                         className={classes.tabRoot}
@@ -101,7 +100,7 @@ class AccountViewContentTypeNav extends Component {
                             <img
                                 className={classes.icon}
                                 src={applicationIconSrc}
-                                alt="application content"
+                                alt="application content icon"
                             />
                         }
                         className={classes.tabRoot}
@@ -113,7 +112,7 @@ class AccountViewContentTypeNav extends Component {
                             <img
                                 className={classes.icon}
                                 src={pdfIconSrc}
-                                alt="pdf content"
+                                alt="pdf content icon"
                             />
                         }
                         className={classes.tabRoot}
@@ -126,7 +125,7 @@ class AccountViewContentTypeNav extends Component {
                             <img
                                 className={classes.icon}
                                 src={musicIconSrc}
-                                alt="music content"
+                                alt="music content icon"
                             />
                         }
                         className={classes.tabRoot}
@@ -139,7 +138,7 @@ class AccountViewContentTypeNav extends Component {
                             <img
                                 className={classes.icon}
                                 src={imageIconSrc}
-                                alt="image content"
+                                alt="content type icon"
                             />
                         }
                         className={classes.tabRoot}
@@ -152,7 +151,7 @@ class AccountViewContentTypeNav extends Component {
                             <img
                                 className={classes.icon}
                                 src={assetIconSrc}
-                                alt="digital asset content"
+                                alt="digital asset content icon"
                             />
                         }
                         className={classes.tabRoot}
@@ -165,7 +164,7 @@ class AccountViewContentTypeNav extends Component {
                             <img
                                 className={classes.icon}
                                 src={documentIconSrc}
-                                alt="document content"
+                                alt="document content icon"
                             />
                         }
                         className={classes.tabRoot}
