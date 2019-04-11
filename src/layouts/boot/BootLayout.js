@@ -8,8 +8,7 @@ import React, { Component } from "react";
 import IpcLogs from "../../modules/electron/components/IpcLogs";
 import { connect } from "react-redux";
 import Typography from "@material-ui/core/Typography";
-import Lottie from "react-lottie";
-import * as loadingAnimation from "./loadingAnimation.json";
+import { LogoIcon } from "../../assets/Icons";
 import {
     addNotification,
     dismissNotification
@@ -18,18 +17,7 @@ import { OnlyRenderUnderElectronContext } from "../../utils/electron";
 import EthereumRpcInputPrompt from "../../modules/electron/components/EthereumRpcInputPromt";
 
 class BootLayout extends Component {
-    constructor() {
-        super();
-        this.state = {
-            animationStarted: false
-        };
-    }
     componentDidMount() {
-        this._animationTimeout = setTimeout(() => {
-            this.setState({
-                animationStarted: true
-            });
-        }, 500); // slight delay to avoid flashing of animation (see App.js setTimeout)
         // NOTE: if this app is running outside of electron the only method of communication
         // with core is through core's http interface. If we do not see that in a timely fashion
         // we warn the user
@@ -46,7 +34,6 @@ class BootLayout extends Component {
     }
     componentWillUnmount() {
         clearTimeout(this._connectionTimeout);
-        clearTimeout(this._animationTimeout);
         if (this._networkErrorNotId) {
             this.props.dismissNotification(this._networkErrorNotId);
         }
@@ -73,28 +60,13 @@ class BootLayout extends Component {
                             right: 0,
                             bottom: 0,
                             background: "#000000",
-                            zIndex: 0
+                            zIndex: 0,
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center"
                         }}
                     >
-                        <Lottie
-                            style={{
-                                position: "absolute",
-                                top: "50%",
-                                left: "50%",
-                                transform: "translate(-50%, -50%)"
-                            }}
-                            height={1000}
-                            width={1000}
-                            isStopped={!this.state.animationStarted}
-                            options={{
-                                loop: true,
-                                autoplay: false,
-                                animationData: loadingAnimation,
-                                rendererSettings: {
-                                    preserveAspectRatio: "xMidYMid slice"
-                                }
-                            }}
-                        />
+                        <LogoIcon width={96} height={96} />
                     </div>
                 </div>
                 <OnlyRenderUnderElectronContext>
