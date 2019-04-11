@@ -20,7 +20,7 @@ class DappListItem extends Component {
         return (
             <div className={classes.root}>
                 <ContentPurchaseAction content={content}>
-                    {({ action, actionCopy, loading }) => (
+                    {({ action, actionCopy, loading, downloadProgress }) => (
                         <div
                             className={classes.previewImage}
                             style={{
@@ -36,6 +36,7 @@ class DappListItem extends Component {
                             >
                                 <ContentPurchaseState
                                     content={content}
+                                    downloadProgress={downloadProgress}
                                     currentUserEthAddress={ethAddress}
                                 />
                             </PrimaryButton>

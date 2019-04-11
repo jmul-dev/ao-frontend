@@ -3,6 +3,7 @@ const DatStatsFragment = `
         files,
         byteLength,
         length,
+        downloaded,
         version,
         downloadSpeed,
         uploadSpeed,
@@ -13,5 +14,5 @@ const DatStatsFragment = `
         complete,
         joinedNetwork,
     }
-`
-export default DatStatsFragment
+`;
+export default DatStatsFragment;

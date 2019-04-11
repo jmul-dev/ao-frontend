@@ -175,7 +175,7 @@ class TeaserCard extends Component<Props> {
                     contentRef={this.refs.videoContainer}
                     content={content}
                 >
-                    {({ action, loading, error }) => (
+                    {({ action, loading, error, downloadProgress }) => (
                         <PrimaryButton
                             disabled={!action || loading || videoQueryLoading}
                             onClick={() => {
@@ -184,6 +184,7 @@ class TeaserCard extends Component<Props> {
                         >
                             <ContentPurchaseState
                                 content={content}
+                                downloadProgress={downloadProgress}
                                 currentUserEthAddress={ethAddress}
                             />
                         </PrimaryButton>

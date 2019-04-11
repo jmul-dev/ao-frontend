@@ -112,7 +112,7 @@ class UserContentView extends PureComponent {
                     contentRef={this._watchNowRef}
                     content={content}
                 >
-                    {({ action, loading, error }) => (
+                    {({ action, loading, error, downloadProgress }) => (
                         <Fragment>
                             <Grid item sm={12}>
                                 <ButtonBase
@@ -150,6 +150,7 @@ class UserContentView extends PureComponent {
                                 >
                                     <ContentPurchaseState
                                         content={content}
+                                        downloadProgress={downloadProgress}
                                         currentUserEthAddress={ethAddress}
                                     />
                                 </PrimaryButton>
@@ -246,7 +247,7 @@ class UserContentView extends PureComponent {
                                     <Typography
                                         className={classes.content}
                                         variant="body2"
-                                        style={{whiteSpace: 'nowrap'}}
+                                        style={{ whiteSpace: "nowrap" }}
                                     >
                                         {`Eth address: ${
                                             content.creatorEthAddress

@@ -97,7 +97,7 @@ const featuredStyles = ({}) => ({
 const ContentCardFeatured = compose(withStyles(featuredStyles))(
     ({ content, ethAddress, classes }) => (
         <ContentPurchaseAction content={content}>
-            {({ action, actionCopy, loading }) => (
+            {({ action, actionCopy, loading, downloadProgress }) => (
                 <div>
                     <Grid container spacing={24} alignItems="center">
                         <Grid item xs={6}>
@@ -128,6 +128,7 @@ const ContentCardFeatured = compose(withStyles(featuredStyles))(
                             >
                                 <ContentPurchaseState
                                     content={content}
+                                    downloadProgress={downloadProgress}
                                     currentUserEthAddress={ethAddress}
                                 />
                             </PrimaryButton>
@@ -182,7 +183,7 @@ const ContentCardDefault = compose(withStyles(defaultStyles))(
         }
         return (
             <ContentPurchaseAction content={content}>
-                {({ action, actionCopy, loading }) => (
+                {({ action, actionCopy, loading, downloadProgress }) => (
                     <div className={classes.root}>
                         <div
                             className={classes.featuredImage}
@@ -231,6 +232,7 @@ const ContentCardDefault = compose(withStyles(defaultStyles))(
                         >
                             <ContentPurchaseState
                                 content={content}
+                                downloadProgress={downloadProgress}
                                 currentUserEthAddress={ethAddress}
                             />
                         </PrimaryButton>

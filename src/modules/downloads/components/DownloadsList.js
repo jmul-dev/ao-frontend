@@ -9,7 +9,7 @@ import { Typography } from "@material-ui/core";
 import { compose } from "react-apollo";
 import withUserIdentifiers from "../../account/containers/withUserIdentifiers";
 
-class DownloadsList extends Component<Props> {
+class DownloadsList extends Component {
     static propTypes = {
         // redux bound state
         recentlyHostedContentIds: PropTypes.arrayOf(PropTypes.string)

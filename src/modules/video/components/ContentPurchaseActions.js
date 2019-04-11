@@ -28,6 +28,7 @@ import { userContentQuery } from "../containers/withUserContent";
 import { stakeContent } from "../../upload/reducers/upload.reducer";
 import { contentUploadStakeTransaction } from "../../upload/containers/withUploadFormMutation";
 import withUserIdentifiers from "../../account/containers/withUserIdentifiers";
+import withDownloadStats from "../../content/containers/withDownloadStats";
 
 /*
 DISCOVERED
@@ -171,7 +172,8 @@ export const getContentState = (content, currentUserEthAddress) => {
 export const ContentPurchaseState = ({
     content,
     iconOnly = false,
-    currentUserEthAddress
+    currentUserEthAddress,
+    downloadProgress // used in conjunction with ContentPurchaseAction
 }) => {
     const isUploadedContent = determineIfContentWasUploadedByCurrentUser(
         content,
@@ -193,6 +195,9 @@ export const ContentPurchaseState = ({
         case "DOWNLOADING":
             isLoadingState = true;
             copy = "Downloading...";
+            if (downloadProgress) {
+                copy = `Downloading... (${downloadProgress}%)`;
+            }
             break;
         case "DOWNLOADED":
             // Content is download, indicate need to purchase
@@ -291,6 +296,7 @@ const withContentPurchaseActions = compose(
     withApollo,
     withRouter,
     withUserIdentifiers,
+    withDownloadStats,
     connect(
         mapStateToProps,
         mapDispatchToProps
@@ -308,6 +314,7 @@ const withContentPurchaseActions = compose(
  * @param {ethAddress} String
  * @param {contentRef} Object A reference to the content being displayed (for animation purposes,
  *                            we get the bounding box of this ref and animate to fullscreen video)
+ * @param {downloadStats} Object see withDownloadStats
  * @param {client} ApolloClient
  * @param {history} History react-router-dom withRouter
  * @param {children} Function Accepting parameters {action}
@@ -320,8 +327,27 @@ class ContentPurchaseActionComponent extends Component {
         super();
         this.state = {
             loading: false,
-            error: null
+            error: null,
+            downloadStatsActive: false
         };
+    }
+    componentDidUpdate() {
+        const { content } = this.props;
+        if (
+            content.state === "DOWNLOADING" &&
+            !this.state.downloadStatsActive
+        ) {
+            // TODO: start download stats query
+            this.props.downloadStats.startPolling(1000);
+            this.setState({ downloadStatsActive: true });
+        } else if (
+            this.state.downloadStatsActive &&
+            content.state !== "DOWNLOADING"
+        ) {
+            // TODO: stop download stats query
+            this.props.downloadStats.stopPolling();
+            this.setState({ downloadStatsActive: false });
+        }
     }
     _preActionHook = action => {
         const { aoName, ethAddress } = this.props;
@@ -566,7 +592,7 @@ class ContentPurchaseActionComponent extends Component {
             });
     };
     render() {
-        const { content, ethAddress, children } = this.props;
+        const { content, ethAddress, children, downloadStats } = this.props;
         const { loading, error } = this.state;
         const isUploadedContent = determineIfContentWasUploadedByCurrentUser(
             content,
@@ -645,7 +671,23 @@ class ContentPurchaseActionComponent extends Component {
         if (typeof action === "function") {
             action = this._preActionHook.bind(this, action);
         }
-        return children({ action, actionCopy, loading, error });
+        let childFuncParams = {
+            action,
+            actionCopy,
+            loading,
+            error
+        };
+        if (content.state === "DOWNLOADING" && downloadStats.userContent) {
+            const {
+                downloaded = 0,
+                length = 1
+            } = downloadStats.userContent.fileDatStats;
+            childFuncParams["downloadProgress"] = (
+                (downloaded / length) *
+                100.0
+            ).toFixed(0);
+        }
+        return children(childFuncParams);
     }
 }
 
