@@ -80,7 +80,7 @@ const DaoViewWithUser = compose(
                         <ButtonBase
                             component={Link}
                             to={{
-                                pathname: `/app/view/account/dapp`
+                                pathname: `/app/view/account`
                             }}
                             style={{
                                 alignSelf: "flex-end",
