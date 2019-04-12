@@ -56,6 +56,11 @@ export const waitForTransactionReceipt = transactionHash => {
 // Actions
 export const initializeContracts = networkId => {
     return (dispatch, getState) => {
+        const { app } = getState();
+        if (app.states[APP_STATES.CONTRACTS_INITIALIZED])
+            return console.warn(
+                `Preventing attempt to re-initialize contracts`
+            );
         try {
             let contracts = [
                 AOTreasury,

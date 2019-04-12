@@ -13,8 +13,7 @@ import PropTypes from "prop-types";
 import SettingsIcon from "@material-ui/icons/Settings";
 
 export default class App extends Component {
-    static contextTypes = {
-        router: PropTypes.object.isRequired,
+    static propTypes = {
         children: PropTypes.node,
         query: PropTypes.shape({
             loading: PropTypes.bool.isRequired,
@@ -32,6 +31,9 @@ export default class App extends Component {
         addNotification: PropTypes.func.isRequired,
         dismissNotification: PropTypes.func.isRequired,
         setCoreEthNetworkId: PropTypes.func.isRequired
+    };
+    static contextTypes = {
+        router: PropTypes.object.isRequired
     };
     _networkDisconnectedErrorNotificationId = null;
     _networkMismatchNotificationId = null;

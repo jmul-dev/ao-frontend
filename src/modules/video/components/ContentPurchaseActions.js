@@ -29,6 +29,7 @@ import { stakeContent } from "../../upload/reducers/upload.reducer";
 import { contentUploadStakeTransaction } from "../../upload/containers/withUploadFormMutation";
 import withUserIdentifiers from "../../account/containers/withUserIdentifiers";
 import withDownloadStats from "../../content/containers/withDownloadStats";
+import withContentState from "../../content/containers/withContentState";
 
 /*
 DISCOVERED
@@ -297,6 +298,7 @@ const withContentPurchaseActions = compose(
     withRouter,
     withUserIdentifiers,
     withDownloadStats,
+    withContentState,
     connect(
         mapStateToProps,
         mapDispatchToProps
@@ -315,6 +317,7 @@ const withContentPurchaseActions = compose(
  * @param {contentRef} Object A reference to the content being displayed (for animation purposes,
  *                            we get the bounding box of this ref and animate to fullscreen video)
  * @param {downloadStats} Object see withDownloadStats
+ * @param {withContentState} Object see withContentState, query used to poll for state change
  * @param {client} ApolloClient
  * @param {history} History react-router-dom withRouter
  * @param {children} Function Accepting parameters {action}
@@ -328,25 +331,35 @@ class ContentPurchaseActionComponent extends Component {
         this.state = {
             loading: false,
             error: null,
-            downloadStatsActive: false
+            downloadStatsActive: false,
+            statePollingActive: false
         };
     }
     componentDidUpdate() {
         const { content } = this.props;
+        // Logic for download stats polling
         if (
             content.state === "DOWNLOADING" &&
             !this.state.downloadStatsActive
         ) {
-            // TODO: start download stats query
             this.props.downloadStats.startPolling(1000);
             this.setState({ downloadStatsActive: true });
         } else if (
             this.state.downloadStatsActive &&
             content.state !== "DOWNLOADING"
         ) {
-            // TODO: stop download stats query
             this.props.downloadStats.stopPolling();
             this.setState({ downloadStatsActive: false });
+        }
+        // Logic for state change polling
+        const isIncompleteState =
+            ["DISCOVERABLE", "DISCOVERED"].indexOf(content.state) < 0;
+        if (isIncompleteState && !this.state.statePollingActive) {
+            this.props.contentStateQuery.startPolling(1000);
+            this.setState({ statePollingActive: true });
+        } else if (!isIncompleteState && this.state.statePollingActive) {
+            this.props.contentStateQuery.stopPolling();
+            this.setState({ statePollingActive: false });
         }
     }
     _preActionHook = action => {
