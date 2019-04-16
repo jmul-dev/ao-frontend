@@ -7,6 +7,7 @@ import "./settings-view.css";
 import Export from "../../modules/account/components/Export";
 import withStatsContainer from "../../modules/stats/containers/withStatsContainer";
 import { getNetworkName } from "../../store/app.reducer";
+import DebugLog from "../../modules/settings/components/DebugLog";
 
 class SettingsView extends PureComponent {
     render() {
@@ -16,11 +17,16 @@ class SettingsView extends PureComponent {
             statistics && `${statistics.ethNetworkId}` !== `${ethNetworkId}`;
         return (
             <View className={"SettingsView"} padding="full">
-                <header style={{ display: "flex" }}>
+                <header style={{ display: "flex", alignItems: "center" }}>
                     <Typography variant="subheading" gutterBottom>
                         {"Settings"}
                     </Typography>
-                    <Export />
+                    <div style={{ marginLeft: "auto" }}>
+                        <DebugLog />
+                    </div>
+                    <div style={{ marginLeft: 16 }}>
+                        <Export />
+                    </div>
                 </header>
                 <section>
                     {desktopVersion && (
