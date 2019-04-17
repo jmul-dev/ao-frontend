@@ -7,6 +7,7 @@ export const contentDownloadStatsQuery = gql(`
     query($id: ID!) {
         userContent(id: $id) {
             id
+            fileDatKey
             fileDatStats {
                 ...DatStatsFragment
             }

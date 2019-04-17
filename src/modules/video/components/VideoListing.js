@@ -13,6 +13,7 @@ import withVideos from "../containers/withVideos";
 import Fade from "@material-ui/core/Fade";
 import OfflineIcon from "@material-ui/icons/CloudOff";
 import Tooltip from "@material-ui/core/Tooltip";
+import moment from "moment";
 
 const propertySelection = ({ top, right, bottom, left, width, height }) => ({
     top,
@@ -285,7 +286,7 @@ class VideoListingCellCard extends Component {
                 <div
                     {...props}
                     style={{
-                        opacity: video.recentlySeenHostsCount > 0 ? 1 : 0.25
+                        opacity: video.recentlySeenHostsCount > 0 ? 1 : 0.3
                     }}
                 >
                     <img
@@ -311,7 +312,21 @@ class VideoListingCellCard extends Component {
                     >
                         {video.title}
                         {video.recentlySeenHostsCount < 1 && (
-                            <Tooltip title="Unable to find a host for this piece of content">
+                            <Tooltip
+                                title={
+                                    video.lastSeenContentHost
+                                        ? `last host seen ${moment
+                                              .utc(
+                                                  parseInt(
+                                                      video.lastSeenContentHost
+                                                          .timestamp,
+                                                      10
+                                                  )
+                                              )
+                                              .fromNow()}`
+                                        : "Unable to find a host for this piece of content"
+                                }
+                            >
                                 <OfflineIcon style={{ marginLeft: "auto" }} />
                             </Tooltip>
                         )}

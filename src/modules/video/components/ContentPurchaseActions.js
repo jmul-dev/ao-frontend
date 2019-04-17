@@ -690,7 +690,11 @@ class ContentPurchaseActionComponent extends Component {
             loading,
             error
         };
-        if (content.state === "DOWNLOADING" && downloadStats.userContent) {
+        if (
+            content.state === "DOWNLOADING" &&
+            downloadStats.userContent &&
+            downloadStats.userContent.fileDatStats
+        ) {
             const {
                 downloaded = 0,
                 length = 1

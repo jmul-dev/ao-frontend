@@ -15,8 +15,12 @@
     opacity: 0.5;
 }
 @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
 }
 .VideoListing.placeholder .placeholder-title {
     opacity: 0;
@@ -29,8 +33,9 @@
     animation-fill-mode: forwards;
 }
 
-
-
+.VideoListing .ReactVirtualized__Grid {
+    overflow: auto !important;
+}
 .VideoListing .ReactVirtualized__Grid:focus {
     outline: none;
 }
@@ -43,7 +48,7 @@
     padding-bottom: 56.25%;
     background-size: cover;
     background-position: center;
-    background-repeat: no-repeat;    
+    background-repeat: no-repeat;
     background-color: #151515;
     margin-bottom: 8px;
 }
@@ -55,17 +60,18 @@
     transition: opacity var(--enter-teaser-duration) var(--enter-teaser-ease);
     opacity: 0;
 }
-.teaser-modal-enter-done .video-navigation, .teaser-modal-enter-active .video-navigation {
+.teaser-modal-enter-done .video-navigation,
+.teaser-modal-enter-active .video-navigation {
     opacity: 1;
 }
-
 
 /* Teaser modal - slide title */
 .teaser-modal .title {
     transition: font-size var(--enter-teaser-duration) var(--enter-teaser-ease);
-    font-size: 1.125rem;  /* Note, this must match the font-size of the list item titles */
+    font-size: 1.125rem; /* Note, this must match the font-size of the list item titles */
 }
-.teaser-modal-enter-done .title, .teaser-modal-enter-active .title {
+.teaser-modal-enter-done .title,
+.teaser-modal-enter-active .title {
     font-size: 1.5rem;
 }
 /* Teaser modal - slide action pane (below title) */
@@ -73,10 +79,11 @@
     transition: opacity var(--enter-teaser-duration) var(--enter-teaser-ease);
     opacity: 0;
 }
-.teaser-modal-enter-active .slider-track .slide:nth-child(3) .action-pane, .teaser-modal-enter-done .slider-track .slide:nth-child(3) .action-pane {
+.teaser-modal-enter-active .slider-track .slide:nth-child(3) .action-pane,
+.teaser-modal-enter-done .slider-track .slide:nth-child(3) .action-pane {
     opacity: 1;
 }
-.teaser-modal-exit-active .action-pane { 
+.teaser-modal-exit-active .action-pane {
     opacity: 0;
 }
 
@@ -89,7 +96,8 @@
     width: 50vw;
     height: 85vh;
 }
-.teaser-modal-enter-done .slider-track .slide, .teaser-modal-enter-active .slider-track .slide {
+.teaser-modal-enter-done .slider-track .slide,
+.teaser-modal-enter-active .slider-track .slide {
     top: 15vh !important;
     width: 50vw !important;
     height: 85vh !important;
@@ -98,46 +106,55 @@
     transition: all var(--teaser-slide-duration) var(--teaser-slide-ease);
 }
 /* Teaser modal - prev prev slide (initial) */
-    .teaser-modal .slider-track .slide:nth-child(1), .teaser-modal .slider-track .slide:nth-child(1) {
-        left: -100vw;
-        opacity: 0;
-    }
-    /* Teaser modal - prev prev slide (enter) */
-    .teaser-modal-enter-done .slider-track .slide:nth-child(1), .teaser-modal-enter-active .slider-track .slide:nth-child(1) {
-        left: -100vw !important;
-    }
+.teaser-modal .slider-track .slide:nth-child(1),
+.teaser-modal .slider-track .slide:nth-child(1) {
+    left: -100vw;
+    opacity: 0;
+}
+/* Teaser modal - prev prev slide (enter) */
+.teaser-modal-enter-done .slider-track .slide:nth-child(1),
+.teaser-modal-enter-active .slider-track .slide:nth-child(1) {
+    left: -100vw !important;
+}
 /* Teaser modal - prev slide (initial) */
-    .teaser-modal .slider-track .slide:nth-child(2), .teaser-modal .slider-track .slide:nth-child(2) {
-        left: -50vw;
-        opacity: 0.5;
-    }
-    /* Teaser modal - prev slide (enter) */
-    .teaser-modal-enter-done .slider-track .slide:nth-child(2), .teaser-modal-enter-active .slider-track .slide:nth-child(2) {
-        left: -40vw !important;
-    }
+.teaser-modal .slider-track .slide:nth-child(2),
+.teaser-modal .slider-track .slide:nth-child(2) {
+    left: -50vw;
+    opacity: 0.5;
+}
+/* Teaser modal - prev slide (enter) */
+.teaser-modal-enter-done .slider-track .slide:nth-child(2),
+.teaser-modal-enter-active .slider-track .slide:nth-child(2) {
+    left: -40vw !important;
+}
 /* Teaser modal - ACTIVE slide */
-    .teaser-modal-enter-done .slider-track .slide:nth-child(3), .teaser-modal-enter-active .slider-track .slide:nth-child(3) {
-        left: 25vw !important;
-        opacity: 1;
-    }
+.teaser-modal-enter-done .slider-track .slide:nth-child(3),
+.teaser-modal-enter-active .slider-track .slide:nth-child(3) {
+    left: 25vw !important;
+    opacity: 1;
+}
 /* Teaser modal - next slide (initial) */
-    .teaser-modal .slider-track .slide:nth-child(4), .teaser-modal .slider-track .slide:nth-child(4) {
-        left: 100vw;
-        opacity: 0.5;
-    }
-    /* Teaser modal - next slide (enter) */
-    .teaser-modal-enter-done .slider-track .slide:nth-child(4), .teaser-modal-enter-active .slider-track .slide:nth-child(4) {
-        left: 90vw !important;
-    }
+.teaser-modal .slider-track .slide:nth-child(4),
+.teaser-modal .slider-track .slide:nth-child(4) {
+    left: 100vw;
+    opacity: 0.5;
+}
+/* Teaser modal - next slide (enter) */
+.teaser-modal-enter-done .slider-track .slide:nth-child(4),
+.teaser-modal-enter-active .slider-track .slide:nth-child(4) {
+    left: 90vw !important;
+}
 /* Teaser modal - next next slide (initial) */
-    .teaser-modal .slider-track .slide:nth-child(5), .teaser-modal .slider-track .slide:nth-child(5) {
-        left: 150vw;
-        opacity: 0;
-    }
-    /* Teaser modal - next next slide (enter) */
-    .teaser-modal-enter-done .slider-track .slide:nth-child(5), .teaser-modal-enter-active .slider-track .slide:nth-child(5) {
-        left: 150vw !important;
-    }
+.teaser-modal .slider-track .slide:nth-child(5),
+.teaser-modal .slider-track .slide:nth-child(5) {
+    left: 150vw;
+    opacity: 0;
+}
+/* Teaser modal - next next slide (enter) */
+.teaser-modal-enter-done .slider-track .slide:nth-child(5),
+.teaser-modal-enter-active .slider-track .slide:nth-child(5) {
+    left: 150vw !important;
+}
 
 /* Teaser modal - content containers */
 .teaser-modal .content-container {
@@ -153,33 +170,34 @@
 .teaser-modal-enter-done .content-container {
     transition: all var(--teaser-slide-duration) var(--teaser-slide-ease) !important;
 }
-.teaser-modal-enter-done .content-container, .teaser-modal-enter-active .content-container {
-    top: 15vh;    
+.teaser-modal-enter-done .content-container,
+.teaser-modal-enter-active .content-container {
+    top: 15vh;
 }
-.teaser-modal-enter-done .slide:nth-child(3) .content-container, .teaser-modal-enter-active .slide:nth-child(3) .content-container {
+.teaser-modal-enter-done .slide:nth-child(3) .content-container,
+.teaser-modal-enter-active .slide:nth-child(3) .content-container {
     opacity: 1;
 }
-    .teaser-modal .slide:nth-child(1) .content-container {
-        left: -100vw;
-    }
-    .teaser-modal .slide:nth-child(2) .content-container {
-        left: -40vw;
-    }
-    .teaser-modal .slide:nth-child(3) .content-container {
-        left: 25vw;        
-    }
-    .teaser-modal .slide:nth-child(4) .content-container {
-        left: 90vw;
-    }
-    .teaser-modal .slide:nth-child(5) .content-container {
-        left: 150vw;
-    }
+.teaser-modal .slide:nth-child(1) .content-container {
+    left: -100vw;
+}
+.teaser-modal .slide:nth-child(2) .content-container {
+    left: -40vw;
+}
+.teaser-modal .slide:nth-child(3) .content-container {
+    left: 25vw;
+}
+.teaser-modal .slide:nth-child(4) .content-container {
+    left: 90vw;
+}
+.teaser-modal .slide:nth-child(5) .content-container {
+    left: 150vw;
+}
 
 .teaser-modal-exit .slide.no-recent-hosts .media-container {
     transition: opacity var(--enter-teaser-duration) var(--enter-teaser-ease);
     opacity: 0.25;
 }
-
 
 /* Teaser modal - backdrop */
 .teaser-modal .teaser-modal-backdrop {
@@ -193,7 +211,8 @@
     opacity: 0;
     background: #000000;
 }
-.teaser-modal-enter-done .teaser-modal-backdrop, .teaser-modal-enter-active .teaser-modal-backdrop {
+.teaser-modal-enter-done .teaser-modal-backdrop,
+.teaser-modal-enter-active .teaser-modal-backdrop {
     opacity: 1;
 }
 
@@ -207,10 +226,12 @@
     z-index: 1000;
     opacity: 0;
 }
-.playback-modal-enter-done .playback-modal-backdrop, .playback-modal-enter-active .playback-modal-backdrop {
+.playback-modal-enter-done .playback-modal-backdrop,
+.playback-modal-enter-active .playback-modal-backdrop {
     opacity: 1;
 }
-.playback-modal-enter-done .video-navigation, .playback-modal-enter-active .video-navigation {
+.playback-modal-enter-done .video-navigation,
+.playback-modal-enter-active .video-navigation {
     opacity: 1;
 }
 .playback-modal .video-navigation {
