@@ -65,9 +65,10 @@ class UploadForm extends Component {
                         active: contentType === "DAPP",
                         disabled: false,
                         fileTypesMessage:
-                            "an individual html file or a zip folder of the dapp (with an index.html)",
+                            "zip folder of the dapp (with an index.html somewhere inside)",
                         fileInputProps: {
-                            accept: "application/zip,text/html"
+                            accept:
+                                "application/zip,application/x-zip,application/x-zip-compressed"
                         }
                     })}
                     {this._renderContentListItem({
