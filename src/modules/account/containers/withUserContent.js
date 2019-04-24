@@ -47,7 +47,7 @@ export default compose(
     graphql(userContent, {
         name: "query",
         options: ({ contentType }) => ({
-            pollInterval: 1500,
+            pollInterval: 2000,
             variables: {
                 inputs: {
                     contentType: contentType

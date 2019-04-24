@@ -55,7 +55,7 @@ class UploadForm extends Component {
                         disabled: false,
                         fileTypesMessage: "mp4 or mov files",
                         fileInputProps: {
-                            accept: "video/mp4,video/mov"
+                            accept: "video/mp4,video/mov,video/quicktime"
                         }
                     })}
                     {this._renderContentListItem({

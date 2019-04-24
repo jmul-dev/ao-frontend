@@ -45,8 +45,10 @@ class UploadFormContent extends Component {
         if (file.size > MAX_TEASER_FILE_SIZE) {
             this.props.updateUploadFormField("videoTeaser", undefined);
             this.props.addNotification({
-                message: `Your teaser video is too large. Currently, the network limits teaser video file sizes to <= ${MAX_TEASER_FILE_SIZE}MB.`,
-                variant: "warning"
+                message: `Your teaser video is too large. Currently, the network limits teaser video file sizes to <= ${MAX_TEASER_FILE_SIZE /
+                    Math.pow(10, 6)}MB.`,
+                variant: "warning",
+                action: "dismiss"
             });
         }
     };
