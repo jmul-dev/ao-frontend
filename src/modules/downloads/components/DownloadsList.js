@@ -33,12 +33,13 @@ class DownloadsList extends Component {
         if (!node || (node && !node.hostedContent)) return null; // no incomplete hosted content
         const { recentlyHostedContentIds } = this.props;
         const incompleteContent = node.hostedContent.filter(content => {
-            // incomplete
-            if (content.state !== "STAKED" && content.state !== "DISCOVERABLE")
-                return true;
             // completed recently (still show in enqueued videos)
-            if (recentlyHostedContentIds.indexOf(content.id) > -1) return true;
-            return false;
+            if (
+                content.state === "DISCOVERABLE" &&
+                recentlyHostedContentIds.indexOf(content.id) === -1
+            )
+                return false;
+            return true;
         });
         return incompleteContent.length > 0 ? (
             <div className="DownloadsList">
