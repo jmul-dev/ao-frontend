@@ -37,7 +37,7 @@ class UserContentListing extends Component {
         if (!ethAddress) return this._renderPlaceholderContentListing();
         const { error, node } = this.props.query;
         if (!node) return null; // TODO: loading
-        if (error) return this._renderErrorState();
+        if (error && !node) return this._renderErrorState();
         const contentList =
             filter === "uploaded" ? node.stakedContent : node.hostedContent;
         if (!contentList || contentList.length === 0)
