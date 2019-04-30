@@ -28,7 +28,7 @@ const snackbarStyles = ({ palette, spacing }) => ({
         maxWidth: "100%",
         borderRadius: 0,
         justifyContent: "center",
-        flexWrap: "no-wrap"
+        flexWrap: "nowrap"
     },
     action: {
         marginLeft: "initial"

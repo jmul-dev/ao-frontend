@@ -10,6 +10,7 @@ const userContent = gql(`
     query($inputs: UserContentInputs!) {
         node {
             id,
+            ethAddress,
             stakedContent(inputs: $inputs) {
                 ${ContentFields}
                 metadataDatStats {
