@@ -154,7 +154,11 @@ export const getRegisteredNameByEthAddress = ethAddress => {
         });
     };
 };
-export const registerNameUnderEthAddress = ({ name, ethAddress }) => {
+export const registerNameUnderEthAddress = ({
+    name,
+    ethAddress,
+    localPublicKey
+}) => {
     return (dispatch, getState) => {
         const { contracts } = getState();
         dispatch({
@@ -164,13 +168,20 @@ export const registerNameUnderEthAddress = ({ name, ethAddress }) => {
         const validUsername = /^[a-zA-Z0-9_-]{3,20}$/.test(name);
         console.log(validUsername, name);
         if (!validUsername) {
-            dispatch({
+            return dispatch({
                 type: AO_NAME_REGISTRATION_TRANSACTION.ERROR,
                 payload: new Error(
                     `validation requirements: 3-20 characters, no spaces, hyphen and underscores allowed`
                 )
             });
-            return null;
+        }
+        if (!localPublicKey) {
+            return dispatch({
+                type: AO_NAME_REGISTRATION_TRANSACTION.ERROR,
+                payload: new Error(
+                    `a local public key is required for name registration`
+                )
+            });
         }
         // 1. Check that the name does not exist already
         contracts.nameTAOLookup.isExist(name, function(err, doesExist) {
@@ -193,6 +204,7 @@ export const registerNameUnderEthAddress = ({ name, ethAddress }) => {
                     "",
                     "",
                     "",
+                    localPublicKey,
                     {
                         from: ethAddress
                     },
