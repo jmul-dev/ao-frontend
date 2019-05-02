@@ -11,7 +11,7 @@ const mapStateToProps = store => {
     return {
         ethNetworkId: store.app.ethNetworkId,
         ethAddress: store.app.ethAddress,
-        aoNameId: store.app.aoName ? store.app.aoName.id : undefined,
+        aoNameId: store.app.aoName ? store.app.aoName.nameId : undefined,
         coreConnected: store.app.states[APP_STATES.CORE_CONNECTED]
     };
 };

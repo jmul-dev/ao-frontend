@@ -55,7 +55,7 @@ class AccountContentViewWithQuery extends PureComponent {
         const { userContentQuery } = this.props;
         if (userContentQuery.error) {
             return (
-                <Typography>{`An error occured while fetching your video: ${
+                <Typography>{`An error occured while fetching your content: ${
                     userContentQuery.error.message
                 }`}</Typography>
             );
