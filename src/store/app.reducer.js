@@ -10,6 +10,9 @@ import {
     waitForTransactionReceipt
 } from "./contracts.reducer";
 import { triggerMetamaskPopupWithinElectron } from "../utils/electron";
+import { client } from "../index.js";
+import gql from "graphql-tag";
+import { addNotification } from "../modules/notifications/reducers/notifications.reducer";
 
 // Constants
 export const WEB3_CONNECTED = "WEB3_CONNECTED";
@@ -171,6 +174,44 @@ export const getRegisteredNameByEthAddress = (
                         }
                         resolve(aoName);
                     });
+
+                    const { node } = client.readQuery({
+                        query: gql(`
+                            query {
+                                node {
+                                    publicAddress
+                                }
+                            }
+                        `)
+                    });
+                    if (node && node.publicAddress) {
+                        const localPublicAddress = node.publicAddress;
+                        // Check if localPublicKey is registered to this user
+                        contracts.namePublicKey.isNameWriterKey(
+                            nameId,
+                            localPublicAddress,
+                            (err, isValid) => {
+                                if (err) {
+                                    console.error(err);
+                                    return;
+                                } else if (!isValid) {
+                                    dispatch(
+                                        addNotification({
+                                            message: `Local public key mismatch (TODO, add writer key form)`,
+                                            variant: "error",
+                                            action: "dismiss"
+                                        })
+                                    );
+                                }
+                            }
+                        );
+                        // contracts.namePublicKey.getWriterKey(nameId, function(
+                        //     err,
+                        //     result
+                        // ) {
+                        //     console.log(err, result);
+                        // });
+                    }
                 }
             });
         });

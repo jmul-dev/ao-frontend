@@ -12,6 +12,7 @@ import AOIonLot from "ao-contracts/build/contracts/AOIonLot.json";
 import AOPurchaseReceipt from "ao-contracts/build/contracts/AOPurchaseReceipt.json";
 import NameFactory from "ao-contracts/build/contracts/NameFactory.json";
 import NameTAOLookup from "ao-contracts/build/contracts/NameTAOLookup.json";
+import NamePublicKey from "ao-contracts/build/contracts/NamePublicKey.json";
 
 import debounce from "debounce";
 import { APP_STATES, updateAppState, getNetworkName } from "./app.reducer";
@@ -76,7 +77,8 @@ export const initializeContracts = networkId => {
                 AOIonLot,
                 AOPurchaseReceipt,
                 NameFactory,
-                NameTAOLookup
+                NameTAOLookup,
+                NamePublicKey
             ];
             let initializedContracts = contracts.reduce((acc, contract) => {
                 if (!contract.networks[networkId]) {

@@ -23,7 +23,7 @@ const fragmentMatcher = new IntrospectionFragmentMatcher({
     }
 });
 
-const client = new ApolloClient({
+export const client = new ApolloClient({
     link: createUploadLink({
         uri: `${process.env.REACT_APP_AO_CORE_URL}/graphql`
     }),

@@ -109,9 +109,7 @@ export default class App extends Component {
         }
         if (query.state !== "READY" && nextProps.query.state === "READY") {
             // TODO: pull READY from ao-library constants
-            setTimeout(() => {
-                updateAppState(APP_STATES.CORE_READY, true);
-            }, 500); // slight delay to avoid flashing of screens (see BootLayout.js timeout)
+            updateAppState(APP_STATES.CORE_READY, true);
         }
         if (
             query.statistics &&
