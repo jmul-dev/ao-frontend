@@ -42,20 +42,23 @@ class UserContentListing extends Component {
             filter === "uploaded" ? node.stakedContent : node.hostedContent;
         if (!contentList || contentList.length === 0)
             return this._renderNoUserContent();
+
         return (
             <div className="UserContentListing">
                 <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
-                    {contentList.map((content, index) => (
-                        <li key={content.id}>
-                            <Divider />
-                            <UserContentListItem
-                                content={content}
-                                filter={filter}
-                                listingContentType={contentType}
-                                currentUserEthAddress={ethAddress}
-                            />
-                        </li>
-                    ))}
+                    {contentList.map((content, index) =>
+                        content ? (
+                            <li key={content.id}>
+                                <Divider />
+                                <UserContentListItem
+                                    content={content}
+                                    filter={filter}
+                                    listingContentType={contentType}
+                                    currentUserEthAddress={ethAddress}
+                                />
+                            </li>
+                        ) : null
+                    )}
                 </ul>
             </div>
         );

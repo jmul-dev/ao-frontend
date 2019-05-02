@@ -46,6 +46,7 @@ export const setCoreEthNetworkId = coreEthNetworkId => ({
 export const connectToWeb3 = networkId => {
     return (dispatch, getState) => {
         let networkName = getNetworkName(networkId, true);
+        console.log(`connectToWeb3: [${networkId}] ${networkName}`);
         const networkLink = networkName
             ? `https://${networkName}.etherscan.io`
             : `https://etherscan.io`;
@@ -63,14 +64,25 @@ export const connectToWeb3 = networkId => {
                 let { ethAddress } = getState().app;
                 if (accounts && accounts[0] !== ethAddress) {
                     let account = accounts[0];
-                    dispatch({
-                        type: WEB3_ETH_ACCOUNT_CHANGE,
-                        payload: { ethAddress: account }
-                    });
+                    console.log(
+                        `Account change from ${ethAddress} to ${account}`
+                    );
+                    dispatch(getRegisteredNameByEthAddress(account, true))
+                        .then(aoName => {
+                            dispatch({
+                                type: WEB3_ETH_ACCOUNT_CHANGE,
+                                payload: { ethAddress: account, aoName }
+                            });
+                        })
+                        .catch(() => {
+                            dispatch({
+                                type: WEB3_ETH_ACCOUNT_CHANGE,
+                                payload: { ethAddress: account, aoName: null }
+                            });
+                        });
                     if (account) {
                         dispatch(getEthBalanceForAccount(account));
                         dispatch(getTokenBalanceForAccount(account));
-                        dispatch(getRegisteredNameByEthAddress(account));
                     }
                 }
                 // Poll for account change
@@ -106,7 +118,10 @@ export const getNetworkName = (networkId, shortname = false) => {
             return shortname ? "" : `Unkown Network (id:${networkId})`;
     }
 };
-export const getRegisteredNameByEthAddress = ethAddress => {
+export const getRegisteredNameByEthAddress = (
+    ethAddress,
+    preventDispatch = false
+) => {
     return (dispatch, getState) => {
         return new Promise((resolve, reject) => {
             if (!ethAddress)
@@ -124,10 +139,13 @@ export const getRegisteredNameByEthAddress = ethAddress => {
                         ? undefined
                         : result;
                 if (!nameId) {
-                    dispatch({
-                        type: AO_NAME_CHANGE,
-                        payload: undefined
-                    });
+                    if (preventDispatch === false) {
+                        dispatch({
+                            type: AO_NAME_CHANGE,
+                            payload: undefined
+                        });
+                    }
+                    reject(new Error(`nameId not found`));
                 } else {
                     // Fetch the name details (including name)
                     contracts.nameFactory.getName(nameId, function(
@@ -135,26 +153,34 @@ export const getRegisteredNameByEthAddress = ethAddress => {
                         result
                     ) {
                         if (err) return reject(err);
-                        dispatch({
-                            type: AO_NAME_CHANGE,
-                            payload: {
-                                nameId,
-                                name: result[0],
-                                originId: result[1],
-                                datHash: result[2],
-                                database: result[3],
-                                keyValue: result[4],
-                                contentId: result[5],
-                                typeId: result[6]
-                            }
-                        });
+                        const aoName = {
+                            nameId,
+                            name: result[0],
+                            originId: result[1],
+                            datHash: result[2],
+                            database: result[3],
+                            keyValue: result[4],
+                            contentId: result[5],
+                            typeId: result[6]
+                        };
+                        if (preventDispatch === false) {
+                            dispatch({
+                                type: AO_NAME_CHANGE,
+                                payload: aoName
+                            });
+                        }
+                        resolve(aoName);
                     });
                 }
             });
         });
     };
 };
-export const registerNameUnderEthAddress = ({ name, ethAddress }) => {
+export const registerNameUnderEthAddress = ({
+    name,
+    ethAddress,
+    localPublicAddress
+}) => {
     return (dispatch, getState) => {
         const { contracts } = getState();
         dispatch({
@@ -162,15 +188,22 @@ export const registerNameUnderEthAddress = ({ name, ethAddress }) => {
         });
         // 0. name validation
         const validUsername = /^[a-zA-Z0-9_-]{3,20}$/.test(name);
-        console.log(validUsername, name);
+        console.log(validUsername, name, localPublicAddress);
         if (!validUsername) {
-            dispatch({
+            return dispatch({
                 type: AO_NAME_REGISTRATION_TRANSACTION.ERROR,
                 payload: new Error(
                     `validation requirements: 3-20 characters, no spaces, hyphen and underscores allowed`
                 )
             });
-            return null;
+        }
+        if (!localPublicAddress) {
+            return dispatch({
+                type: AO_NAME_REGISTRATION_TRANSACTION.ERROR,
+                payload: new Error(
+                    `a local public key is required for name registration`
+                )
+            });
         }
         // 1. Check that the name does not exist already
         contracts.nameTAOLookup.isExist(name, function(err, doesExist) {
@@ -193,6 +226,7 @@ export const registerNameUnderEthAddress = ({ name, ethAddress }) => {
                     "",
                     "",
                     "",
+                    localPublicAddress,
                     {
                         from: ethAddress
                     },
@@ -308,7 +342,8 @@ export default function appReducer(state = initialState, action) {
         case WEB3_ETH_ACCOUNT_CHANGE:
             return {
                 ...state,
-                ethAddress: action.payload.ethAddress
+                ethAddress: action.payload.ethAddress,
+                aoName: action.payload.aoName
             };
         case UPDATE_APP_STATE:
             return {

@@ -11,6 +11,7 @@ const ContentFields = `
     nodeEthAddress,
     creatorNodePublicKey,
     creatorEthAddress,
+    creatorNameId,
     taoId,
     purchaseReceiptId,
     contentType,

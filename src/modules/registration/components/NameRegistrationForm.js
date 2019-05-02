@@ -49,6 +49,11 @@ class NameRegistrationForm extends Component {
             result: PropTypes.any,
             error: PropTypes.any
         }).isRequired,
+        identity: PropTypes.shape({
+            node: PropTypes.shape({
+                publicKey: PropTypes.string.isRequired
+            }).isRequired
+        }).isRequired,
         // withUserIdentifiers
         ethAddress: PropTypes.string.isRequired,
         aoName: PropTypes.shape({
@@ -72,6 +77,7 @@ class NameRegistrationForm extends Component {
         // Note: input validation occurs in registerNameUnderEthAddress
         this.props.registerNameUnderEthAddress({
             ethAddress: this.props.ethAddress,
+            localPublicAddress: this.props.identity.node.publicAddress,
             name: nameInput
         });
     };

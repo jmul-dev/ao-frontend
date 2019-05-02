@@ -49,6 +49,7 @@ export default compose(
         name: "query",
         options: ({ contentType }) => ({
             pollInterval: 2000,
+            errorPolicy: "all",
             variables: {
                 inputs: {
                     contentType: contentType
