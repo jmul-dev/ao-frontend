@@ -77,7 +77,7 @@ class NameRegistrationForm extends Component {
         // Note: input validation occurs in registerNameUnderEthAddress
         this.props.registerNameUnderEthAddress({
             ethAddress: this.props.ethAddress,
-            localPublicKey: this.props.identity.publicKey,
+            localPublicAddress: this.props.identity.node.publicAddress,
             name: nameInput
         });
     };

@@ -14,7 +14,7 @@ const mapDispatchToProps = {
 const identityQuery = gql(`
     query {
         node {
-            publicKey
+            publicAddress
         }
     }
 `);

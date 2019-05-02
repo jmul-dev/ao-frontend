@@ -66,7 +66,6 @@ export default compose(
             variables: {
                 inputs: {
                     ...props.form,
-                    ethAddress: props.ethAddress,
                     pricingOption: undefined, // remove from form inputs
                     stakeTokenType: undefined, // remove from form inputs
                     networkTokensRequired: undefined, // remove from form inputs
