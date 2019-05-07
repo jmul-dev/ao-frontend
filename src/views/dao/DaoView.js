@@ -5,14 +5,14 @@ import { compose } from "react-apollo";
 import { Link } from "react-router-dom";
 import AccountRequired from "../../modules/account/components/AccountRequired";
 import withUserIdentifiers from "../../modules/account/containers/withUserIdentifiers";
-import ContentCard from "../../modules/content/components/ContentCard";
 import WhitepaperLink from "../../modules/ico/components/WhitepaperLink";
 import View from "../View";
 import NetworkTaoContentListing from "./NetworkTaoContentListing";
 import withNetworkTaoContent from "./withNetworkTaoContent";
-import withTheAoDappId from "./withTheAoDappId";
+import { PrimaryButton } from "../../theme";
+import LaunchIcon from "@material-ui/icons/Launch";
 
-const DaoViewNoUser = () => (
+const DaoViewNoUser = ({ includeTaoLink = false }) => (
     <React.Fragment>
         <Grid container>
             <Grid item xs={12} md={7}>
@@ -30,40 +30,40 @@ const DaoViewNoUser = () => (
                     <AccountRequired>
                         <div>{/* placeholder */}</div>
                     </AccountRequired>
+                    {includeTaoLink && (
+                        <PrimaryButton
+                            component={Link}
+                            to={`/app/view/daoDapp`}
+                        >
+                            <div
+                                style={{
+                                    display: "flex",
+                                    alignItems: "center"
+                                }}
+                            >
+                                <LaunchIcon style={{ marginRight: 8 }} />
+                                {`View The AO Dapp`}
+                            </div>
+                        </PrimaryButton>
+                    )}
                 </section>
             </Grid>
         </Grid>
     </React.Fragment>
 );
 
-const DaoViewWithUser = compose(
-    withTheAoDappId,
-    withNetworkTaoContent
-)(
-    ({
-        theAoDappId,
-        networkTaoContentQuery: { loading, error, networkContent }
-    }) => {
+const DaoViewWithUser = compose(withNetworkTaoContent)(
+    ({ networkTaoContentQuery: { loading, error, networkContent } }) => {
         if (loading)
             return <Typography variant="body1">{`loading...`}</Typography>;
         if (error && !networkContent)
             return (
                 <Typography variant="body1">{`Error loading content...`}</Typography>
             );
-        const featuredDapp = networkContent.filter(content => {
-            return content.id === theAoDappId;
-        });
         return (
             <React.Fragment>
                 <section style={{ minHeight: 400 }}>
-                    {featuredDapp.length > 0 ? (
-                        <ContentCard
-                            variant="featured"
-                            contentId={featuredDapp[0].id}
-                        />
-                    ) : (
-                        <DaoViewNoUser />
-                    )}
+                    <DaoViewNoUser includeTaoLink={true} />
                 </section>
                 <section>
                     <Typography

@@ -5,6 +5,7 @@ import AccountView from "../../views/account/AccountView";
 import BrowseView from "../../views/browse/BrowseView";
 import ContentView from "../../views/content";
 import DaoView from "../../views/dao/DaoView";
+import DaoDappView from "../../views/dao/DaoDappView";
 import DevelopersView from "../../views/developers/DevelopersView";
 import IcoView from "../../views/ico/IcoView";
 import IngressView from "../../views/ingress/IngressView";
@@ -28,6 +29,7 @@ const ViewRoutes = () => (
             <Route path="/app/view/ingress" component={IngressView} />
             <Route path="/app/view/dao" component={DaoView} />
             <Route path="/app/view/content" component={ContentView} />
+            <Route path="/app/view/daoDapp" component={DaoDappView} />
         </Switch>
     </div>
 );
