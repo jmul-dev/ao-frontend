@@ -1,6 +1,5 @@
 import BigNumber from "bignumber.js";
 import { getApolloClient } from "../../../index";
-import EthCrypto from "eth-crypto";
 import gql from "graphql-tag";
 import { waitForTransactionReceipt } from "../../../store/contracts.reducer";
 import { triggerMetamaskPopupWithinElectron } from "../../../utils/electron";
@@ -17,7 +16,9 @@ export const WRITER_KEY_ADD_TRANSACTION = Object.freeze({
 
 const localKeySignatureQuery = gql(`
     query signature($nameId: ID!, $nonce: String!) {
-        writerKeySignature(nameId: $nameId, nonce: $nonce)
+        writerKeySignature(nameId: $nameId, nonce: $nonce) {
+            v, r, s
+        }
     }
 `);
 
@@ -77,24 +78,15 @@ export const addWriterKey = localPublicAddress => {
                                     )
                                 });
                             } else {
-                                const vrs = EthCrypto.vrs.fromString(
-                                    data.writerKeySignature
-                                );
-                                console.log(
-                                    vrs,
-                                    nameId,
-                                    localPublicAddress,
-                                    nonce
-                                );
                                 // 4. Finally, submit key
                                 triggerMetamaskPopupWithinElectron(getState);
                                 contracts.namePublicKey.addSetWriterKey(
                                     nameId,
                                     localPublicAddress,
                                     nonce.plus(1).toNumber(),
-                                    vrs.v,
-                                    vrs.r,
-                                    vrs.s,
+                                    data.writerKeySignature.v,
+                                    data.writerKeySignature.r,
+                                    data.writerKeySignature.s,
                                     { from: app.ethAddress },
                                     (err, transactionHash) => {
                                         if (err) {

@@ -357,31 +357,31 @@ const initialState = {
         error: undefined
     }
 };
-export type AppReducerType = {
-    state: {
-        [key: string]: boolean
-    },
-    ethNetworkId?: string | number,
-    ethNetworkLink?: string,
-    ethAddress?: string,
-    aoName?: {
-        id: string,
-        name: string,
-        originId: string,
-        datHash: string,
-        database: string,
-        keyValue: string,
-        contentId: string,
-        typeId: string
-    },
-    aoNameRegistrationState: {
-        initialized: boolean,
-        transactionHash: string,
-        result: any,
-        error: any
-    },
-    coreEthNetworkId?: string
-};
+// export type AppReducerType = {
+//     state: {
+//         [key: string]: boolean
+//     },
+//     ethNetworkId?: string | number,
+//     ethNetworkLink?: string,
+//     ethAddress?: string,
+//     aoName?: {
+//         id: string,
+//         name: string,
+//         originId: string,
+//         datHash: string,
+//         database: string,
+//         keyValue: string,
+//         contentId: string,
+//         typeId: string
+//     },
+//     aoNameRegistrationState: {
+//         initialized: boolean,
+//         transactionHash: string,
+//         result: any,
+//         error: any
+//     },
+//     coreEthNetworkId?: string
+// };
 
 // Reducer
 export default function appReducer(state = initialState, action) {
