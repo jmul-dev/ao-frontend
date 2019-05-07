@@ -9,6 +9,7 @@ import DevelopersView from "../../views/developers/DevelopersView";
 import IcoView from "../../views/ico/IcoView";
 import IngressView from "../../views/ingress/IngressView";
 import NameRegistrationView from "../../views/registration/NameRegistrationView";
+import WriterView from "../../views/writer/WriterView";
 import SettingsView from "../../views/settings/SettingsView";
 import UploadView from "../../views/upload/UploadView";
 import WalletView from "../../views/wallet/WalletView";
@@ -63,6 +64,8 @@ const MainLayout = () => (
             path="/app/registration"
             component={NameRegistrationView}
         />
+        {/* Writer form (modal overlay) */}
+        <Route exact path="/app/writerMismatch" component={WriterView} />
     </main>
 );
 export default MainLayout;

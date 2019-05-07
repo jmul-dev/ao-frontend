@@ -10,9 +10,14 @@ import {
     waitForTransactionReceipt
 } from "./contracts.reducer";
 import { triggerMetamaskPopupWithinElectron } from "../utils/electron";
-import { client } from "../index.js";
+import { getApolloClient } from "../index.js";
 import gql from "graphql-tag";
-import { addNotification } from "../modules/notifications/reducers/notifications.reducer";
+import {
+    addNotification,
+    dismissNotification
+} from "../modules/notifications/reducers/notifications.reducer";
+import { push } from "react-router-redux";
+import NavigateIcon from "@material-ui/icons/NavigateNext";
 
 // Constants
 export const WEB3_CONNECTED = "WEB3_CONNECTED";
@@ -175,7 +180,7 @@ export const getRegisteredNameByEthAddress = (
                         resolve(aoName);
                     });
 
-                    const { node } = client.readQuery({
+                    const { node } = getApolloClient().readQuery({
                         query: gql(`
                             query {
                                 node {
@@ -195,11 +200,22 @@ export const getRegisteredNameByEthAddress = (
                                     console.error(err);
                                     return;
                                 } else if (!isValid) {
-                                    dispatch(
+                                    let notificationId = dispatch(
                                         addNotification({
-                                            message: `Local public key mismatch (TODO, add writer key form)`,
-                                            variant: "error",
-                                            action: "dismiss"
+                                            message: `Local public key mismatch. Submit your signature to continue using the AO network.`,
+                                            variant: "warning",
+                                            // hideVarientIcon: true,
+                                            action: () => {
+                                                dispatch(
+                                                    dismissNotification(
+                                                        notificationId
+                                                    )
+                                                );
+                                                dispatch(
+                                                    push(`/app/writerMismatch`)
+                                                );
+                                            },
+                                            ActionIcon: NavigateIcon
                                         })
                                     );
                                 }
