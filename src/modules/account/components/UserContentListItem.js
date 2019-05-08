@@ -114,7 +114,7 @@ class ContentListItem extends Component {
                         variant="caption"
                         className={classes.contentIdCaption}
                     >
-                        {content.id}
+                        {`dat://${content.id}`}
                     </Typography>
                     <div className={classes.statsContainer}>
                         <UserContentStats
@@ -149,7 +149,10 @@ class ContentListItem extends Component {
                         <Typography variant="subheading" component="div">
                             {content.title}
                         </Typography>
-                        <Typography variant="caption">{content.id}</Typography>
+                        <Typography
+                            variant="caption"
+                            className={classes.contentIdCaption}
+                        >{`dat://${content.id}`}</Typography>
                         <ContentPurchaseAction
                             contentRef={this._watchNowRef}
                             content={content}
@@ -279,7 +282,8 @@ const styles = ({ spacing }) => ({
         paddingLeft: spacing.unit * 5
     },
     contentIdCaption: {
-        marginBottom: spacing.unit * 2
+        marginBottom: spacing.unit * 2,
+        color: "#777777"
     },
     statsContainer: {
         width: "100%",
