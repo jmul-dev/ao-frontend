@@ -13,6 +13,7 @@ const DatStatsFragment = `
         peersComplete,
         complete,
         joinedNetwork,
+        connected
     }
 `;
 export default DatStatsFragment;

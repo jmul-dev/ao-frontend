@@ -23,6 +23,9 @@ const styles = ({ palette }) => ({
         fontFamily: "courier",
         lineHeight: `0.8125rem`
     },
+    highlighted: {
+        color: palette.primary.main
+    },
     multiplier: {
         color: palette.primary.main,
         marginLeft: 4
@@ -56,6 +59,9 @@ class UserContentStats extends PureComponent {
             peerConnectionSpeed
         } = this.props;
         const transactions = video.transactions || {};
+        let peerStatClasses = [classes.stat];
+        if (video.metadataDatStats && video.metadataDatStats.connected)
+            peerStatClasses.push(classes.highlighted);
         return (
             <div
                 className={classes.root}
@@ -75,9 +81,8 @@ class UserContentStats extends PureComponent {
                         {"peers"}
                     </Typography>
                     <Typography
-                        className={classes.stat}
+                        className={peerStatClasses}
                         variant="body2"
-                        color="textSecondary"
                         component="div"
                     >
                         <DatStats
