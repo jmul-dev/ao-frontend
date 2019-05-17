@@ -695,13 +695,8 @@ class ContentPurchaseActionComponent extends Component {
             downloadStats.userContent &&
             downloadStats.userContent.fileDatStats
         ) {
-            const {
-                downloaded = 0,
-                length = 1
-            } = downloadStats.userContent.fileDatStats;
             childFuncParams["downloadProgress"] = (
-                (downloaded / length) *
-                100.0
+                downloadStats.userContent.fileDatStats.progress * 100.0
             ).toFixed(0);
         }
         return children(childFuncParams);

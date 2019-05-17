@@ -1,19 +1,20 @@
 const DatStatsFragment = `
     fragment DatStatsFragment on DatStats {
-        files,
-        byteLength,
-        length,
-        downloaded,
+        key,
+        writer,
         version,
+        files,
+        blocksDownloaded,
+        blocksLength,
+        byteLength,
+        progress,
+        connected,
         downloadSpeed,
-        uploadSpeed,
         downloadTotal,
+        uploadSpeed,
         uploadTotal,
         peersTotal,
         peersComplete,
-        complete,
-        joinedNetwork,
-        connected
     }
 `;
 export default DatStatsFragment;
