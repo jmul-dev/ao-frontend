@@ -196,6 +196,9 @@ export const getRegisteredNameByEthAddress = (
                             nameId,
                             localPublicAddress,
                             (err, isValid) => {
+                                console.log(`local key name association check`);
+                                console.log(`\tlocal: ${localPublicAddress}`);
+                                console.log(`\tisAssociated: ${isValid}`);
                                 if (err) {
                                     console.error(err);
                                     return;
