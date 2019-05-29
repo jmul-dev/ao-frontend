@@ -115,11 +115,13 @@ class UploadFormContent extends Component {
                                 value={form.title}
                                 onChange={this._handleTextInput("title")}
                                 label="content title"
+                                helperText="64 character limit"
                             />
                             <TextInput
                                 value={form.description}
                                 onChange={this._handleTextInput("description")}
                                 label="description"
+                                helperText="1024 character limit"
                                 multiline
                                 rows={4}
                             />

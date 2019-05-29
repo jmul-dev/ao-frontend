@@ -180,54 +180,67 @@ export const getRegisteredNameByEthAddress = (
                         resolve(aoName);
                     });
 
-                    const { node } = getApolloClient().readQuery({
-                        query: gql(`
-                            query {
-                                node {
-                                    publicAddress
+                    // Sry, account change triggers graphql.register mutation which may not update apollo cache immediatly,
+                    // this is quickest hack to wait for that
+                    setTimeout(() => {
+                        const { node } = getApolloClient().readQuery({
+                            query: gql(`
+                                query {
+                                    node {
+                                        publicAddress
+                                    }
                                 }
-                            }
-                        `)
-                    });
-                    if (node && node.publicAddress) {
-                        const localPublicAddress = node.publicAddress;
-                        // Check if localPublicKey is registered to this user
-                        contracts.namePublicKey.isNameWriterKey(
-                            nameId,
-                            localPublicAddress,
-                            (err, isValid) => {
-                                if (err) {
-                                    console.error(err);
-                                    return;
-                                } else if (!isValid) {
-                                    let notificationId = dispatch(
-                                        addNotification({
-                                            message: `Local public key mismatch. Submit your signature to continue using the AO network.`,
-                                            variant: "warning",
-                                            // hideVarientIcon: true,
-                                            action: () => {
-                                                dispatch(
-                                                    dismissNotification(
-                                                        notificationId
-                                                    )
-                                                );
-                                                dispatch(
-                                                    push(`/app/writerMismatch`)
-                                                );
-                                            },
-                                            ActionIcon: NavigateIcon
-                                        })
+                            `)
+                        });
+                        if (node && node.publicAddress) {
+                            const localPublicAddress = node.publicAddress;
+                            // Check if localPublicKey is registered to this user
+                            contracts.namePublicKey.isNameWriterKey(
+                                nameId,
+                                localPublicAddress,
+                                (err, isValid) => {
+                                    console.log(
+                                        `local key name association check`
                                     );
+                                    console.log(
+                                        `\tlocal: ${localPublicAddress}`
+                                    );
+                                    console.log(`\tisAssociated: ${isValid}`);
+                                    if (err) {
+                                        console.error(err);
+                                        return;
+                                    } else if (!isValid) {
+                                        let notificationId = dispatch(
+                                            addNotification({
+                                                message: `Local public key mismatch. Submit your signature to continue using the AO network.`,
+                                                variant: "warning",
+                                                // hideVarientIcon: true,
+                                                action: () => {
+                                                    dispatch(
+                                                        dismissNotification(
+                                                            notificationId
+                                                        )
+                                                    );
+                                                    dispatch(
+                                                        push(
+                                                            `/app/writerMismatch`
+                                                        )
+                                                    );
+                                                },
+                                                ActionIcon: NavigateIcon
+                                            })
+                                        );
+                                    }
                                 }
-                            }
-                        );
-                        // contracts.namePublicKey.getWriterKey(nameId, function(
-                        //     err,
-                        //     result
-                        // ) {
-                        //     console.log(err, result);
-                        // });
-                    }
+                            );
+                            // contracts.namePublicKey.getWriterKey(nameId, function(
+                            //     err,
+                            //     result
+                            // ) {
+                            //     console.log(err, result);
+                            // });
+                        }
+                    }, 1000);
                 }
             });
         });
