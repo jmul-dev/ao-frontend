@@ -183,7 +183,7 @@ export const getRegisteredNameByEthAddress = (
                     // Sry, account change triggers graphql.register mutation which may not update apollo cache immediatly,
                     // this is quickest hack to wait for that
                     setTimeout(() => {
-                        const { node } = getApolloClient().readQuery({
+                        const { node } = getApolloClient().query({
                             query: gql(`
                                 query {
                                     node {
