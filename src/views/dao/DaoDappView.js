@@ -34,7 +34,7 @@ class DaoDappView extends PureComponent {
                 AO_CONSTANTS.IPC.DAPP_WINDOW_CLOSED,
                 this._onClose
             );
-            window.chrome.ipcRenderer.send(AO_CONSTANTS.IPC.CLOSE_DAPP_WINDOW);
+            window.chrome.ipcRenderer.send(AO_CONSTANTS.IPC.CLOSE_DAPP_WINDOW, {dappKey: 'ao-tao-frontend'});
         }
     }
     componentDidUpdate(prevProps) {
