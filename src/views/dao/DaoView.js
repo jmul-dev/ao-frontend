@@ -54,7 +54,7 @@ const DaoViewNoUser = ({ includeTaoLink = false }) => (
 
 const DaoViewWithUser = compose(withNetworkTaoContent)(
     ({ networkTaoContentQuery: { loading, error, networkContent } }) => {
-        if (loading)
+        if (loading && !networkContent)
             return <Typography variant="body1">{`loading...`}</Typography>;
         if (error && !networkContent)
             return (

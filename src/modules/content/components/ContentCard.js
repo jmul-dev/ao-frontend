@@ -11,6 +11,7 @@ import {
 } from "../../video/components/ContentPurchaseActions";
 import withContentById from "../containers/withContentById";
 import TaoContentVerificationState from "./TaoContentVerificationState";
+import NameTaoPosition from "./NameTaoPosition";
 
 /**
  * ContentCard
@@ -36,6 +37,7 @@ import TaoContentVerificationState from "./TaoContentVerificationState";
 const ContentCard = ({
     // @ts-ignore
     contentId,
+    nameTaoPosition, // optional for TAO content type
     variant = "default",
     ethAddress,
     query: { loading, error, userContent, networkContent }
@@ -58,6 +60,7 @@ const ContentCard = ({
                 <ContentCardDefault
                     content={contentForActions}
                     ethAddress={ethAddress}
+                    nameTaoPosition={nameTaoPosition}
                 />
             );
     }
@@ -176,7 +179,7 @@ const defaultStyles = () => ({
 });
 
 const ContentCardDefault = compose(withStyles(defaultStyles))(
-    ({ content, ethAddress, classes }) => {
+    ({ content, nameTaoPosition, ethAddress, classes }) => {
         let isOffline = content.recentlySeenHostsCount < 1;
         if (content.nodeEthAddress === ethAddress) {
             isOffline = false;
@@ -214,6 +217,9 @@ const ContentCardDefault = compose(withStyles(defaultStyles))(
                             <div style={{ marginBottom: 8 }}>
                                 <TaoContentVerificationState
                                     contentId={content.id}
+                                />
+                                <NameTaoPosition
+                                    nameTaoPosition={nameTaoPosition}
                                 />
                             </div>
                         )}

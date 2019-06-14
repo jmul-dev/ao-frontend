@@ -6,6 +6,7 @@ export const ACCOUNT_VIDEO_LISTING_ORDERING = "ACCOUNT_VIDEO_LISTING_ORDERING";
 export const UPDATE_CONTENT_METRICS_BY_STAKE_ID =
     "UPDATE_CONTENT_METRICS_BY_STAKE_ID";
 export const UPDATE_TAO_CONTENT_STATE = "UPDATE_TAO_CONTENT_STATE";
+export const UPDATE_NAME_TAO_POSITION = "UPDATE_NAME_TAO_POSITION";
 export const ACCOUNT_CONTENT_TYPE_FILTER = "ACCOUNT_CONTENT_TYPE_FILTER";
 export const UPDATE_CONTENT_HOST_EARNINGS = "UPDATE_CONTENT_HOST_EARNINGS";
 export const MEDIA_TYPES = [
@@ -122,6 +123,27 @@ export const getTaoContentState = contentId => {
         });
     };
 };
+export const getNameTaoPosition = taoId => {
+    return (dispatch, getState) => {
+        const { contracts } = getState();
+        contracts.nameTAOPosition.getPositionById(taoId, function(err, result) {
+            if (!err) {
+                dispatch({
+                    type: UPDATE_NAME_TAO_POSITION,
+                    payload: {
+                        taoId,
+                        advocateName: result[0],
+                        advocateId: result[1],
+                        listenerName: result[2],
+                        listenerId: result[3],
+                        speakerName: result[4],
+                        speakerId: result[5]
+                    }
+                });
+            }
+        });
+    };
+};
 
 // State
 const initialState = {
@@ -129,7 +151,8 @@ const initialState = {
     videoListingOrdering: "recent", // recent || earned || staked
     contentMetrics: {}, // stakeId => { metrics }
     contentHostEarnings: {}, // contentHostId => BigNumber
-    taoContentState: {} // contentId
+    taoContentState: {}, // contentId
+    nameTaoPosition: {} // taoId => { advocateName, speakerName, listenerName }
 };
 
 // Reducer
@@ -167,6 +190,14 @@ export default function accountReducer(state = initialState, action) {
                 taoContentState: {
                     ...state.taoContentState,
                     [action.payload.contentId]: action.payload.taoContentState
+                }
+            };
+        case UPDATE_NAME_TAO_POSITION:
+            return {
+                ...state,
+                nameTaoPosition: {
+                    ...state.nameTaoPosition,
+                    [action.payload.taoId]: action.payload
                 }
             };
         default:
