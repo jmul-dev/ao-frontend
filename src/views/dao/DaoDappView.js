@@ -6,9 +6,14 @@ import { AO_CONSTANTS } from "ao-library";
 import PropTypes from "prop-types";
 import React, { PureComponent } from "react";
 import View from "../View";
+import { compose } from "react-apollo";
+import { connect } from "react-redux";
+import { setDaoDappLaunched } from "../../store/app.reducer";
 
 class DaoDappView extends PureComponent {
     static propTypes = {
+        daoDappLaunched: PropTypes.bool,
+        setDaoDappLaunched: PropTypes.func.isRequired,
         // react-router
         history: PropTypes.any
     };
@@ -22,6 +27,7 @@ class DaoDappView extends PureComponent {
     componentDidMount() {
         if (this.state.isElectron) {
             this._openDappWindow();
+            if (!this.props.daoDappLaunched) this.props.setDaoDappLaunched();
             window.chrome.ipcRenderer.on(
                 AO_CONSTANTS.IPC.DAPP_WINDOW_CLOSED,
                 this._onClose
@@ -34,7 +40,9 @@ class DaoDappView extends PureComponent {
                 AO_CONSTANTS.IPC.DAPP_WINDOW_CLOSED,
                 this._onClose
             );
-            window.chrome.ipcRenderer.send(AO_CONSTANTS.IPC.CLOSE_DAPP_WINDOW, {dappKey: 'ao-tao-frontend'});
+            window.chrome.ipcRenderer.send(AO_CONSTANTS.IPC.CLOSE_DAPP_WINDOW, {
+                dappKey: "ao-tao-frontend"
+            });
         }
     }
     componentDidUpdate(prevProps) {
@@ -108,4 +116,15 @@ const styles = ({ palette }) => ({
     }
 });
 
-export default withStyles(styles, { withTheme: true })(DaoDappView);
+const mapDispatchToProps = { setDaoDappLaunched };
+const mapStateToProps = state => ({
+    daoDappLaunched: state.app.daoDappLaunched
+});
+
+export default compose(
+    connect(
+        mapStateToProps,
+        mapDispatchToProps
+    ),
+    withStyles(styles, { withTheme: true })
+)(DaoDappView);

@@ -41,11 +41,15 @@ export const AO_NAME_REGISTRATION_TRANSACTION = Object.freeze({
     ERROR: "AO_NAME_REGISTRATION_TRANSACTION.ERROR",
     RESET: "AO_NAME_REGISTRATION_TRANSACTION.RESET"
 });
+export const SET_DAO_DAPP_LAUNCHED = "SET_DAO_DAPP_LAUNCHED";
 
 // Actions
 export const updateAppState = (key, value) => ({
     type: UPDATE_APP_STATE,
     payload: { key, value }
+});
+export const setDaoDappLaunched = () => ({
+    type: SET_DAO_DAPP_LAUNCHED
 });
 export const setCoreEthNetworkId = coreEthNetworkId => ({
     type: SET_CORE_ETHEREUM_NETWORK_ID,
@@ -368,7 +372,8 @@ const initialState = {
         transactionHash: undefined,
         result: undefined,
         error: undefined
-    }
+    },
+    daoDappLaunched: false
 };
 // export type AppReducerType = {
 //     state: {
@@ -470,6 +475,11 @@ export default function appReducer(state = initialState, action) {
                 aoNameRegistrationState: {
                     ...initialState.aoNameRegistrationState
                 }
+            };
+        case SET_DAO_DAPP_LAUNCHED:
+            return {
+                ...state,
+                daoDappLaunched: true
             };
         default:
             return state;

@@ -35,6 +35,7 @@ const MainNavigation = ({
     overlayViewsActive,
     primordialSaleEnded,
     ingressTabDisabled,
+    daoDappLaunched,
     classes
 }) => (
     <nav className={classnames("MainNavigation", { offcanvas })}>
@@ -264,6 +265,26 @@ const MainNavigation = ({
                         </Typography>
                     </NavLink>
                 </li>
+                {daoDappLaunched && (
+                    <li className={classes.navListItem}>
+                        <NavLink
+                            className={classes.navListItemLink}
+                            to="/app/view/daoDapp"
+                        >
+                            <img
+                                src={navIconDaoSrc}
+                                className={classes.navLinkIcon}
+                                alt="The AO Dapp"
+                            />
+                            <Typography
+                                variant="caption"
+                                className={classes.navLinkCopy}
+                            >
+                                {"The AO DApp"}
+                            </Typography>
+                        </NavLink>
+                    </li>
+                )}
                 <li className={classes.navListItem}>
                     <NavLink
                         className={classes.navListItemLink}
@@ -372,7 +393,8 @@ const mapStateToProps = store => {
         isElectron: store.electron.isElectron,
         ethAddress: store.app.ethAddress,
         primordialSaleEnded: store.ico.primordialSaleEnded,
-        ingressTabDisabled: !store.contracts.settings.ingressUrl
+        ingressTabDisabled: !store.contracts.settings.ingressUrl,
+        daoDappLaunched: store.app.daoDappLaunched
     };
 };
 
