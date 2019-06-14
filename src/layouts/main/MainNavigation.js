@@ -276,13 +276,14 @@ const MainNavigation = ({
                             <img
                                 src={navIconDaoDappSrc}
                                 className={classes.navLinkIcon}
+                                style={{ transform: `translateY(-4px)` }}
                                 alt="The AO Dapp"
                             />
                             <Typography
                                 variant="caption"
                                 className={classes.navLinkCopy}
                             >
-                                {"DApp"}
+                                {"DAPP"}
                             </Typography>
                         </NavLink>
                     </li>
