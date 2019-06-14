@@ -14,6 +14,7 @@ import navIconBrowseSrc from "../../assets/nav-icon-browse.svg";
 import navIconDevelopersSrc from "../../assets/nav-icon-developers.svg";
 import navIconIngressSrc from "../../assets/nav-icon-ingress.svg";
 import navIconMetamaskSrc from "../../assets/nav-icon-metamask.svg";
+import navIconDaoDappSrc from "../../assets/nav-icon-dao-dapp.svg";
 import navIconMyVideosSrc from "../../assets/nav-icon-my-videos.svg";
 import navIconSettingsSrc from "../../assets/nav-icon-settings.svg";
 import navIconTokenExchangeSrc from "../../assets/nav-icon-token-exchange.svg";
@@ -268,11 +269,12 @@ const MainNavigation = ({
                 {daoDappLaunched && (
                     <li className={classes.navListItem}>
                         <NavLink
+                            style={{ paddingLeft: 24 }}
                             className={classes.navListItemLink}
                             to="/app/view/daoDapp"
                         >
                             <img
-                                src={navIconDaoSrc}
+                                src={navIconDaoDappSrc}
                                 className={classes.navLinkIcon}
                                 alt="The AO Dapp"
                             />
@@ -280,7 +282,7 @@ const MainNavigation = ({
                                 variant="caption"
                                 className={classes.navLinkCopy}
                             >
-                                {"The AO DApp"}
+                                {"DApp"}
                             </Typography>
                         </NavLink>
                     </li>
