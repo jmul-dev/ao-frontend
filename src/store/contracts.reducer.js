@@ -167,53 +167,142 @@ const fetchSettingsFromContract = () => {
         // 1. We have to fetch the settings TAO id before fetching the actual settings
         contracts.aoIon.settingTAOId((err, settingsTAOId) => {
             console.log(`settingsTAOId:`, settingsTAOId);
-            let ingressUrlPromise = new Promise((resolve, reject) => {
-                contracts.aoSetting.getSettingValuesByTAOName(
-                    settingsTAOId,
-                    "ingressUrl",
-                    function(err, settingsValue) {
-                        if (err) {
-                            reject(err);
-                        } else {
-                            resolve(settingsValue[4]);
+
+            let settingsPromises = [];
+            settingsPromises.push(
+                new Promise((resolve, reject) => {
+                    contracts.aoSetting.getSettingValuesByTAOName(
+                        settingsTAOId,
+                        "ingressUrl",
+                        function(err, settingsValue) {
+                            if (err) {
+                                reject(err);
+                            } else {
+                                resolve(settingsValue[4]);
+                            }
                         }
-                    }
-                );
-            });
-            let aoUrlPromise = new Promise((resolve, reject) => {
-                contracts.aoSetting.getSettingValuesByTAOName(
-                    settingsTAOId,
-                    "aoUrl",
-                    function(err, settingsValue) {
-                        if (err) {
-                            reject(err);
-                        } else {
-                            resolve(settingsValue[4]);
+                    );
+                })
+            );
+            settingsPromises.push(
+                new Promise((resolve, reject) => {
+                    contracts.aoSetting.getSettingValuesByTAOName(
+                        settingsTAOId,
+                        "aoUrl",
+                        function(err, settingsValue) {
+                            if (err) {
+                                reject(err);
+                            } else {
+                                resolve(settingsValue[4]);
+                            }
                         }
-                    }
-                );
-            });
-            let aoDappIdPromise = new Promise((resolve, reject) => {
-                contracts.aoSetting.getSettingValuesByTAOName(
-                    settingsTAOId,
-                    "theAoDappId",
-                    function(err, settingsValue) {
-                        if (err) {
-                            reject(err);
-                        } else {
-                            resolve(settingsValue[4]);
+                    );
+                })
+            );
+            settingsPromises.push(
+                new Promise((resolve, reject) => {
+                    contracts.aoSetting.getSettingValuesByTAOName(
+                        settingsTAOId,
+                        "theAoDappId",
+                        function(err, settingsValue) {
+                            if (err) {
+                                reject(err);
+                            } else {
+                                resolve(settingsValue[4]);
+                            }
                         }
-                    }
-                );
-            });
-            Promise.all([ingressUrlPromise, aoUrlPromise, aoDappIdPromise])
+                    );
+                })
+            );
+            settingsPromises.push(
+                new Promise((resolve, reject) => {
+                    contracts.aoSetting.getSettingValuesByTAOName(
+                        settingsTAOId,
+                        "defaultEthereumProvider_1",
+                        function(err, settingsValue) {
+                            if (err) {
+                                reject(err);
+                            } else {
+                                resolve(settingsValue[4]);
+                            }
+                        }
+                    );
+                })
+            );
+            settingsPromises.push(
+                new Promise((resolve, reject) => {
+                    contracts.aoSetting.getSettingValuesByTAOName(
+                        settingsTAOId,
+                        "defaultEthereumProvider_1",
+                        function(err, settingsValue) {
+                            if (err) {
+                                resolve(null);
+                            } else {
+                                resolve(settingsValue[4]);
+                            }
+                        }
+                    );
+                })
+            );
+            settingsPromises.push(
+                new Promise((resolve, reject) => {
+                    contracts.aoSetting.getSettingValuesByTAOName(
+                        settingsTAOId,
+                        "defaultEthereumProvider_3",
+                        function(err, settingsValue) {
+                            if (err) {
+                                resolve(null);
+                            } else {
+                                resolve(settingsValue[4]);
+                            }
+                        }
+                    );
+                })
+            );
+            settingsPromises.push(
+                new Promise((resolve, reject) => {
+                    contracts.aoSetting.getSettingValuesByTAOName(
+                        settingsTAOId,
+                        "defaultEthereumProvider_4",
+                        function(err, settingsValue) {
+                            if (err) {
+                                resolve(null);
+                            } else {
+                                resolve(settingsValue[4]);
+                            }
+                        }
+                    );
+                })
+            );
+            settingsPromises.push(
+                new Promise((resolve, reject) => {
+                    contracts.aoSetting.getSettingValuesByTAOName(
+                        settingsTAOId,
+                        "defaultEthereumProvider_42",
+                        function(err, settingsValue) {
+                            if (err) {
+                                resolve(null);
+                            } else {
+                                resolve(settingsValue[4]);
+                            }
+                        }
+                    );
+                })
+            );
+            Promise.all(settingsPromises)
                 .then(settings => {
                     dispatch({
                         type: UPDATE_CONTRACT_SETTINGS,
                         payload: {
                             ingressUrl: settings[0],
                             aoUrl: settings[1],
-                            theAoDappId: settings[2]
+                            theAoDappId: settings[2],
+                            recommendedEthNetworkRpcs: {
+                                "1": settings[3],
+                                "3": settings[4],
+                                "4": settings[5],
+                                "42": settings[6]
+                            }
                         }
                     });
                 })
@@ -237,7 +326,8 @@ const initialState = {
     settings: {
         aoUrl: undefined,
         ingressUrl: undefined,
-        theAoDappId: undefined
+        theAoDappId: undefined,
+        recommendedEthNetworkRpcs: {}
     }
 };
 

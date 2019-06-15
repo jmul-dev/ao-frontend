@@ -4,7 +4,7 @@ import MaxStorageInput from "./components/MaxStorageInput";
 import NetworkBandwidthInput from "./components/NetworkBandwidthInput";
 import MaxPeerConnectionsInput from "./components/MaxPeerConnectionsInput";
 import SwitchInput from "./components/SwitchInput";
-import TextInput from "./components/TextInput";
+import EthNetworkRpcInput from "./components/EthNetworkRpcInput";
 
 type Props = {
     inputName:
@@ -46,7 +46,7 @@ export default ({ inputName, inputLabel, ...props } = Props) => {
             );
         case "ethNetworkRpc":
             return (
-                <TextInput
+                <EthNetworkRpcInput
                     inputName={inputName}
                     label={inputLabel}
                     {...props}
