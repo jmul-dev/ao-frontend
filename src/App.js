@@ -124,7 +124,7 @@ export default class App extends Component {
             if (`${app.coreEthNetworkId}` !== `${app.ethNetworkId}`) {
                 const coreEthNetworkName = getNetworkName(app.coreEthNetworkId);
                 this._networkMismatchNotificationId = addNotification({
-                    message: `AO is currently running on the ${coreEthNetworkName}. Switch to this network (in Metamask) or update the network settings...`,
+                    message: `AO core is currently running on the ${coreEthNetworkName}. Switch to this network (in Metamask) or update the network settings...`,
                     variant: "error",
                     hideVarientIcon: true,
                     action: () => {
