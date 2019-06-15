@@ -123,11 +123,14 @@ export const getNetworkName = (networkId, shortname = false) => {
         case 42:
         case "42":
             return shortname ? "kovan" : "Kovan Network (Proof of Authority)";
+        case 1985:
+        case "1985":
+            return shortname ? "" : "Local TestRPC";
         case null:
         case undefined:
             return shortname ? "" : "(Not connected)";
         default:
-            return shortname ? "" : `Unkown Network (id:${networkId})`;
+            return shortname ? "" : `Unknown Network (id:${networkId})`;
     }
 };
 export const getRegisteredNameByEthAddress = (
