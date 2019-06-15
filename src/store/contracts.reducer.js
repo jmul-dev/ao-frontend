@@ -248,37 +248,7 @@ const fetchSettingsFromContract = () => {
                 new Promise((resolve, reject) => {
                     contracts.aoSetting.getSettingValuesByTAOName(
                         settingsTAOId,
-                        "defaultEthereumProvider_3",
-                        function(err, settingsValue) {
-                            if (err) {
-                                resolve(null);
-                            } else {
-                                resolve(settingsValue[4]);
-                            }
-                        }
-                    );
-                })
-            );
-            settingsPromises.push(
-                new Promise((resolve, reject) => {
-                    contracts.aoSetting.getSettingValuesByTAOName(
-                        settingsTAOId,
                         "defaultEthereumProvider_4",
-                        function(err, settingsValue) {
-                            if (err) {
-                                resolve(null);
-                            } else {
-                                resolve(settingsValue[4]);
-                            }
-                        }
-                    );
-                })
-            );
-            settingsPromises.push(
-                new Promise((resolve, reject) => {
-                    contracts.aoSetting.getSettingValuesByTAOName(
-                        settingsTAOId,
-                        "defaultEthereumProvider_42",
                         function(err, settingsValue) {
                             if (err) {
                                 resolve(null);
@@ -299,9 +269,7 @@ const fetchSettingsFromContract = () => {
                             theAoDappId: settings[2],
                             recommendedEthNetworkRpcs: {
                                 "1": settings[3],
-                                "3": settings[4],
-                                "4": settings[5],
-                                "42": settings[6]
+                                "4": settings[4]
                             }
                         }
                     });
