@@ -17,7 +17,7 @@ import NamePublicKey from "ao-contracts/build/minified/NamePublicKey.json";
 
 import debounce from "debounce";
 import { APP_STATES, updateAppState, getNetworkName } from "./app.reducer";
-import { updateIcoState } from "../modules/ico/reducers/ico.reducer";
+import { updateIcoState, startListeningForRecentTransactions } from "../modules/ico/reducers/ico.reducer";
 import { addNotification } from "../modules/notifications/reducers/notifications.reducer";
 
 // Constants
@@ -233,7 +233,7 @@ const fetchSettingsFromContract = () => {
                 new Promise((resolve, reject) => {
                     contracts.aoSetting.getSettingValuesByTAOName(
                         settingsTAOId,
-                        "defaultEthereumProvider_1",
+                        "defaultEthereumProvider_4",
                         function(err, settingsValue) {
                             if (err) {
                                 resolve(null);
@@ -246,18 +246,25 @@ const fetchSettingsFromContract = () => {
             );
             settingsPromises.push(
                 new Promise((resolve, reject) => {
-                    contracts.aoSetting.getSettingValuesByTAOName(
-                        settingsTAOId,
-                        "defaultEthereumProvider_4",
-                        function(err, settingsValue) {
-                            if (err) {
-                                resolve(null);
-                            } else {
-                                resolve(settingsValue[4]);
-                            }
-                        }
-                    );
-                })
+					contracts.aoIon.aoDevTeam1((err, aoDevTeam1) => {
+						if (err) {
+							resolve(null);
+						} else {
+							resolve(aoDevTeam1);
+						}
+					});
+				})
+            );
+            settingsPromises.push(
+                new Promise((resolve, reject) => {
+					contracts.aoIon.aoDevTeam2((err, aoDevTeam2) => {
+						if (err) {
+							resolve(null);
+						} else {
+							resolve(aoDevTeam2);
+						}
+					});
+				})
             );
             Promise.all(settingsPromises)
                 .then(settings => {
@@ -270,9 +277,12 @@ const fetchSettingsFromContract = () => {
                             recommendedEthNetworkRpcs: {
                                 "1": settings[3],
                                 "4": settings[4]
-                            }
+                            },
+							aoDevTeam1: settings[5],
+							aoDevTeam2: settings[6]
                         }
                     });
+					dispatch(startListeningForRecentTransactions());
                 })
                 .catch(error => {
                     dispatch(
@@ -295,7 +305,9 @@ const initialState = {
         aoUrl: undefined,
         ingressUrl: undefined,
         theAoDappId: undefined,
-        recommendedEthNetworkRpcs: {}
+        recommendedEthNetworkRpcs: {},
+		aoDevTeam1: undefined,
+		aoDevTeam2: undefined
     }
 };
 
