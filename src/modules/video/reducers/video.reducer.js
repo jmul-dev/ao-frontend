@@ -122,58 +122,78 @@ export const buyContent = (contentHostId, publicKey, publicAddress) => {
                 // 0. Let's make sure this is a valid content host before purchasing!
                 dispatch(checkContentHostIsStaked(contentHostId))
                     .then(() => {
-                        // 1. Get latest price
-                        dispatch(getContentPrice(contentHostId))
-                            .then(contentPrice => {
-                                // 2. Ensure sufficient balance!
-                                dispatch(
-                                    ensureSufficientBalance({
-                                        amount: contentPrice,
-                                        isPrimordial: false
-                                    })
-                                )
-                                    .then(() => {
-                                        // 3. buyContent
-                                        triggerMetamaskPopupWithinElectron(
-                                            getState
-                                        );
-                                        contracts.aoPurchaseReceipt.buyContent(
-                                            contentHostId,
-                                            contentPrice.toNumber(), // networkIntegerAmount
-                                            0, // networkFractionAmount
-                                            "ao",
-                                            publicKey, // publicKey of requesting node
-                                            publicAddress, // publicAddress of requesting node
-                                            { from: app.ethAddress },
-                                            (error, transactionHash) => {
-                                                if (error) {
-                                                    console.error(
-                                                        `buyContent error: ${
-                                                            error.message
-                                                        }`
+                        // 0b. Make sure the user has not already purchased!
+                        dispatch(checkContentAlreadyPurchased(contentHostId))
+                            .then(existingPurchaseTxHash => {
+                                if (existingPurchaseTxHash) {
+                                    resolve(existingPurchaseTxHash);
+                                } else {
+                                    // 1. Get latest price
+                                    dispatch(getContentPrice(contentHostId))
+                                        .then(contentPrice => {
+                                            // 2. Ensure sufficient balance!
+                                            dispatch(
+                                                ensureSufficientBalance({
+                                                    amount: contentPrice,
+                                                    isPrimordial: false
+                                                })
+                                            )
+                                                .then(() => {
+                                                    // 3. buyContent
+                                                    triggerMetamaskPopupWithinElectron(
+                                                        getState
                                                     );
-                                                    reject(error);
-                                                    return;
-                                                }
-                                                // 3a. Transaction submitted succesfully (has not been confirmed)
-                                                resolve(transactionHash);
-                                                waitForTransactionReceipt(
-                                                    transactionHash
-                                                ).catch(error => {
-                                                    // The TX failed for some reason...
-                                                    dispatch(
-                                                        addNotification({
-                                                            action: "dismiss",
-                                                            message:
-                                                                "Purchase content transaction failed...",
-                                                            variant: "error"
-                                                        })
+                                                    contracts.aoPurchaseReceipt.buyContent(
+                                                        contentHostId,
+                                                        contentPrice.toNumber(), // networkIntegerAmount
+                                                        0, // networkFractionAmount
+                                                        "ao",
+                                                        publicKey, // publicKey of requesting node
+                                                        publicAddress, // publicAddress of requesting node
+                                                        {
+                                                            from: app.ethAddress
+                                                        },
+                                                        (
+                                                            error,
+                                                            transactionHash
+                                                        ) => {
+                                                            if (error) {
+                                                                console.error(
+                                                                    `buyContent error: ${
+                                                                        error.message
+                                                                    }`
+                                                                );
+                                                                reject(error);
+                                                                return;
+                                                            }
+                                                            // 3a. Transaction submitted succesfully (has not been confirmed)
+                                                            resolve(
+                                                                transactionHash
+                                                            );
+                                                            waitForTransactionReceipt(
+                                                                transactionHash
+                                                            ).catch(error => {
+                                                                // The TX failed for some reason...
+                                                                dispatch(
+                                                                    addNotification(
+                                                                        {
+                                                                            action:
+                                                                                "dismiss",
+                                                                            message:
+                                                                                "Purchase content transaction failed...",
+                                                                            variant:
+                                                                                "error"
+                                                                        }
+                                                                    )
+                                                                );
+                                                            });
+                                                        }
                                                     );
-                                                });
-                                            }
-                                        );
-                                    })
-                                    .catch(reject);
+                                                })
+                                                .catch(reject);
+                                        })
+                                        .catch(reject);
+                                }
                             })
                             .catch(reject);
                     })
@@ -315,6 +335,55 @@ export const checkContentHostIsStaked = contentHostId => {
                     }
                 });
             });
+        });
+    };
+};
+export const checkContentAlreadyPurchased = contentHostId => {
+    return (dispatch, getState) => {
+        return new Promise((resolve, reject) => {
+            const state = getState();
+            const { contracts, app } = state;
+            const buyerNameId = app.aoName.nameId;
+            window.test = contracts.aoPurchaseReceipt;
+            contracts.aoPurchaseReceipt.buyerPurchaseReceipts(
+                buyerNameId,
+                contentHostId,
+                function(err, result) {
+                    if (err) {
+                        console.error(err);
+                        return reject(
+                            new Error(`Error fetching purchase receipt`)
+                        );
+                    }
+                    if (
+                        result ===
+                        "0x0000000000000000000000000000000000000000000000000000000000000000"
+                    ) {
+                        resolve(null);
+                    } else {
+                        console.log(
+                            `Attempting to get BuyContent even for purchaseReceiptId: ${result}`
+                        );
+                        const buyContentEventWatch = contracts.aoPurchaseReceipt.BuyContent(
+                            {
+                                purchaseReceiptId: result
+                            },
+                            {
+                                fromBlock: 0
+                            }
+                        );
+                        buyContentEventWatch.get(function(
+                            error,
+                            buyContentEvents
+                        ) {
+                            if (buyContentEvents.length) {
+                                buyContentEventWatch.stopWatching();
+                                resolve(buyContentEvents[0].transactionHash);
+                            }
+                        });
+                    }
+                }
+            );
         });
     };
 };

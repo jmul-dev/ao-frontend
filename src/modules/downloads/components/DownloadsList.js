@@ -4,7 +4,6 @@ import PropTypes from "prop-types";
 import List from "@material-ui/core/List";
 import DownloadsListItem from "./DownloadsListItem";
 import Divider from "@material-ui/core/Divider";
-import "../styles/downloads-list.css";
 import { Typography } from "@material-ui/core";
 import { compose } from "react-apollo";
 import withUserIdentifiers from "../../account/containers/withUserIdentifiers";
@@ -47,12 +46,13 @@ class DownloadsList extends Component {
                     {"Active Downloads"}
                 </Typography>
                 <Divider />
-                <List dense={true} style={{ paddingTop: 0 }}>
-                    {incompleteContent.map(content => (
+                <List dense={true} style={{ paddingTop: 0, paddingRight: 24 }}>
+                    {incompleteContent.map((content, index) => (
                         <DownloadsListItem
                             key={content.id}
                             content={content}
                             currentUserEthAddress={this.props.ethAddress}
+                            hideBorder={index === 0}
                         />
                     ))}
                 </List>

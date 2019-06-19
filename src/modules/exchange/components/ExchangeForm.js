@@ -28,17 +28,22 @@ class ExchangeForm extends Component {
         ico: PropTypes.object,
         icoRemainingSupply: PropTypes.instanceOf(BigNumber),
         isElectron: PropTypes.bool,
-        calculatePrimoridialExchangeMultiplierAndBonus: PropTypes.func.isRequired,
-    }
+        calculatePrimoridialExchangeMultiplierAndBonus:
+            PropTypes.func.isRequired
+    };
     static defaultProps = {
-        initialTokenInput: Math.pow(10, 12) * 10,  // 10 tera ao
-        isPrimordialExchange: false,
-    }
+        initialTokenInput: Math.pow(10, 9) * 10, // 10 giga ao (~1eth)
+        isPrimordialExchange: false
+    };
     constructor(props) {
-        super(props)
-        const { denomination, amount } = fromBaseToHighestDenomination(props.initialTokenInput)
+        super(props);
+        const { denomination, amount } = fromBaseToHighestDenomination(
+            props.initialTokenInput
+        );
         this.state = {
-            ethInput: '1000',
+            ethInput: props.exchangeRate
+                ? `${props.initialTokenInput * props.exchangeRate}`
+                : "1",
             tokenInput: `${amount}`,
             tokenInputDenomination: denomination.name,
             tokenInputBaseAo: new BigNumber(props.initialTokenInput),
@@ -49,11 +54,13 @@ class ExchangeForm extends Component {
 		this._handleAgreeToTerms = this._handleAgreeToTerms.bind(this);
     }
     componentDidMount() {
-        this.props.updateCurrentExchangeAmountInBaseAo(this.state.tokenInputBaseAo)
-        this._inputChangeRecalculations(this.state.tokenInputBaseAo)
+        this.props.updateCurrentExchangeAmountInBaseAo(
+            this.state.tokenInputBaseAo
+        );
+        this._inputChangeRecalculations(this.state.tokenInputBaseAo);
     }
     componentDidUpdate(prevProps) {
-        if ( !this.props.exchangeRate.isEqualTo(prevProps.exchangeRate) ) {
+        if (!this.props.exchangeRate.isEqualTo(prevProps.exchangeRate)) {
             // Force recalculation of ETH cost
             this._onTokenInputChange({
                 value: this.state.tokenInput,
@@ -65,53 +72,68 @@ class ExchangeForm extends Component {
 			});
 		}
     }
-    _onEthInputChange = ({value}) => {
-        const { exchangeRate } = this.props
+    _onEthInputChange = ({ value }) => {
+        const { exchangeRate } = this.props;
         // Eth input changed, we need to convert to AO amount in the current denomination
-        let tokenAmountInBaseAo = new BigNumber(value).dividedBy(exchangeRate)
-        let tokenAmountInCurrentDenom = fromBaseToDenominationValue(tokenAmountInBaseAo, this.state.tokenInputDenomination)
-        this._inputChangeRecalculations(tokenAmountInBaseAo)
+        let tokenAmountInBaseAo = new BigNumber(value).dividedBy(exchangeRate);
+        let tokenAmountInCurrentDenom = fromBaseToDenominationValue(
+            tokenAmountInBaseAo,
+            this.state.tokenInputDenomination
+        );
+        this._inputChangeRecalculations(tokenAmountInBaseAo);
         this.setState({
             ethInput: value,
             tokenInput: tokenAmountInCurrentDenom,
-            tokenInputBaseAo: tokenAmountInBaseAo,
-        })
-    }
-    _onTokenInputChange = ({value, denominationName}) => {
-        const { exchangeRate } = this.props
+            tokenInputBaseAo: tokenAmountInBaseAo
+        });
+    };
+    _onTokenInputChange = ({ value, denominationName }) => {
+        const { exchangeRate } = this.props;
         // Token input changed (value or denomination!)
-        let tokenAmountInBaseAo = fromDenominationValueToBase(new BigNumber(value), denominationName)
-        this._inputChangeRecalculations(tokenAmountInBaseAo)
+        let tokenAmountInBaseAo = fromDenominationValueToBase(
+            new BigNumber(value),
+            denominationName
+        );
+        this._inputChangeRecalculations(tokenAmountInBaseAo);
         this.setState({
             tokenInput: value,
             tokenInputBaseAo: tokenAmountInBaseAo,
             tokenInputDenomination: denominationName,
             ethInput: tokenAmountInBaseAo * exchangeRate
-        })
-    }
-    _inputChangeRecalculations = (baseTokenAmount) => {
-        if ( this.props.isPrimordialExchange ) {
+        });
+    };
+    _inputChangeRecalculations = baseTokenAmount => {
+        if (this.props.isPrimordialExchange) {
             // Primordial exchange -> recalculate the exchange multiplier/bonus
-            this.props.calculatePrimoridialExchangeMultiplierAndBonus(baseTokenAmount).then(bonuses => {
-                this.setState({
-                    primordialExchangeBonuses: bonuses,                    
+            this.props
+                .calculatePrimoridialExchangeMultiplierAndBonus(baseTokenAmount)
+                .then(bonuses => {
+                    this.setState({
+                        primordialExchangeBonuses: bonuses
+                    });
                 })
-            }).catch(error => {
-                console.error(`Error fetching primordial exchange bonuses:`, error)
-            })
+                .catch(error => {
+                    console.error(
+                        `Error fetching primordial exchange bonuses:`,
+                        error
+                    );
+                });
         } else {
             // Network exchange -> update exchange amount in reducer so we can recaulculate the best exchange pool
-            this.props.updateCurrentExchangeAmountInBaseAo(baseTokenAmount)
+            this.props.updateCurrentExchangeAmountInBaseAo(baseTokenAmount);
         }
-    }
-    _submit = (event) => {
+    };
+    _submit = event => {
         event.preventDefault();
         // TODO: check eth balance sufficient
         this.props.onSubmit({
             ethInput: parseFloat(this.state.ethInput),
-            tokenInputInBaseDenomination: fromDenominationValueToBase(new BigNumber(this.state.tokenInput), this.state.tokenInputDenomination),
-        })
-    }
+            tokenInputInBaseDenomination: fromDenominationValueToBase(
+                new BigNumber(this.state.tokenInput),
+                this.state.tokenInputDenomination
+            )
+        });
+    };
     _reset = () => {
         this.props.resetExchange()
     }
@@ -259,75 +281,75 @@ class ExchangeForm extends Component {
 
 const styles = ({ palette, shape, spacing }) => ({
     form: {
-        textAlign: 'left',
-        '&[disabled]': {
-            opacity: 0.5,
+        textAlign: "left",
+        "&[disabled]": {
+            opacity: 0.5
         }
     },
     section: {
         marginBottom: spacing.unit * 3
     },
     sectionTitle: {
-        fontWeight: 'bold',
-        marginBottom: spacing.unit,
+        fontWeight: "bold",
+        marginBottom: spacing.unit
     },
     walletContainer: {
-        backgroundColor: palette.type === 'light' ? '#DEE0E3' : '#333333',
+        backgroundColor: palette.type === "light" ? "#DEE0E3" : "#333333",
         borderRadius: shape.borderRadius,
         padding: `${spacing.unit}px ${spacing.unit * 2}px`,
-        display: 'flex',
-        alignItems: 'center',
+        display: "flex",
+        alignItems: "center"
     },
     ethIcon: {
         marginRight: spacing.unit
     },
     inputsContainer: {
-        display: 'flex',
-        alignItems: 'center',
-        position: 'relative',
+        display: "flex",
+        alignItems: "center",
+        position: "relative"
     },
     inputContainer: {
-        flex: 1,
+        flex: 1
     },
     exchangeIconContainer: {
         marginLeft: spacing.unit * 2,
-        marginRight: spacing.unit * 2,
+        marginRight: spacing.unit * 2
     },
     summaryItem: {
-        display: 'flex',
-        alignItems: 'baseline',
-        marginBottom: spacing.unit / 2,
+        display: "flex",
+        alignItems: "baseline",
+        marginBottom: spacing.unit / 2
     },
     spacer: {
         flex: 1,
         borderBottom: `1px dashed #CCCCCC`,
         marginLeft: spacing.unit,
-        marginRight: spacing.unit,
+        marginRight: spacing.unit
     },
     txMessage: {
         marginTop: spacing.unit * 2,
-        textAlign: 'right',
+        textAlign: "right"
     },
     actionButton: {
-        position: 'relative',
+        position: "relative"
     },
     errorMessage: {
         // account for very long error messages...
-        textOverflow: 'ellipsis',
-        overflow: 'hidden',
-        whiteSpace: 'nowrap',
+        textOverflow: "ellipsis",
+        overflow: "hidden",
+        whiteSpace: "nowrap"
     },
     maxExchangeAmountExceeded: {
-        position: 'absolute',
+        position: "absolute",
         top: `calc(100% + 4px)`,
-        right: 0,
-    },
-})
+        right: 0
+    }
+});
 
 // export specifically for storybook
-export const ExchangeFormWithStyles = withStyles(styles)(ExchangeForm)
+export const ExchangeFormWithStyles = withStyles(styles)(ExchangeForm);
 
-export default withExchangeContainer(ExchangeFormWithStyles)
+export default withExchangeContainer(ExchangeFormWithStyles);
 
 // export default compose(
 //     withExchangeContainer,
