@@ -1,24 +1,28 @@
-import Typography from '@material-ui/core/Typography';
-import React, { Component } from 'react';
-import withExchangeContainer from '../containers/withExchangeContainer';
-import ExchangeForm from './ExchangeForm';
-
+import Typography from "@material-ui/core/Typography";
+import React, { Component } from "react";
+import withExchangeContainer from "../containers/withExchangeContainer";
+import ExchangeForm from "./ExchangeForm";
 
 class PrimordialExchangeForm extends Component {
     componentDidMount() {
-        this.props.getPrimordialExchangeRate()
+        this.props.getPrimordialExchangeRate();
     }
     componentWillReceiveProps(nextProps) {
-        if ( !this.props.contractsInitialized && nextProps.contractsInitialized ) {
-            this.props.getPrimordialExchangeRate()
+        if (
+            !this.props.contractsInitialized &&
+            nextProps.contractsInitialized
+        ) {
+            this.props.getPrimordialExchangeRate();
         }
     }
-    _onSubmit = ({ethInput}) => {
-        this.props.exchangeEthForPrimordialTokens( ethInput )
-    }
+    _onSubmit = ({ ethInput }) => {
+        this.props.exchangeEthForPrimordialTokens(ethInput);
+    };
     render() {
-        const { ico } = this.props
-        const maxTokenExchangeAmount = ico.primordialMaxSupply.minus(ico.primordialTotalSupply)
+        const { ico } = this.props;
+        const maxTokenExchangeAmount = ico.primordialMaxSupply.minus(
+            ico.primordialTotalSupply
+        );
         return ico.primordialSaleEnded ? (
             <div>
                 <Typography variant="body1">
@@ -26,16 +30,14 @@ class PrimordialExchangeForm extends Component {
                 </Typography>
             </div>
         ) : (
-            <ExchangeForm 
+            <ExchangeForm
                 onSubmit={this._onSubmit}
                 isPrimordialExchange={true}
                 exchangeRate={this.props.exchange.primordialExchangeRate}
-                initialTokenInput={Math.pow(10, 12) * 10}
                 maxTokenExchangeAmount={maxTokenExchangeAmount}
             />
-        )
+        );
     }
 }
 
-
-export default withExchangeContainer(PrimordialExchangeForm)
+export default withExchangeContainer(PrimordialExchangeForm);
