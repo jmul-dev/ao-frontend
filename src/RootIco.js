@@ -5,10 +5,13 @@
  */
 import React, { Component } from 'react';
 import { Provider } from 'react-redux';
+import { ConnectedRouter } from 'react-router-redux';
+import { Switch, Route, Redirect } from "react-router";
 import { MuiThemeProvider } from '@material-ui/core/styles';
 import { darkTheme } from './theme';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import IcoView from './views/ico/IcoView';
+import TermsView from './views/terms/TermsView';
 import "./app-variables.css";
 import "./app.css";
 import { connectToWeb3, updateAppState, APP_STATES } from './store/app.reducer';
@@ -20,11 +23,17 @@ export default class IcoRoot extends Component {
     render() {
         return (
             <Provider store={this.props.store}>
-                <MuiThemeProvider theme={darkTheme}>
-                    <CssBaseline>
-                        <IcoAppContainer />
-                    </CssBaseline>
-                </MuiThemeProvider>
+				<MuiThemeProvider theme={darkTheme}>
+					<CssBaseline>
+						<ConnectedRouter history={this.props.history}>
+							<Switch>
+								<Route exact path="/" component={IcoAppContainer} />
+								<Route path="/app/view/terms" component={TermsView} />
+								<Redirect to="/" />
+							</Switch>
+						</ConnectedRouter>
+					</CssBaseline>
+				</MuiThemeProvider>
             </Provider>
         )
     }
@@ -47,7 +56,7 @@ class IcoApp extends Component {
     }
     render() {
         return (
-            <IcoView />
+			<IcoView />
         )
     }
 }
