@@ -151,11 +151,13 @@ class ExchangeForm extends Component {
         const showExchangeTransactionMessage = exchangeTransaction.error || exchangeTransaction.initialized || exchangeTransaction.transactionHash || exchangeTransaction.result
         return (
 			<Fragment>
-				<div>
+				<div style={{marginBottom: 16, textAlign: 'center'}}>
 					<label>
 						<Checkbox disabled={!ethAddress} checked={agreeToTerms} onChange={this._handleAgreeToTerms} />
 						<CheckboxLabel>
-							I agree to <Ahref to="/app/view/terms">terms of sale</Ahref>
+                            <Typography variant="body1" style={{fontWeight: 'bold', display: 'inline'}}>
+							    I agree to <Ahref to="/app/view/terms">terms of sale</Ahref>
+                            </Typography>
 						</CheckboxLabel>
 					</label>
 				</div>
