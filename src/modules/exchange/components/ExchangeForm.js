@@ -38,7 +38,7 @@ class ExchangeForm extends Component {
         super(props)
         const { denomination, amount } = fromBaseToHighestDenomination(props.initialTokenInput)
         this.state = {
-            ethInput: '0.1',
+            ethInput: '1000',
             tokenInput: `${amount}`,
             tokenInputDenomination: denomination.name,
             tokenInputBaseAo: new BigNumber(props.initialTokenInput),
