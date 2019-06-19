@@ -44,7 +44,7 @@ class ExchangeForm extends Component {
             tokenInputBaseAo: new BigNumber(props.initialTokenInput),
             ethUsdExchangeRate: undefined,
             primordialExchangeBonuses: undefined,
-			agreeToTerms: !!localStorage.getItem(`AO_agreeToTerms_${props.ethAddress}`)
+			agreeToTerms: props.ethAddress ? !!localStorage.getItem(`AO_agreeToTerms_${props.ethAddress}`) : false
         }
 		this._handleAgreeToTerms = this._handleAgreeToTerms.bind(this);
     }
@@ -131,7 +131,7 @@ class ExchangeForm extends Component {
 			<Fragment>
 				<div>
 					<label>
-						<Checkbox checked={agreeToTerms} onChange={this._handleAgreeToTerms} />
+						<Checkbox disabled={!ethAddress} checked={agreeToTerms} onChange={this._handleAgreeToTerms} />
 						<CheckboxLabel>
 							I agree to <Ahref to="/app/view/terms">terms of sale</Ahref>
 						</CheckboxLabel>

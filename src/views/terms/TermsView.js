@@ -5,9 +5,17 @@ import { Wrapper, Title, Description, Header, Section, Ahref } from "./styledCom
 
 export default class TermsView extends PureComponent {
 	render() {
+		const style = {
+			backgroundColor: lightTheme.palette.background.default,
+			position: "absolute",
+			height: "100%",
+			width: "100%",
+			overflow: "auto"
+		};
+
 		return (
 			<MuiThemeProvider theme={lightTheme}>
-				<section className="section-padding section-exchange bg-shapes-white" style={{ backgroundColor: lightTheme.palette.background.default}}>
+				<section className="section-padding bg-shapes-white" style={style}>
 					<Wrapper>
 						<Title>Global AO+ Ion Exchange Terms</Title>
 						<Header>
@@ -356,21 +364,21 @@ export default class TermsView extends PureComponent {
 							<Description>The AO Whitepaper</Description>
 						</Title>
 						<Section className="center">
-							The AO's Whitepaper is available at the following link: <a href="https://ao.network/assets/AO_Whitepaper.pdf" target="_blank">https://ao.network/assets/AO_Whitepaper.pdf</a>
+							The AO's Whitepaper is available at the following link: <a href="https://ao.network/assets/AO_Whitepaper.pdf" target="_blank" rel="noopener noreferrer">https://ao.network/assets/AO_Whitepaper.pdf</a>
 						</Section>
 						<Title>
 							Exhibit D
 							<Description>AO Constitution</Description>
 						</Title>
 						<Section className="center">
-							The AO Constitution is available at the following link: <a href="https://ao.network" target="_blank">https://ao.network</a>
+							The AO Constitution is available at the following link: <a href="https://ao.network" target="_blank" rel="noopener noreferrer">https://ao.network</a>
 						</Section>
 						<Title>
 							Exhibit E
 							<Description>AO Protocol Code</Description>
 						</Title>
 						<Section className="center">
-							AO's Code is available at the following link: <a href="https://ao.network" target="_blank">https://ao.network</a>
+							AO's Code is available at the following link: <a href="https://ao.network" target="_blank" rel="noopener noreferrer">https://ao.network</a>
 						</Section>
 						<Title>
 							Exhibit F
@@ -520,7 +528,7 @@ export default class TermsView extends PureComponent {
 								</li>
 							</ol>
 						</Section>
-						<Ahref to={`/`}>View Ion Exchange Page</Ahref>
+						<Ahref to={`/app/view/ico`}>View Ion Exchange</Ahref>
 					</Wrapper>
 				</section>
 			</MuiThemeProvider>
