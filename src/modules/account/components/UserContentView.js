@@ -1,4 +1,4 @@
-import { Typography, Grid, ButtonBase } from "@material-ui/core";
+import { Typography, Grid, ButtonBase, Button } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
 import PlayIcon from "@material-ui/icons/PlayArrow";
 import PropTypes from "prop-types";
@@ -22,6 +22,7 @@ import { Link } from "react-router-dom";
 import { withRouter } from "react-router";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import withUserIdentifiers from "../containers/withUserIdentifiers";
+import DeleteIcon from "@material-ui/icons/Delete";
 
 class UserContentView extends PureComponent {
     static propTypes = {
@@ -112,7 +113,13 @@ class UserContentView extends PureComponent {
                     contentRef={this._watchNowRef}
                     content={content}
                 >
-                    {({ action, loading, error, downloadProgress }) => (
+                    {({
+                        action,
+                        cancelAction,
+                        loading,
+                        error,
+                        downloadProgress
+                    }) => (
                         <Fragment>
                             <Grid item sm={12}>
                                 <ButtonBase
@@ -144,16 +151,39 @@ class UserContentView extends PureComponent {
                                 >
                                     {content.title}
                                 </Typography>
-                                <PrimaryButton
-                                    disabled={!action || loading}
-                                    onClick={action}
-                                >
-                                    <ContentPurchaseState
-                                        content={content}
-                                        downloadProgress={downloadProgress}
-                                        currentUserEthAddress={ethAddress}
-                                    />
-                                </PrimaryButton>
+                                <div>
+                                    <PrimaryButton
+                                        disabled={!action || loading}
+                                        onClick={action}
+                                    >
+                                        <ContentPurchaseState
+                                            content={content}
+                                            downloadProgress={downloadProgress}
+                                            currentUserEthAddress={ethAddress}
+                                        />
+                                    </PrimaryButton>
+                                    {content.state === "DAT_INITIALIZED" && (
+                                        <Button
+                                            onClick={() => {
+                                                cancelAction();
+                                                this.props.history.goBack();
+                                            }}
+                                            style={{ marginLeft: 16 }}
+                                        >
+                                            <div
+                                                style={{
+                                                    display: "flex",
+                                                    alignItems: "center"
+                                                }}
+                                            >
+                                                <DeleteIcon
+                                                    style={{ marginRight: 8 }}
+                                                />
+                                                {`delete content`}
+                                            </div>
+                                        </Button>
+                                    )}
+                                </div>
                             </Grid>
                         </Fragment>
                     )}

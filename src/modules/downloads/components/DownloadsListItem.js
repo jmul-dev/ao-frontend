@@ -1,4 +1,4 @@
-import { IconButton } from "@material-ui/core";
+import { IconButton, ButtonBase, Typography } from "@material-ui/core";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
@@ -14,19 +14,21 @@ import {
     ContentPurchaseAction,
     getContentState
 } from "../../video/components/ContentPurchaseActions";
+import CancelDownloadConfirmationDialog from "./CancelDownloadConfirmationDialog";
 
 class DownloadsListItem extends Component {
     static propTypes = {
         currentUserEthAddress: PropTypes.string.isRequired,
         classes: PropTypes.object.isRequired,
-        content: PropTypes.object.isRequired
+        content: PropTypes.object.isRequired,
+        hideBorder: PropTypes.bool
     };
-    _watchNowRef;
     constructor() {
         super();
         this.state = {
             actionsMenuActive: false,
-            actionsMenuAnchor: null
+            actionsMenuAnchor: null,
+            cancelDialogOpen: false
         };
     }
     _setActionsMenuState = (active, event) => {
@@ -40,31 +42,32 @@ class DownloadsListItem extends Component {
         });
         return null;
     };
-    _cancelContentPurchase = event => {
-        event.preventDefault();
-        event.stopPropagation();
-        // TODO
+    _openCancelDialog = () => {
+        this.setState({ cancelDialogOpen: true });
     };
     render() {
-        const { content, classes, currentUserEthAddress } = this.props;
+        const {
+            content,
+            classes,
+            currentUserEthAddress,
+            hideBorder
+        } = this.props;
+        const contentInCancelableState =
+            ["STAKING", "STAKED", "DISCOVERABLE"].indexOf(content.state) === -1;
         const { stateCopy, StateIcon, actionRequired } = getContentState(
             content,
             currentUserEthAddress
         );
         return (
-            <ContentPurchaseAction
-                contentRef={this._watchNowRef}
-                content={content}
-            >
-                {({ action, loading }) => (
+            <ContentPurchaseAction content={content}>
+                {({ action, loading, cancelAction }) => (
                     <ListItem
-                        buttonRef={ref => {
-                            this._watchNowRef = ref;
-                        }}
-                        className={`DownloadsListItem ${classes.root}`}
-                        button={true}
-                        disabled={!action || loading}
-                        onClick={action}
+                        className={`${classes.root} ${
+                            hideBorder ? classes.rootNoBorder : ""
+                        }`}
+                        disabled={
+                            !action || loading || this.state.actionsMenuActive
+                        }
                     >
                         <ListItemIcon className={classes.listItemIcon}>
                             <StateIcon />
@@ -84,14 +87,15 @@ class DownloadsListItem extends Component {
                                 classes.secondaryAction
                             }`}
                         >
-                            <IconButton
+                            <ButtonBase
+                                className={classes.secondaryActionButton}
                                 onClick={this._setActionsMenuState.bind(
                                     this,
                                     true
                                 )}
                             >
                                 <MoreVertIcon />
-                            </IconButton>
+                            </ButtonBase>
                         </ListItemSecondaryAction>
                         <Menu
                             anchorEl={this.state.actionsMenuAnchor}
@@ -102,6 +106,14 @@ class DownloadsListItem extends Component {
                             )}
                         >
                             <MenuItem
+                                disabled
+                                className={classes.menuItemTitle}
+                            >
+                                <Typography noWrap variant="caption">
+                                    {content.title}
+                                </Typography>
+                            </MenuItem>
+                            <MenuItem
                                 component={Link}
                                 to={`/app/view/account/${content.contentType.toLowerCase()}/${
                                     content.id
@@ -111,10 +123,41 @@ class DownloadsListItem extends Component {
                                     false
                                 )}
                             >
-                                More info
+                                Details
                             </MenuItem>
-                            {/* <MenuItem onClick={this._cancelContentPurchase} onMouseUp={this._setActionsMenuState.bind(this, false)}>Cancel</MenuItem> */}
+                            {!loading && action && (
+                                <MenuItem
+                                    onClick={action}
+                                    onMouseUp={this._setActionsMenuState.bind(
+                                        this,
+                                        false
+                                    )}
+                                >
+                                    {stateCopy}
+                                </MenuItem>
+                            )}
+                            <MenuItem
+                                onClick={this._openCancelDialog}
+                                onMouseUp={this._setActionsMenuState.bind(
+                                    this,
+                                    false
+                                )}
+                                disabled={loading || !contentInCancelableState}
+                                className={classes.cancelButton}
+                            >
+                                Cancel Download
+                            </MenuItem>
                         </Menu>
+                        <CancelDownloadConfirmationDialog
+                            open={this.state.cancelDialogOpen}
+                            onConfirm={() => {
+                                cancelAction();
+                                this.setState({ cancelDialogOpen: false });
+                            }}
+                            onCancel={() => {
+                                this.setState({ cancelDialogOpen: false });
+                            }}
+                        />
                     </ListItem>
                 )}
             </ContentPurchaseAction>
@@ -126,8 +169,11 @@ const styles = ({ palette, spacing }) => ({
     root: {
         alignItems: "flex-start",
         borderTop: `1px solid ${palette.divider}`,
-        padding: `12px 16px`,
+        padding: `12px 0 12px 16px`,
         pointerEvents: "auto !important"
+    },
+    rootNoBorder: {
+        borderTop: 0
     },
     listItemIcon: {
         marginRight: 0,
@@ -145,8 +191,23 @@ const styles = ({ palette, spacing }) => ({
         color: palette.primary.main
     },
     secondaryAction: {
-        right: 0,
+        width: 24,
+        height: "100%",
+        overflow: "hidden",
+        justifyContent: "center",
+        alignItems: "center",
+        right: -24,
         opacity: 0.75
+    },
+    secondaryActionButton: {
+        height: "100%",
+        color: "white"
+    },
+    cancelButton: {
+        color: palette.error.main
+    },
+    menuItemTitle: {
+        borderBottom: `1px solid #AAAAAA`
     }
 });
 

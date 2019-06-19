@@ -17,6 +17,7 @@ import contentPurchaseTransactionMutation from "../../../graphql/mutations/conte
 import contentBecomeHostTransactionMutation from "../../../graphql/mutations/contentBecomeHostTransaction";
 import contentRequestMutation from "../../../graphql/mutations/contentRequest";
 import contentRetryHostDiscoveryMutation from "../../../graphql/mutations/contentRetryHostDiscovery";
+import removeContentMutation from "../../../graphql/mutations/removeContent";
 import {
     becomeHost,
     buyContent,
@@ -320,7 +321,8 @@ const withContentPurchaseActions = compose(
  * @param {withContentState} Object see withContentState, query used to poll for state change
  * @param {client} ApolloClient
  * @param {history} History react-router-dom withRouter
- * @param {children} Function Accepting parameters {action}
+ * @param {children} Function Accepting parameters
+ *      ({action, actionCopy, cancelAction, loading, error}) => any
  */
 class ContentPurchaseActionComponent extends Component {
     static defaultProps = {
@@ -604,6 +606,27 @@ class ContentPurchaseActionComponent extends Component {
                 );
             });
     };
+    _removeContent = () => {
+        const { content, client } = this.props;
+        this.setState({ loading: true, error: null });
+        client
+            .mutate({
+                mutation: removeContentMutation,
+                variables: {
+                    id: content.id
+                }
+            })
+            .then(({ data, ...props }) => {
+                this.setState({ loading: false });
+            })
+            .catch(error => {
+                this._dispatchErrorNotificationAndStopLoading(
+                    error,
+                    "An error occured while trying to remove content",
+                    "Error during removeContent"
+                );
+            });
+    };
     render() {
         const { content, ethAddress, children, downloadStats } = this.props;
         const { loading, error } = this.state;
@@ -688,7 +711,8 @@ class ContentPurchaseActionComponent extends Component {
             action,
             actionCopy,
             loading,
-            error
+            error,
+            cancelAction: this._removeContent
         };
         if (
             content.state === "DOWNLOADING" &&
