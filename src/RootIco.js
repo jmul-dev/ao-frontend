@@ -20,11 +20,11 @@ export default class IcoRoot extends Component {
     render() {
         return (
             <Provider store={this.props.store}>
-                <MuiThemeProvider theme={darkTheme}>
-                    <CssBaseline>
-                        <IcoAppContainer />
-                    </CssBaseline>
-                </MuiThemeProvider>
+				<MuiThemeProvider theme={darkTheme}>
+					<CssBaseline>
+						<IcoAppContainer />
+					</CssBaseline>
+				</MuiThemeProvider>
             </Provider>
         )
     }
@@ -32,7 +32,7 @@ export default class IcoRoot extends Component {
 
 class IcoApp extends Component {
     componentDidMount() {
-        const { app, connectToWeb3, updateAppState } = this.props
+        const { connectToWeb3, updateAppState } = this.props
         if (typeof window.web3 !== 'undefined') {
             window.web3 = new Web3(window.web3.currentProvider)
             updateAppState(APP_STATES.WEB3_AVAILABLE, true)
@@ -47,7 +47,7 @@ class IcoApp extends Component {
     }
     render() {
         return (
-            <IcoView />
+			<IcoView />
         )
     }
 }

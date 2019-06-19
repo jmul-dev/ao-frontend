@@ -87,6 +87,7 @@ export const startListeningForRecentTransactions = () => {
     return (dispatch, getState) => {
         const state = getState();
         const { contracts, app, ico } = state;
+		const { aoDevTeam1, aoDevTeam2 } = contracts.settings;
         if (!app.states[APP_STATES.CONTRACTS_INITIALIZED])
             return console.warn(
                 `Attempting to call contract method before contracts initialized`
@@ -105,7 +106,10 @@ export const startListeningForRecentTransactions = () => {
                 payload: lotCreationEvent
             });
             lotCreationEvent.watch((error, result) => {
-                if (result) {
+                if (result &&
+					(!aoDevTeam1 || (aoDevTeam1 && aoDevTeam1.toLowerCase() !== result.args.lotOwner.toLowerCase())) &&
+					(!aoDevTeam2 || (aoDevTeam2 && aoDevTeam2.toLowerCase() !== result.args.lotOwner.toLowerCase()))
+				) {
                     // event LotCreation(address indexed lotOwner, bytes32 indexed lotId, uint256 multiplier, uint256 primordialAmount, uint256 networkBonusAmount);
                     dispatch({
                         type: LOT_CREATION_EVENT_RECEIVED,

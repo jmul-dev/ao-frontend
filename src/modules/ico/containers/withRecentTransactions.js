@@ -1,11 +1,6 @@
 import { connect } from "react-redux";
-import { startListeningForRecentTransactions } from "../reducers/ico.reducer";
 
 // Redux
-const mapDispatchToProps = {
-    startListeningForRecentTransactions
-};
-
 const mapStateToProps = store => {
     let lotCreations = Object.values(store.ico.lotCreations).sort((a, b) => {
         if (a.blockNumber > b.blockNumber) return -1;
@@ -21,6 +16,5 @@ const mapStateToProps = store => {
 };
 
 export default connect(
-    mapStateToProps,
-    mapDispatchToProps
+    mapStateToProps
 );

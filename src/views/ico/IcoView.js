@@ -50,7 +50,8 @@ export default class IcoView extends PureComponent {
                         <WhitepaperLink
                             style={{
                                 marginTop: 24,
-                                display: "inline-block"
+                                display: "inline-block",
+								fontSize: "1.4em"
                             }}
                         />
                     </div>
@@ -255,7 +256,11 @@ export default class IcoView extends PureComponent {
                             >{`Exchange ETH for AO+`}</Typography>
                             <PrimordialExchangeForm />
                         </div>
-                        <WhitepaperLink />
+                        <WhitepaperLink
+                            style={{
+								fontSize: "1.2em"
+                            }}
+						/>
                     </section>
                 </MuiThemeProvider>
             </View>

@@ -26,12 +26,7 @@ class RecentTransactions extends Component<Props> {
                 networkTokenBonusAmount: PropTypes.instanceOf(BigNumber)
             })
         ),
-        // redux bound actions
-        startListeningForRecentTransactions: PropTypes.func.isRequired
     };
-    componentDidMount() {
-        this.props.startListeningForRecentTransactions();
-    }
     render() {
         const { classes, lotCreations } = this.props;
         return (

@@ -14,6 +14,7 @@ import WriterView from "../../views/writer/WriterView";
 import SettingsView from "../../views/settings/SettingsView";
 import UploadView from "../../views/upload/UploadView";
 import WalletView from "../../views/wallet/WalletView";
+import TermsView from '../../views/terms/TermsView';
 import "./main-layout.css";
 import MainNavigation from "./MainNavigation";
 
@@ -30,6 +31,7 @@ const ViewRoutes = () => (
             <Route path="/app/view/dao" component={DaoView} />
             <Route path="/app/view/content" component={ContentView} />
             <Route path="/app/view/daoDapp" component={DaoDappView} />
+            <Route path="/app/view/terms" component={TermsView} />
         </Switch>
     </div>
 );

@@ -1,22 +1,17 @@
-import CircularProgress from "@material-ui/core/CircularProgress";
-import { withStyles } from "@material-ui/core/styles";
-import Typography from "@material-ui/core/Typography";
-import BigNumber from "bignumber.js";
-import PropTypes from "prop-types";
-import React, { Component } from "react";
-import { EthereumInput, TokenInput } from "../../../common/Inputs";
-import { PrimaryButton } from "../../../theme";
-import {
-    denominationsByName,
-    fromBaseToDenominationValue,
-    fromBaseToHighestDenomination,
-    fromDenominationValueToBase,
-    TokenBalance
-} from "../../../utils/denominations";
-import Account from "../../account/components/Account";
-import EtherscanLink from "../../etherscan/EtherscanLink";
-import WalletBalances from "../../wallet/components/WalletBalances";
-import withExchangeContainer from "../containers/withExchangeContainer";
+import CircularProgress from '@material-ui/core/CircularProgress';
+import { withStyles } from '@material-ui/core/styles';
+import Typography from '@material-ui/core/Typography';
+import BigNumber from 'bignumber.js';
+import PropTypes from 'prop-types';
+import React, { Component, Fragment } from 'react';
+import { EthereumInput, TokenInput } from '../../../common/Inputs';
+import { PrimaryButton } from '../../../theme';
+import { denominationsByName, fromBaseToDenominationValue, fromBaseToHighestDenomination, fromDenominationValueToBase, TokenBalance } from '../../../utils/denominations';
+import Account from '../../account/components/Account';
+import EtherscanLink from '../../etherscan/EtherscanLink';
+import WalletBalances from '../../wallet/components/WalletBalances';
+import withExchangeContainer from '../containers/withExchangeContainer';
+import { Checkbox, CheckboxLabel, Ahref } from "./styledComponents";
 
 class ExchangeForm extends Component {
     static propTypes = {
@@ -53,8 +48,10 @@ class ExchangeForm extends Component {
             tokenInputDenomination: denomination.name,
             tokenInputBaseAo: new BigNumber(props.initialTokenInput),
             ethUsdExchangeRate: undefined,
-            primordialExchangeBonuses: undefined
-        };
+            primordialExchangeBonuses: undefined,
+			agreeToTerms: props.ethAddress ? !!localStorage.getItem(`AO_agreeToTerms_${props.ethAddress}`) : false
+        }
+		this._handleAgreeToTerms = this._handleAgreeToTerms.bind(this);
     }
     componentDidMount() {
         this.props.updateCurrentExchangeAmountInBaseAo(
@@ -67,9 +64,13 @@ class ExchangeForm extends Component {
             // Force recalculation of ETH cost
             this._onTokenInputChange({
                 value: this.state.tokenInput,
-                denominationName: this.state.tokenInputDenomination
-            });
-        }
+                denominationName: this.state.tokenInputDenomination,
+            })
+		} else if (this.props.ethAddress !== prevProps.ethAddress) {
+			this.setState({
+				agreeToTerms: !!localStorage.getItem(`AO_agreeToTerms_${this.props.ethAddress}`)
+			});
+		}
     }
     _onEthInputChange = ({ value }) => {
         const { exchangeRate } = this.props;
@@ -134,229 +135,147 @@ class ExchangeForm extends Component {
         });
     };
     _reset = () => {
-        this.props.resetExchange();
-    };
+        this.props.resetExchange()
+    }
+	_handleAgreeToTerms() {
+		localStorage.setItem(`AO_agreeToTerms_${this.props.ethAddress}`, !this.state.agreeToTerms);
+		this.setState({ agreeToTerms: !this.state.agreeToTerms });
+	}
     render() {
-        const {
-            ethAddress,
-            isPrimordialExchange,
-            exchangeRate,
-            classes
-        } = this.props;
-        const { exchangeTransaction } = this.props.exchange;
-        const { primordialExchangeBonuses } = this.state;
-        const currentDenomination =
-            denominationsByName[this.state.tokenInputDenomination];
-        const exchangeInProgress =
-            exchangeTransaction.initialized &&
-            !exchangeTransaction.error &&
-            !exchangeTransaction.result;
-        const formDisabled =
-            !ethAddress ||
-            exchangeInProgress ||
-            (isPrimordialExchange && !this.props.ico.primordialSaleActive) ||
-            exchangeRate.lte(0);
-        const showExchangeTransactionMessage =
-            exchangeTransaction.error ||
-            exchangeTransaction.initialized ||
-            exchangeTransaction.transactionHash ||
-            exchangeTransaction.result;
+        const { ethAddress, isPrimordialExchange, exchangeRate, classes } = this.props
+        const { exchangeTransaction } = this.props.exchange
+        const { primordialExchangeBonuses, agreeToTerms } = this.state
+        const currentDenomination = denominationsByName[this.state.tokenInputDenomination]
+        const exchangeInProgress = exchangeTransaction.initialized && !exchangeTransaction.error && !exchangeTransaction.result
+        const formDisabled = !ethAddress || exchangeInProgress || (isPrimordialExchange && !this.props.ico.primordialSaleActive) || exchangeRate.lte(0) || !agreeToTerms
+        const showExchangeTransactionMessage = exchangeTransaction.error || exchangeTransaction.initialized || exchangeTransaction.transactionHash || exchangeTransaction.result
         return (
-            <form
-                onSubmit={this._submit}
-                disabled={formDisabled}
-                className={classes.form}
-            >
-                <section className={classes.section}>
-                    <Typography
-                        variant="body2"
-                        className={classes.sectionTitle}
-                    >{`Ethereum Address`}</Typography>
-                    <div className={classes.walletContainer}>
-                        <Account
-                            display="ethIcon"
-                            size={32}
-                            className={classes.ethIcon}
-                        />
-                        <div style={{ opacity: ethAddress ? 1 : 0.5 }}>
-                            <Typography variant="body1" component="span">
-                                <b>{"id:"}</b> <Account display="ethAddress" />
-                            </Typography>
-                            <div>
-                                <WalletBalances>
-                                    {({ ethBalance }) => (
-                                        <Typography variant="body1">
-                                            <b>{`${ethBalance.toFixed(
-                                                3
-                                            )} ETH`}</b>
-                                        </Typography>
-                                    )}
-                                </WalletBalances>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-                <section className={classes.section}>
-                    <Typography
-                        variant="body2"
-                        className={classes.sectionTitle}
-                    >{`Amount`}</Typography>
-                    <div className={classes.inputsContainer}>
-                        <div className={classes.inputContainer}>
-                            <EthereumInput
-                                label={`SEND`}
-                                value={this.state.ethInput}
-                                onChange={this._onEthInputChange}
-                                disabled={formDisabled}
-                            />
-                        </div>
-                        <div className={classes.exchangeIconContainer}>
-                            <img
-                                alt="exchange icon"
-                                src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz48c3ZnIHdpZHRoPSIyNnB4IiBoZWlnaHQ9IjE3cHgiIHZpZXdCb3g9IjAgMCAyNiAxNyIgdmVyc2lvbj0iMS4xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIj4gICAgICAgIDx0aXRsZT5leGNoYW5nZS1pY29uPC90aXRsZT4gICAgPGRlc2M+Q3JlYXRlZCB3aXRoIFNrZXRjaC48L2Rlc2M+ICAgIDxnIGlkPSJleGNoYW5nZS1pY29uIiBzdHJva2U9Im5vbmUiIHN0cm9rZS13aWR0aD0iMSIgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIj4gICAgICAgIDxnIGlkPSJHcm91cC0xNyIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMS4wMDAwMDAsIDEuMDAwMDAwKSIgc3Ryb2tlPSIjNzc3Nzc3Ij4gICAgICAgICAgICA8cG9seWxpbmUgaWQ9IlBhdGgiIHBvaW50cz0iMCA1IDI0IDUgMTguNzg5Nzg2MSAwIj48L3BvbHlsaW5lPiAgICAgICAgICAgIDxwb2x5bGluZSBpZD0iUGF0aCIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMTIuMDAwMDAwLCAxMi41MDAwMDApIHJvdGF0ZSgtMTgwLjAwMDAwMCkgdHJhbnNsYXRlKC0xMi4wMDAwMDAsIC0xMi41MDAwMDApICIgcG9pbnRzPSIwIDE1IDI0IDE1IDE4Ljc4OTc4NjEgMTAiPjwvcG9seWxpbmU+ICAgICAgICA8L2c+ICAgIDwvZz48L3N2Zz4="
-                            />
-                        </div>
-                        <div className={classes.inputContainer}>
-                            <TokenInput
-                                label={"RECEIVE"}
-                                value={this.state.tokenInput}
-                                denominationName={
-                                    this.state.tokenInputDenomination
-                                }
-                                onChange={this._onTokenInputChange}
-                                disabled={formDisabled}
-                                isPrimordial={isPrimordialExchange}
-                                supplementalText={
-                                    isPrimordialExchange &&
-                                    primordialExchangeBonuses
-                                        ? `multiplier = ${
-                                              primordialExchangeBonuses.multiplier
-                                          }`
-                                        : undefined
-                                }
-                            />
-                        </div>
-                        {this.state.tokenInputBaseAo.gt(
-                            this.props.maxTokenExchangeAmount
-                        ) && (
-                            <Typography
-                                color="error"
-                                variant="caption"
-                                className={classes.maxExchangeAmountExceeded}
-                            >
-                                {isPrimordialExchange
-                                    ? "Remaining supply: "
-                                    : `Maximum exchange amount: `}
-                                <TokenBalance
-                                    baseAmount={
-                                        this.props.maxTokenExchangeAmount
-                                    }
-                                    includeAO={true}
-                                    isPrimordial={isPrimordialExchange}
-                                />
-                            </Typography>
-                        )}
-                    </div>
-                </section>
-                <section className={classes.section}>
-                    <Typography
-                        variant="body2"
-                        className={classes.sectionTitle}
-                    >{`Summary`}</Typography>
-                    <div className={classes.summaryItem}>
-                        <Typography>
-                            {`${this.state.tokenInput} ${
-                                currentDenomination.prefix
-                            } AO${isPrimordialExchange ? "+" : ""}`}
-                        </Typography>
-                        <div className={classes.spacer} />
-                        <Typography>{`${this.state.ethInput} ETH`}</Typography>
-                    </div>
-                    {isPrimordialExchange && primordialExchangeBonuses && (
-                        <div className={classes.summaryItem}>
-                            <Typography color="primary">
-                                <TokenBalance
-                                    baseAmount={
-                                        primordialExchangeBonuses.networkTokenBonusAmount
-                                    }
-                                    includeAO={true}
-                                    isPrimordial={false}
-                                />
-                                {` (${
-                                    primordialExchangeBonuses.bonusPercentage
-                                }% Bonus)`}
-                            </Typography>
-                            <div className={classes.spacer} />
-                            <Typography>{`FREE`}</Typography>
-                        </div>
-                    )}
-                    <div className={classes.summaryItem}>
-                        <Typography>{"Total"}</Typography>
-                        <div className={classes.spacer} />
-                        <Typography>
-                            <b>{`${this.state.ethInput} ETH`}</b>
-                        </Typography>
-                    </div>
-                </section>
-                {/* Action */}
-                <PrimaryButton
-                    fullWidth
-                    onClick={
-                        exchangeTransaction.result ? this._reset : this._submit
-                    }
-                    disabled={exchangeTransaction.result ? false : formDisabled}
-                    className={classes.actionButton}
-                >
-                    {exchangeTransaction.result ? (
-                        "Make another exchange   ↺"
-                    ) : (
-                        <span>
-                            {exchangeInProgress
-                                ? "Exchanging..."
-                                : "Exchange tokens"}
-                        </span>
-                    )}
-                    {exchangeInProgress ? (
-                        <CircularProgress
-                            size={25}
-                            style={{ position: "absolute", right: 6 }}
-                        />
-                    ) : null}
-                </PrimaryButton>
-                {/* Status */}
-                {showExchangeTransactionMessage ? (
-                    <div className={classes.txMessage}>
-                        {exchangeTransaction.error ? (
-                            <Typography
-                                color="error"
-                                className={classes.errorMessage}
-                            >
-                                {exchangeTransaction.error.message}
-                            </Typography>
-                        ) : null}
-                        {exchangeTransaction.initialized &&
-                        !exchangeTransaction.transactionHash &&
-                        !exchangeTransaction.error ? (
-                            <Typography color="default">{`Please check Metamask to approve this transaction`}</Typography>
-                        ) : null}
-                        {exchangeTransaction.transactionHash &&
-                        !exchangeTransaction.result ? (
-                            <Typography color="default">
-                                {"tx: "}{" "}
-                                <EtherscanLink
-                                    type="tx"
-                                    value={exchangeTransaction.transactionHash}
-                                    style={{ maxWidth: "80%" }}
-                                />
-                            </Typography>
-                        ) : null}
-                        {exchangeTransaction.result ? (
-                            <Typography color="primary">{`Your exchange was succesful!`}</Typography>
-                        ) : null}
-                    </div>
-                ) : null}
-            </form>
-        );
+			<Fragment>
+				<div>
+					<label>
+						<Checkbox disabled={!ethAddress} checked={agreeToTerms} onChange={this._handleAgreeToTerms} />
+						<CheckboxLabel>
+							I agree to <Ahref to="/app/view/terms">terms of sale</Ahref>
+						</CheckboxLabel>
+					</label>
+				</div>
+				<form onSubmit={this._submit} disabled={formDisabled} className={classes.form}>
+					<section className={classes.section}>
+						<Typography variant="body2" className={classes.sectionTitle}>{`Ethereum Address`}</Typography>
+						<div className={classes.walletContainer}>
+							<Account display="ethIcon" size={32} className={classes.ethIcon} />
+							<div style={{opacity: ethAddress ? 1 : 0.5}}>
+								<Typography variant="body1" component="span">
+									<b>{'id:'}</b> <Account display="ethAddress" />
+								</Typography>
+								<div>
+									<WalletBalances>{({ ethBalance }) => (
+										<Typography variant="body1"><b>{`${ethBalance.toFixed(3)} ETH`}</b></Typography>
+									)}</WalletBalances>
+								</div>
+							</div>
+						</div>
+					</section>
+					<section className={classes.section}>
+						<Typography variant="body2" className={classes.sectionTitle}>{`Amount`}</Typography>
+						<div className={classes.inputsContainer}>
+							<div className={classes.inputContainer}>
+								<EthereumInput
+									label={`SEND`}
+									value={this.state.ethInput}
+									onChange={this._onEthInputChange}
+									disabled={formDisabled}
+								/>
+							</div>
+							<div className={classes.exchangeIconContainer}>
+								<img alt="exchange icon" src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz48c3ZnIHdpZHRoPSIyNnB4IiBoZWlnaHQ9IjE3cHgiIHZpZXdCb3g9IjAgMCAyNiAxNyIgdmVyc2lvbj0iMS4xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIj4gICAgICAgIDx0aXRsZT5leGNoYW5nZS1pY29uPC90aXRsZT4gICAgPGRlc2M+Q3JlYXRlZCB3aXRoIFNrZXRjaC48L2Rlc2M+ICAgIDxnIGlkPSJleGNoYW5nZS1pY29uIiBzdHJva2U9Im5vbmUiIHN0cm9rZS13aWR0aD0iMSIgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIj4gICAgICAgIDxnIGlkPSJHcm91cC0xNyIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMS4wMDAwMDAsIDEuMDAwMDAwKSIgc3Ryb2tlPSIjNzc3Nzc3Ij4gICAgICAgICAgICA8cG9seWxpbmUgaWQ9IlBhdGgiIHBvaW50cz0iMCA1IDI0IDUgMTguNzg5Nzg2MSAwIj48L3BvbHlsaW5lPiAgICAgICAgICAgIDxwb2x5bGluZSBpZD0iUGF0aCIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMTIuMDAwMDAwLCAxMi41MDAwMDApIHJvdGF0ZSgtMTgwLjAwMDAwMCkgdHJhbnNsYXRlKC0xMi4wMDAwMDAsIC0xMi41MDAwMDApICIgcG9pbnRzPSIwIDE1IDI0IDE1IDE4Ljc4OTc4NjEgMTAiPjwvcG9seWxpbmU+ICAgICAgICA8L2c+ICAgIDwvZz48L3N2Zz4=" />
+							</div>
+							<div className={classes.inputContainer}>
+								<TokenInput
+									label={'RECEIVE'}
+									value={this.state.tokenInput}
+									denominationName={this.state.tokenInputDenomination}
+									onChange={this._onTokenInputChange}
+									disabled={formDisabled}
+									isPrimordial={isPrimordialExchange}
+									supplementalText={isPrimordialExchange && primordialExchangeBonuses ? `multiplier = ${primordialExchangeBonuses.multiplier}` : undefined}
+								/>
+							</div>
+							{this.state.tokenInputBaseAo.gt(this.props.maxTokenExchangeAmount) && (
+								<Typography color="error" variant="caption" className={classes.maxExchangeAmountExceeded}>
+									{isPrimordialExchange ? 'Remaining supply: ' : `Maximum exchange amount: `}<TokenBalance baseAmount={this.props.maxTokenExchangeAmount} includeAO={true} isPrimordial={isPrimordialExchange} />
+								</Typography>
+							)}
+						</div>
+					</section>
+					<section className={classes.section}>
+						<Typography variant="body2" className={classes.sectionTitle}>{`Summary`}</Typography>
+						<div className={classes.summaryItem}>
+							<Typography>
+								{`${this.state.tokenInput} ${currentDenomination.prefix} AO${isPrimordialExchange ? '+' : ''}`}
+							</Typography>
+							<div className={classes.spacer}></div>
+							<Typography>
+								{`${this.state.ethInput} ETH`}
+							</Typography>
+						</div>
+						{isPrimordialExchange && primordialExchangeBonuses && (
+							<div className={classes.summaryItem}>
+								<Typography color="primary">
+									<TokenBalance baseAmount={primordialExchangeBonuses.networkTokenBonusAmount} includeAO={true} isPrimordial={false} />{` (${primordialExchangeBonuses.bonusPercentage}% Bonus)`}
+								</Typography>
+								<div className={classes.spacer}></div>
+								<Typography>
+									{`FREE`}
+								</Typography>
+							</div>
+						)}
+						<div className={classes.summaryItem}>
+							<Typography>
+								{'Total'}
+							</Typography>
+							<div className={classes.spacer}></div>
+							<Typography>
+								<b>{`${this.state.ethInput} ETH`}</b>
+							</Typography>
+						</div>
+					</section>
+					{/* Action */}
+					<PrimaryButton
+						fullWidth
+						onClick={exchangeTransaction.result ? this._reset : this._submit}
+						disabled={exchangeTransaction.result ? false : formDisabled}
+						className={classes.actionButton}
+					>
+						{exchangeTransaction.result ? 'Make another exchange   ↺' : (
+							<span>{exchangeInProgress ? 'Exchanging...' : 'Exchange tokens'}</span>
+						)}
+						{exchangeInProgress ? (
+							<CircularProgress size={25} style={{position: 'absolute', right: 6}} />
+						) : null}
+					</PrimaryButton>
+					{/* Status */}
+					{showExchangeTransactionMessage ? (
+						<div className={classes.txMessage}>
+							{exchangeTransaction.error ? (
+								<Typography color="error" className={classes.errorMessage}>{exchangeTransaction.error.message}</Typography>                                
+							) : null}
+							{exchangeTransaction.initialized && !exchangeTransaction.transactionHash && !exchangeTransaction.error ? (
+								<Typography color="default">{`Please check Metamask to approve this transaction`}</Typography>
+							) : null}
+							{exchangeTransaction.transactionHash && !exchangeTransaction.result ? (
+								<Typography color="default">
+									{'tx: '} <EtherscanLink type="tx" value={exchangeTransaction.transactionHash} style={{maxWidth: '80%'}} />
+								</Typography>
+							) : null}
+							{exchangeTransaction.result ? (
+								<Typography color="primary">{`Your exchange was succesful!`}</Typography>
+							) : null}
+						</div>
+					) : null}
+				</form>
+			</Fragment>
+        )
     }
 }
 

@@ -10,7 +10,7 @@ const WhitepaperUrl = ({ contractSettings, dispatch, ...props }) => {
         <Typography
             variant="body1"
             component="a"
-            href={contractSettings.aoUrl}
+            href={`${contractSettings.aoUrl}/assets/AO_Whitepaper.pdf`}
             target="_blank"
             className="whitepaper-link"
             {...props}
