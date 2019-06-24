@@ -18,6 +18,23 @@ import {
 } from "../modules/notifications/reducers/notifications.reducer";
 import { push } from "react-router-redux";
 import NavigateIcon from "@material-ui/icons/NavigateNext";
+const nameLookupQuery = gql(`
+    query getNameLookup($name: String!) {
+        nameLookup(name: $name) {
+			name
+			id
+        }
+    }
+`);
+
+const insertNameLookupMutation = gql(`
+	mutation insertNameLookup($name: String!, $id: ID!) {
+		submitNameLookup(inputs: {name: $name, id: $id}) {
+			name
+			id
+		}
+	}
+`);
 
 // Constants
 export const WEB3_CONNECTED = "WEB3_CONNECTED";
@@ -258,19 +275,19 @@ export const registerNameUnderEthAddress = ({
     ethAddress,
     localPublicAddress
 }) => {
-    return (dispatch, getState) => {
+    return async (dispatch, getState) => {
         const { contracts } = getState();
         dispatch({
             type: AO_NAME_REGISTRATION_TRANSACTION.INITIALIZED
         });
         // 0. name validation
-        const validUsername = /^[a-zA-Z0-9_-]{3,20}$/.test(name);
+        const validUsername = /^[a-zA-Z0-9_]{3,20}$/.test(name);
         console.log(validUsername, name, localPublicAddress);
         if (!validUsername) {
             return dispatch({
                 type: AO_NAME_REGISTRATION_TRANSACTION.ERROR,
                 payload: new Error(
-                    `validation requirements: 3-20 characters, no spaces, hyphen and underscores allowed`
+                    `validation requirements: 3-20 alphanumeric characters (letters A-Z, numbers 0-9) with the exception of underscores`
                 )
             });
         }
@@ -282,14 +299,27 @@ export const registerNameUnderEthAddress = ({
                 )
             });
         }
-        // 1. Check that the name does not exist already
+
+		// 1.a Check that the name does not exist already (db-side)
+		let nameExistDb = false;
+		const client = getApolloClient();
+		try {
+			const response = await client.query({
+				query: nameLookupQuery,
+				variables: { name }
+			});
+			nameExistDb = response.data.nameLookup.id ? true : false;
+		} catch (e) {
+		}
+
+		// 1.b Check that the name does not exist already (contract-side)
         contracts.nameTAOLookup.isExist(name, function(err, doesExist) {
             if (err) {
                 dispatch({
                     type: AO_NAME_REGISTRATION_TRANSACTION.ERROR,
                     payload: err
                 });
-            } else if (doesExist) {
+			} else if (doesExist || nameExistDb) {
                 dispatch({
                     type: AO_NAME_REGISTRATION_TRANSACTION.ERROR,
                     payload: new Error(`Name is already registered`)
@@ -326,12 +356,20 @@ export const registerNameUnderEthAddress = ({
                                 dispatch(
                                     getRegisteredNameByEthAddress(ethAddress)
                                 )
-                                    .then(nameObject => {
+                                    .then(async (nameObject) => {
                                         dispatch({
                                             type:
                                                 AO_NAME_REGISTRATION_TRANSACTION.RESULT,
                                             payload: nameObject
                                         });
+
+										try {
+											await client.mutate({
+												mutation: insertNameLookupMutation,
+												variables: {name: nameObject.name, id: nameObject.nameId}
+											});
+										} catch (e) {
+										}
                                     })
                                     .catch(err => {
                                         dispatch({
