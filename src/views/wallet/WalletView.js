@@ -22,7 +22,7 @@ class WalletView extends PureComponent {
                         {"My Wallet"}
                     </Typography>
                     <div style={{ display: "flex", alignItems: "center" }}>
-                        <div style={{ marginRight: 8 }}>
+                        <div style={{ marginRight: 8, marginLeft: -32 }}>
                             <Account
                                 display="ethIcon"
                                 size={25}
@@ -54,7 +54,7 @@ class WalletView extends PureComponent {
                         </div>
                     </div>
                     {aoName && (
-                        <Typography variant="body1" style={{ marginLeft: 32 }}>
+                        <Typography variant="body1">
                             <b style={{ marginRight: 6 }}>{`Username:`}</b>
                             {`${aoName.name}`}
                         </Typography>

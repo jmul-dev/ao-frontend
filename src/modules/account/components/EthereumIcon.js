@@ -49,7 +49,9 @@ export default class EthereumIcon extends Component {
             width: size,
             height: size,
             borderRadius: size / 2,
-            overflow: "hidden"
+            overflow: "hidden",
+            position: "relative",
+            zIndex: 1
         };
         return <div style={style} {...props} />;
     }

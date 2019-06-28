@@ -12,6 +12,7 @@ export const listenOnIpcChannel = () => {
     return (dispatch, getState) => {
         const isElectron = getState().electron.isElectron;
         if (isElectron) {
+            console.log(AO_CONSTANTS);
             window.chrome.ipcRenderer.on(AO_CONSTANTS.IPC.EVENT_LOG, function(
                 event,
                 data
