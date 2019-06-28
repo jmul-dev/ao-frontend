@@ -1,4 +1,5 @@
 import { AO_CONSTANTS } from "ao-library";
+import { push } from "react-router-redux";
 import { isElectron } from "../../../utils/electron";
 
 // Constants
@@ -39,6 +40,16 @@ export const listenOnIpcChannel = () => {
                         type: AO_CONSTANTS.IPC.AO_ETH_RPC_PROMPT,
                         payload: data
                     });
+                }
+            );
+            window.chrome.ipcRenderer.on(
+                AO_CONSTANTS.IPC.MAIN_WINDOW_NAV_REQUEST,
+                function(event, { data }) {
+                    console.log(
+                        `Handling request for navigation from main process:`,
+                        data
+                    );
+                    dispatch(push(data.location, data.state));
                 }
             );
             window.onerror = function(error, url, line) {

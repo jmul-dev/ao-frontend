@@ -20,7 +20,7 @@
         "@material-ui/icons": "^1.1.0",
         "@material-ui/lab": "^1.0.0-alpha.5",
         "ao-contracts": "git+ssh://git@git.y-designs.com:ao/ao-contracts.git#v1.0.19",
-        "ao-library": "git+ssh://git@git.y-designs.com:ao/ao-library.git",
+        "ao-library": "git+ssh://git@git.y-designs.com:ao/ao-library.git#v0.0.4",
         "apollo-cache-inmemory": "^1.2.5",
         "apollo-client": "^2.3.5",
         "apollo-upload-client": "^10.0.0",
