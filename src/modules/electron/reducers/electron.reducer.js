@@ -45,12 +45,13 @@ export const listenOnIpcChannel = () => {
             );
             window.chrome.ipcRenderer.on(
                 AO_CONSTANTS.IPC.MAIN_WINDOW_NAV_REQUEST,
-                function(event, { data }) {
+                function(event, { location, state }) {
                     console.log(
                         `Handling request for navigation from main process:`,
-                        data
+                        location,
+                        state
                     );
-                    dispatch(push(data.location, data.state));
+                    dispatch(push(location, state));
                 }
             );
             window.onerror = function(error, url, line) {

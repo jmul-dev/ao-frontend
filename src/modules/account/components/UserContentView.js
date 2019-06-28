@@ -164,11 +164,11 @@ class UserContentView extends PureComponent {
                                     </PrimaryButton>
                                     {content.state === "DAT_INITIALIZED" && (
                                         <Button
+                                            className={classes.deleteButton}
                                             onClick={() => {
                                                 cancelAction();
                                                 this.props.history.goBack();
                                             }}
-                                            style={{ marginLeft: 16 }}
                                         >
                                             <div
                                                 style={{
@@ -386,32 +386,6 @@ class UserContentView extends PureComponent {
                                         {`dat://${content.metadataDatKey}`}
                                     </Typography>
                                 </div>
-                                {content.contentType === "VOD" && (
-                                    <React.Fragment>
-                                        <Divider />
-                                        <div
-                                            className={classes.contentListItem}
-                                        >
-                                            <Typography
-                                                className={classes.contentLabel}
-                                                variant="caption"
-                                            >
-                                                {"Content metadata"}
-                                            </Typography>
-                                            <Typography
-                                                className={classes.content}
-                                                variant="body2"
-                                                component="pre"
-                                            >
-                                                {JSON.stringify(
-                                                    content.metadata,
-                                                    null,
-                                                    "\t"
-                                                )}
-                                            </Typography>
-                                        </div>
-                                    </React.Fragment>
-                                )}
                                 {content.contentType === "DAPP" && (
                                     <React.Fragment>
                                         <Divider />
@@ -678,6 +652,12 @@ const styles = ({ palette, spacing }) => ({
     title: {
         marginBottom: spacing.unit * 2,
         fontWeight: "bold"
+    },
+    deleteButton: {
+        marginTop: 4,
+        borderRadius: 0,
+        background: "#333",
+        color: "#DDD"
     },
     contentContainer: {
         marginTop: spacing.unit * 4
