@@ -46,6 +46,7 @@ export const PRICING_DEFAULTS = [
  */
 export const isFormValid = form => {
     let requiredFields = ["content", "featuredImage", "title", "description"];
+	/*
     switch (form.contentType) {
         case "VOD":
             requiredFields.push("videoTeaser");
@@ -53,6 +54,7 @@ export const isFormValid = form => {
         default:
             break;
     }
+	*/
     if (form.contentLicense === "TAO") {
         requiredFields.push("taoId");
     }
