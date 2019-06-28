@@ -194,6 +194,7 @@ export const getRegisteredNameByEthAddress = (
                             query: gql(`
                                 query {
                                     node {
+                                        id
                                         publicAddress
                                     }
                                 }
