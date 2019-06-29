@@ -81,7 +81,7 @@ class VideoListing extends Component<Props> {
         return (
             <div className="VideoListing placeholder">
                 <Typography
-                    className="placeholder-title"
+                    className="placeholder-title shimmer"
                     variant="display1"
                 >{`Welcome to AO`}</Typography>
                 <Typography
