@@ -8,6 +8,7 @@ import Export from "../../modules/account/components/Export";
 import withStatsContainer from "../../modules/stats/containers/withStatsContainer";
 import { getNetworkName } from "../../store/app.reducer";
 import DebugLog from "../../modules/settings/components/DebugLog";
+import GraphiqlButton from "../../modules/settings/components/GraphiqlButton";
 
 class SettingsView extends PureComponent {
     render() {
@@ -23,6 +24,9 @@ class SettingsView extends PureComponent {
                     </Typography>
                     <div style={{ marginLeft: "auto" }}>
                         <DebugLog />
+                    </div>
+                    <div style={{ marginLeft: 16 }}>
+                        <GraphiqlButton />
                     </div>
                     <div style={{ marginLeft: 16 }}>
                         <Export />
