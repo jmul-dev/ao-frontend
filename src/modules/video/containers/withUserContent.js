@@ -28,6 +28,12 @@ export const userContentQuery = gql(`
             },
             fileDatStats {
                 ...DatStatsFragment
+            },
+            taodbValues {
+                key,
+                value,
+                schema,
+                label
             }
         }
     }

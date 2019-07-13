@@ -237,6 +237,15 @@ class UserContentView extends PureComponent {
                             }}
                         />
                         <Tab
+                            label="TaoDB"
+                            classes={{
+                                label: classes.tabLabel,
+                                labelContainer: classes.tabLabelContainer,
+                                wrapper: classes.tabWrapper,
+                                root: classes.tabRoot
+                            }}
+                        />
+                        <Tab
                             label="Advanced"
                             classes={{
                                 label: classes.tabLabel,
@@ -582,6 +591,52 @@ class UserContentView extends PureComponent {
                             </div>
                         )}
                         {activeTabIndex === 3 && (
+                            <div>
+                                {content.taodbValues.map(taodbKeyValue => {
+                                    let value = taodbKeyValue.value;
+                                    try {
+                                        value = JSON.parse(value);
+                                    } catch (error) {}
+                                    return (
+                                        <React.Fragment>
+                                            <div
+                                                className={
+                                                    classes.contentListItem
+                                                }
+                                            >
+                                                <Typography
+                                                    className={
+                                                        classes.contentLabel
+                                                    }
+                                                    variant="caption"
+                                                >
+                                                    {taodbKeyValue.label}
+                                                </Typography>
+                                                <Typography
+                                                    className={classes.content}
+                                                    variant="body2"
+                                                    component="pre"
+                                                >
+                                                    {JSON.stringify(
+                                                        {
+                                                            schema:
+                                                                taodbKeyValue.schema,
+                                                            key:
+                                                                taodbKeyValue.key,
+                                                            value
+                                                        },
+                                                        null,
+                                                        "\t"
+                                                    )}
+                                                </Typography>
+                                            </div>
+                                            <Divider />
+                                        </React.Fragment>
+                                    );
+                                })}
+                            </div>
+                        )}
+                        {activeTabIndex === 4 && (
                             <div>
                                 <div className={classes.contentListItem}>
                                     <Typography
