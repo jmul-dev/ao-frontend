@@ -72,6 +72,7 @@ export const setCoreEthNetworkId = coreEthNetworkId => ({
     type: SET_CORE_ETHEREUM_NETWORK_ID,
     payload: coreEthNetworkId
 });
+let processingAccount;
 export const connectToWeb3 = networkId => {
     return (dispatch, getState) => {
         let networkName = getNetworkName(networkId, true);
@@ -91,19 +92,22 @@ export const connectToWeb3 = networkId => {
         const getCurrentAccount = () => {
             window.web3.eth.getAccounts((err, accounts) => {
                 let { ethAddress } = getState().app;
-                if (accounts && accounts[0] !== ethAddress) {
+                if (accounts && accounts[0] !== ethAddress && processingAccount !== accounts[0]) {
                     let account = accounts[0];
+					processingAccount = accounts[0];
                     console.log(
                         `Account change from ${ethAddress} to ${account}`
                     );
                     dispatch(getRegisteredNameByEthAddress(account, true))
                         .then(aoName => {
+							processingAccount = null;
                             dispatch({
                                 type: WEB3_ETH_ACCOUNT_CHANGE,
                                 payload: { ethAddress: account, aoName }
                             });
                         })
                         .catch(() => {
+							processingAccount = null;
                             dispatch({
                                 type: WEB3_ETH_ACCOUNT_CHANGE,
                                 payload: { ethAddress: account, aoName: null }
