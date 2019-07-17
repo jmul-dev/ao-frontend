@@ -81,7 +81,7 @@ class UserContentStats extends PureComponent {
                         {"peers"}
                     </Typography>
                     <Typography
-                        className={peerStatClasses}
+                        className={peerStatClasses.join(" ")}
                         variant="body2"
                         component="div"
                     >
