@@ -598,7 +598,7 @@ class UserContentView extends PureComponent {
                                         value = JSON.parse(value);
                                     } catch (error) {}
                                     return (
-                                        <React.Fragment>
+                                        <React.Fragment key={taodbKeyValue.key}>
                                             <div
                                                 className={
                                                     classes.contentListItem
