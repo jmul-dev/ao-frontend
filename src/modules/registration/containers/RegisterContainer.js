@@ -17,7 +17,7 @@ const mapStateToProps = store => {
 };
 
 // GraphQL
-const registerMutation = gql(`
+export const registerMutation = gql(`
     mutation registerMutation($inputs: RegisterInputs) {
         register(inputs: $inputs) {
             id, 

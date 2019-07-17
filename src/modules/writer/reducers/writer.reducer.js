@@ -3,6 +3,7 @@ import { getApolloClient } from "../../../index";
 import gql from "graphql-tag";
 import { waitForTransactionReceipt } from "../../../store/contracts.reducer";
 import { triggerMetamaskPopupWithinElectron } from "../../../utils/electron";
+import { registerMutation } from "../../registration/containers/RegisterContainer";
 
 // Constants
 export const EMPTY_ADDRESS = "0x0000000000000000000000000000000000000000";
@@ -110,6 +111,24 @@ export const addWriterKey = localPublicAddress => {
                                                             WRITER_KEY_ADD_TRANSACTION.RESULT,
                                                         payload: true
                                                     });
+                                                    // Ping core to update the taodb writer key
+                                                    getApolloClient()
+                                                        .mutate({
+                                                            mutation: registerMutation,
+                                                            variables: {
+                                                                ethAddress:
+                                                                    app.ethAddress,
+                                                                networkId:
+                                                                    app.ethNetworkId,
+                                                                aoNameId: nameId
+                                                            }
+                                                        })
+                                                        .catch(error => {
+                                                            console.error(
+                                                                `Error hitting register after writer key mismatch update`,
+                                                                error
+                                                            );
+                                                        });
                                                 })
                                                 .catch(err => {
                                                     dispatch({
