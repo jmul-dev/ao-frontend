@@ -116,11 +116,13 @@ export const addWriterKey = localPublicAddress => {
                                                         .mutate({
                                                             mutation: registerMutation,
                                                             variables: {
-                                                                ethAddress:
-                                                                    app.ethAddress,
-                                                                networkId:
-                                                                    app.ethNetworkId,
-                                                                aoNameId: nameId
+                                                                inputs: {
+                                                                    ethAddress:
+                                                                        app.ethAddress,
+                                                                    networkId:
+                                                                        app.ethNetworkId,
+                                                                    aoNameId: nameId
+                                                                }
                                                             }
                                                         })
                                                         .catch(error => {
