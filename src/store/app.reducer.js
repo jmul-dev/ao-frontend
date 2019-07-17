@@ -204,9 +204,8 @@ export const getRegisteredNameByEthAddress = (
                         resolve(aoName);
                     });
 
-                    // Sry, account change triggers graphql.register mutation which may not update apollo cache immediatly,
-                    // this is quickest hack to wait for that
-                    setTimeout(async () => {
+					let getWriterKeyTimeoutId, notificationId;
+					const getWriterKey = async () => {
                         const response = await getApolloClient().query({
                             query: gql(`
                                 query {
@@ -219,6 +218,8 @@ export const getRegisteredNameByEthAddress = (
                         });
 						const { node } = response.data;
                         if (node && node.publicAddress) {
+							clearTimeout(getWriterKeyTimeoutId);
+
                             const localPublicAddress = node.publicAddress;
                             // Check if localPublicKey is registered to this user
                             contracts.namePublicKey.isNameWriterKey(
@@ -235,8 +236,8 @@ export const getRegisteredNameByEthAddress = (
                                     if (err) {
                                         console.error(err);
                                         return;
-                                    } else if (!isValid) {
-                                        let notificationId = dispatch(
+                                    } else if (!isValid && !notificationId) {
+                                        notificationId = dispatch(
                                             addNotification({
                                                 message: `Local public key mismatch. Submit your signature to continue using the AO network.`,
                                                 variant: "warning",
@@ -265,8 +266,13 @@ export const getRegisteredNameByEthAddress = (
                             // ) {
                             //     console.log(err, result);
                             // });
-                        }
-                    }, 1000);
+                        } else {
+							getWriterKeyTimeoutId = setTimeout(() => {
+								getWriterKey();
+							}, 1000);
+						}
+					};
+					getWriterKey();
                 }
             });
         });
